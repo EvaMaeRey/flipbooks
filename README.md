@@ -1,23 +1,32 @@
 
-# Little flipbooks library
+# Flipbooks
 
 <img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+
 <!-- Original author is de:John Barnes Linnet - Zeitgenössische Illustration (1886), via de.wikipedia -->
 
-The incremental code/result reveal provided by flipbooks may help you
-digest longer snippets of code including pipelines and ggplot builds.
-Since developing the code-parsing code that allows flipbooking (with Emi
-Tanaka and Garrick Aden-Buie), I’ve created many little books; they
-don’t seem like they each need their own github repository. Many
-smaller flipbooks live here together, while some larger ones have their
-own repositories. This webpage/github-readme acts as a directory for
-many of the flipbooks.
+*Flipbooks* present code step-by-step and side-by-side with its output.
+The incremental code/result reveal may help you digest longer
+manipulation and analysis pipelines as well as plot builds.
 
-## DIY
+## Background
+
+Interested in flipbooks origin story, and where the project is headed?
+Check out our
+[about](https://evamaerey.github.io/flipbooks/about/what_the_flipbook)
+page.
+
+## Do It Yourself
 
 Would you like to make a flipbook? We try to make that easy for you with
 {flipbookr}. To get started have a look at [A minimal
-Flipbook](https://evamaerey.github.io/little_flipbooks_library/flipbookr/skeleton#1),
+Flipbook](https://evamaerey.github.io/flipbooks/flipbookr/skeleton#1),
 the template for which will be available once you install the [flipbooks
 package](https://github.com/EvaMaeRey/flipbookr) as follows:
 
@@ -25,14 +34,24 @@ package](https://github.com/EvaMaeRey/flipbookr) as follows:
 devtools::install_github("EvaMaeRey/flipbookr")
 ```
 
-## Background
+You will also likely use `xaringan`, an rmarkdown presentation builder:
 
-Interested in flipbooks origin story, and where the project is headed?
-Check out our
-[about](https://evamaerey.github.io/little_flipbooks_library/about/what_the_flipbook)
-page.
+``` r
+install.packages("xaringan")
+```
 
-## The library
+#### Steps to building your first flipbook
+
+1.  install.packages(“xaringan”)
+2.  devtools::install\_github(“EvaMaeRey/flipbookr”)
+3.  restart RStudio
+4.  File -\> New File -\> RMarkdown -\> From Template -\> A Minimal
+    Flipbook
+5.  Use template or your own pipelines
+6.  “Knit”
+7.  Explore your flipbook\!
+
+## Existing Flipbooks for Reference
 
 If you need a theoretical exploration of the grammar of graphics and its
 use with ggplot2, see [The ggplot2 grammar
@@ -62,8 +81,8 @@ Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html
 <hr>
 
 For some life-changing, magical, and real-life examples on scanning data
-into R and cleaning data (aka tidying up), see [the data cleaning
-flipbook](https://evamaerey.github.io/little_flipbooks_library/data_cleaning/data_cleaning).
+into R and cleaning data (aka “tidying up”), see [the data cleaning
+flipbook](https://evamaerey.github.io/flipbooks/data_cleaning/data_cleaning).
 
 <img src="figures/data_cleaning_flipbook1.png" width="60%" style="display: block; margin: auto;" />
 
@@ -80,20 +99,20 @@ flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.h
 More favorites:
 
   - [Galton
-    Board](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html#1)
+    Board](https://evamaerey.github.io/flipbooks/galton_board/galton_board.html#1)
   - [leaflet for R (interactive
-    maps)](https://evamaerey.github.io/little_flipbooks_library/leaflet/leaflet#1)
+    maps)](https://evamaerey.github.io/flipbooks/leaflet/leaflet#1)
   - [ggplot
-    themes](https://evamaerey.github.io/little_flipbooks_library/taming_themes_in_ggplot/taming_ggplot_themes.html)
+    themes](https://evamaerey.github.io/flipbooks/taming_themes_in_ggplot/taming_ggplot_themes.html)
   - [racing
-    barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html)
+    barchart](https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html)
   - [easing gallery for
     gganimate](https://evamaerey.github.io/easing_gganimate/easing_examples.html)
   - [D’Hondt/Jefferson
-    Allocation](https://evamaerey.github.io/little_flipbooks_library/dhondt_jefferson_allocation/dhondt_jefferson_allocation)
+    Allocation](https://evamaerey.github.io/flipbooks/dhondt_jefferson_allocation/dhondt_jefferson_allocation)
   - [ggplot
-    themes](https://evamaerey.github.io/little_flipbooks_library/taming_themes_in_ggplot/taming_ggplot_themes.html)
+    themes](https://evamaerey.github.io/flipbooks/taming_themes_in_ggplot/taming_ggplot_themes.html)
   - [a data.table
-    flipbook](https://evamaerey.github.io/little_flipbooks_library/data.table/data.table)
+    flipbook](https://evamaerey.github.io/flipbooks/data.table/data.table)
   - [\#TidyTuesday walk
     through](https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html)
