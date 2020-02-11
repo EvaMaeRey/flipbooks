@@ -1,0 +1,147 @@
+---
+title: "Mapping Data in R"
+subtitle: "A 'flipbookr' Tutorial"
+author: "Conner J. Surrency, January 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 10:5
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, echo=F}
+knitr::opts_chunk$set(fig.width = 12, message = FALSE, warning = FALSE, comment = "", cache = TRUE, fig.retina = 3)
+
+library(flipbookr)
+```
+
+# What Are We Doing?
+--
+
+- Here we will walk through the process of creating maps in RStudio.
+--
+
+- This will include the packages required and how to code a map.
+--
+
+- We will be looking at data from two cases: incidents of terrorism in India, and defense expenditure of NATO member states. 
+
+
+---
+
+## Set-Up
+--
+
+We will need the following packages (and data) installed:  
+--
+
+- tidyverse
+--
+
+- rnaturalearth
+
+
+---
+#Example #1
+--
+
+We will begin with the India data. It is a collection of coordinate points representing each terrorist attack attempted in India between 1972-2017. It also contains a classification of the motivation type of the perpetrator. 
+
+The map we make will be a simple static map that shows those points.
+
+---
+
+
+```{r, echo=T}
+library(tidyverse)
+library(rnaturalearth)
+library(readxl)
+indian_terrorism <- read_excel("C:/Users/conne/OneDrive/Desktop/flipbook/indian_terrorism.xlsx")
+
+indian_terrorism %>%
+  mutate(year = as.numeric(year)) %>% 
+  select(year, latitude, longitude, mtype) ->
+terrorism_data
+
+terrorism_data
+```
+
+```{r terror, include = FALSE, echo=F}
+rnaturalearth::ne_countries(
+  scale = "medium", returnclass = "sf") %>% 
+  filter(name == 'India') -> 
+  india
+
+ggplot(data = terrorism_data) + 
+  ggplot2::geom_sf(data = india) + 
+  ggplot2::coord_sf(xlim = c(67, 98), 
+           ylim = c(7, 36.7), 
+           expand = FALSE) + 
+    geom_point(aes(x = longitude, 
+                   y = latitude, 
+                   color = mtype), 
+               alpha = .3) +
+    scale_color_manual(
+      values=c("darkorchid1", "forestgreen", 
+               "indianred2", "cyan3", 
+               "darkgoldenrod2")) + 
+    labs(title = "Attacks by Motivation Type") + 
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme(axis.title = element_blank()) 
+```
+
+
+---
+
+`r reveal("terror", reveal_type = "auto")`
+
+
+---
+#Example #2
+--
+
+The second example will also draw its shapefiles from the rnaturalearth package. We will also use a dataset containing the defense expenditure of NATO member states. 
+
+We will make a colored map that allows for easy visual comparison of spending levels. This type is called a choropleth map.
+
+---
+
+
+```{r, echo=T}
+library(readxl)
+nato_expenditure <- read_excel("C:/Users/conne/OneDrive/Desktop/flipbook/nato_expenditure.xlsx")
+
+nato_expenditure
+```
+---
+
+```{r nato, include = FALSE, echo=F}
+rnaturalearth::ne_countries(
+  scale = "medium", returnclass = "sf") %>% 
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %>% 
+  left_join(nato_expenditure,by="name") ->
+  nato_countries
+
+ggplot(data = nato_countries) + 
+  ggplot2::geom_sf(data = nato_countries) + 
+    aes(fill = spendingPercap) +
+    scale_fill_gradient(low = "lightskyblue1", 
+                        high = "dodgerblue3") +
+  ggplot2::coord_sf(xlim = c(-175, 47.5), 
+           ylim = c(23, 85), 
+           expand = FALSE) + 
+    labs(title = "Defense Expenditure by Share of GDP (%)", 
+         subtitle = "NATO Member States", 
+         fill = "Share of GDP (%)") + 
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), 
+          plot.subtitle = element_text(hjust = 0.5)) 
+```
+
+`r reveal("nato", reveal_type = "auto")`
+
