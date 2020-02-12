@@ -55,9 +55,9 @@ ggplot() +
   theme_minimal() +
   theme(legend.position = "none", #no legend
         plot.margin = margin(35, 35, 10, 35)) + 
-  labs(title = "<b><span style = 'font-size:20pt'>15% of <span style = 'color:#F11B59;'>**Americans Have no Favorite Spectator Sport**</span></span></b><br> <b><span style = 'font-size:14pt'>Share of Answers to **Gallup** question *'What is your favorite sport to watch'* in 2017</span></b><br>") +
   labs(x = NULL) + 
   labs(y = NULL) +
+  labs(title = "<b><span style = 'font-size:20pt'>15% of <span style = 'color:#F11B59;'>**Americans Have no Favorite Spectator Sport**</span></span></b><br> <b><span style = 'font-size:14pt'>Share of Answers to **Gallup** question *'What is your favorite sport to watch'* in 2017</span></b><br>") +
   labs(caption = "#makeovermonday 01/2020 | @ProfDrKSchulte | Inspired by: @barnabasmarkus") +
   theme(plot.title.position = "plot") +
   theme(plot.title = ggtext::element_textbox_simple(
