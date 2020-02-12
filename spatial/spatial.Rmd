@@ -1,7 +1,7 @@
 ---
 title: "Mapping Data in R with geom_sf()"
 subtitle: "a 'flipbookr' tutorial"
-author: "Conner J. Surrency, January 2020"
+author: "Conner J. Surrency, January 2020, advice/editing Gina Reynolds"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, echo=F}
-knitr::opts_chunk$set(fig.width = 12, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3)
+knitr::opts_chunk$set(fig.width = 12, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
 library(flipbookr)
 ```
 
