@@ -1,0 +1,87 @@
+---
+title: "ggplotting w/ Claus Wilk's new ggtext"
+subtitle: "made with {flipbookr}"
+author: "Klaus Schulte, edited by Gina Reynolds, Feb 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r}
+library("httr")
+library("readxl")
+df <- readxl::read_excel("sports_data.xlsx")
+knitr::opts_chunk$set(cache = T)
+```
+
+---
+
+```{r}
+library(tidyverse)
+```
+
+---
+
+`r flipbookr::chunk_reveal("wrangle")`
+
+```{r wrangle, include = F}
+df %>% 
+  janitor::clean_names() %>%
+  arrange(-x2017) %>% 
+  select(1:2) %>% 
+  mutate(sport_dummy = sport != "None") %>% 
+  slice(1:10) %>% 
+ggplot() +
+  aes(x = sport) +
+  aes(y = x2017) + 
+  aes(fill = sport_dummy) +
+  aes(color = sport_dummy) + 
+  geom_col(width = 0.6) + 
+  coord_flip() + 
+  aes(x = reorder(sport, x2017)) +
+  geom_text(aes(label = x2017),
+            nudge_y = 1) +
+  scale_fill_manual(values =
+                      c("#F11B59", "#8d8d8d")) + 
+  scale_color_manual(values = 
+                       c("#F11B59", "#8d8d8d")) + 
+  theme_minimal() +
+  theme(legend.position = "none", #no legend
+        plot.margin = margin(35, 35, 10, 35)) + 
+  labs(title = "<b><span style = 'font-size:20pt'>15% of <span style = 'color:#F11B59;'>**Americans Have no Favorite Spectator Sport**</span></span></b><br> <b><span style = 'font-size:14pt'>Share of Answers to **Gallup** question *'What is your favorite sport to watch'* in 2017</span></b><br>") +
+  labs(x = NULL) + 
+  labs(y = NULL) +
+  labs(caption = "#makeovermonday 01/2020 | @ProfDrKSchulte | Inspired by: @barnabasmarkus") +
+  theme(plot.title.position = "plot") +
+  theme(plot.title = ggtext::element_textbox_simple(
+      size = 13,
+      face = NULL,
+      lineheight = 1.75,
+      padding = margin(5, 5, 0, 5),
+      margin = margin(0, 0, 0, 0),
+      fill = "white")) +
+  theme(plot.caption.position = "plot") +
+  theme(plot.caption = ggtext::element_textbox_simple(
+      size = 10,
+      lineheight = 1,
+      padding = margin(10, 10, 10, 10),
+      margin = margin(10, 0, 10, 0),
+      fill = "#F5F5F5",
+      halign = 0.5,
+      valign = 0.5)) 
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 45%}
+```
+

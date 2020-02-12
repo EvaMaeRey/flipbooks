@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>tuning ggplot themes</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="  Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# tuning ggplot themes
+## a flipbook | made with Xaringan
+### <br><br>Gina Reynolds, May 2019
+### <br>
+
+---
+
+
+
+
+```r
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ───────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
+source("../xaringan_reveal_parentheses_balanced.R")
+```
+
+
+
+
+```r
+cars %&gt;%            
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%  
+  ggplot() +              
+  aes(x = speed) +
+  aes(y = dist) +  
+  # Describing what follows
+  geom_point(
+    size = 8, #REVEAL5
+    aes(color = speed_14_plus, #REVEAL6
+        shape = speed_14_plus), #REVEAL6
+    ) +
+  geom_point(
+    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2
+    color = "red", #REVEAL2
+    size = 5,   #REVEAL3
+    alpha = .8, #REVEAL4
+    )
+```
+
+![](nonsequential_reveal_files/figure-html/example-1.png)&lt;!-- --&gt;
+
+
+```r
+"example" %&gt;% 
+  parse_chunk() %&gt;% 
+  knitr::kable()
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+
+
+ line   num_open_par   num_closed_par  full_line                               comment                     raw_code                                       code                                   user_non_seq  user_reveal   connector   balanced_par 
+-----  -------------  ---------------  --------------------------------------  --------------------------  ---------------------------------------------  ------------------------------------  -------------  ------------  ----------  -------------
+    1              0                0  cars%&gt;%                                                             cars %&gt;%                                       cars                                              1  FALSE         %&gt;%         TRUE         
+    2              1                1  mutate(speed_14_plus=speed&gt;=14)%&gt;%                                  mutate(speed_14_plus = speed &gt;= 14) %&gt;%        mutate(speed_14_plus = speed &gt;= 14)               1  FALSE         %&gt;%         TRUE         
+    3              1                1  ggplot()+                                                           ggplot() +                                     ggplot()                                          1  FALSE         +           TRUE         
+    4              1                1  aes(x=speed)+                                                       aes(x = speed) +                               aes(x = speed)                                    1  FALSE         +           TRUE         
+    5              1                1  aes(y=dist)+                                                        aes(y = dist) +                                aes(y = dist)                                     1  FALSE         +           TRUE         
+    6              0                0  # Describing what follows               # Describing what follows   # Describing what follows                                                                        1  FALSE                     FALSE        
+    7              1                0  geom_point(                                                         geom_point(                                    geom_point(                                       1  FALSE                     FALSE        
+    8              0                0  size=8,#REVEAL5                                                     size = 8, #REVEAL5                             size = 8,                                         5  FALSE                     FALSE        
+    9              1                0  aes(color=speed_14_plus,#REVEAL6                                    aes(color = speed_14_plus, #REVEAL6            aes(color = speed_14_plus,                        6  FALSE                     FALSE        
+   10              0                1  shape=speed_14_plus),#REVEAL6                                       shape = speed_14_plus), #REVEAL6               shape = speed_14_plus),                           6  FALSE                     FALSE        
+   11              0                1  )+                                                                  ) +                                            )                                                 1  FALSE         +           TRUE         
+   12              1                0  geom_point(                                                         geom_point(                                    geom_point(                                       1  FALSE                     FALSE        
+   13              1                1  data=cars%&gt;%filter(speed&gt;14),#REVEAL2                               data = cars %&gt;% filter(speed &gt; 14), #REVEAL2   data = cars %&gt;% filter(speed &gt; 14),               2  FALSE                     FALSE        
+   14              0                0  color="red",#REVEAL2                                                color = "red", #REVEAL2                        color = "red",                                    2  FALSE                     FALSE        
+   15              0                0  size=5,#REVEAL3                                                     size = 5,   #REVEAL3                           size = 5,                                         3  FALSE                     FALSE        
+   16              0                0  alpha=.8,#REVEAL4                                                   alpha = .8, #REVEAL4                           alpha = .8,                                       4  FALSE                     FALSE        
+   17              0                1  )                                                                   )                                              )                                                 1  FALSE                     TRUE         
+
+
+
+
+```r
+local_code &lt;- "cars %&gt;%            
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%  
+  ggplot() +              
+    aes(x = speed) +
+    aes(y = dist) +  
+    # Describing what follows
+    geom_point(
+      size = 2,   #REVEAL2
+      alpha = .3, #REVEAL3
+      color = \"blue\", #REVEAL4
+      ) + 
+    aes(color = speed_14_plus)"
+```
+
+
+---
+
+
+```r
+parse_code(local_code)
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+## # A tibble: 12 x 11
+##     line num_open_par num_closed_par full_line comment raw_code code 
+##    &lt;int&gt;        &lt;int&gt;          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;
+##  1     1            0              0 cars%&gt;%   ""      "cars %… "car…
+##  2     2            1              1 mutate(s… ""      "  muta… "  m…
+##  3     3            1              1 ggplot()+ ""      "  ggpl… "  g…
+##  4     4            1              1 aes(x=sp… ""      "    ae… "   …
+##  5     5            1              1 aes(y=di… ""      "    ae… "   …
+##  6     6            0              0 # Descri… # Desc… "    # … ""   
+##  7     7            1              0 geom_poi… ""      "    ge… "   …
+##  8     8            0              0 size=2,#… ""      "      … "   …
+##  9     9            0              0 alpha=.3… ""      "      … "   …
+## 10    10            0              0 "color=\… ""      "      … "   …
+## 11    11            0              1 )+        ""      "      … "   …
+## 12    12            1              1 aes(colo… ""      "    ae… "   …
+## # … with 4 more variables: user_non_seq &lt;dbl&gt;, user_reveal &lt;lgl&gt;,
+## #   connector &lt;chr&gt;, balanced_par &lt;lgl&gt;
+```
+
+```r
+parsed &lt;- parse_code(local_code)
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```r
+reveal_parsed_nonsequential &lt;- function(parsed, which_supress = 2:5, which_highlight = 6){
+  
+  parsed %&gt;% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %&gt;% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#&lt;&lt;", "")) %&gt;% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %&gt;% 
+    select(out) -&gt;
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+reveal_code_nonsequential &lt;- function(code, which_supress = 2:5, which_highlight = 6){
+  
+  parsed &lt;- parse_code(code = code) 
+
+  parsed %&gt;% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %&gt;% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#&lt;&lt;", "")) %&gt;% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %&gt;% 
+    select(out) -&gt;
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+reveal_chunk_nonsequential &lt;- function(chunk_name, which_supress = 2:5, which_highlight = 6){
+  
+  content &lt;- chunk_as_text(chunk_name)
+  parsed &lt;- parse_code(code = content) 
+
+  parsed %&gt;% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %&gt;% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#&lt;&lt;", "")) %&gt;% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %&gt;% 
+    select(out) -&gt;
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+local_code %&gt;% 
+  parse_code() %&gt;% 
+  reveal_parsed_nonsequential() 
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+##  [1] "cars %&gt;%              "                                     
+##  [2] "  "                                                         
+##  [3] "  "                                                         
+##  [4] "  "                                                         
+##  [5] "  "                                                         
+##  [6] "    # Describing what follows  # Describing what follows#&lt;&lt;"
+##  [7] "    geom_point(  "                                          
+##  [8] "      size = 2,   #REVEAL2  "                               
+##  [9] "      alpha = .3, #REVEAL3  "                               
+## [10] "      color = \"blue\", #REVEAL4  "                         
+## [11] "      ) +   "                                               
+## [12] "    aes(color = speed_14_plus)  "
+```
+
+
+
+```r
+reveal_chunk_nonsequential('example', 1, NULL)
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+##  [1] "  "                                                    
+##  [2] "  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    "         
+##  [3] "  ggplot() +                "                          
+##  [4] "  aes(x = speed) +  "                                  
+##  [5] "  aes(y = dist) +    "                                 
+##  [6] "  # Describing what follows  # Describing what follows"
+##  [7] "  geom_point(  "                                       
+##  [8] "    size = 8, #REVEAL5  "                              
+##  [9] "    aes(color = speed_14_plus, #REVEAL6  "             
+## [10] "        shape = speed_14_plus), #REVEAL6  "            
+## [11] "    ) +  "                                             
+## [12] "  geom_point(  "                                       
+## [13] "    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  "    
+## [14] "    color = \"red\", #REVEAL2  "                       
+## [15] "    size = 5,   #REVEAL3  "                            
+## [16] "    alpha = .8, #REVEAL4  "                            
+## [17] "    )  "
+```
+
+```r
+reveal_chunk_nonsequential("example")
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+##  [1] "cars %&gt;%              "                                   
+##  [2] "  "                                                       
+##  [3] "  "                                                       
+##  [4] "  "                                                       
+##  [5] "  "                                                       
+##  [6] "  # Describing what follows  # Describing what follows#&lt;&lt;"
+##  [7] "  geom_point(  "                                          
+##  [8] "    size = 8, #REVEAL5  "                                 
+##  [9] "    aes(color = speed_14_plus, #REVEAL6  "                
+## [10] "        shape = speed_14_plus), #REVEAL6  "               
+## [11] "    ) +  "                                                
+## [12] "  geom_point(  "                                          
+## [13] "    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  "       
+## [14] "    color = \"red\", #REVEAL2  "                          
+## [15] "    size = 5,   #REVEAL3  "                               
+## [16] "    alpha = .8, #REVEAL4  "                               
+## [17] "    )  "
+```
+
+
+
+```r
+calc_supress &lt;- function(parsed){
+  
+  parsed %&gt;% 
+    pull(user_non_seq) -&gt;
+  code_ordering  
+    
+  code_ordering %&gt;% 
+    unique() %&gt;% 
+    sort() -&gt;
+  steps
+  
+  which_supress &lt;- list()
+  
+  for (i in steps) {
+    
+    which_supress[[i]] &lt;- which(code_ordering &gt; i)
+      
+  }
+
+  
+  return(which_supress)
+  
+}
+
+
+local_code %&gt;% 
+  parse_code() %&gt;% 
+  calc_supress()
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+## [[1]]
+## [1]  8  9 10
+## 
+## [[2]]
+## [1]  9 10
+## 
+## [[3]]
+## [1] 10
+## 
+## [[4]]
+## integer(0)
+```
+
+```r
+calc_highlight_non_sequential &lt;- function(parsed) {
+  
+  parsed %&gt;% 
+    pull(user_non_seq) -&gt;
+  code_ordering  
+    
+  code_ordering %&gt;% 
+    unique() %&gt;% 
+    sort() -&gt;
+  steps
+  
+  highlighting &lt;- list()
+  
+  for (i in steps)
+  
+  if (i == 1) {
+    highlighting[[i]] &lt;- NULL
+  } else {
+    highlighting[[i]] &lt;- which(code_ordering == i)
+  }
+  
+  return(highlighting)
+
+}
+
+"example" %&gt;% 
+  parse_chunk() %&gt;% 
+  calc_highlight_non_sequential()
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+## [[1]]
+## NULL
+## 
+## [[2]]
+## [1] 13 14
+## 
+## [[3]]
+## [1] 15
+## 
+## [[4]]
+## [1] 16
+## 
+## [[5]]
+## [1] 8
+## 
+## [[6]]
+## [1]  9 10
+```
+
+
+
+```r
+# partial knit chunks
+
+non_sequential_partially_knit_chunks &lt;- function(chunk_name, show_code = T, title = "", reg_assignment = F) {
+  # Create slide for lines 1:N for each line N in the given chunk
+  
+  parsed &lt;- parse_chunk(chunk_name)
+  
+  parsed %&gt;% 
+    pull(user_non_seq) %&gt;% 
+    unique() %&gt;% 
+    sort() -&gt;
+  steps
+    
+  steps_supress &lt;- calc_supress(parsed)
+
+  highlighting &lt;- calc_highlight_non_sequential(parsed)
+  
+  if (show_code == T) {
+    partial_knit_steps &lt;- glue::glue(
+      "class: split-40",
+      "count: false",
+      ".column[.content[",
+      "```{r plot_{{chunk_name}}_{{steps}}, eval=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+      "```",
+      "]]",
+      ".column[.content[",
+      "```{r output_{{chunk_name}}_{{steps}}, echo=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+      "```",
+      "]]",
+      .open = "{{", .close = "}}", .sep = "\n"
+    )
+  } else {
+    
+    partial_knit_steps &lt;- glue::glue(title,"```{r output_{{chunk_name}}_{{steps}}, echo=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+                                     "```",
+                                     .open = "{{", .close = "}}", .sep = "\n"
+    )
+    
+  }
+  
+  glue::glue_collapse(x = partial_knit_steps, sep = "\n---\n")
+}
+```
+
+---
+
+
+```r
+non_sequential_partially_knit_chunks(chunk_name = "example")
+```
+
+```
+## Joining, by = "line"
+```
+
+```
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+
+## Warning in stri_replace_first_regex(string, pattern,
+## fix_replacement(replacement), : empty search patterns are not supported
+```
+
+```
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_1, eval=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 13, 14, 15, 16), NULL)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_1, echo=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 13, 14, 15, 16), NULL)}
+## ```
+## ]]
+## ---
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_2, eval=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 15, 16), 13:14)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_2, echo=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 15, 16), 13:14)}
+## ```
+## ]]
+## ---
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_3, eval=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 16), 15)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_3, echo=FALSE, code=reveal_chunk_nonsequential('example', c(8, 9, 10, 16), 15)}
+## ```
+## ]]
+## ---
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_4, eval=FALSE, code=reveal_chunk_nonsequential('example', 8:10, 16)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_4, echo=FALSE, code=reveal_chunk_nonsequential('example', 8:10, 16)}
+## ```
+## ]]
+## ---
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_5, eval=FALSE, code=reveal_chunk_nonsequential('example', 9:10, 8)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_5, echo=FALSE, code=reveal_chunk_nonsequential('example', 9:10, 8)}
+## ```
+## ]]
+## ---
+## class: split-40
+## count: false
+## .column[.content[
+## ```{r plot_example_6, eval=FALSE, code=reveal_chunk_nonsequential('example', integer(0), 9:10)}
+## ```
+## ]]
+## .column[.content[
+## ```{r output_example_6, echo=FALSE, code=reveal_chunk_nonsequential('example', integer(0), 9:10)}
+## ```
+## ]]
+```
+
+---
+
+
+```r
+apply_reveal_nonsequential &lt;- function(...){
+  paste(knitr::knit(text = non_sequential_partially_knit_chunks(...)), collapse = "\n")
+}
+```
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+  
+  
+  
+    ) +  
+  geom_point(  
+  
+  
+  
+  
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+  
+  
+  
+    ) +  
+  geom_point(  
+*   data = cars %&gt;% filter(speed &gt; 14), #REVEAL2
+*   color = "red", #REVEAL2
+  
+  
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+  
+  
+  
+    ) +  
+  geom_point(  
+    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  
+    color = "red", #REVEAL2  
+*   size = 5,   #REVEAL3
+  
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+  
+  
+  
+    ) +  
+  geom_point(  
+    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  
+    color = "red", #REVEAL2  
+    size = 5,   #REVEAL3  
+*   alpha = .8, #REVEAL4
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+*   size = 8, #REVEAL5
+  
+  
+    ) +  
+  geom_point(  
+    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  
+    color = "red", #REVEAL2  
+    size = 5,   #REVEAL3  
+    alpha = .8, #REVEAL4  
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%              
+  mutate(speed_14_plus = speed &gt;= 14) %&gt;%    
+  ggplot() +                
+  aes(x = speed) +  
+  aes(y = dist) +    
+  # Describing what follows  # Describing what follows
+  geom_point(  
+    size = 8, #REVEAL5  
+*   aes(color = speed_14_plus, #REVEAL6
+*       shape = speed_14_plus), #REVEAL6
+    ) +  
+  geom_point(  
+    data = cars %&gt;% filter(speed &gt; 14), #REVEAL2  
+    color = "red", #REVEAL2  
+    size = 5,   #REVEAL3  
+    alpha = .8, #REVEAL4  
+    )  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_example_6-1.png)&lt;!-- --&gt;
+]]
+
+
+
+---
+
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gganimate)  
+library(gapminder)  
+gapminder %&gt;%   
+  
+  ggplot() +  
+  aes(x = gdpPercap) +   
+  aes(y = lifeExp) +  
+  aes(size = pop) +   
+  aes(colour = continent) +  
+  
+  geom_point(alpha = 0.7,   
+             show.legend = FALSE) +  
+  scale_size(range = c(2, 12)) +  
+  scale_x_log10() +  
+  facet_wrap(~ continent) +  
+  # Here comes the gganimate specific bits  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}',   
+       x = 'GDP per capita',   
+       y = 'life expectancy') +  
+  gganimate::transition_time(year) +  
+  gganimate::ease_aes('linear')  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_caution_group_1-1.gif)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gganimate)  
+library(gapminder)  
+gapminder %&gt;%   
+* sample_frac(size = 1, replace = F) %&gt;% #REVEAL2
+  ggplot() +  
+  aes(x = gdpPercap) +   
+  aes(y = lifeExp) +  
+  aes(size = pop) +   
+  aes(colour = continent) +  
+  
+  geom_point(alpha = 0.7,   
+             show.legend = FALSE) +  
+  scale_size(range = c(2, 12)) +  
+  scale_x_log10() +  
+  facet_wrap(~ continent) +  
+  # Here comes the gganimate specific bits  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}',   
+       x = 'GDP per capita',   
+       y = 'life expectancy') +  
+  gganimate::transition_time(year) +  
+  gganimate::ease_aes('linear')  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_caution_group_2-1.gif)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gganimate)  
+library(gapminder)  
+gapminder %&gt;%   
+  sample_frac(size = 1, replace = F) %&gt;% #REVEAL2  
+  ggplot() +  
+  aes(x = gdpPercap) +   
+  aes(y = lifeExp) +  
+  aes(size = pop) +   
+  aes(colour = continent) +  
+* aes(group = country) + #REVEAL3
+  geom_point(alpha = 0.7,   
+             show.legend = FALSE) +  
+  scale_size(range = c(2, 12)) +  
+  scale_x_log10() +  
+  facet_wrap(~ continent) +  
+  # Here comes the gganimate specific bits  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}',   
+       x = 'GDP per capita',   
+       y = 'life expectancy') +  
+  gganimate::transition_time(year) +  
+  gganimate::ease_aes('linear')  
+```
+]]
+.column[.content[
+![](nonsequential_reveal_files/figure-html/output_caution_group_3-1.gif)&lt;!-- --&gt;
+]]
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

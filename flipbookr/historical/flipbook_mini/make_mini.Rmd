@@ -1,0 +1,122 @@
+---
+title: "made mp4"
+author: "Evangeline Reynolds"
+date: "8/10/2019"
+output: html_document
+---
+
+
+
+```{r}
+source(file = "../xaringan_reveal_parentheses_balanced.R")
+library(tidyverse)
+knitr::opts_chunk$set(cache = F, fig.height = 6, fig.width = 6)
+```
+
+
+
+---
+
+# Where we are going: 
+
+We'll create this checkerboard (something An Kdrew Heiss was recently working on).  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "checkerboard", and this is used in the in apply_reveal function, which will break down the code by wrangling and plot statements. 
+
+```{r checkerboard, echo = F, eval = F, fig.height=5}
+ggplot(data = 
+         crossing(x = 1:8, y = 1:8) %>%
+         mutate(value = (x + y) %% 2)
+       ) + 
+  aes(x = x) +  # a comment
+  aes(y = y) + 
+  geom_tile(color = "lightgrey") +
+  aes(fill = factor(value)) +
+  theme_void() +
+  scale_fill_manual(
+    values = c("thistle", 
+               "darkgrey"), 
+    guide = F) + 
+  coord_equal()
+```
+ 
+
+```{r}
+make_flipbook_mini("checkerboard", file_out = "flipped_checker.gif", title = "Make checkerboard")
+```
+
+
+```{r, eval = F}
+library(recipes)
+# Data described here: https://bookdown.org/max/FES/chicago-intro.html
+load(url("https://github.com/topepo/FES/blob/master/Data_Sets/Chicago_trains/chicago.RData?raw=true"))
+
+pca_on_stations <-
+  recipe(~ ., data = training %>% select(starts_with("l14_"))) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  step_pca(all_predictors(), num_comp = 5) %>%
+  prep() %>%
+  juice()
+
+pca_on_stations
+```
+
+
+```{r}
+knitr::include_graphics("flipped_checker.gif")
+```
+
+
+
+```{r}
+library(ggforce)
+```
+
+
+
+```{r facets, eval = F}
+ggplot(data = pca_on_stations) + #REVEAL
+  ggforce::facet_matrix(
+    rows = vars(everything())
+    ) + #REVEAL
+  theme_bw(base_size = 4) + #REVEAL
+  aes(x = .panel_x) + 
+  aes(y = .panel_y) +
+  # first geom layer 
+  geom_point(alpha = 0.2, 
+             shape = 16, 
+             size = 0.5, 
+             color = "plum4") + #REVEAL
+  # second geom layer
+  ggforce::geom_autodensity() +  #REVEAL
+  # third geom layer 
+  geom_density2d() +  #REVEAL
+  # overwrites above facet specification with new
+  ggforce::facet_matrix( 
+    rows = vars(everything()), 
+     layer.lower = 1, # first geom layer
+     layer.diag = c(1,2), # first, second geom layer
+     layer.upper = 3, # third geom layer
+     grid.y.diag = FALSE
+    )  #REVEAL
+```
+
+
+```{r, eval = F}
+make_flipbook_mini(chunk_name = "facets", file_out = "facet_matrix.gif", user_reveal_defined = T, title = "What's new in ggforce", font_size = 2, highlight_color = "goldenrod")
+```
+
+
+```{r, eval = F}
+library(purrr)
+library(magick)
+setwd("make_mini_files/figure-html/")
+list.files(pattern = ".png") %>%
+  file.info() %>%
+  rownames_to_column(var = "file") %>%
+  arrange(mtime) %>% # sort them by time modified
+  pull(file) %>%
+  purrr::map(image_read) %>% # reads each path file
+  magick::image_join() %>% # joins image
+  magick::image_animate(fps = 1) %>% # animates
+  magick::image_write(path = "checkerboard_flipbook_mini.gif")
+```

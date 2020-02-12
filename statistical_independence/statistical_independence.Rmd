@@ -1,0 +1,589 @@
+---
+title: "Cool with statistical independence"
+subtitle: "Basic bivariate statistical tests (and false positives)"
+author: "Evangeline Reynolds"
+date: "September 21 and Oct 24, 2019"
+output:
+  # html_document:
+  #   toc: no
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["xaringan-themer-special.css", "ninjutsu"]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r xaringan-themer, include = FALSE, eval = F}
+# xaringanthemer::write_xaringan_theme(text_font_size = ".75cm",
+#                                      text_color = "darkblue")
+# 
+# xaringanthemer::mono_accent(
+#   base_color = "#43418A",
+#   header_font_google = google_font("Montserrat"),
+#   text_font_google   = google_font("Montserrat", "200", "200i"),
+#   code_font_google   = google_font("Droid Mono"),
+#   text_font_size = ".6cm",
+#   code_font_size = ".7cm", )
+  
+knitr::opts_chunk$set(out.width = "10%", fig.height = 4, comment = "")
+```
+
+```{r}
+source("../xaringan_reveal_parentheses_balanced.R")
+```
+
+
+---
+# Statistical independence
+
+In probability theory, two events are independent, statistically independent, or stochastically independent if the occurrence of one does not affect the probability of occurrence of the other.
+
+Similarly, two random variables are independent if the realization of one does not affect the probability distribution of the other.
+
+---
+## "A statistically significant relationship"
+
+- When you have *evidence* of statistical *dependence*.  The probability of observing of observing such a strong relationship --- or stronger --- under *statistical independence* (the null) is quite small.  
+
+https://www.youtube.com/watch?v=gSyGVDMcg-U
+
+---
+## Hypotheses
+
+Hypothesis testing:
+
+- A null hypothsis: Ho (Often statistical independence)
+- Alternate hypothesis: Ha (Statistical dependence)
+
+---
+## Rejecting the null hypothesis
+
+- Comparison will be made with expectation about null (no relationship).  Such a strong relationship is unlikely to be observed by chance in a sample, if there is *not* dependence.  
+
+---
+
+- If data deviates from expecations about null
+
+   - we reject the null (there is no relationship - statistical independence)
+   - and accept the alternative (there is a relationship - statistical dependence)
+
+---
+## P-Value
+
+The probability that a relationship as strong or stronger would have been observed under the null.
+
+http://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/
+
+---
+## Fisher's exact test
+
+```{r, eval = F}
+number_correct = rep(NA, 1000000)
+for (i in 1:1000000){
+  guess <- sample(c(rep("tea first", 4), rep("milk first", 4)))
+  truth <- sample(c(rep("tea first", 4), rep("milk first", 4)))
+  number_correct[i] = sum(guess == truth)
+}
+
+table(number_correct)
+
+table(number_correct)/10000
+```
+
+
+
+
+
+
+---
+
+# Two statistically *independent* continuous variables
+
+
+
+```{r continuous0, echo = F, eval = F, out.width="20%", comment=""}
+library(tidyverse) 
+set.seed(98735)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -> 
+my_data; my_data  #REVEAL
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) #REVEAL
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight) #REVEAL
+```
+
+---
+
+`r apply_reveal("continuous0", user_reveal_defined = T)`
+
+
+
+---
+
+
+```{r, echo = F}
+# partial knit chunks
+
+reveal_sequence <- function(chunk_name, num_ensembles = 10, seed = sample(1000:2000, num_ensembles, replace = F)) {
+  # Create slide for lines 1:N for each line N in the given chunk
+  # break_points <- seq_along(knitr:::knit_code$get(chunk_name)) # original code, breaks for each line
+
+    out <- glue::glue(
+      "class: split-40",
+      "count: false",
+      "```{r set_{{chunk_name}}_{{seed}}_1, echo = F}",
+      "set.seed({{seed}})",
+      "```",
+      ".column[.content[",
+      "```{r code_{{chunk_name}}_{{seed}}, eval=FALSE, code=knitr::knit_code$get('{{chunk_name}}')}",
+      "```",
+      "]]",
+      # "```{r set_{{chunk_name}}_{{seed}}_2, echo = F}",
+      # "set.seed({{seed}})",
+      # "```",
+      ".column[.content[",
+      "```{r output_{{chunk_name}}_{{seed}}, echo=FALSE, code=knitr::knit_code$get('{{chunk_name}}'), , comment='   '}",
+      "```",
+      "]]",
+      .open = "{{", .close = "}}", .sep = "\n"
+    )
+
+  glue::glue_collapse(x = out, sep = "\n---\n")
+}
+
+apply_repeat_reveal <- function(...){
+  paste(knitr::knit(text = reveal_sequence(...)), collapse = "\n")
+}
+
+
+
+```
+
+
+```{r continuous, echo = F, eval = F, out.width="20%", comment=""}
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) ->
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]<.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]<.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+
+---
+
+`r apply_repeat_reveal("continuous")`
+
+
+
+---
+
+```{r c_and_d2, echo = F, eval = F}
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %>% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) ->
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+
+
+
+
+
+
+
+```
+
+---
+
+
+
+
+---
+
+`r apply_repeat_reveal(chunk_name = "c_and_d2")`
+
+---
+
+
+# ANOVA (analysis of Variance)
+
+
+---
+
+```{r c_and_d3, echo = F, eval = F}
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %>% 
+  mutate(height = rnorm(n = 50)) ->
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+
+
+
+
+
+
+
+```
+
+
+---
+
+`r apply_repeat_reveal(chunk_name = "c_and_d3")`
+
+
+
+
+
+---
+
+
+# Chi-squared test 
+
+$$\chi$$
+
+Two-by-two
+
+```{r d_and_d, echo = F, eval = F}
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) ->
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+
+---
+
+
+
+`r apply_repeat_reveal(chunk_name = "d_and_d")`
+
+
+
+---
+
+```{r lady_tea, echo = F, eval = F}
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %>% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) ->
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+
+
+---
+
+---
+
+
+
+`r apply_repeat_reveal(chunk_name = "lady_tea")`
+
+---
+
+
+
+
+
+
+---
+
+```{r d4_d2, echo = F, eval = F}
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %>% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) ->
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+
+---
+
+`r apply_repeat_reveal(chunk_name = "d4_d2")`
+
+
+
+
+---
+
+# Game Time
+
+https://evangelinereynolds.shinyapps.io/EyeBallIt/
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 30%}
+```

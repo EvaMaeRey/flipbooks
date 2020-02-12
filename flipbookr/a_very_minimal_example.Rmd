@@ -1,0 +1,93 @@
+---
+title: "A Very Minimal Flipbook"
+author: "Gina Reynolds, Feb 9, 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+# If you don't have them already...
+
+## in your console:
+
+--
+
+`install.packages("tidyverse")`
+
+--
+
+`install.packages("xaringan")`
+
+--
+
+`devtools::install_github("EvaMaeRey/flipbookr")`
+
+
+---
+
+<!-- recommended chunk option settings -->
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
+                      comment = "", cache = F)
+```
+
+```{r}
+library(tidyverse)
+library(flipbookr)
+```
+
+---
+
+`r chunk_reveal(chunk_name = "wrangling")`
+
+```{r wrangling, include = F}
+cars %>% 
+  filter(speed > 18) ->
+fast_cars
+```
+
+---
+
+`r chunk_reveal(chunk_name = "plotting")`
+
+```{r plotting, include = F}
+fast_cars %>% 
+  # this demos SLOWggplot
+  # 1. aes is pulled out of
+  # ggplot statement
+  ggplot() +
+  # 2. aesthetics are listed 
+  # one by one
+  aes(x = speed) +
+  aes(y = dist) +
+  # 3. required aesthetics come 
+  # before geoms that require 
+  # them so partial code does
+  # not break - these are positional
+  # x, xmin, xend, y, ymin, etc.
+  # and label
+  geom_point() +
+  # 4. aesthetics that are not 
+  # required - like color
+  # so that flipbook reader
+  # sees feedback
+  aes(color = dist) +
+  scale_color_viridis_c()
+```
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 90%}
+```
+
+

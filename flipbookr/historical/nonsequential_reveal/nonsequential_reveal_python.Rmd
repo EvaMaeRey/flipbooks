@@ -1,0 +1,268 @@
+---
+title: "tuning ggplot themes"
+subtitle: "a flipbook | made with Xaringan"
+author: "<br><br>Gina Reynolds, May 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+
+```{r}
+library(tidyverse)
+source("../xaringan_reveal_parentheses_balanced.R")
+```
+
+
+
+```{python example}
+import matplotlib.pyplot as plt
+import numpy as np
+```
+
+```{r}
+"example" %>% 
+  parse_chunk() %>% 
+  knitr::kable()
+```
+
+
+
+```{r}
+local_code <- "import matplotlib.pyplot as plt
+import numpy as np"
+```
+
+
+---
+
+```{r}
+parse_code(local_code)
+parsed <- parse_code(local_code)
+
+reveal_parsed_nonsequential <- function(parsed, which_supress = 2:5, which_highlight = 6){
+  
+  parsed %>% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %>% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#<<", "")) %>% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %>% 
+    select(out) ->
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+reveal_code_nonsequential <- function(code, which_supress = 2:5, which_highlight = 6){
+  
+  parsed <- parse_code(code = code) 
+
+  parsed %>% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %>% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#<<", "")) %>% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %>% 
+    select(out) ->
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+reveal_chunk_nonsequential <- function(chunk_name, which_supress = 2:5, which_highlight = 6){
+  
+  content <- chunk_as_text(chunk_name)
+  parsed <- parse_code(code = content) 
+
+  parsed %>% 
+    mutate(reveal = ifelse(row_number() %in% which_supress, "", raw_code)) %>% 
+    mutate(highlight = ifelse(row_number() %in% which_highlight, "#<<", "")) %>% 
+    mutate(out = paste0(reveal, "  ", comment, highlight)) %>% 
+    select(out) ->
+    up_to_result
+  up_to_result$out  
+  
+}
+
+
+local_code %>% 
+  parse_code() %>% 
+  reveal_parsed_nonsequential() 
+```
+
+
+```{r}
+reveal_chunk_nonsequential('example', 1, NULL)
+reveal_chunk_nonsequential("example")
+```
+
+
+```{r}
+calc_supress <- function(parsed){
+  
+  parsed %>% 
+    pull(user_non_seq) ->
+  code_ordering  
+    
+  code_ordering %>% 
+    unique() %>% 
+    sort() ->
+  steps
+  
+  which_supress <- list()
+  
+  for (i in steps) {
+    
+    which_supress[[i]] <- which(code_ordering > i)
+      
+  }
+
+  
+  return(which_supress)
+  
+}
+
+
+local_code %>% 
+  parse_code() %>% 
+  calc_supress()
+
+calc_highlight_non_sequential <- function(parsed) {
+  
+  parsed %>% 
+    pull(user_non_seq) ->
+  code_ordering  
+    
+  code_ordering %>% 
+    unique() %>% 
+    sort() ->
+  steps
+  
+  highlighting <- list()
+  
+  for (i in steps)
+  
+  if (i == 1) {
+    highlighting[[i]] <- NULL
+  } else {
+    highlighting[[i]] <- which(code_ordering == i)
+  }
+  
+  return(highlighting)
+
+}
+
+"example" %>% 
+  parse_chunk() %>% 
+  calc_highlight_non_sequential()
+
+```
+
+
+```{r}
+# partial knit chunks
+
+non_sequential_partially_knit_chunks <- function(chunk_name, show_code = T, title = "", reg_assignment = F) {
+  # Create slide for lines 1:N for each line N in the given chunk
+  
+  parsed <- parse_chunk(chunk_name)
+  
+  parsed %>% 
+    pull(user_non_seq) %>% 
+    unique() %>% 
+    sort() ->
+  steps
+    
+  steps_supress <- calc_supress(parsed)
+
+  highlighting <- calc_highlight_non_sequential(parsed)
+  
+  if (show_code == T) {
+    partial_knit_steps <- glue::glue(
+      "class: split-40",
+      "count: false",
+      ".column[.content[",
+      "```{r plot_{{chunk_name}}_{{steps}}, eval=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+      "```",
+      "]]",
+      ".column[.content[",
+      "```{r output_{{chunk_name}}_{{steps}}, echo=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+      "```",
+      "]]",
+      .open = "{{", .close = "}}", .sep = "\n"
+    )
+  } else {
+    
+    partial_knit_steps <- glue::glue(title,"```{r output_{{chunk_name}}_{{steps}}, echo=FALSE, code=reveal_chunk_nonsequential('{{chunk_name}}', {{steps_supress}}, {{highlighting}})}",
+                                     "```",
+                                     .open = "{{", .close = "}}", .sep = "\n"
+    )
+    
+  }
+  
+  glue::glue_collapse(x = partial_knit_steps, sep = "\n---\n")
+}
+
+
+```
+
+---
+
+```{r}
+non_sequential_partially_knit_chunks(chunk_name = "example")
+```
+
+---
+
+```{r}
+apply_reveal_nonsequential <- function(...){
+  paste(knitr::knit(text = non_sequential_partially_knit_chunks(...)), collapse = "\n")
+}
+```
+
+---
+
+`r apply_reveal_nonsequential("example")`
+
+
+
+---
+
+
+
+```{r caution_group, eval = F, echo = F}
+library(gganimate)
+library(gapminder)
+gapminder %>% 
+  sample_frac(size = 1, replace = F) %>% #REVEAL2
+  ggplot() +
+  aes(x = gdpPercap) + 
+  aes(y = lifeExp) +
+  aes(size = pop) + 
+  aes(colour = continent) +
+  aes(group = country) + #REVEAL3
+  geom_point(alpha = 0.7, 
+             show.legend = FALSE) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~ continent) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  gganimate::transition_time(year) +
+  gganimate::ease_aes('linear')
+```
+
+`r apply_reveal_nonsequential("caution_group")`
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 80%}
+```
+

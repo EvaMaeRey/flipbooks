@@ -1,0 +1,149 @@
+---
+title: "Racing Barchart with gganimate"
+subtitle: "a quick flipbook | made with Xaringan"
+author: "<br><br>Gina Reynolds, April 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = F, message = F, warning = F, dpi = 300)
+
+source("../xaringan_reveal_parentheses_balanced.R")
+```
+
+
+# Introduction
+
+This book walks through data prep and plotting a racing barchart with ggplot and gganimate. 
+
+
+
+---
+
+# Set up
+
+
+```{r}
+library(gapminder)
+library(tidyverse)
+```
+
+
+```{r prep_data, echo = F, eval = T}
+gapminder %>% 
+  select(country, pop, year, continent) %>% 
+  # for each year we assign a rank
+  group_by(year) %>% 
+  arrange(year, -pop) %>% 
+  # assign ranking
+  mutate(rank = 1:n()) %>% 
+  filter(rank <= 10) ->
+ranked_by_year
+```
+
+---
+
+`r apply_reveal("prep_data")`
+
+---
+
+
+
+```{r, echo = T}
+my_theme <- theme_classic(base_family = "Times") +
+  theme(axis.text.y = element_blank()) +
+  theme(axis.ticks.y = element_blank()) +
+  theme(axis.line.y = element_blank()) +
+  theme(legend.background = element_rect(fill = "gainsboro")) +
+  theme(plot.background = element_rect(fill = "gainsboro")) +
+  theme(panel.background = element_rect(fill = "gainsboro"))
+```
+  
+---
+# Static plot
+  
+```{r static_bar, eval = T, echo = F}  
+ranked_by_year %>% 
+  ggplot() +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45,
+      y = rank) +
+  facet_wrap(~ year) +
+  geom_rect(alpha = .7) +
+  aes(fill = continent) +
+  scale_fill_viridis_d(option = "magma", 
+                       direction = -1) +
+  scale_x_continuous(
+    limits = c(-800, 1400),
+    breaks = c(0, 400, 800, 1200)) +
+  geom_text(col = "gray13", 
+            hjust = "right",
+            aes(label = country),
+            x = -50) + 
+  scale_y_reverse() +
+  labs(fill = NULL) +
+  labs(x = 'Population (millions)') +
+  labs(y = "") +
+  my_theme ->
+my_plot
+```
+
+---
+`r apply_reveal("static_bar")`
+
+---
+
+# Now set up the animation
+
+Next we add the animation statement, which uses a function from the gganimate package. 
+
+```{r, eval = T}
+library(gganimate) 
+# options(gganimate.nframes = 20)
+```
+
+---
+
+```{r ani_final, eval = F, echo = F, fig.height=5, fig.width=4}
+my_plot +
+  facet_null() +
+  scale_x_continuous(
+    limits = c(-355, 1400),
+    breaks = c(0, 400, 800, 1200)) +
+  geom_text(x = 1000 , y = -10, 
+            family = "Times", 
+            aes(label = as.character(year)), 
+            size = 30, col = "grey18") +
+  aes(group = country) +
+  gganimate::transition_time(year) 
+```
+
+`r apply_reveal("ani_final")`
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 78%}
+```
+
+
+
+
+
+
+
+
+
+

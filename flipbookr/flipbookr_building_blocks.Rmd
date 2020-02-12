@@ -1,0 +1,240 @@
+---
+title: "flipbookr building blocks"
+subtitle: "what lies beneath"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup}
+library(flipbookr)
+library(tidyverse)
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cache = F)
+```
+
+```{r xaringan_look}
+xaringanthemer::mono_accent(
+  code_highlight_color = "rgba(255, 211, 0, .35)",
+  base_color = "#03418A")
+```
+
+---
+
+
+We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
+
+```{r}
+library(tidyverse)
+library(flipbookr)
+```
+
+The input code to be "flipbookified" is below:
+
+```{r cars_plot, echo = T, eval = F, fig.height=5}
+cars %>%  #BREAK          
+  ggplot() +  
+  aes(x = speed) + 
+  aes(color = speed) + #BREAK2
+  geom_rug() #BREAK
+```
+
+
+---
+
+Let's first look at the result of using flipbookr to bring this code.
+
+---
+
+`r chunk_reveal("cars_plot")`
+
+---
+
+
+# Move to automate
+
+
+## 1. *Automatically* parsing a block of input code 
+
+--
+
+## 2. *Automatically* reconstructing code into partial builds
+
+--
+
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
+
+
+
+---
+
+Now, lets look at some of the functions working in the background.
+
+
+---
+
+## 1.  *Automatically* parsing a block of input code 
+
+---
+
+`r chunk_reveal("code_parsing")`
+
+
+```{r, code_parsing, echo = F, eval = F}
+# The name of the code chunk containing code to be flipped
+flipbookr:::create_code() %>% 
+  # parse that code into code, pipes, comments, etc
+  flipbookr:::code_parse() 
+```
+
+---
+
+## 2. *Automatically* reconstructing code into partial builds
+
+---
+
+## First calculate which lines need to be shown and highlighted in each frame of the mini flipbook.
+
+--
+
+A list is returned where each frame corresponds to the element in the list.  
+
+--
+
+Within the list numbers of the lines of code for each frame is returned.
+
+--
+
+This is dependent on what the user has set for the break_type. 
+--
+
+Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
+
+
+---
+
+`r chunk_reveal("calc_lines_for_show_and_highlight")`
+
+
+```{r calc_lines_for_show_and_highlight, echo = F, eval = F}
+# The name of the code chunk containing code to be flipped
+flipbookr:::create_code() %>% 
+  # parse that code into code, pipes, comments, etc
+  flipbookr:::code_parse() %>% 
+  # calculate which lines to show for each frame
+  flipbookr:::parsed_calc_show(break_type = "non_seq") %>% 
+  # calculate highlighting that is needed for each frame
+  flipbookr:::shown_lines_calc_highlight(break_type = "non_seq")
+```
+
+---
+
+## Based on the calculation, return partial code builds for each frame of the flipbook.
+
+--
+
+We create a list of strings of the partial builds, which can be saved as an object `code_seq`.
+
+---
+
+`r chunk_reveal("partial_code")`
+
+
+```{r partial_code, echo = F, eval = F}
+# from the parsed code 
+# and using calc for which lines to display ...
+flipbookr:::create_code() %>% 
+  flipbookr:::code_parse() %>% #BREAK
+  # ... return the code needed for each slide ...
+  flipbookr:::parsed_return_partial_code_sequence() -> #BREAK
+# ... save this list
+code_seq #BREAK
+```
+
+
+
+
+
+---
+
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
+
+
+```{r xaringan_slides}
+return_partial_chunks_template_code()
+return_partial_chunks_template_output()
+```
+
+---
+
+# The generic templates above...
+
+
+
+---
+
+## ... are used to create chunks of code and output displayed side-by-side
+
+```{r}
+chunk_expand(chunk_name = "cars_plot")
+```
+
+
+---
+
+## ... or a series of slides that *just* display output or *just* display code 
+
+
+```{r}
+chunk_expand(num_breaks = 2, display_type = "code")
+chunk_expand(num_breaks = 2, display_type = "output")
+```
+
+
+
+
+---
+
+# The reveal asks for the chunks we've created to be evaluated, by using the knitr::knit() function. 
+
+We've applied it above.  Let's just look at the function itself.  
+
+```{r}
+chunk_reveal
+```
+
+---
+
+# Notes (points of vacillation)
+
+I'm vacillating on the public function name still.  I thought about chunk_reveal, reveal, flipbookify, flipify.
+Most recently, I was most excited about chunk_reveal, but the function will also work with the parsed and expanded code as an input, which I think is really cool, and makes the code nice and flexible a la Yihui here:  https://yihui.org/en/2018/11/two-roads/
+
+Related, I'm a little nervous about code_seq argument.  What if code_seq is defined in the global environment? 
+There is this interesting warning about this formulation: https://adv-r.hadley.nz/functions.html#default-arguments  
+
+Probably the right (worry free) way is to set the default to NULL, and then do an if.null() inside the function where code_seq is defined. The one downside is that this is a little verbose, right?  num_breaks would also need to be adjusted in this way. 
+
+Another point of waffling was the argument order.  What's really the main input, is it the expanded code, or is it the chunk name?  Which ever (I'm not sure) should be the first thing. It probably must be the chunk name, as this is the way people will most likely use the code, else there would be a lot of confusion for the user.  Still, I found it unsatisfying that you, can't then somehow pipe code into this final function. 
+
+
+---
+
+
+# Go to code [**here**](https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R)
+
+https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

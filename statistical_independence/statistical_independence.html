@@ -1,0 +1,6043 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Cool with statistical independence</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Evangeline Reynolds" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer-special.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Cool with statistical independence
+## Basic bivariate statistical tests (and false positives)
+### Evangeline Reynolds
+### September 21 and Oct 24, 2019
+
+---
+
+
+
+
+
+```r
+source("../xaringan_reveal_parentheses_balanced.R")
+```
+
+```
+## ── Attaching packages ───────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+
+---
+# Statistical independence
+
+In probability theory, two events are independent, statistically independent, or stochastically independent if the occurrence of one does not affect the probability of occurrence of the other.
+
+Similarly, two random variables are independent if the realization of one does not affect the probability distribution of the other.
+
+---
+## "A statistically significant relationship"
+
+- When you have *evidence* of statistical *dependence*.  The probability of observing of observing such a strong relationship --- or stronger --- under *statistical independence* (the null) is quite small.  
+
+https://www.youtube.com/watch?v=gSyGVDMcg-U
+
+---
+## Hypotheses
+
+Hypothesis testing:
+
+- A null hypothsis: Ho (Often statistical independence)
+- Alternate hypothesis: Ha (Statistical dependence)
+
+---
+## Rejecting the null hypothesis
+
+- Comparison will be made with expectation about null (no relationship).  Such a strong relationship is unlikely to be observed by chance in a sample, if there is *not* dependence.  
+
+---
+
+- If data deviates from expecations about null
+
+   - we reject the null (there is no relationship - statistical independence)
+   - and accept the alternative (there is a relationship - statistical dependence)
+
+---
+## P-Value
+
+The probability that a relationship as strong or stronger would have been observed under the null.
+
+http://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/
+
+---
+## Fisher's exact test
+
+
+```r
+number_correct = rep(NA, 1000000)
+for (i in 1:1000000){
+  guess &lt;- sample(c(rep("tea first", 4), rep("milk first", 4)))
+  truth &lt;- sample(c(rep("tea first", 4), rep("milk first", 4)))
+  number_correct[i] = sum(guess == truth)
+}
+
+table(number_correct)
+
+table(number_correct)/10000
+```
+
+
+
+
+
+
+---
+
+# Two statistically *independent* continuous variables
+
+
+
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(tidyverse)
+*set.seed(98735)
+*tibble(tail_length = rnorm(n = 50),
+*      brain_weight = rnorm(n = 50)) -&gt;
+*my_data; my_data
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 2
+##    tail_length brain_weight
+##          &lt;dbl&gt;        &lt;dbl&gt;
+##  1      -1.64       -0.530 
+##  2      -0.107      -0.744 
+##  3       0.185       0.476 
+##  4       1.36        1.32  
+##  5       0.210      -0.0852
+##  6      -0.658      -1.36  
+##  7       1.53       -1.18  
+##  8       1.40       -0.867 
+##  9       1.54        0.115 
+## 10       0.131       0.960 
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+set.seed(98735)  
+tibble(tail_length = rnorm(n = 50),  
+       brain_weight = rnorm(n = 50)) -&gt;  
+my_data; my_data  
+*ggplot(data = my_data) +
+* aes(x = tail_length) +
+* aes(y = brain_weight) +
+* geom_point(color = "steelblue",
+*            alpha = .8)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 2
+##    tail_length brain_weight
+##          &lt;dbl&gt;        &lt;dbl&gt;
+##  1      -1.64       -0.530 
+##  2      -0.107      -0.744 
+##  3       0.185       0.476 
+##  4       1.36        1.32  
+##  5       0.210      -0.0852
+##  6      -0.658      -1.36  
+##  7       1.53       -1.18  
+##  8       1.40       -0.867 
+##  9       1.54        0.115 
+## 10       0.131       0.960 
+## # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous0_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+set.seed(98735)  
+tibble(tail_length = rnorm(n = 50),  
+       brain_weight = rnorm(n = 50)) -&gt;  
+my_data; my_data  
+ggplot(data = my_data) +  
+  aes(x = tail_length) +  
+  aes(y = brain_weight) +  
+  geom_point(color = "steelblue",  
+             alpha = .8)  
+*cor.test(x = my_data$tail_length,
+*             y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 2
+##    tail_length brain_weight
+##          &lt;dbl&gt;        &lt;dbl&gt;
+##  1      -1.64       -0.530 
+##  2      -0.107      -0.744 
+##  3       0.185       0.476 
+##  4       1.36        1.32  
+##  5       0.210      -0.0852
+##  6      -0.658      -1.36  
+##  7       1.53       -1.18  
+##  8       1.40       -0.867 
+##  9       1.54        0.115 
+## 10       0.131       0.960 
+## # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous0_12-1.png)&lt;!-- --&gt;
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  my_data$tail_length and my_data$brain_weight
+## t = -0.14569, df = 48, p-value = 0.8848
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.2976302  0.2588382
+## sample estimates:
+##         cor 
+## -0.02102428
+```
+]]
+
+
+
+---
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1       1.24       -0.451 
+     2       0.544       0.243 
+     3      -0.487       0.395 
+     4      -1.09        0.492 
+     5       0.468       0.0326
+     6      -1.29        0.848 
+     7       1.72        0.391 
+     8      -0.435      -0.231 
+     9       1.06       -1.67  
+    10      -0.575      -0.403 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1908-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = 0.036671, df = 48, p-value = 0.9709
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2734576  0.2832234
+    sample estimates:
+            cor 
+    0.005292975
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1      0.850       -0.454 
+     2     -0.148        1.04  
+     3     -1.66         0.0499
+     4      1.46        -0.212 
+     5      0.924        0.0783
+     6      1.07         0.438 
+     7      0.893       -2.44  
+     8     -0.0985      -0.745 
+     9      1.77         0.405 
+    10     -0.714        0.239 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1546-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = -0.24984, df = 48, p-value = 0.8038
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.3112634  0.2447650
+    sample estimates:
+            cor 
+    -0.03603795
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1      -0.514       -1.06 
+     2       0.475        1.96 
+     3      -1.29        -0.320
+     4       0.804       -0.772
+     5       0.879       -1.60 
+     6      -0.561        0.918
+     7      -0.639       -1.64 
+     8       1.36        -0.654
+     9      -0.705        1.58 
+    10      -1.65        -0.587
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1364-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = 0.36636, df = 48, p-value = 0.7157
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2289062  0.3263569
+    sample estimates:
+           cor 
+    0.05280613
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1      -0.779        0.411
+     2      -0.934       -0.952
+     3      -0.866       -0.659
+     4      -0.703        0.547
+     5       0.526        0.688
+     6      -0.900        0.636
+     7       0.763       -1.25 
+     8      -0.956        0.775
+     9      -1.36         1.44 
+    10       0.672       -0.423
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1969-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = -0.13851, df = 48, p-value = 0.8904
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2966848  0.2598054
+    sample estimates:
+            cor 
+    -0.01998772
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1     -0.386        1.06  
+     2     -0.477        0.516 
+     3      0.463       -1.14  
+     4      1.02        -0.414 
+     5     -0.169        1.55  
+     6     -1.31         0.0368
+     7      0.356        1.18  
+     8      1.12         1.37  
+     9      0.291       -0.750 
+    10      0.0537       0.855 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1468-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = -0.018802, df = 48, p-value = 0.9851
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2808494  0.2758423
+    sample estimates:
+             cor 
+    -0.002713825
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1       1.42         0.359
+     2       0.252       -1.52 
+     3       0.186        0.919
+     4       2.63        -0.232
+     5       0.217       -0.456
+     6      -0.993        1.02 
+     7       0.510        0.614
+     8      -1.06        -0.252
+     9      -0.199        0.264
+    10      -0.209        0.667
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1751-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = -1.7151, df = 48, p-value = 0.09278
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.48612814  0.04077987
+    sample estimates:
+           cor 
+    -0.2402954
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1      0.0673       3.20  
+     2      0.898        0.373 
+     3      0.582        0.117 
+     4     -0.0626       0.216 
+     5     -0.512        0.969 
+     6     -1.89         0.0187
+     7     -1.13         0.0565
+     8      1.88         0.200 
+     9     -0.964       -0.572 
+    10      0.615       -1.22  
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1696-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = 0.92747, df = 48, p-value = 0.3583
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.1512493  0.3963924
+    sample estimates:
+          cor 
+    0.1326845
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1       1.33        -1.11 
+     2       0.864        0.515
+     3       0.140        2.83 
+     4       1.07         0.101
+     5      -1.17         0.117
+     6       1.16         0.868
+     7      -1.91        -0.961
+     8      -1.33         1.73 
+     9       1.32        -0.205
+    10      -0.543       -0.545
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1926-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = 0.68654, df = 48, p-value = 0.4957
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.1848104  0.3668874
+    sample estimates:
+           cor 
+    0.09860999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1       0.645        1.07 
+     2       0.346        0.741
+     3      -1.57        -0.353
+     4      -0.212       -1.80 
+     5       0.790        0.706
+     6       0.969       -0.102
+     7       2.10         0.866
+     8       0.955        0.562
+     9       0.818       -0.651
+    10      -0.662        0.314
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1547-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = 0.26619, df = 48, p-value = 0.7912
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2425473  0.3133910
+    sample estimates:
+           cor 
+    0.03839233
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(tail_length = rnorm(n = 50), 
+       brain_weight = rnorm(n = 50)) -&gt;
+my_data; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = my_data) +
+  aes(x = tail_length) +
+  aes(y = brain_weight) +
+  geom_point(color = "steelblue",
+             alpha = .8) +
+  theme(panel.background = 
+          element_rect(color = 
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, "red", "black"),
+                       size =
+                         ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]&lt;.05, 8, 3)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cor.test(x = my_data$tail_length, 
+              y = my_data$brain_weight)
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       tail_length brain_weight
+             &lt;dbl&gt;        &lt;dbl&gt;
+     1     -0.304        -0.485
+     2      0.426        -0.714
+     3     -0.0802       -0.658
+     4     -0.924        -0.792
+     5      2.26         -1.23 
+     6      0.451        -0.573
+     7      0.610        -1.18 
+     8      0.311        -0.867
+     9      1.03          1.74 
+    10      1.21         -0.127
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_continuous_1719-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Pearson's product-moment correlation
+    
+    data:  my_data$tail_length and my_data$brain_weight
+    t = -0.0034297, df = 48, p-value = 0.9973
+    alternative hypothesis: true correlation is not equal to 0
+    95 percent confidence interval:
+     -0.2788043  0.2778910
+    sample estimates:
+              cor 
+    -0.0004950385
+```
+]]
+
+
+
+---
+
+
+
+---
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   5.42
+     2 female   6.02
+     3 male     5.35
+     4 female   5.00
+     5 male     4.89
+     6 female   4.94
+     7 female   5.55
+     8 female   5.12
+     9 female   6.15
+    10 male     4.94
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1937-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -0.5276, df = 41.933, p-value = 0.6006
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.3727815  0.2182681
+    sample estimates:
+    mean in group female   mean in group male 
+                5.592825             5.670082
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   5.77
+     2 male     5.76
+     3 female   5.48
+     4 male     4.72
+     5 male     5.98
+     6 female   4.65
+     7 female   3.88
+     8 female   5.20
+     9 female   5.04
+    10 male     5.93
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1091-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -2.2976, df = 47.722, p-value = 0.02601
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.64528977 -0.04293539
+    sample estimates:
+    mean in group female   mean in group male 
+                5.424188             5.768301
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   6.21
+     2 female   5.18
+     3 female   5.71
+     4 female   5.59
+     5 female   5.02
+     6 female   5.80
+     7 male     4.82
+     8 female   6.04
+     9 female   5.45
+    10 female   5.61
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1095-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -0.19354, df = 39.62, p-value = 0.8475
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.2885968  0.2381672
+    sample estimates:
+    mean in group female   mean in group male 
+                5.532653             5.557868
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   4.96
+     2 male     5.47
+     3 male     5.25
+     4 female   4.99
+     5 female   5.61
+     6 female   5.69
+     7 female   5.84
+     8 male     5.36
+     9 female   5.30
+    10 female   5.18
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1181-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = 0.43508, df = 44.025, p-value = 0.6656
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.2453736  0.3804869
+    sample estimates:
+    mean in group female   mean in group male 
+                5.414411             5.346855
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 male     5.23
+     2 female   5.70
+     3 male     5.94
+     4 male     5.09
+     5 female   5.87
+     6 male     5.17
+     7 female   5.68
+     8 male     6.01
+     9 female   5.38
+    10 male     6.18
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1024-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = 1.4942, df = 46.496, p-value = 0.1419
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.0649970  0.4398794
+    sample estimates:
+    mean in group female   mean in group male 
+                5.610472             5.423031
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 male     6.14
+     2 female   4.77
+     3 female   5.97
+     4 male     5.88
+     5 male     5.28
+     6 male     6.31
+     7 male     6.05
+     8 female   4.81
+     9 female   4.91
+    10 male     5.97
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1593-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -2.8456, df = 43.603, p-value = 0.006728
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.7224641 -0.1233087
+    sample estimates:
+    mean in group female   mean in group male 
+                5.247190             5.670076
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   5.51
+     2 male     5.28
+     3 male     6.39
+     4 male     5.95
+     5 female   5.77
+     6 male     4.94
+     7 male     5.11
+     8 male     5.91
+     9 male     6.11
+    10 female   5.24
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1670-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -1.4319, df = 42.788, p-value = 0.1594
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.48344797  0.08202018
+    sample estimates:
+    mean in group female   mean in group male 
+                5.312708             5.513422
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 male     5.09
+     2 male     5.26
+     3 male     5.53
+     4 female   4.96
+     5 female   5.00
+     6 male     5.16
+     7 female   5.68
+     8 female   5.15
+     9 female   5.67
+    10 male     5.46
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1328-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -0.34206, df = 34.687, p-value = 0.7344
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.3260416  0.2320385
+    sample estimates:
+    mean in group female   mean in group male 
+                5.381918             5.428919
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 male     5.95
+     2 male     5.36
+     3 female   6.49
+     4 male     5.72
+     5 male     5.77
+     6 female   5.66
+     7 male     5.17
+     8 female   5.85
+     9 female   5.27
+    10 male     5.53
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1128-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = 1.4487, df = 47.996, p-value = 0.1539
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.07036757  0.43323156
+    sample estimates:
+    mean in group female   mean in group male 
+                5.621557             5.440125
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("male","female"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50, sd = .5) + 5.5) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t.test(height_data$height ~ # the continuous variable by (~)
+         height_data$sex) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 female   4.88
+     2 male     5.75
+     3 male     5.69
+     4 male     5.62
+     5 male     6.47
+     6 male     5.74
+     7 male     4.29
+     8 female   5.26
+     9 male     5.27
+    10 male     4.66
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d2_1845-1.png)&lt;!-- --&gt;
+
+```
+    
+    	Welch Two Sample t-test
+    
+    data:  height_data$height by height_data$sex
+    t = -1.2684, df = 46.968, p-value = 0.2109
+    alternative hypothesis: true difference in means is not equal to 0
+    95 percent confidence interval:
+     -0.41508678  0.09407199
+    sample estimates:
+    mean in group female   mean in group male 
+                5.272995             5.433503
+```
+]]
+
+---
+
+
+# ANOVA (analysis of Variance)
+
+
+---
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 Crew   0.643 
+     2 2nd    0.0428
+     3 Crew  -1.36  
+     4 2nd    0.0554
+     5 Crew  -0.0980
+     6 3rd    1.38  
+     7 Crew   0.204 
+     8 3rd   -0.364 
+     9 Crew   1.17  
+    10 3rd    0.658 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1141-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st   0.61514375 -0.5636183 1.7939058 0.5113096
+    3rd-1st   0.54516424 -0.5115034 1.6018319 0.5210132
+    Crew-1st  0.50692309 -0.5983013 1.6121475 0.6159341
+    3rd-2nd  -0.06997951 -1.1575052 1.0175462 0.9981798
+    Crew-2nd -0.10822065 -1.2429835 1.0265422 0.9941566
+    Crew-3rd -0.03824115 -1.0455907 0.9691084 0.9996234
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 Crew  -0.609 
+     2 1st    2.85  
+     3 1st   -0.323 
+     4 1st   -2.37  
+     5 Crew   0.786 
+     6 1st    0.0970
+     7 1st    0.328 
+     8 3rd    0.660 
+     9 1st    0.0372
+    10 Crew   1.44  
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1776-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                   diff        lwr      upr     p adj
+    2nd-1st  -0.3537038 -1.9409663 1.233559 0.9333937
+    3rd-1st   0.2876081 -0.6683735 1.243590 0.8531639
+    Crew-1st  0.8999530 -0.2632376 2.063144 0.1808322
+    3rd-2nd   0.6413119 -0.9691236 2.251747 0.7143747
+    Crew-2nd  1.2536568 -0.4877834 2.995097 0.2344379
+    Crew-3rd  0.6123449 -0.5822732 1.806963 0.5265002
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex   height
+       &lt;chr&gt;  &lt;dbl&gt;
+     1 Crew  -0.483
+     2 Crew   1.13 
+     3 1st    0.721
+     4 1st    1.51 
+     5 1st   -0.698
+     6 2nd   -0.813
+     7 2nd    0.564
+     8 3rd   -0.240
+     9 3rd   -0.724
+    10 3rd    0.962
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1119-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st  -0.27691728 -1.2479602 0.6941256 0.8718482
+    3rd-1st  -0.40575389 -1.3499425 0.5384347 0.6636455
+    Crew-1st -0.20085589 -1.0847564 0.6830446 0.9297515
+    3rd-2nd  -0.12883661 -1.1681041 0.9104309 0.9873898
+    Crew-2nd  0.07606139 -0.9087558 1.0608786 0.9968688
+    Crew-3rd  0.20489801 -0.7534510 1.1632470 0.9405330
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 2nd   -0.357 
+     2 1st   -0.324 
+     3 1st    0.0804
+     4 1st    0.682 
+     5 2nd   -0.370 
+     6 Crew  -1.30  
+     7 1st   -1.71  
+     8 1st    0.470 
+     9 Crew   0.480 
+    10 2nd    1.50  
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1560-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                     diff       lwr       upr     p adj
+    2nd-1st  -0.001051185 -1.013046 1.0109431 1.0000000
+    3rd-1st  -0.405786454 -1.675829 0.8642563 0.8294104
+    Crew-1st -0.389422799 -1.282531 0.5036851 0.6533319
+    3rd-2nd  -0.404735270 -1.840377 1.0309063 0.8755753
+    Crew-2nd -0.388371614 -1.504481 0.7277375 0.7902917
+    Crew-3rd  0.016363656 -1.338101 1.3708288 0.9999878
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex     height
+       &lt;chr&gt;    &lt;dbl&gt;
+     1 1st    0.830  
+     2 2nd   -0.760  
+     3 2nd    1.55   
+     4 Crew   0.0219 
+     5 3rd   -0.00863
+     6 1st    0.825  
+     7 1st   -0.520  
+     8 3rd   -0.830  
+     9 2nd   -0.192  
+    10 Crew  -0.633  
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1946-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                   diff        lwr       upr     p adj
+    2nd-1st   0.1020501 -0.7270887 0.9311889 0.9876516
+    3rd-1st  -0.6041807 -1.5096491 0.3012877 0.2965533
+    Crew-1st -0.2661404 -1.1104940 0.5782133 0.8350335
+    3rd-2nd  -0.7062308 -1.5975282 0.1850667 0.1645241
+    Crew-2nd -0.3681905 -1.1973292 0.4609483 0.6401044
+    Crew-3rd  0.3380403 -0.5674281 1.2435087 0.7529145
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex   height
+       &lt;chr&gt;  &lt;dbl&gt;
+     1 1st    0.739
+     2 Crew   1.61 
+     3 2nd    0.221
+     4 1st   -0.815
+     5 Crew  -0.116
+     6 3rd    1.01 
+     7 1st    0.883
+     8 1st   -0.869
+     9 3rd    0.885
+    10 3rd   -1.35 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1809-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st   0.01230542 -1.0833287 1.1079395 0.9999902
+    3rd-1st  -0.28644209 -1.1293235 0.5564394 0.8017979
+    Crew-1st  0.12886142 -0.6993601 0.9570829 0.9756790
+    3rd-2nd  -0.29874750 -1.4055051 0.8080101 0.8888303
+    Crew-2nd  0.11655600 -0.9790781 1.2121901 0.9919400
+    Crew-3rd  0.41530351 -0.4275779 1.2581850 0.5593247
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex   height
+       &lt;chr&gt;  &lt;dbl&gt;
+     1 2nd   -0.643
+     2 3rd   -1.08 
+     3 Crew  -0.521
+     4 2nd   -2.01 
+     5 Crew  -0.598
+     6 Crew  -0.357
+     7 Crew   1.18 
+     8 1st    0.448
+     9 3rd    0.341
+    10 2nd   -1.21 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1008-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st  -0.04906300 -1.4012098 1.3030838 0.9996710
+    3rd-1st  -0.13654359 -1.2405668 0.9674796 0.9874757
+    Crew-1st  0.18143160 -1.0391120 1.4019752 0.9786652
+    3rd-2nd  -0.08748058 -1.2799620 1.1050008 0.9973123
+    Crew-2nd  0.23049460 -1.0706092 1.5315984 0.9648086
+    Crew-3rd  0.31797518 -0.7229079 1.3588583 0.8474120
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex   height
+       &lt;chr&gt;  &lt;dbl&gt;
+     1 2nd    1.05 
+     2 2nd    1.31 
+     3 2nd   -0.149
+     4 2nd   -0.258
+     5 3rd   -1.02 
+     6 2nd    0.493
+     7 1st    0.876
+     8 3rd   -2.07 
+     9 2nd   -0.152
+    10 2nd    1.98 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1739-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st   0.35632090 -0.8615876 1.5742294 0.8631872
+    3rd-1st  -0.58014031 -1.8694503 0.7091697 0.6303552
+    Crew-1st  0.26280205 -1.1374427 1.6630468 0.9585956
+    3rd-2nd  -0.93646121 -2.2057807 0.3328583 0.2155264
+    Crew-2nd -0.09351885 -1.4753789 1.2883412 0.9978851
+    Crew-3rd  0.84294236 -0.6022414 2.2881261 0.4141361
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex   height
+       &lt;chr&gt;  &lt;dbl&gt;
+     1 3rd   -1.38 
+     2 Crew  -0.132
+     3 Crew  -0.583
+     4 3rd    0.797
+     5 1st   -0.276
+     6 Crew  -0.374
+     7 1st   -0.238
+     8 2nd   -1.14 
+     9 3rd    1.46 
+    10 1st   -1.01 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1517-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                     diff        lwr       upr     p adj
+    2nd-1st   0.405284314 -0.5090082 1.3195769 0.6414036
+    3rd-1st   0.411022371 -0.5496376 1.3716824 0.6667236
+    Crew-1st  0.311888859 -0.5535556 1.1773333 0.7722694
+    3rd-2nd   0.005738057 -0.9721704 0.9836465 0.9999986
+    Crew-2nd -0.093395455 -0.9779469 0.7911560 0.9921161
+    Crew-3rd -0.099133512 -1.0315326 0.8332656 0.9919536
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+tibble(sex = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(height = rnorm(n = 50)) -&gt;
+height_data; height_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggplot(height_data) +
+  aes(x = sex) +
+  aes(y = height) +
+  aes(group = sex) +
+  geom_boxplot() +
+  geom_jitter(height = 0,
+              width = .02) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
+         height_data$sex)) # the discrete variable
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       sex    height
+       &lt;chr&gt;   &lt;dbl&gt;
+     1 3rd    0.867 
+     2 1st   -0.887 
+     3 3rd    1.47  
+     4 3rd    2.24  
+     5 2nd   -0.0710
+     6 2nd    0.482 
+     7 1st   -0.637 
+     8 1st   -1.08  
+     9 Crew  -0.167 
+    10 2nd   -0.0793
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_c_and_d3_1805-1.png)&lt;!-- --&gt;
+
+```
+      Tukey multiple comparisons of means
+        95% family-wise confidence level
+    
+    Fit: aov(formula = height_data$height ~ height_data$sex)
+    
+    $`height_data$sex`
+                    diff        lwr       upr     p adj
+    2nd-1st  -0.03540905 -1.2347821 1.1639640 0.9998226
+    3rd-1st   0.77242845 -0.5950673 2.1399242 0.4425127
+    Crew-1st  0.04152733 -1.0880878 1.1711425 0.9996579
+    3rd-2nd   0.80783751 -0.5384554 2.1541305 0.3890320
+    Crew-2nd  0.07693638 -1.0269162 1.1807890 0.9976916
+    Crew-3rd -0.73090112 -2.0154397 0.5536374 0.4360551
+```
+]]
+
+
+
+
+
+---
+
+
+# Chi-squared test 
+
+`$$\chi$$`
+
+Two-by-two
+
+
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   right 
+     2 female right 
+     3 male   right 
+     4 female right 
+     5 male   right 
+     6 female right 
+     7 male   left  
+     8 female left  
+     9 female right 
+    10 male   right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1793-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   18    39
+      male     15    28
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0.017733, df = 1, p-value = 0.8941
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 female left  
+     2 male   right 
+     3 female right 
+     4 female right 
+     5 female left  
+     6 female right 
+     7 female right 
+     8 female right 
+     9 male   right 
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1903-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   24    32
+      male     19    25
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 female right 
+     2 female right 
+     3 female left  
+     4 female right 
+     5 male   right 
+     6 female left  
+     7 male   right 
+     8 male   right 
+     9 female right 
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1735-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   14    31
+      male     13    42
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0.3736, df = 1, p-value = 0.541
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   right 
+     2 male   left  
+     3 male   right 
+     4 female right 
+     5 female right 
+     6 female right 
+     7 female right 
+     8 female right 
+     9 male   left  
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1343-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female    9    42
+      male     17    32
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 2.9404, df = 1, p-value = 0.08639
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   left  
+     2 female right 
+     3 female right 
+     4 male   right 
+     5 male   left  
+     6 female left  
+     7 female left  
+     8 female right 
+     9 male   right 
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1275-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   14    30
+      male     14    42
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0.28031, df = 1, p-value = 0.5965
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 female left  
+     2 female right 
+     3 female right 
+     4 male   right 
+     5 male   right 
+     6 female right 
+     7 male   right 
+     8 female right 
+     9 female right 
+    10 female left  
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1561-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   22    33
+      male     13    32
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0.8991, df = 1, p-value = 0.343
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   right 
+     2 male   right 
+     3 female right 
+     4 female left  
+     5 male   right 
+     6 male   left  
+     7 male   right 
+     8 male   right 
+     9 male   right 
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1132-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   12    30
+      male     22    36
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0.57962, df = 1, p-value = 0.4465
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   right 
+     2 male   right 
+     3 male   right 
+     4 female left  
+     5 female right 
+     6 female left  
+     7 female right 
+     8 female right 
+     9 male   right 
+    10 male   left  
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1088-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   15    36
+      male     14    35
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   right 
+     2 male   right 
+     3 female right 
+     4 male   right 
+     5 male   right 
+     6 female right 
+     7 male   right 
+     8 female left  
+     9 male   right 
+    10 female left  
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1222-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   10    35
+      male     13    42
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 1.6557e-31, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(sex = sample(x = c("male","female"), 
+                  size = 100, 
+                  replace = T), 
+       handed = sample(x = c("left", "right"), 
+                  size = 100, 
+                  replace = T, 
+                  prob = c(.3,.7))) -&gt;
+my_data ; my_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = my_data) +
+  geom_mosaic(aes(x = product(sex),
+                  fill = handed))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table(x = my_data$sex, y = my_data$handed)
+
+
+
+
+
+chisq.test(x = my_data$sex, 
+           y = my_data$handed) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 100 x 2
+       sex    handed
+       &lt;chr&gt;  &lt;chr&gt; 
+     1 male   left  
+     2 female right 
+     3 male   right 
+     4 male   left  
+     5 male   right 
+     6 female left  
+     7 female right 
+     8 male   right 
+     9 female right 
+    10 female right 
+    # … with 90 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d_and_d_1656-1.png)&lt;!-- --&gt;
+
+```
+            y
+    x        left right
+      female   16    35
+      male      8    41
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  my_data$sex and my_data$handed
+    X-squared = 2.3315, df = 1, p-value = 0.1268
+```
+]]
+
+
+
+---
+
+
+
+
+---
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  tea  
+    2 milk  tea  
+    3 milk  tea  
+    4 tea   milk 
+    5 tea   milk 
+    6 tea   milk 
+    7 milk  milk 
+    8 tea   tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1775-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0.5, df = 1, p-value = 0.4795
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 tea   milk 
+    2 milk  tea  
+    3 tea   tea  
+    4 tea   tea  
+    5 milk  tea  
+    6 tea   milk 
+    7 milk  milk 
+    8 milk  milk
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1837-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  tea  
+    2 tea   milk 
+    3 tea   milk 
+    4 milk  milk 
+    5 tea   tea  
+    6 milk  milk 
+    7 milk  tea  
+    8 tea   tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1089-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  milk 
+    2 tea   tea  
+    3 tea   tea  
+    4 tea   milk 
+    5 milk  milk 
+    6 milk  tea  
+    7 milk  tea  
+    8 tea   milk
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1813-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 tea   tea  
+    2 milk  milk 
+    3 tea   tea  
+    4 tea   tea  
+    5 milk  milk 
+    6 tea   milk 
+    7 milk  milk 
+    8 milk  tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1244-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test with Yates' continuity correction
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0.5, df = 1, p-value = 0.4795
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 tea   milk 
+    2 tea   tea  
+    3 milk  milk 
+    4 tea   milk 
+    5 tea   tea  
+    6 milk  tea  
+    7 milk  tea  
+    8 milk  milk
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1205-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 tea   tea  
+    2 milk  tea  
+    3 tea   milk 
+    4 tea   tea  
+    5 milk  milk 
+    6 tea   milk 
+    7 milk  tea  
+    8 milk  milk
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1397-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  tea  
+    2 tea   milk 
+    3 milk  milk 
+    4 milk  tea  
+    5 tea   tea  
+    6 milk  milk 
+    7 tea   milk 
+    8 tea   tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1540-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  tea  
+    2 tea   milk 
+    3 tea   tea  
+    4 milk  milk 
+    5 milk  tea  
+    6 tea   milk 
+    7 milk  milk 
+    8 tea   tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1025-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(truth = sample(rep(c("tea", "milk"), 4))) %&gt;% 
+  mutate(guess = sample(rep(c("tea", "milk"), 4))) -&gt;
+tea_data ; tea_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = tea_data) +
+  geom_mosaic(aes(x = product(truth),
+                  fill = guess))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = tea_data$truth, 
+           y = tea_data$guess) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 8 x 2
+      truth guess
+      &lt;chr&gt; &lt;chr&gt;
+    1 milk  milk 
+    2 tea   milk 
+    3 tea   tea  
+    4 tea   tea  
+    5 milk  tea  
+    6 milk  milk 
+    7 tea   milk 
+    8 milk  tea
+```
+
+![](statistical_independence_files/figure-html/output_lady_tea_1131-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
+    approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  tea_data$truth and tea_data$guess
+    X-squared = 0, df = 1, p-value = 1
+```
+]]
+
+---
+
+
+
+
+
+
+---
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 Crew  Perish 
+     2 2nd   Survive
+     3 2nd   Perish 
+     4 Crew  Survive
+     5 2nd   Perish 
+     6 1st   Survive
+     7 Crew  Survive
+     8 Crew  Perish 
+     9 3rd   Survive
+    10 2nd   Perish 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1643-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 2.608, df = 3, p-value = 0.4561
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 2nd   Survive
+     2 Crew  Perish 
+     3 Crew  Perish 
+     4 3rd   Survive
+     5 1st   Perish 
+     6 3rd   Survive
+     7 Crew  Perish 
+     8 2nd   Perish 
+     9 3rd   Survive
+    10 3rd   Perish 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1678-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 1.5454, df = 3, p-value = 0.6718
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 1st   Survive
+     2 Crew  Perish 
+     3 3rd   Perish 
+     4 3rd   Perish 
+     5 2nd   Perish 
+     6 Crew  Survive
+     7 1st   Perish 
+     8 3rd   Perish 
+     9 1st   Survive
+    10 Crew  Perish 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1874-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 7.7324, df = 3, p-value = 0.05188
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 3rd   Perish 
+     2 2nd   Perish 
+     3 Crew  Perish 
+     4 1st   Perish 
+     5 3rd   Perish 
+     6 Crew  Perish 
+     7 1st   Perish 
+     8 2nd   Perish 
+     9 1st   Survive
+    10 Crew  Perish 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1207-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 2.5992, df = 3, p-value = 0.4576
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 Crew  Perish 
+     2 Crew  Survive
+     3 1st   Perish 
+     4 2nd   Perish 
+     5 3rd   Perish 
+     6 1st   Survive
+     7 Crew  Perish 
+     8 Crew  Survive
+     9 Crew  Perish 
+    10 3rd   Survive
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1764-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 3.3655, df = 3, p-value = 0.3386
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 Crew  Perish 
+     2 Crew  Perish 
+     3 Crew  Perish 
+     4 2nd   Survive
+     5 1st   Perish 
+     6 1st   Survive
+     7 3rd   Survive
+     8 Crew  Perish 
+     9 Crew  Survive
+    10 2nd   Survive
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1617-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 5.617, df = 3, p-value = 0.1318
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 3rd   Perish 
+     2 2nd   Perish 
+     3 3rd   Survive
+     4 1st   Perish 
+     5 1st   Perish 
+     6 2nd   Survive
+     7 Crew  Perish 
+     8 1st   Survive
+     9 3rd   Survive
+    10 1st   Survive
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1755-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 1.9037, df = 3, p-value = 0.5926
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 Crew  Perish 
+     2 1st   Perish 
+     3 3rd   Perish 
+     4 Crew  Perish 
+     5 2nd   Perish 
+     6 1st   Survive
+     7 2nd   Perish 
+     8 1st   Survive
+     9 Crew  Perish 
+    10 3rd   Perish 
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1259-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 0.72044, df = 3, p-value = 0.8684
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 1st   Survive
+     2 1st   Perish 
+     3 3rd   Survive
+     4 1st   Perish 
+     5 1st   Perish 
+     6 3rd   Perish 
+     7 3rd   Survive
+     8 Crew  Survive
+     9 Crew  Survive
+    10 2nd   Survive
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1993-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 1.6875, df = 3, p-value = 0.6397
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+library(tidyverse)
+tibble(class = sample(x = c("1st","2nd","3rd","Crew"), 
+                  size = 50, 
+                  replace = T)) %&gt;% 
+  mutate(survive = sample(x = c("Survive", "Perish"), 
+                          size = 50, 
+                          replace = T, 
+                          prob = c(.3, .7))) -&gt;
+fake_titanic ; fake_titanic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+library(ggmosaic) # geom_mosaic() and product()
+ggplot(data = fake_titanic) +
+  geom_mosaic(aes(x = product(class),
+                  fill = survive))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chisq.test(x = fake_titanic$class, 
+           y = fake_titanic$survive) 
+```
+]]
+.column[.content[
+
+```
+    # A tibble: 50 x 2
+       class survive
+       &lt;chr&gt; &lt;chr&gt;  
+     1 Crew  Perish 
+     2 1st   Perish 
+     3 3rd   Perish 
+     4 3rd   Perish 
+     5 3rd   Perish 
+     6 1st   Survive
+     7 1st   Perish 
+     8 1st   Perish 
+     9 Crew  Perish 
+    10 Crew  Survive
+    # … with 40 more rows
+```
+
+![](statistical_independence_files/figure-html/output_d4_d2_1696-1.png)&lt;!-- --&gt;
+
+```
+    Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
+    Chi-squared approximation may be incorrect
+```
+
+```
+    
+    	Pearson's Chi-squared test
+    
+    data:  fake_titanic$class and fake_titanic$survive
+    X-squared = 1.4742, df = 3, p-value = 0.6882
+```
+]]
+
+
+
+
+---
+
+# Game Time
+
+https://evangelinereynolds.shinyapps.io/EyeBallIt/
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 30%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
