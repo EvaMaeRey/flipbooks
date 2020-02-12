@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Mapping Data in R with geom_sf()</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Conner J. Surrency, January 2020" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Mapping Data in R with geom_sf()
+## A ‘flipbookr’ Tutorial
+### Conner J. Surrency, January 2020
+
+---
+
+
+
+
+# What Are We Doing?
+--
+
+- Here we will walk through the process of creating maps in RStudio.
+--
+
+- This will include the packages required and how to code a map.
+--
+
+- We will be looking at data from two cases: Wetherspoon restaurants in UK, and defense expenditure of NATO member states. 
+
+
+---
+
+## Set-Up
+--
+
+We will need the following packages (and data) installed:  
+--
+
+- tidyverse
+--
+
+- rnaturalearth
+
+
+---
+#Example #1
+--
+
+We know the location of restaurants in the UK and the price of the empire burgur. 
+
+
+The map we make will be a simple static map that shows those points.
+
+---
+
+
+
+```r
+library(tidyverse)
+library(rnaturalearth)
+library(readxl)
+wetherspoon_raw &lt;- read_excel("wetherspoon.xlsx")
+
+wetherspoon_raw %&gt;%
+  janitor::clean_names() %&gt;% 
+  select(1:5)  -&gt;
+wetherspoon
+
+wetherspoon
+```
+
+```
+# A tibble: 213 x 5
+   name                location            latitude longitude empire_state_burg…
+   &lt;chr&gt;               &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;              &lt;dbl&gt;
+ 1 The Moon Under Wat… Leicester Square, …     51.5   -0.129               11.2 
+ 2 The Lord Moon of t… Whitehall, London       51.5   -0.127               11.0 
+ 3 Pendrel's Oak       Holborn, London         51.5   -0.115               11.0 
+ 4 The Cross Keyes     City of London, Lo…     51.5   -0.0847              11.0 
+ 5 The Mardi Gras      Manchester              53.5   -2.35                13.6 
+ 6 The King and Castle Windsor                 51.5   -0.609               10.6 
+ 7 The Hope &amp; Champion Beaconsfield Servi…     51.6   -0.627                9.75
+ 8 Goodman's Field     Tower Hamlets, Lon…     51.5   -0.0728              11.0 
+ 9 Castle In the Air   Manchester              53.5   -2.36                11.5 
+10 The Ice Wharf       Camden, London          51.5   -0.145               11.2 
+# … with 203 more rows
+```
+
+
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*rnaturalearth::ne_countries(
+* scale = "medium", returnclass = "sf")
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 241 features and 63 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+  scalerank      featurecla labelrank           sovereignt sov_a3 adm0_dif
+0         3 Admin-0 country         5          Netherlands    NL1        1
+1         1 Admin-0 country         3          Afghanistan    AFG        0
+2         1 Admin-0 country         3               Angola    AGO        0
+3         1 Admin-0 country         6       United Kingdom    GB1        1
+4         1 Admin-0 country         6              Albania    ALB        0
+5         3 Admin-0 country         6              Finland    FI1        1
+6         3 Admin-0 country         6              Andorra    AND        0
+7         1 Admin-0 country         4 United Arab Emirates    ARE        0
+8         1 Admin-0 country         2            Argentina    ARG        0
+9         1 Admin-0 country         6              Armenia    ARM        0
+  level              type                admin adm0_a3 geou_dif
+0     2           Country                Aruba     ABW        0
+1     2 Sovereign country          Afghanistan     AFG        0
+2     2 Sovereign country               Angola     AGO        0
+3     2        Dependency             Anguilla     AIA        0
+4     2 Sovereign country              Albania     ALB        0
+5     2           Country                Aland     ALD        0
+6     2 Sovereign country              Andorra     AND        0
+7     2 Sovereign country United Arab Emirates     ARE        0
+8     2 Sovereign country            Argentina     ARG        0
+9     2 Sovereign country              Armenia     ARM        0
+               geounit gu_a3 su_dif              subunit su_a3 brk_diff
+0                Aruba   ABW      0                Aruba   ABW        0
+1          Afghanistan   AFG      0          Afghanistan   AFG        0
+2               Angola   AGO      0               Angola   AGO        0
+3             Anguilla   AIA      0             Anguilla   AIA        0
+4              Albania   ALB      0              Albania   ALB        0
+5                Aland   ALD      0                Aland   ALD        0
+6              Andorra   AND      0              Andorra   AND        0
+7 United Arab Emirates   ARE      0 United Arab Emirates   ARE        0
+8            Argentina   ARG      0            Argentina   ARG        0
+9              Armenia   ARM      0              Armenia   ARM        0
+                  name            name_long brk_a3             brk_name
+0                Aruba                Aruba    ABW                Aruba
+1          Afghanistan          Afghanistan    AFG          Afghanistan
+2               Angola               Angola    AGO               Angola
+3             Anguilla             Anguilla    AIA             Anguilla
+4              Albania              Albania    ALB              Albania
+5                Aland        Aland Islands    ALD                Aland
+6              Andorra              Andorra    AND              Andorra
+7 United Arab Emirates United Arab Emirates    ARE United Arab Emirates
+8            Argentina            Argentina    ARG            Argentina
+9              Armenia              Armenia    ARM              Armenia
+  brk_group abbrev postal                    formal_en formal_fr note_adm0
+0      &lt;NA&gt;  Aruba     AW                        Aruba      &lt;NA&gt;     Neth.
+1      &lt;NA&gt;   Afg.     AF Islamic State of Afghanistan      &lt;NA&gt;      &lt;NA&gt;
+2      &lt;NA&gt;   Ang.     AO  People's Republic of Angola      &lt;NA&gt;      &lt;NA&gt;
+3      &lt;NA&gt;   Ang.     AI                         &lt;NA&gt;      &lt;NA&gt;      U.K.
+4      &lt;NA&gt;   Alb.     AL          Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
+5      &lt;NA&gt;  Aland     AI                Åland Islands      &lt;NA&gt;      Fin.
+6      &lt;NA&gt;   And.    AND      Principality of Andorra      &lt;NA&gt;      &lt;NA&gt;
+7      &lt;NA&gt; U.A.E.     AE         United Arab Emirates      &lt;NA&gt;      &lt;NA&gt;
+8      &lt;NA&gt;   Arg.     AR           Argentine Republic      &lt;NA&gt;      &lt;NA&gt;
+9      &lt;NA&gt;   Arm.    ARM          Republic of Armenia      &lt;NA&gt;      &lt;NA&gt;
+  note_brk            name_sort name_alt mapcolor7 mapcolor8 mapcolor9
+0     &lt;NA&gt;                Aruba     &lt;NA&gt;         4         2         2
+1     &lt;NA&gt;          Afghanistan     &lt;NA&gt;         5         6         8
+2     &lt;NA&gt;               Angola     &lt;NA&gt;         3         2         6
+3     &lt;NA&gt;             Anguilla     &lt;NA&gt;         6         6         6
+4     &lt;NA&gt;              Albania     &lt;NA&gt;         1         4         1
+5     &lt;NA&gt;                Aland     &lt;NA&gt;         4         1         4
+6     &lt;NA&gt;              Andorra     &lt;NA&gt;         1         4         1
+7     &lt;NA&gt; United Arab Emirates     &lt;NA&gt;         2         1         3
+8     &lt;NA&gt;            Argentina     &lt;NA&gt;         3         1         3
+9     &lt;NA&gt;              Armenia     &lt;NA&gt;         3         1         2
+  mapcolor13  pop_est gdp_md_est pop_year lastcensus gdp_year
+0          9   103065     2258.0       NA       2010       NA
+1          7 28400000    22270.0       NA       1979       NA
+2          1 12799293   110300.0       NA       1970       NA
+3          3    14436      108.9       NA         NA       NA
+4          6  3639453    21810.0       NA       2001       NA
+5          6    27153     1563.0       NA         NA       NA
+6          8    83888     3660.0       NA       1989       NA
+7          3  4798491   184300.0       NA       2010       NA
+8         13 40913584   573900.0       NA       2010       NA
+9         10  2967004    18770.0       NA       2001       NA
+                     economy              income_grp wikipedia fips_10 iso_a2
+0       6. Developing region 2. High income: nonOECD        NA    &lt;NA&gt;     AW
+1  7. Least developed region           5. Low income        NA    &lt;NA&gt;     AF
+2  7. Least developed region  3. Upper middle income        NA    &lt;NA&gt;     AO
+3       6. Developing region  3. Upper middle income        NA    &lt;NA&gt;     AI
+4       6. Developing region  4. Lower middle income        NA    &lt;NA&gt;     AL
+5 2. Developed region: nonG7    1. High income: OECD        NA    &lt;NA&gt;     AX
+6 2. Developed region: nonG7 2. High income: nonOECD        NA    &lt;NA&gt;     AD
+7       6. Developing region 2. High income: nonOECD        NA    &lt;NA&gt;     AE
+8    5. Emerging region: G20  3. Upper middle income        NA    &lt;NA&gt;     AR
+9       6. Developing region  4. Lower middle income        NA    &lt;NA&gt;     AM
+  iso_a3 iso_n3 un_a3 wb_a2 wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un
+0    ABW    533   533    AW   ABW     NA        ABW        ABW         NA
+1    AFG    004   004    AF   AFG     NA        AFG        AFG         NA
+2    AGO    024   024    AO   AGO     NA        AGO        AGO         NA
+3    AIA    660   660  &lt;NA&gt;  &lt;NA&gt;     NA        AIA        AIA         NA
+4    ALB    008   008    AL   ALB     NA        ALB        ALB         NA
+5    ALA    248   248  &lt;NA&gt;  &lt;NA&gt;     NA        ALA        ALD         NA
+6    AND    020   020    AD   ADO     NA        AND        AND         NA
+7    ARE    784   784    AE   ARE     NA        ARE        ARE         NA
+8    ARG    032   032    AR   ARG     NA        ARG        ARG         NA
+9    ARM    051   051    AM   ARM     NA        ARM        ARM         NA
+  adm0_a3_wb     continent region_un       subregion                  region_wb
+0         NA North America  Americas       Caribbean  Latin America &amp; Caribbean
+1         NA          Asia      Asia   Southern Asia                 South Asia
+2         NA        Africa    Africa   Middle Africa         Sub-Saharan Africa
+3         NA North America  Americas       Caribbean  Latin America &amp; Caribbean
+4         NA        Europe    Europe Southern Europe      Europe &amp; Central Asia
+5         NA        Europe    Europe Northern Europe      Europe &amp; Central Asia
+6         NA        Europe    Europe Southern Europe      Europe &amp; Central Asia
+7         NA          Asia      Asia    Western Asia Middle East &amp; North Africa
+8         NA South America  Americas   South America  Latin America &amp; Caribbean
+9         NA          Asia      Asia    Western Asia      Europe &amp; Central Asia
+  name_len long_len abbrev_len tiny homepart                       geometry
+0        5        5          5    4       NA MULTIPOLYGON (((-69.89912 1...
+1       11       11          4   NA        1 MULTIPOLYGON (((74.89131 37...
+2        6        6          4   NA        1 MULTIPOLYGON (((14.19082 -5...
+3        8        8          4   NA       NA MULTIPOLYGON (((-63.00122 1...
+4        7        7          4   NA        1 MULTIPOLYGON (((20.06396 42...
+5        5       13          5    5       NA MULTIPOLYGON (((20.61133 60...
+6        7        7          4    5        1 MULTIPOLYGON (((1.706055 42...
+7       20       20          6   NA        1 MULTIPOLYGON (((53.92783 24...
+8        9        9          4   NA        1 MULTIPOLYGON (((-64.54917 -...
+9        7        7          4   NA        1 MULTIPOLYGON (((45.55234 40...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+* filter(name == 'United Kingdom')
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 1 feature and 63 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -8.144824 ymin: 50.02139 xmax: 1.746582 ymax: 60.83188
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+  scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
+1         1 Admin-0 country         2 United Kingdom    GB1        1     2
+     type          admin adm0_a3 geou_dif        geounit gu_a3 su_dif
+1 Country United Kingdom     GBR        0 United Kingdom   GBR      0
+         subunit su_a3 brk_diff           name      name_long brk_a3
+1 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
+        brk_name brk_group abbrev postal
+1 United Kingdom      &lt;NA&gt;   U.K.     GB
+                                             formal_en formal_fr note_adm0
+1 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
+  note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
+1     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
+   pop_est gdp_md_est pop_year lastcensus gdp_year                 economy
+1 62262000    1977704        0       2011     2009 1. Developed region: G7
+            income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2 wb_a3
+1 1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB   GBR
+  woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb continent region_un
+1     NA        GBR        GBR         NA         NA    Europe    Europe
+        subregion             region_wb name_len long_len abbrev_len tiny
+1 Northern Europe Europe &amp; Central Asia       14       14          4   NA
+  homepart                       geometry
+1        1 MULTIPOLYGON (((-1.065576 5...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+* uk
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+*ggplot(data = wetherspoon)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_4_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+* ggplot2::geom_sf(data = uk)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_5_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+* geom_point(aes(x = longitude,
+*                  y = latitude,
+*                  color = empire_state_burger),
+*              alpha = .3)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_6_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+*   scale_color_viridis_c()
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_7_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+    scale_color_viridis_c() +  
+*   labs(color = "Empire State Burger\nCost (pounds)")
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_8_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+    scale_color_viridis_c() +  
+    labs(color = "Empire State Burger\nCost (pounds)") +  
+*   theme_bw()
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_9_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+    scale_color_viridis_c() +  
+    labs(color = "Empire State Burger\nCost (pounds)") +  
+    theme_bw() +  
+*   theme(plot.title = element_text(hjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_10_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+  uk  
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+    scale_color_viridis_c() +  
+    labs(color = "Empire State Burger\nCost (pounds)") +  
+    theme_bw() +  
+    theme(plot.title = element_text(hjust = 0.5)) +  
+*   theme(axis.title = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/wether_auto_11_output-1.png" width="864" /&gt;
+]]
+
+
+---
+#Example #2
+--
+
+The second example will also draw its shapefiles from the rnaturalearth package. We will also use a dataset containing the defense expenditure of NATO member states. 
+
+We will make a colored map that allows for easy visual comparison of spending levels. This type is called a choropleth map.
+
+---
+
+
+
+```r
+library(readxl)
+nato_expenditure &lt;- read_excel("nato_expenditure.xlsx")
+
+nato_expenditure
+```
+
+```
+# A tibble: 29 x 2
+   name           spendingPercap
+   &lt;chr&gt;                   &lt;dbl&gt;
+ 1 Albania                  1.26
+ 2 Belgium                  0.93
+ 3 Bulgaria                 1.61
+ 4 Canada                   1.27
+ 5 Croatia                  1.75
+ 6 Czech Republic           1.19
+ 7 Denmark                  1.35
+ 8 Estonia                  2.13
+ 9 France                   1.84
+10 Germany                  1.36
+# … with 19 more rows
+```
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*rnaturalearth::ne_countries(
+* scale = "medium", returnclass = "sf")
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 241 features and 63 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+  scalerank      featurecla labelrank           sovereignt sov_a3 adm0_dif
+0         3 Admin-0 country         5          Netherlands    NL1        1
+1         1 Admin-0 country         3          Afghanistan    AFG        0
+2         1 Admin-0 country         3               Angola    AGO        0
+3         1 Admin-0 country         6       United Kingdom    GB1        1
+4         1 Admin-0 country         6              Albania    ALB        0
+5         3 Admin-0 country         6              Finland    FI1        1
+6         3 Admin-0 country         6              Andorra    AND        0
+7         1 Admin-0 country         4 United Arab Emirates    ARE        0
+8         1 Admin-0 country         2            Argentina    ARG        0
+9         1 Admin-0 country         6              Armenia    ARM        0
+  level              type                admin adm0_a3 geou_dif
+0     2           Country                Aruba     ABW        0
+1     2 Sovereign country          Afghanistan     AFG        0
+2     2 Sovereign country               Angola     AGO        0
+3     2        Dependency             Anguilla     AIA        0
+4     2 Sovereign country              Albania     ALB        0
+5     2           Country                Aland     ALD        0
+6     2 Sovereign country              Andorra     AND        0
+7     2 Sovereign country United Arab Emirates     ARE        0
+8     2 Sovereign country            Argentina     ARG        0
+9     2 Sovereign country              Armenia     ARM        0
+               geounit gu_a3 su_dif              subunit su_a3 brk_diff
+0                Aruba   ABW      0                Aruba   ABW        0
+1          Afghanistan   AFG      0          Afghanistan   AFG        0
+2               Angola   AGO      0               Angola   AGO        0
+3             Anguilla   AIA      0             Anguilla   AIA        0
+4              Albania   ALB      0              Albania   ALB        0
+5                Aland   ALD      0                Aland   ALD        0
+6              Andorra   AND      0              Andorra   AND        0
+7 United Arab Emirates   ARE      0 United Arab Emirates   ARE        0
+8            Argentina   ARG      0            Argentina   ARG        0
+9              Armenia   ARM      0              Armenia   ARM        0
+                  name            name_long brk_a3             brk_name
+0                Aruba                Aruba    ABW                Aruba
+1          Afghanistan          Afghanistan    AFG          Afghanistan
+2               Angola               Angola    AGO               Angola
+3             Anguilla             Anguilla    AIA             Anguilla
+4              Albania              Albania    ALB              Albania
+5                Aland        Aland Islands    ALD                Aland
+6              Andorra              Andorra    AND              Andorra
+7 United Arab Emirates United Arab Emirates    ARE United Arab Emirates
+8            Argentina            Argentina    ARG            Argentina
+9              Armenia              Armenia    ARM              Armenia
+  brk_group abbrev postal                    formal_en formal_fr note_adm0
+0      &lt;NA&gt;  Aruba     AW                        Aruba      &lt;NA&gt;     Neth.
+1      &lt;NA&gt;   Afg.     AF Islamic State of Afghanistan      &lt;NA&gt;      &lt;NA&gt;
+2      &lt;NA&gt;   Ang.     AO  People's Republic of Angola      &lt;NA&gt;      &lt;NA&gt;
+3      &lt;NA&gt;   Ang.     AI                         &lt;NA&gt;      &lt;NA&gt;      U.K.
+4      &lt;NA&gt;   Alb.     AL          Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
+5      &lt;NA&gt;  Aland     AI                Åland Islands      &lt;NA&gt;      Fin.
+6      &lt;NA&gt;   And.    AND      Principality of Andorra      &lt;NA&gt;      &lt;NA&gt;
+7      &lt;NA&gt; U.A.E.     AE         United Arab Emirates      &lt;NA&gt;      &lt;NA&gt;
+8      &lt;NA&gt;   Arg.     AR           Argentine Republic      &lt;NA&gt;      &lt;NA&gt;
+9      &lt;NA&gt;   Arm.    ARM          Republic of Armenia      &lt;NA&gt;      &lt;NA&gt;
+  note_brk            name_sort name_alt mapcolor7 mapcolor8 mapcolor9
+0     &lt;NA&gt;                Aruba     &lt;NA&gt;         4         2         2
+1     &lt;NA&gt;          Afghanistan     &lt;NA&gt;         5         6         8
+2     &lt;NA&gt;               Angola     &lt;NA&gt;         3         2         6
+3     &lt;NA&gt;             Anguilla     &lt;NA&gt;         6         6         6
+4     &lt;NA&gt;              Albania     &lt;NA&gt;         1         4         1
+5     &lt;NA&gt;                Aland     &lt;NA&gt;         4         1         4
+6     &lt;NA&gt;              Andorra     &lt;NA&gt;         1         4         1
+7     &lt;NA&gt; United Arab Emirates     &lt;NA&gt;         2         1         3
+8     &lt;NA&gt;            Argentina     &lt;NA&gt;         3         1         3
+9     &lt;NA&gt;              Armenia     &lt;NA&gt;         3         1         2
+  mapcolor13  pop_est gdp_md_est pop_year lastcensus gdp_year
+0          9   103065     2258.0       NA       2010       NA
+1          7 28400000    22270.0       NA       1979       NA
+2          1 12799293   110300.0       NA       1970       NA
+3          3    14436      108.9       NA         NA       NA
+4          6  3639453    21810.0       NA       2001       NA
+5          6    27153     1563.0       NA         NA       NA
+6          8    83888     3660.0       NA       1989       NA
+7          3  4798491   184300.0       NA       2010       NA
+8         13 40913584   573900.0       NA       2010       NA
+9         10  2967004    18770.0       NA       2001       NA
+                     economy              income_grp wikipedia fips_10 iso_a2
+0       6. Developing region 2. High income: nonOECD        NA    &lt;NA&gt;     AW
+1  7. Least developed region           5. Low income        NA    &lt;NA&gt;     AF
+2  7. Least developed region  3. Upper middle income        NA    &lt;NA&gt;     AO
+3       6. Developing region  3. Upper middle income        NA    &lt;NA&gt;     AI
+4       6. Developing region  4. Lower middle income        NA    &lt;NA&gt;     AL
+5 2. Developed region: nonG7    1. High income: OECD        NA    &lt;NA&gt;     AX
+6 2. Developed region: nonG7 2. High income: nonOECD        NA    &lt;NA&gt;     AD
+7       6. Developing region 2. High income: nonOECD        NA    &lt;NA&gt;     AE
+8    5. Emerging region: G20  3. Upper middle income        NA    &lt;NA&gt;     AR
+9       6. Developing region  4. Lower middle income        NA    &lt;NA&gt;     AM
+  iso_a3 iso_n3 un_a3 wb_a2 wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un
+0    ABW    533   533    AW   ABW     NA        ABW        ABW         NA
+1    AFG    004   004    AF   AFG     NA        AFG        AFG         NA
+2    AGO    024   024    AO   AGO     NA        AGO        AGO         NA
+3    AIA    660   660  &lt;NA&gt;  &lt;NA&gt;     NA        AIA        AIA         NA
+4    ALB    008   008    AL   ALB     NA        ALB        ALB         NA
+5    ALA    248   248  &lt;NA&gt;  &lt;NA&gt;     NA        ALA        ALD         NA
+6    AND    020   020    AD   ADO     NA        AND        AND         NA
+7    ARE    784   784    AE   ARE     NA        ARE        ARE         NA
+8    ARG    032   032    AR   ARG     NA        ARG        ARG         NA
+9    ARM    051   051    AM   ARM     NA        ARM        ARM         NA
+  adm0_a3_wb     continent region_un       subregion                  region_wb
+0         NA North America  Americas       Caribbean  Latin America &amp; Caribbean
+1         NA          Asia      Asia   Southern Asia                 South Asia
+2         NA        Africa    Africa   Middle Africa         Sub-Saharan Africa
+3         NA North America  Americas       Caribbean  Latin America &amp; Caribbean
+4         NA        Europe    Europe Southern Europe      Europe &amp; Central Asia
+5         NA        Europe    Europe Northern Europe      Europe &amp; Central Asia
+6         NA        Europe    Europe Southern Europe      Europe &amp; Central Asia
+7         NA          Asia      Asia    Western Asia Middle East &amp; North Africa
+8         NA South America  Americas   South America  Latin America &amp; Caribbean
+9         NA          Asia      Asia    Western Asia      Europe &amp; Central Asia
+  name_len long_len abbrev_len tiny homepart                       geometry
+0        5        5          5    4       NA MULTIPOLYGON (((-69.89912 1...
+1       11       11          4   NA        1 MULTIPOLYGON (((74.89131 37...
+2        6        6          4   NA        1 MULTIPOLYGON (((14.19082 -5...
+3        8        8          4   NA       NA MULTIPOLYGON (((-63.00122 1...
+4        7        7          4   NA        1 MULTIPOLYGON (((20.06396 42...
+5        5       13          5    5       NA MULTIPOLYGON (((20.61133 60...
+6        7        7          4    5        1 MULTIPOLYGON (((1.706055 42...
+7       20       20          6   NA        1 MULTIPOLYGON (((53.92783 24...
+8        9        9          4   NA        1 MULTIPOLYGON (((-64.54917 -...
+9        7        7          4   NA        1 MULTIPOLYGON (((45.55234 40...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+* filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States"))
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 28 features and 63 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -178.1945 ymin: -21.36904 xmax: 179.78 ymax: 83.11611
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+   scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
+1          1 Admin-0 country         6        Albania    ALB        0     2
+2          1 Admin-0 country         2        Belgium    BEL        0     2
+3          1 Admin-0 country         4       Bulgaria    BGR        0     2
+4          1 Admin-0 country         2         Canada    CAN        0     2
+5          1 Admin-0 country         2        Germany    DEU        0     2
+6          1 Admin-0 country         4        Denmark    DN1        1     2
+7          1 Admin-0 country         2          Spain    ESP        0     2
+8          1 Admin-0 country         6        Estonia    EST        0     2
+9          1 Admin-0 country         2         France    FR1        1     2
+10         1 Admin-0 country         2 United Kingdom    GB1        1     2
+                type          admin adm0_a3 geou_dif        geounit gu_a3
+1  Sovereign country        Albania     ALB        0        Albania   ALB
+2  Sovereign country        Belgium     BEL        0        Belgium   BEL
+3  Sovereign country       Bulgaria     BGR        0       Bulgaria   BGR
+4  Sovereign country         Canada     CAN        0         Canada   CAN
+5  Sovereign country        Germany     DEU        0        Germany   DEU
+6            Country        Denmark     DNK        0        Denmark   DNK
+7  Sovereign country          Spain     ESP        0          Spain   ESP
+8  Sovereign country        Estonia     EST        0        Estonia   EST
+9            Country         France     FRA        0         France   FRA
+10           Country United Kingdom     GBR        0 United Kingdom   GBR
+   su_dif        subunit su_a3 brk_diff           name      name_long brk_a3
+1       0        Albania   ALB        0        Albania        Albania    ALB
+2       0        Belgium   BEL        0        Belgium        Belgium    BEL
+3       0       Bulgaria   BGR        0       Bulgaria       Bulgaria    BGR
+4       0         Canada   CAN        0         Canada         Canada    CAN
+5       0        Germany   DEU        0        Germany        Germany    DEU
+6       0        Denmark   DNK        0        Denmark        Denmark    DNK
+7       0          Spain   ESP        0          Spain          Spain    ESP
+8       0        Estonia   EST        0        Estonia        Estonia    EST
+9       0         France   FRA        0         France         France    FRA
+10      0 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
+         brk_name brk_group abbrev postal
+1         Albania      &lt;NA&gt;   Alb.     AL
+2         Belgium      &lt;NA&gt;  Belg.      B
+3        Bulgaria      &lt;NA&gt;  Bulg.     BG
+4          Canada      &lt;NA&gt;   Can.     CA
+5         Germany      &lt;NA&gt;   Ger.      D
+6         Denmark      &lt;NA&gt;   Den.     DK
+7           Spain      &lt;NA&gt;    Sp.      E
+8         Estonia      &lt;NA&gt;   Est.    EST
+9          France      &lt;NA&gt;    Fr.      F
+10 United Kingdom      &lt;NA&gt;   U.K.     GB
+                                              formal_en formal_fr note_adm0
+1                                   Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
+2                                    Kingdom of Belgium      &lt;NA&gt;      &lt;NA&gt;
+3                                  Republic of Bulgaria      &lt;NA&gt;      &lt;NA&gt;
+4                                                Canada      &lt;NA&gt;      &lt;NA&gt;
+5                           Federal Republic of Germany      &lt;NA&gt;      &lt;NA&gt;
+6                                    Kingdom of Denmark      &lt;NA&gt;      &lt;NA&gt;
+7                                      Kingdom of Spain      &lt;NA&gt;      &lt;NA&gt;
+8                                   Republic of Estonia      &lt;NA&gt;      &lt;NA&gt;
+9                                       French Republic      &lt;NA&gt;      &lt;NA&gt;
+10 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
+   note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
+1      &lt;NA&gt;        Albania     &lt;NA&gt;         1         4         1          6
+2      &lt;NA&gt;        Belgium     &lt;NA&gt;         3         2         1          8
+3      &lt;NA&gt;       Bulgaria     &lt;NA&gt;         4         5         1          8
+4      &lt;NA&gt;         Canada     &lt;NA&gt;         6         6         2          2
+5      &lt;NA&gt;        Germany     &lt;NA&gt;         2         5         5          1
+6      &lt;NA&gt;        Denmark     &lt;NA&gt;         4         1         3         12
+7      &lt;NA&gt;          Spain     &lt;NA&gt;         4         5         5          5
+8      &lt;NA&gt;        Estonia     &lt;NA&gt;         3         2         1         10
+9      &lt;NA&gt;         France     &lt;NA&gt;         7         5         9         11
+10     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
+    pop_est gdp_md_est pop_year lastcensus gdp_year                    economy
+1   3639453      21810       NA       2001       NA       6. Developing region
+2  10414336     389300       NA       2011       NA 2. Developed region: nonG7
+3   7204687      93750       NA       2011       NA 2. Developed region: nonG7
+4  33487208    1300000       NA       2011       NA    1. Developed region: G7
+5  82329758    2918000       NA       2011       NA    1. Developed region: G7
+6   5500510     203600       NA       2011       NA 2. Developed region: nonG7
+7  40525002    1403000       NA       2001       NA 2. Developed region: nonG7
+8   1299371      27410       NA       2000       NA 2. Developed region: nonG7
+9  64057792    2128000       NA         NA       NA    1. Developed region: G7
+10 62262000    1977704        0       2011     2009    1. Developed region: G7
+               income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2
+1  4. Lower middle income        NA    &lt;NA&gt;     AL    ALB    008   008    AL
+2    1. High income: OECD        NA    &lt;NA&gt;     BE    BEL    056   056    BE
+3  3. Upper middle income        NA    &lt;NA&gt;     BG    BGR    100   100    BG
+4    1. High income: OECD        NA    &lt;NA&gt;     CA    CAN    124   124    CA
+5    1. High income: OECD        NA    &lt;NA&gt;     DE    DEU    276   276    DE
+6    1. High income: OECD        NA    &lt;NA&gt;     DK    DNK    208   208    DK
+7    1. High income: OECD        NA    &lt;NA&gt;     ES    ESP    724   724    ES
+8    1. High income: OECD        NA    &lt;NA&gt;     EE    EST    233   233    EE
+9    1. High income: OECD        NA    &lt;NA&gt;     FR    FRA    250   250    FR
+10   1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB
+   wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb     continent
+1    ALB     NA        ALB        ALB         NA         NA        Europe
+2    BEL     NA        BEL        BEL         NA         NA        Europe
+3    BGR     NA        BGR        BGR         NA         NA        Europe
+4    CAN     NA        CAN        CAN         NA         NA North America
+5    DEU     NA        DEU        DEU         NA         NA        Europe
+6    DNK     NA        DNK        DNK         NA         NA        Europe
+7    ESP     NA        ESP        ESP         NA         NA        Europe
+8    EST     NA        EST        EST         NA         NA        Europe
+9    FRA     NA        FRA        FRA         NA         NA        Europe
+10   GBR     NA        GBR        GBR         NA         NA        Europe
+   region_un        subregion             region_wb name_len long_len
+1     Europe  Southern Europe Europe &amp; Central Asia        7        7
+2     Europe   Western Europe Europe &amp; Central Asia        7        7
+3     Europe   Eastern Europe Europe &amp; Central Asia        8        8
+4   Americas Northern America         North America        6        6
+5     Europe   Western Europe Europe &amp; Central Asia        7        7
+6     Europe  Northern Europe Europe &amp; Central Asia        7        7
+7     Europe  Southern Europe Europe &amp; Central Asia        5        5
+8     Europe  Northern Europe Europe &amp; Central Asia        7        7
+9     Europe   Western Europe Europe &amp; Central Asia        6        6
+10    Europe  Northern Europe Europe &amp; Central Asia       14       14
+   abbrev_len tiny homepart                       geometry
+1           4   NA        1 MULTIPOLYGON (((20.06396 42...
+2           5   NA        1 MULTIPOLYGON (((4.816016 51...
+3           5   NA        1 MULTIPOLYGON (((28.58535 43...
+4           4   NA        1 MULTIPOLYGON (((-59.7876 43...
+5           4   NA        1 MULTIPOLYGON (((14.19824 53...
+6           4   NA        1 MULTIPOLYGON (((11.36143 54...
+7           3   NA        1 MULTIPOLYGON (((-17.88794 2...
+8           4   NA        1 MULTIPOLYGON (((22.61738 58...
+9           3   NA        1 MULTIPOLYGON (((55.79736 -2...
+10          4   NA        1 MULTIPOLYGON (((-1.065576 5...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+* left_join(nato_expenditure,by = "name")
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 28 features and 64 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -178.1945 ymin: -21.36904 xmax: 179.78 ymax: 83.11611
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+   scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
+1          1 Admin-0 country         6        Albania    ALB        0     2
+2          1 Admin-0 country         2        Belgium    BEL        0     2
+3          1 Admin-0 country         4       Bulgaria    BGR        0     2
+4          1 Admin-0 country         2         Canada    CAN        0     2
+5          1 Admin-0 country         2        Germany    DEU        0     2
+6          1 Admin-0 country         4        Denmark    DN1        1     2
+7          1 Admin-0 country         2          Spain    ESP        0     2
+8          1 Admin-0 country         6        Estonia    EST        0     2
+9          1 Admin-0 country         2         France    FR1        1     2
+10         1 Admin-0 country         2 United Kingdom    GB1        1     2
+                type          admin adm0_a3 geou_dif        geounit gu_a3
+1  Sovereign country        Albania     ALB        0        Albania   ALB
+2  Sovereign country        Belgium     BEL        0        Belgium   BEL
+3  Sovereign country       Bulgaria     BGR        0       Bulgaria   BGR
+4  Sovereign country         Canada     CAN        0         Canada   CAN
+5  Sovereign country        Germany     DEU        0        Germany   DEU
+6            Country        Denmark     DNK        0        Denmark   DNK
+7  Sovereign country          Spain     ESP        0          Spain   ESP
+8  Sovereign country        Estonia     EST        0        Estonia   EST
+9            Country         France     FRA        0         France   FRA
+10           Country United Kingdom     GBR        0 United Kingdom   GBR
+   su_dif        subunit su_a3 brk_diff           name      name_long brk_a3
+1       0        Albania   ALB        0        Albania        Albania    ALB
+2       0        Belgium   BEL        0        Belgium        Belgium    BEL
+3       0       Bulgaria   BGR        0       Bulgaria       Bulgaria    BGR
+4       0         Canada   CAN        0         Canada         Canada    CAN
+5       0        Germany   DEU        0        Germany        Germany    DEU
+6       0        Denmark   DNK        0        Denmark        Denmark    DNK
+7       0          Spain   ESP        0          Spain          Spain    ESP
+8       0        Estonia   EST        0        Estonia        Estonia    EST
+9       0         France   FRA        0         France         France    FRA
+10      0 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
+         brk_name brk_group abbrev postal
+1         Albania      &lt;NA&gt;   Alb.     AL
+2         Belgium      &lt;NA&gt;  Belg.      B
+3        Bulgaria      &lt;NA&gt;  Bulg.     BG
+4          Canada      &lt;NA&gt;   Can.     CA
+5         Germany      &lt;NA&gt;   Ger.      D
+6         Denmark      &lt;NA&gt;   Den.     DK
+7           Spain      &lt;NA&gt;    Sp.      E
+8         Estonia      &lt;NA&gt;   Est.    EST
+9          France      &lt;NA&gt;    Fr.      F
+10 United Kingdom      &lt;NA&gt;   U.K.     GB
+                                              formal_en formal_fr note_adm0
+1                                   Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
+2                                    Kingdom of Belgium      &lt;NA&gt;      &lt;NA&gt;
+3                                  Republic of Bulgaria      &lt;NA&gt;      &lt;NA&gt;
+4                                                Canada      &lt;NA&gt;      &lt;NA&gt;
+5                           Federal Republic of Germany      &lt;NA&gt;      &lt;NA&gt;
+6                                    Kingdom of Denmark      &lt;NA&gt;      &lt;NA&gt;
+7                                      Kingdom of Spain      &lt;NA&gt;      &lt;NA&gt;
+8                                   Republic of Estonia      &lt;NA&gt;      &lt;NA&gt;
+9                                       French Republic      &lt;NA&gt;      &lt;NA&gt;
+10 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
+   note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
+1      &lt;NA&gt;        Albania     &lt;NA&gt;         1         4         1          6
+2      &lt;NA&gt;        Belgium     &lt;NA&gt;         3         2         1          8
+3      &lt;NA&gt;       Bulgaria     &lt;NA&gt;         4         5         1          8
+4      &lt;NA&gt;         Canada     &lt;NA&gt;         6         6         2          2
+5      &lt;NA&gt;        Germany     &lt;NA&gt;         2         5         5          1
+6      &lt;NA&gt;        Denmark     &lt;NA&gt;         4         1         3         12
+7      &lt;NA&gt;          Spain     &lt;NA&gt;         4         5         5          5
+8      &lt;NA&gt;        Estonia     &lt;NA&gt;         3         2         1         10
+9      &lt;NA&gt;         France     &lt;NA&gt;         7         5         9         11
+10     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
+    pop_est gdp_md_est pop_year lastcensus gdp_year                    economy
+1   3639453      21810       NA       2001       NA       6. Developing region
+2  10414336     389300       NA       2011       NA 2. Developed region: nonG7
+3   7204687      93750       NA       2011       NA 2. Developed region: nonG7
+4  33487208    1300000       NA       2011       NA    1. Developed region: G7
+5  82329758    2918000       NA       2011       NA    1. Developed region: G7
+6   5500510     203600       NA       2011       NA 2. Developed region: nonG7
+7  40525002    1403000       NA       2001       NA 2. Developed region: nonG7
+8   1299371      27410       NA       2000       NA 2. Developed region: nonG7
+9  64057792    2128000       NA         NA       NA    1. Developed region: G7
+10 62262000    1977704        0       2011     2009    1. Developed region: G7
+               income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2
+1  4. Lower middle income        NA    &lt;NA&gt;     AL    ALB    008   008    AL
+2    1. High income: OECD        NA    &lt;NA&gt;     BE    BEL    056   056    BE
+3  3. Upper middle income        NA    &lt;NA&gt;     BG    BGR    100   100    BG
+4    1. High income: OECD        NA    &lt;NA&gt;     CA    CAN    124   124    CA
+5    1. High income: OECD        NA    &lt;NA&gt;     DE    DEU    276   276    DE
+6    1. High income: OECD        NA    &lt;NA&gt;     DK    DNK    208   208    DK
+7    1. High income: OECD        NA    &lt;NA&gt;     ES    ESP    724   724    ES
+8    1. High income: OECD        NA    &lt;NA&gt;     EE    EST    233   233    EE
+9    1. High income: OECD        NA    &lt;NA&gt;     FR    FRA    250   250    FR
+10   1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB
+   wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb     continent
+1    ALB     NA        ALB        ALB         NA         NA        Europe
+2    BEL     NA        BEL        BEL         NA         NA        Europe
+3    BGR     NA        BGR        BGR         NA         NA        Europe
+4    CAN     NA        CAN        CAN         NA         NA North America
+5    DEU     NA        DEU        DEU         NA         NA        Europe
+6    DNK     NA        DNK        DNK         NA         NA        Europe
+7    ESP     NA        ESP        ESP         NA         NA        Europe
+8    EST     NA        EST        EST         NA         NA        Europe
+9    FRA     NA        FRA        FRA         NA         NA        Europe
+10   GBR     NA        GBR        GBR         NA         NA        Europe
+   region_un        subregion             region_wb name_len long_len
+1     Europe  Southern Europe Europe &amp; Central Asia        7        7
+2     Europe   Western Europe Europe &amp; Central Asia        7        7
+3     Europe   Eastern Europe Europe &amp; Central Asia        8        8
+4   Americas Northern America         North America        6        6
+5     Europe   Western Europe Europe &amp; Central Asia        7        7
+6     Europe  Northern Europe Europe &amp; Central Asia        7        7
+7     Europe  Southern Europe Europe &amp; Central Asia        5        5
+8     Europe  Northern Europe Europe &amp; Central Asia        7        7
+9     Europe   Western Europe Europe &amp; Central Asia        6        6
+10    Europe  Northern Europe Europe &amp; Central Asia       14       14
+   abbrev_len tiny homepart spendingPercap                       geometry
+1           4   NA        1           1.26 MULTIPOLYGON (((20.06396 42...
+2           5   NA        1           0.93 MULTIPOLYGON (((4.816016 51...
+3           5   NA        1           1.61 MULTIPOLYGON (((28.58535 43...
+4           4   NA        1           1.27 MULTIPOLYGON (((-59.7876 43...
+5           4   NA        1           1.36 MULTIPOLYGON (((14.19824 53...
+6           4   NA        1           1.35 MULTIPOLYGON (((11.36143 54...
+7           3   NA        1           0.92 MULTIPOLYGON (((-17.88794 2...
+8           4   NA        1           2.13 MULTIPOLYGON (((22.61738 58...
+9           3   NA        1           1.84 MULTIPOLYGON (((55.79736 -2...
+10          4   NA        1           2.13 MULTIPOLYGON (((-1.065576 5...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+* nato_countries
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+*ggplot(data = nato_countries)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_5_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+* ggplot2::geom_sf(data = nato_countries)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_6_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+*   aes(fill = spendingPercap)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_7_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+*   scale_fill_gradient(low = "lightskyblue1",
+*                       high = "dodgerblue3")
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_8_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_gradient(low = "lightskyblue1",  
+                        high = "dodgerblue3") +  
+* ggplot2::coord_sf(xlim = c(-175, 47.5),
+*          ylim = c(23, 85),
+*          expand = FALSE)
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_9_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_gradient(low = "lightskyblue1",  
+                        high = "dodgerblue3") +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+*   labs(title = "Defense Expenditure by Share of GDP (%)",
+*        subtitle = "NATO Member States",
+*        fill = "Share of GDP (%)")
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_10_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_gradient(low = "lightskyblue1",  
+                        high = "dodgerblue3") +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+    labs(title = "Defense Expenditure by Share of GDP (%)",  
+         subtitle = "NATO Member States",  
+         fill = "Share of GDP (%)") +  
+*   theme_bw()
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_11_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_gradient(low = "lightskyblue1",  
+                        high = "dodgerblue3") +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+    labs(title = "Defense Expenditure by Share of GDP (%)",  
+         subtitle = "NATO Member States",  
+         fill = "Share of GDP (%)") +  
+    theme_bw() +  
+*   theme(plot.title = element_text(hjust = 0.5),
+*         plot.subtitle = element_text(hjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_12_output-1.png" width="864" /&gt;
+]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "10:5",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
