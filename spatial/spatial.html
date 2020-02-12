@@ -13,7 +13,7 @@
 class: center, middle, inverse, title-slide
 
 # Mapping Data in R with geom_sf()
-## A ‘flipbookr’ Tutorial
+## a ‘flipbookr’ tutorial
 ### Conner J. Surrency, January 2020
 
 ---
@@ -1027,8 +1027,7 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
-*   scale_fill_gradient(low = "lightskyblue1",
-*                       high = "dodgerblue3")
+*   scale_fill_viridis_c(option = "magma")
 ```
 ]]
 .column[.content[
@@ -1048,8 +1047,7 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
-    scale_fill_gradient(low = "lightskyblue1",  
-                        high = "dodgerblue3") +  
+    scale_fill_viridis_c(option = "magma") +  
 * ggplot2::coord_sf(xlim = c(-175, 47.5),
 *          ylim = c(23, 85),
 *          expand = FALSE)
@@ -1072,12 +1070,11 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
-    scale_fill_gradient(low = "lightskyblue1",  
-                        high = "dodgerblue3") +  
+    scale_fill_viridis_c(option = "magma") +  
   ggplot2::coord_sf(xlim = c(-175, 47.5),  
            ylim = c(23, 85),  
            expand = FALSE) +  
-*   labs(title = "Defense Expenditure by Share of GDP (%)",
+* labs(title = "Defense Expenditure by Share of GDP (%)",
 *        subtitle = "NATO Member States",
 *        fill = "Share of GDP (%)")
 ```
@@ -1099,15 +1096,14 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
-    scale_fill_gradient(low = "lightskyblue1",  
-                        high = "dodgerblue3") +  
+    scale_fill_viridis_c(option = "magma") +  
   ggplot2::coord_sf(xlim = c(-175, 47.5),  
            ylim = c(23, 85),  
            expand = FALSE) +  
-    labs(title = "Defense Expenditure by Share of GDP (%)",  
+  labs(title = "Defense Expenditure by Share of GDP (%)",  
          subtitle = "NATO Member States",  
          fill = "Share of GDP (%)") +  
-*   theme_bw()
+* theme_bw()
 ```
 ]]
 .column[.content[
@@ -1127,21 +1123,51 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
-    scale_fill_gradient(low = "lightskyblue1",  
-                        high = "dodgerblue3") +  
+    scale_fill_viridis_c(option = "magma") +  
   ggplot2::coord_sf(xlim = c(-175, 47.5),  
            ylim = c(23, 85),  
            expand = FALSE) +  
-    labs(title = "Defense Expenditure by Share of GDP (%)",  
+  labs(title = "Defense Expenditure by Share of GDP (%)",  
          subtitle = "NATO Member States",  
          fill = "Share of GDP (%)") +  
-    theme_bw() +  
-*   theme(plot.title = element_text(hjust = 0.5),
-*         plot.subtitle = element_text(hjust = 0.5))
+  theme_bw() +  
+* theme(plot.title =
+*           element_text(hjust = 0.5))
 ```
 ]]
 .column[.content[
 &lt;img src="spatial_files/figure-html/nato_auto_12_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
+  left_join(nato_expenditure,by = "name") -&gt;  
+  nato_countries  
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_viridis_c(option = "magma") +  
+  ggplot2::coord_sf(xlim = c(-175, 47.5),  
+           ylim = c(23, 85),  
+           expand = FALSE) +  
+  labs(title = "Defense Expenditure by Share of GDP (%)",  
+         subtitle = "NATO Member States",  
+         fill = "Share of GDP (%)") +  
+  theme_bw() +  
+  theme(plot.title =  
+            element_text(hjust = 0.5)) +  
+* theme(plot.subtitle =
+*           element_text(hjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="spatial_files/figure-html/nato_auto_13_output-1.png" width="864" /&gt;
 ]]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

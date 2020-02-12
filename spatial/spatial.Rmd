@@ -1,6 +1,6 @@
 ---
 title: "Mapping Data in R with geom_sf()"
-subtitle: "A 'flipbookr' Tutorial"
+subtitle: "a 'flipbookr' tutorial"
 author: "Conner J. Surrency, January 2020"
 output:
   xaringan::moon_reader:
@@ -124,17 +124,18 @@ rnaturalearth::ne_countries(
 ggplot(data = nato_countries) + 
   ggplot2::geom_sf(data = nato_countries) + 
     aes(fill = spendingPercap) +
-    scale_fill_gradient(low = "lightskyblue1", 
-                        high = "dodgerblue3") +
+    scale_fill_viridis_c(option = "magma") +
   ggplot2::coord_sf(xlim = c(-175, 47.5), 
            ylim = c(23, 85), 
            expand = FALSE) + 
-    labs(title = "Defense Expenditure by Share of GDP (%)", 
+  labs(title = "Defense Expenditure by Share of GDP (%)", 
          subtitle = "NATO Member States", 
          fill = "Share of GDP (%)") + 
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5), 
-          plot.subtitle = element_text(hjust = 0.5)) 
+  theme_bw() +
+  theme(plot.title = 
+            element_text(hjust = 0.5)) + 
+  theme(plot.subtitle = 
+            element_text(hjust = 0.5)) 
 ```
 
 `r chunk_reveal("nato", break_type = "auto")`

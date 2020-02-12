@@ -41,15 +41,15 @@ df %>%
 ggplot() +
   aes(x = sport) +
   aes(y = x2017) + 
-  aes(fill = sport_dummy) +
-  aes(color = sport_dummy) + 
   geom_col(width = 0.6) + 
+  aes(fill = sport_dummy) +
+  scale_fill_manual(values =
+                      c("#F11B59", "#8d8d8d")) + 
   coord_flip() + 
   aes(x = reorder(sport, x2017)) +
   geom_text(aes(label = x2017),
             nudge_y = 1) +
-  scale_fill_manual(values =
-                      c("#F11B59", "#8d8d8d")) + 
+  aes(color = sport_dummy) + 
   scale_color_manual(values = 
                        c("#F11B59", "#8d8d8d")) + 
   theme_minimal() +
