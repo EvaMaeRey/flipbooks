@@ -1,5 +1,5 @@
 ---
-title: "ggplotting w/ Claus Wilk's new ggtext"
+title: "ggplotting w/ Claus Wilke's new ggtext"
 subtitle: "made with {flipbookr}"
 author: "Klaus Schulte, edited by Gina Reynolds, Feb 2020"
 output:
