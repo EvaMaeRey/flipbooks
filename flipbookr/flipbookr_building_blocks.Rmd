@@ -78,8 +78,22 @@ Now, lets look at some of the functions working in the background.
 
 
 ---
+class: middle center inverse
 
-## 1.  *Automatically* parsing a block of input code 
+# Step 1
+## Parse block of input code
+
+
+---
+
+`r flipbookr::chunk_reveal("the_code_as_table")`
+
+```{r the_code_as_table, include = F}
+flipbookr:::create_code() %>% 
+  flipbookr:::code_as_table()
+```
+
+
 
 ---
 
@@ -90,12 +104,26 @@ Now, lets look at some of the functions working in the background.
 # The name of the code chunk containing code to be flipped
 flipbookr:::create_code() %>% 
   # parse that code into code, pipes, comments, etc
-  flipbookr:::code_parse() 
+  flipbookr:::code_base_parse() %>% 
+  flipbookr:::base_parsed_count_parentheses()
 ```
+
 
 ---
 
-## 2. *Automatically* reconstructing code into partial builds
+`r flipbookr::chunk_reveal("the_parse")`
+
+```{r the_parse, include = F}
+flipbookr:::create_code() %>% 
+  flipbookr:::code_parse()
+```
+
+
+---
+class: middle center inverse
+
+# Step 2
+## Reconstruct code into partial builds
 
 ---
 
@@ -162,24 +190,27 @@ code_seq #BREAK
 
 
 ---
+class: middle center inverse
 
-## 3. *Automatically* delivered on a presentation platform (here Xaringan)
+# Step 3 
+## Deliver to a presentation platform (here Xaringan)
 
+---
+
+## We have generic code chunk templates ...
 
 ```{r xaringan_slides}
 return_partial_chunks_template_code()
 return_partial_chunks_template_output()
 ```
 
----
 
-# The generic templates above...
 
 
 
 ---
 
-## ... are used to create chunks of code and output displayed side-by-side
+## ... which are used to create chunks of code and output displayed side-by-side
 
 ```{r}
 chunk_expand(chunk_name = "cars_plot")

@@ -21,6 +21,31 @@ class: center, middle, inverse, title-slide
 
 
 
+```r
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
+
+library(flipbookr)
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✓ ggplot2 3.3.0.9000     ✓ purrr   0.3.3     
+## ✓ tibble  2.1.3          ✓ dplyr   0.8.4     
+## ✓ tidyr   1.0.2          ✓ stringr 1.4.0     
+## ✓ readr   1.3.1          ✓ forcats 0.4.0
+```
+
+```
+## ── Conflicts ───────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+
 # Welcome
 
 - Yes, there is now a package called `flipbookr`
@@ -72,33 +97,17 @@ As you begin with flipbooks, I'd recommend using the code chunk option `include 
 
 ## Set-up
 
-We use the flipbookr package, of course! This does the work of disassembling a single code chunk and creating the "build" of multiple partial-code chunks.  
+We use the flipbookr package, of course! This does the work of disassembling a single code chunk and creating the "build" of multiple partial-code chunks.  This is at the top of this file in the "setup" code chunk.
 
-
-```r
-library(flipbookr)
-```
-
-Also, I set *code chunk* options for the code chunks that follow.  These will apply to the spawned code chunks.
-
-
-```r
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
-```
-
+Also, at the top of this template in that "setup" code chunk, I set *code chunk* options for the code chunks that follow.  These will apply to the spawned code chunks.
 
 &lt;!-- So that I can sometimes work interactively on the package, I still am making the local source script available for myself.--&gt;
-
 
 
 ```
 Error in file(filename, "r", encoding = encoding) : 
   cannot open the connection
 ```
-
-
-
-
 
 
 
@@ -124,20 +133,13 @@ There are several modalities that you might be interested in using for "flipbook
 
 ---
 
-At first we'll apply our flipbooking to the below input code - the code chunk is named "cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we'll load that too in a previous code chunk. 
-
-
-```r
-library(tidyverse)
-```
+At first we'll apply our flipbooking to the below input code - the code chunk is named "cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we loaded that too in the "setup" code chunk at the beginning of the template. 
 
 
 
 ---
 
 # `break_type`
-
-
 
 Notice the regular comments and the special #BREAK comments, these will be used for a couple of the different "break type" modalities.
 
@@ -156,7 +158,7 @@ cars %&gt;%
   aes(size = speed) #BREAK
 ```
 
-&lt;!-- Also notice how we've created a new code chunk with the code from the previous chunk. --&gt;
+&lt;!-- Also notice how we've created a new code chunk with the code from the previous chunk by calling knitr::knit_code$get("cars"). --&gt;
 &lt;!-- This slide is also about giving you some intuition about how flipbooking works in the background. --&gt;
 &lt;!-- (more on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)) --&gt;
 
@@ -2007,7 +2009,7 @@ prediction_y
 
 ## Change slide show look and feel
 
-To quickly change the look and feel of your xaringan slide show, you might check out the [available themes](https://github.com/yihui/xaringan/wiki/Themes#avaliable-themes) from the xaringan packaga and [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.
+To quickly change the look and feel of your xaringan slide show, you might check out the [available themes](https://github.com/yihui/xaringan/wiki/Themes#avaliable-themes) from the xaringan package and [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.
 
 Another extremely useful resource for xaringan styling is Alison Hill's ["Meet xaringan: Making slides in R Markdown"](https://arm.rbind.io/slides/xaringan.html).
 
@@ -2017,7 +2019,7 @@ Another extremely useful resource for xaringan styling is Alison Hill's ["Meet x
 # Sharing your flipbooks
 
 - flip, zip, and ship
-- get it on github
+- get it on github, with github pages
 
 
 
