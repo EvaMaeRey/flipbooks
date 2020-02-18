@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include = F}
@@ -29,7 +29,7 @@ Click once in the box the below to initiate the session; then use the right and 
 
 
 ```{r}
-knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1")
+knitr::include_url("https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html#1")
 ```
 
 
@@ -61,7 +61,7 @@ install.packages("xaringan")
 Using the steps above, the template will create the following book (you can explore the different modalities here):
 
 ```{r}
-knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/flipbookr/skeleton#1")
+knitr::include_url("https://evamaerey.github.io/flipbooks/flipbookr/skeleton")
 ```
 
 #### But we've all got issues
@@ -200,7 +200,7 @@ knitr::include_graphics(c( "figures/rank_the_traits.png", "figures/uk.png"))
 If you are interested in contributing to {flipbookr}, you might consider getting some of the intuition of the internal functions by browsing through the resource below, or link to it  [here](https://evamaerey.github.io/little_flipbooks_library/flipbookr/flipbookr_building_blocks#1){target="_blank"}:
 
 ```{r}
-knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/flipbookr/flipbookr_building_blocks#1")
+knitr::include_url("https://evamaerey.github.io/flipbooks/flipbookr/flipbookr_building_blocks#1")
 ```
 
 
@@ -242,7 +242,7 @@ Feedback comes from individuals around the world including the following locatio
 
 ```{r, results='asis'}
 library(tidyverse)
-load("about/data_products/tweets.Rdata")
+load("details/data_products/tweets.Rdata")
 df %>% 
   select(location) %>% 
   drop_na() %>% 
@@ -250,6 +250,9 @@ df %>%
   pull(location) %>% 
   cat(sep = " | ")
 ```
+
+# Acknowledgements
+
 
 
 
