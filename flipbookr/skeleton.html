@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>The fragile and perilous art of flipbooking</title>
+    <title>The art of flipbooking</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, December 2019" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# The fragile and perilous art of flipbooking
+# The art of flipbooking
 ## With flipbookr and xaringan
 ### Gina Reynolds, December 2019
 
@@ -21,29 +21,7 @@ class: center, middle, inverse, title-slide
 
 
 
-```r
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
 
-library(flipbookr)
-library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✓ ggplot2 3.3.0.9000     ✓ purrr   0.3.3     
-## ✓ tibble  2.1.3          ✓ dplyr   0.8.4     
-## ✓ tidyr   1.0.2          ✓ stringr 1.4.0     
-## ✓ readr   1.3.1          ✓ forcats 0.4.0
-```
-
-```
-## ── Conflicts ───────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-```
 
 
 # Welcome
@@ -51,13 +29,10 @@ library(tidyverse)
 - Yes, there is now a package called `flipbookr`
 --
 
-- Yes, it's still under construction (thus, the dramatic "fragile" and "perilous")
+- Yes, it's still under construction (the title of this book used to be the "fragile perilous art")
 --
 
 - Yes, you can help make it less fragile and perilous by letting us know if/how it breaks and frustrates you and/or contributing at https://github.com/EvaMaeRey/flipbookr!  
---
-
-- Then we'll retitle this book!
 
 
 
@@ -101,8 +76,13 @@ We use the flipbookr package, of course! This does the work of disassembling a s
 
 Also, at the top of this template in that "setup" code chunk, I set *code chunk* options for the code chunks that follow.  These will apply to the spawned code chunks.
 
-&lt;!-- So that I can sometimes work interactively on the package, I still am making the local source script available for myself.--&gt;
+&lt;!-- Hi there!  It's me, the developer.  So that I can sometimes work interactively on the package, I still am making the local source script available for myself - the code in the following chunk is for this purpose.  It will just work for your, but because I'm using "try" it won't throw an error for you!--&gt;
 
+
+```
+Error in file(filename, "r", encoding = encoding) : 
+  cannot open the connection
+```
 
 ```
 Error in file(filename, "r", encoding = encoding) : 
@@ -119,7 +99,7 @@ You will use the `chunk_reveal()` function [inline](https://rmarkdown.rstudio.co
 
 &lt;!-- The above is for the html output version, just look at the examples below if you are in the source! --&gt;
 ```markdown
-`r chunk_reveal(chunk_name = "cars", break_type = "user", display_type = "both", left_assign = FALSE)`
+`r chunk_reveal(chunk_name = "cars", break_type = "user")`
 ``` 
 
 
@@ -763,7 +743,205 @@ cars %&gt;%
 
 # Assignment
 
-If you want to create an object in your flipbooks, it is most "natural" to use [right assignment](https://stat.ethz.ch/R-manual/R-devel/library/base/html/assignOps.html).  Working sequentially with a pipeline of code, you get feedback all along the way until you get to the point of assigning all of what you have done to a new object with right assignment.  With left assignment in R, you don't get any feedback, so flipbooking prefers this step at the end of a pipeline, so we can enjoy all the nice feedback. So the parameter left_assign is by default set to FALSE.
+If you want to create an object in your flipbooks, it is most "natural" to use [right assignment](https://stat.ethz.ch/R-manual/R-devel/library/base/html/assignOps.html).  Working sequentially with a pipeline of code, you get feedback all along the way until you get to the point of assigning all of what you have done to a new object with right assignment.  Creating objects in one "source" code chunk, means that you can break up a pipeline of tasks into multiple code chunks.  Let's see this in action.
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars
+```
+]]
+.column[.content[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/plot_object_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+* aes(x = speed)
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/plot_object_auto_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/plot_object_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/plot_object_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point() -&gt;  
+*cars_plot
+```
+]]
+.column[.content[
+
+]]
+
+
+
+
+---
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars_plot
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/further_building_auto_1_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_plot +  
+* labs(x = "Speed (mph)")
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/further_building_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_plot +  
+  labs(x = "Speed (mph)") +  
+* labs(y = "Stopping distance (ft)")
+```
+]]
+.column[.content[
+&lt;img src="skeleton_files/figure-html/further_building_auto_3_output-1.png" width="432" /&gt;
+]]
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -771,6 +949,9 @@ If you want to create an object in your flipbooks, it is most "natural" to use [
 
 
 # `left_assign = TRUE`
+
+
+With left assignment in R, you don't get any feedback, so flipbooking prefers this step at the end of a pipeline, so we can enjoy all the nice feedback. So the parameter left_assign is by default set to FALSE.
 
 
 But, setting the left_assign paramter to T and using left assignment, you can still create a meaningful flipbook that gives you feedback.   When left_assign = TRUE, the first object that is created prints at the end of the derivative code chunks. 
@@ -991,198 +1172,7 @@ my_plot # tracked object
 
 # Managing source code chunks
 
-So, it is pretty cool that we can create a bunch of derivative code chunks from one input code chunk (more on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)).  But there are some considerations then for this source chunk.  What should its chunk options be? 
-
-If there are dependenceies between code chunks, you may need to turn the code chunk option `eval` to TRUE (and usually echo = FALSE).  This may be the case when you create an object in one code chunk that you use in a subsequent code chunk.  
-
----
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-*cars
-```
-]]
-.column[.content[
-
-```
-   speed dist
-1      4    2
-2      4   10
-3      7    4
-4      7   22
-5      8   16
-6      9   10
-7     10   18
-8     10   26
-9     10   34
-10    11   17
-11    11   28
-12    12   14
-13    12   20
-14    12   24
-15    12   28
-16    13   26
-17    13   34
-18    13   34
-19    13   46
-20    14   26
-21    14   36
-22    14   60
-23    14   80
-24    15   20
-25    15   26
-26    15   54
-27    16   32
-28    16   40
-29    17   32
-30    17   40
-31    17   50
-32    18   42
-33    18   56
-34    18   76
-35    18   84
-36    19   36
-37    19   46
-38    19   68
-39    20   32
-40    20   48
-41    20   52
-42    20   56
-43    20   64
-44    22   66
-45    23   54
-46    24   70
-47    24   92
-48    24   93
-49    24  120
-50    25   85
-```
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars %&gt;%  
-* ggplot()
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_2_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-* aes(x = speed)
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_3_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-* aes(y = dist)
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_4_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-* geom_point()
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_5_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() -&gt;  
-*cars_plot
-```
-]]
-.column[.content[
-
-]]
-
-
-
-
----
-
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-*cars_plot
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/further_building_auto_1_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars_plot +  
-* labs(x = "Speed (mph)")
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/further_building_auto_2_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-cars_plot +  
-  labs(x = "Speed (mph)") +  
-* labs(y = "Stopping distance (ft)")
-```
-]]
-.column[.content[
-&lt;img src="skeleton_files/figure-html/further_building_auto_3_output-1.png" width="432" /&gt;
-]]
-
-
+So, it is pretty cool that we can create a bunch of derivative code chunks from one input code chunk (a foundational blog post by Emi Tanaka on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)).  But there are some considerations then for this source chunk.  What should its chunk options be?  The easy way is to set all "source" code chunks to include = F, as I do throughout the book.  However, you might consider a combination of `eval` and `echo` instead; you can come back to this idea as you become a more seasoned flipbooker.    
 
 
 
@@ -2007,9 +1997,9 @@ prediction_y
 
 ---
 
-## Change slide show look and feel
+## Xaringan slide show look and feel
 
-To quickly change the look and feel of your xaringan slide show, you might check out the [available themes](https://github.com/yihui/xaringan/wiki/Themes#avaliable-themes) from the xaringan package and [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.
+To quickly change the look and feel of your {xaringan} slide show, you might check out the [available themes](https://github.com/yihui/xaringan/wiki/Themes#avaliable-themes) from the xaringan package and [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.
 
 Another extremely useful resource for xaringan styling is Alison Hill's ["Meet xaringan: Making slides in R Markdown"](https://arm.rbind.io/slides/xaringan.html).
 
@@ -2018,8 +2008,21 @@ Another extremely useful resource for xaringan styling is Alison Hill's ["Meet x
 
 # Sharing your flipbooks
 
+Flipbooks created with Xaringan are multi-file creations.  The figures produced are stored separately from the main html document.  This presents a little bit of a challenge for sharing your work.  You can zip up all the associated files and share that way.  Alternatively, you can share as a website.  I've shared my work on github with github pages.  
+
 - flip, zip, and ship
-- get it on github, with github pages
+- get it on github, with github pages.  A good walk through is the one that I learned with (to get [the ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) online) by Brian Caffo https://www.youtube.com/watch?v=BBCesiebEuQ  Larger flipbooks will take longer to load online - something to keep in mind as you are building. 
+
+---
+
+# Spread the word and giving feedback
+
+Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgement, for example, *The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it at devtools::install_github("EvaMaeRey/flipbookr")*  
+
+Also consider sharing your work on social media, and let me know what you've built on Twitter with a mention to @EvaMaeRey
+
+Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr 
+
 
 
 
