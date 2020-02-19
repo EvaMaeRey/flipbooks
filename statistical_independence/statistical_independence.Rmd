@@ -2,12 +2,11 @@
 title: "Cool with statistical independence"
 subtitle: "Basic bivariate statistical tests (and false positives)"
 author: "Evangeline Reynolds"
-date: "September 21 and Oct 24, 2019"
+date: "September/October, 2019"
 output:
   # html_document:
   #   toc: no
   xaringan::moon_reader:
-    chakra: libs/remark-latest.min.js
     lib_dir: libs
     css: ["xaringan-themer-special.css", "ninjutsu"]
     nature:
@@ -33,7 +32,7 @@ knitr::opts_chunk$set(out.width = "10%", fig.height = 4, comment = "")
 ```
 
 ```{r}
-source("../xaringan_reveal_parentheses_balanced.R")
+library(flipbookr)
 ```
 
 
@@ -110,19 +109,19 @@ library(tidyverse)
 set.seed(98735)
 tibble(tail_length = rnorm(n = 50), 
        brain_weight = rnorm(n = 50)) -> 
-my_data; my_data  #REVEAL
+my_data; my_data  #BREAK
 ggplot(data = my_data) +
   aes(x = tail_length) +
   aes(y = brain_weight) +
   geom_point(color = "steelblue",
-             alpha = .8) #REVEAL
+             alpha = .8) #BREAK
 cor.test(x = my_data$tail_length, 
-              y = my_data$brain_weight) #REVEAL
+              y = my_data$brain_weight) #BREAK
 ```
 
 ---
 
-`r apply_reveal("continuous0", user_reveal_defined = T)`
+`r chunk_reveal("continuous0", break_type = "user")`
 
 
 
@@ -218,7 +217,7 @@ cor.test(x = my_data$tail_length,
 
 ---
 
-`r apply_repeat_reveal("continuous")`
+`r chunk_reveal("continuous", break_type = 20)`
 
 
 
@@ -294,7 +293,7 @@ t.test(height_data$height ~ # the continuous variable by (~)
 
 ---
 
-`r apply_repeat_reveal(chunk_name = "c_and_d2")`
+`r chunk_reveal(chunk_name = "c_and_d2", break_type = 20)`
 
 ---
 
@@ -370,7 +369,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
 
 ---
 
-`r apply_repeat_reveal(chunk_name = "c_and_d3")`
+`r chunk_reveal(chunk_name = "c_and_d3", break_type = 20)`
 
 
 
@@ -443,7 +442,7 @@ chisq.test(x = my_data$sex,
 
 
 
-`r apply_repeat_reveal(chunk_name = "d_and_d")`
+`r chunk_reveal(chunk_name = "d_and_d", break_type = 20)`
 
 
 
@@ -505,7 +504,7 @@ chisq.test(x = tea_data$truth,
 
 
 
-`r apply_repeat_reveal(chunk_name = "lady_tea")`
+`r chunk_reveal(chunk_name = "lady_tea", break_type = 20)`
 
 ---
 
@@ -572,16 +571,9 @@ chisq.test(x = fake_titanic$class,
 
 ---
 
-`r apply_repeat_reveal(chunk_name = "d4_d2")`
+`r chunk_reveal(chunk_name = "d4_d2", break_type = 20)`
 
 
-
-
----
-
-# Game Time
-
-https://evangelinereynolds.shinyapps.io/EyeBallIt/
 
 
 ```{css, eval = TRUE, echo = F}
