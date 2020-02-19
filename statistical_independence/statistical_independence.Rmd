@@ -1,7 +1,7 @@
 ---
 title: "Cool with statistical independence"
 subtitle: "Basic bivariate statistical tests (and false positives)"
-author: "Evangeline Reynolds"
+author: "Gina Reynolds"
 date: "September/October, 2019"
 output:
   # html_document:
@@ -16,37 +16,24 @@ output:
       countIncrementalSlides: false
 ---
 
-```{r xaringan-themer, include = FALSE, eval = F}
-# xaringanthemer::write_xaringan_theme(text_font_size = ".75cm",
-#                                      text_color = "darkblue")
-# 
-# xaringanthemer::mono_accent(
-#   base_color = "#43418A",
-#   header_font_google = google_font("Montserrat"),
-#   text_font_google   = google_font("Montserrat", "200", "200i"),
-#   code_font_google   = google_font("Droid Mono"),
-#   text_font_size = ".6cm",
-#   code_font_size = ".7cm", )
-  
-knitr::opts_chunk$set(out.width = "10%", fig.height = 4, comment = "")
-```
-
-```{r}
+```{r xaringan-themer, include = FALSE, eval = T}
+knitr::opts_chunk$set(comment = "", warning = F, message = F, cache = T)
 library(flipbookr)
 ```
+
 
 
 ---
 # Statistical independence
 
-In probability theory, two events are independent, statistically independent, or stochastically independent if the occurrence of one does not affect the probability of occurrence of the other.
+> In probability theory, two events are independent, statistically independent, or stochastically independent if the occurrence of one does not affect the probability of occurrence of the other.
 
-Similarly, two random variables are independent if the realization of one does not affect the probability distribution of the other.
+> Similarly, two random variables are independent if the realization of one does not affect the probability distribution of the other.
 
 ---
 ## "A statistically significant relationship"
 
-- When you have *evidence* of statistical *dependence*.  The probability of observing of observing such a strong relationship --- or stronger --- under *statistical independence* (the null) is quite small.  
+- When you have *evidence* of statistical *dependence*.  The probability of observing of observing such a strong relationship --- or stronger --- under *statistical independence* (often the null) is quite small.  
 
 https://www.youtube.com/watch?v=gSyGVDMcg-U
 
@@ -55,17 +42,17 @@ https://www.youtube.com/watch?v=gSyGVDMcg-U
 
 Hypothesis testing:
 
-- A null hypothsis: Ho (Often statistical independence)
-- Alternate hypothesis: Ha (Statistical dependence)
+- A null hypothsis: Ho (Often statistical *independence*)
+- Alternate hypothesis: Ha (Statistical *dependence*)
 
 ---
 ## Rejecting the null hypothesis
 
-- Comparison will be made with expectation about null (no relationship).  Such a strong relationship is unlikely to be observed by chance in a sample, if there is *not* dependence.  
+- Comparison will be made in relation to what we would expect to observe *under the null* (no relationship).  Such a strong relationship is unlikely to be observed by chance in a sample, if there is *not* dependence.  
 
 ---
 
-- If data deviates from expecations about null
+- If data *deviates* from expecations about null
 
    - we reject the null (there is no relationship - statistical independence)
    - and accept the alternative (there is a relationship - statistical dependence)
@@ -75,7 +62,7 @@ Hypothesis testing:
 
 The probability that a relationship as strong or stronger would have been observed under the null.
 
-http://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/
+http://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/ - but they all can...
 
 ---
 ## Fisher's exact test
@@ -110,6 +97,7 @@ set.seed(98735)
 tibble(tail_length = rnorm(n = 50), 
        brain_weight = rnorm(n = 50)) -> 
 my_data; my_data  #BREAK
+
 ggplot(data = my_data) +
   aes(x = tail_length) +
   aes(y = brain_weight) +
@@ -172,19 +160,19 @@ library(tidyverse)
 tibble(tail_length = rnorm(n = 50), 
        brain_weight = rnorm(n = 50)) ->
 my_data; my_data
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 ggplot(data = my_data) +
   aes(x = tail_length) +
   aes(y = brain_weight) +
@@ -195,22 +183,22 @@ ggplot(data = my_data) +
                          ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]<.05, "red", "black"),
                        size =
                          ifelse(cor.test(my_data$tail_length, my_data$brain_weight)[[3]]<.05, 8, 3)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 cor.test(x = my_data$tail_length, 
               y = my_data$brain_weight)
 ```
@@ -229,24 +217,24 @@ tibble(sex = sample(x = c("male","female"),
                   replace = T)) %>% 
   mutate(height = rnorm(n = 50, sd = .5) + 5.5) ->
 height_data; height_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# visualization
 ggplot(height_data) +
   aes(x = sex) +
   aes(y = height) +
@@ -258,23 +246,15 @@ ggplot(height_data) +
                geom = "point",
                col = "goldenrod3",
                size = 5) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+# statistical test
 t.test(height_data$height ~ # the continuous variable by (~)
          height_data$sex) # the discrete variable
 
@@ -309,24 +289,24 @@ tibble(sex = sample(x = c("1st","2nd","3rd","Crew"),
                   replace = T)) %>% 
   mutate(height = rnorm(n = 50)) ->
 height_data; height_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 ggplot(height_data) +
   aes(x = sex) +
   aes(y = height) +
@@ -338,23 +318,19 @@ ggplot(height_data) +
                geom = "point",
                col = "goldenrod3",
                size = 5) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# statistical test
 TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
          height_data$sex)) # the discrete variable
 
@@ -394,46 +370,36 @@ tibble(sex = sample(x = c("male","female"),
                   replace = T, 
                   prob = c(.3,.7))) ->
 my_data ; my_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 library(ggmosaic) # geom_mosaic() and product()
 ggplot(data = my_data) +
   geom_mosaic(aes(x = product(sex),
                   fill = handed))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# contingency table or two by two table
 table(x = my_data$sex, y = my_data$handed)
-
-
-
-
-
+#
+#
+#
+#
+#
 chisq.test(x = my_data$sex, 
            y = my_data$handed) 
 ```
@@ -453,46 +419,46 @@ library(tidyverse)
 tibble(truth = sample(rep(c("tea", "milk"), 4))) %>% 
   mutate(guess = sample(rep(c("tea", "milk"), 4))) ->
 tea_data ; tea_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 library(ggmosaic) # geom_mosaic() and product()
 ggplot(data = tea_data) +
   geom_mosaic(aes(x = product(truth),
                   fill = guess))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 chisq.test(x = tea_data$truth, 
            y = tea_data$guess) 
 ```
@@ -525,46 +491,40 @@ tibble(class = sample(x = c("1st","2nd","3rd","Crew"),
                           replace = T, 
                           prob = c(.3, .7))) ->
 fake_titanic ; fake_titanic
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 library(ggmosaic) # geom_mosaic() and product()
 ggplot(data = fake_titanic) +
   geom_mosaic(aes(x = product(class),
-                  fill = survive))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                  fill = survive)) -> g1
+ggplot(data = fake_titanic) +
+  aes(x = class) +
+  aes(y = survive) +
+  geom_count(alpha = .5, color = "blue") +
+  geom_jitter(width = .2, height = .2) -> g2
+library(patchwork)
+g1 + g2
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 chisq.test(x = fake_titanic$class, 
            y = fake_titanic$survive) 
 ```
