@@ -23,17 +23,14 @@ knitr::opts_chunk$set(echo = F, message = F)
 
 *Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Long pipelines of code can produce attractive outputs.  But they can feel like long streches of *highway with no exit or entry ramps*.   Interacting with such code that has been made into a flipbook is different.  The user can isolate and gain insight about short streches along the pipeline that are useful for her or his particular project -- all the while engaged by the creativity brought by the project creator in pursuit of their own goal.  Flipbooks enable us to isolate how individual functions work in context.   
 
-### Example
-
-Click once in the box the below to initiate the session; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
-
+To experience an example, click once in the box the below to initiate the session; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
 
 ```{r}
 knitr::include_url("https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html#1")
 ```
 
 
-## Do It Yourself
+## Create a flipbook
 
 Would you like to make a flipbook? We try to make that easy for you with {flipbookr}. To get started have a look at [A minimal Flipbook](https://evamaerey.github.io/flipbooks/flipbookr/skeleton#1){target="_blank"}, the template for which will be available once you install the [flipbooks package](https://github.com/EvaMaeRey/flipbookr){target="_blank"} as follows:
 
@@ -78,7 +75,7 @@ Here are a few known issues to watch for:
     - Output to be displayed in the flipbook must be supported in Xaringan and html
 
 
-## Flipbooks built in-house
+## Flipbooks examples
 
 Here at the University of Denver, we've built a few flipbooks.  Here are some of them. 
 
@@ -92,11 +89,11 @@ knitr::include_graphics(c("figures/grammar_order.png", "figures/column_aesthetic
 
 <hr>
 
-[The geom pile on](https://evamaerey.github.io/ggplot2_grammar_guide/geoms.html){target="_blank"} is a suppliment to the ggplot grammar guide and shows you a lot of "geoms" that you can use to communicate about your data.  Piling up the geoms allows you to see howing plot types relate to one another. 
+[The geom pile on](https://evamaerey.github.io/ggplot2_grammar_guide/geoms.html){target="_blank"} is a suppliment to the ggplot grammar guide and shows you a lot of "geoms" that you can use to communicate about your data.  Piling up the geoms allows you to see how plot types relate to one another. 
 
 
 ```{r, out.width="45%"}
-knitr::include_graphics(c("figures/one_continuous.png", "figures/two_continuous.png"))
+knitr::include_graphics(c("figures/geom_pile_on.gif"))
 ```
 
 <hr>
@@ -104,15 +101,16 @@ knitr::include_graphics(c("figures/one_continuous.png", "figures/two_continuous.
 [ggplot themes](https://evamaerey.github.io/flipbooks/taming_themes_in_ggplot/taming_ggplot_themes.html){target="_blank"} takes you through 
 logic of the ggplot2 theme adjustments.
 
+![](figures/taming_ggplot_themes.gif){100%}
+
 
 <hr>
 
 For examples of data wrangling/manipulation with pipelines and pipes (`%>%`), check out [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html){target="_blank"}.
 
-```{r, out.width="28%"}
-knitr::include_graphics(c("figures/key_manipulation_functions.png", "figures/median_by_group.png", "figures/select_distinct.png"))
-```
 
+
+![](figures/tidyverse_in_action.gif)
 
 <hr>
 
@@ -124,26 +122,20 @@ knitr::include_graphics(c("figures/data_cleaning_flipbook1.png"))
 ```
 <hr>
 
-[the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"} walks through a variety of examples of plot built using ggplot2.
+[the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"} is a gallery example plots built using ggplot2.
 
-```{r, out.width="95%"}
-knitr::include_graphics(c("figures/visual_table_of_contents.png"))
-```
+![](figures/ggplot_flipbook_long.gif)
 
-
-```{r, out.width="45%"}
-knitr::include_graphics(c( "figures/rank_the_traits.png", "figures/uk.png"))
-```
 
 <hr>
 
 [Galton Board](https://evamaerey.github.io/flipbooks/galton_board/galton_board.html#1){target="_blank"} shows you how to build your own Galton Board with R, ggplot2, and gganimate.
 
-![](figures/galton_board.png)
+![](figures/galton_board.gif)
 
 <hr>
 
-[leaflet for R (interactive maps)](https://evamaerey.github.io/flipbooks/leaflet/leaflet#1){target="_blank"} walk through some interactive map builds using the {leaflet} package (load slow!).
+[leaflet for R (interactive maps)](https://evamaerey.github.io/flipbooks/leaflet/leaflet#1){target="_blank"} walk through some interactive map builds using the {leaflet} package (loads slow!).
 
 
 
@@ -206,7 +198,7 @@ knitr::include_url("https://evamaerey.github.io/flipbooks/flipbookr/flipbookr_bu
 
 ## Origins
 
-In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R visualization package ggplot2.  In August 2018, I emulated this work, but using a code style I developed which I called "slowggplot2", which is entirely sequential and more incremental than typical workflows. This style uses one ggplot function for every plotting decision that is made (when possible); this format is ideal for automatically parsing and reconstructing partial builds of the plots; reconstructions clearly connect the coding decision and associated behavior.  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, which she partially automated.  
+In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R visualization package ggplot2.  In August 2018, I emulated this work, but using a code style I developed which I called "slowggplot2", which is entirely sequential and more incremental than typical workflows. This style uses one ggplot function for every plotting decision that is made (when possible); this format is ideal for automatically parsing and reconstructing partial builds of the plots; and reconstructions clearly connect the coding decision and associated behavior because differences between states is small.  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, which she partially automated.  
 
 I approached Garrick and Emi in October about working together on "flipbooks".  We soon had a fully automated framework to parse ggplot2 code, and present the code reconstruction along with associated output!  
 
