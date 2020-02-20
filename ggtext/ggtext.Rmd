@@ -1,12 +1,13 @@
 ---
-title: "ggplotting w/ Claus Wilke's new ggtext"
+title: "Klaus Schulte's ggplots, uses Claus Wilke's new ggtext"
 subtitle: "made with {flipbookr}"
-author: "Klaus Schulte, edited by Gina Reynolds, Feb 2020"
+author: "Edited by Gina Reynolds, Feb 2020"
 output:
   xaringan::moon_reader:
     lib_dir: libs
     css: [default, hygge, ninjutsu]
     nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
       ratio: 16:10
       highlightStyle: github
       highlightLines: true
@@ -14,11 +15,22 @@ output:
 ---
 
 
+
+My old twitter friend from #MakeoverMonday tried ggplot for the first time a few weeks ago.  He figured out tons of things about ggplot2, and even used Claus Wilke's new ggtext package, and the new ggplot theme option `plot.title.position`.  Way to go Klaus!  And way to go Claus!  
+
+
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Getting started with <a href="https://twitter.com/hashtag/Rstats?src=hash&amp;ref_src=twsrc%5Etfw">#Rstats</a>, <a href="https://twitter.com/hashtag/rstudio?src=hash&amp;ref_src=twsrc%5Etfw">#rstudio</a> and <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> was my project of the week. My first chart was a lot more work than expected and is inspired by <a href="https://twitter.com/barnabasmarkus?ref_src=twsrc%5Etfw">@barnabasmarkus</a> <a href="https://twitter.com/hashtag/makeovermonday?src=hash&amp;ref_src=twsrc%5Etfw">#makeovermonday</a> from week 1. Thanks <a href="https://twitter.com/EvaMaeRey?ref_src=twsrc%5Etfw">@EvaMaeRey</a> for support, my code is probably lousy, but I will build up on this! <a href="https://t.co/2dggPFrwrX">pic.twitter.com/2dggPFrwrX</a></p>&mdash; Klaus Schulte (@ProfDrKSchulte) <a href="https://twitter.com/ProfDrKSchulte/status/1222160205351464960?ref_src=twsrc%5Etfw">January 28, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
 ```{r}
 library("httr")
 library("readxl")
 df <- readxl::read_excel("sports_data.xlsx")
-knitr::opts_chunk$set(cache = T)
+knitr::opts_chunk$set(cache = T, comment = "")
 ```
 
 ---
@@ -56,18 +68,22 @@ ggplot() +
   theme(legend.position = "none", #no legend
         plot.margin = margin(35, 35, 10, 35)) + 
   labs(x = NULL) + 
-  labs(y = NULL) +
-  labs(title = "<b><span style = 'font-size:20pt'>15% of <span style = 'color:#F11B59;'>**Americans Have no Favorite Spectator Sport**</span></span></b><br> <b><span style = 'font-size:14pt'>Share of Answers to **Gallup** question *'What is your favorite sport to watch'* in 2017</span></b><br>") +
-  labs(caption = "#makeovermonday 01/2020 | @ProfDrKSchulte | Inspired by: @barnabasmarkus") +
-  theme(plot.title.position = "plot") +
-  theme(plot.title = ggtext::element_textbox_simple(
-      size = 13,
-      face = NULL,
-      lineheight = 1.75,
-      padding = margin(5, 5, 0, 5),
-      margin = margin(0, 0, 0, 0),
-      fill = "white")) +
-  theme(plot.caption.position = "plot") +
+  labs(y = NULL) ->
+g
+```
+
+
+---
+
+`r flipbookr::chunk_reveal("ggtext")`
+
+```{r ggtext, include = F}
+# now all the ggtext goodness
+g +
+  labs(caption = paste0(
+    "#makeovermonday 01/2020 | ",
+    "@ProfDrKSchulte | Inspired by: @barnabasmarkus")
+    ) +
   theme(plot.caption = ggtext::element_textbox_simple(
       size = 10,
       lineheight = 1,
@@ -75,13 +91,33 @@ ggplot() +
       margin = margin(10, 0, 10, 0),
       fill = "#F5F5F5",
       halign = 0.5,
-      valign = 0.5)) 
+      valign = 0.5)) +
+    labs(title = paste0(
+      "<b><span style = 'font-size:20pt'>15% of",
+      "<span style = 'color:#F11B59;'> ",
+      "**Americans Have no Favorite Spectator Sport**",
+      "</span></span></b>",
+      "<br><b><span style = 'font-size:14pt'>",
+      "Share of Answers to **Gallup** question ",
+      "*'What is your favorite sport to watch?'* ",
+      "in 20017",
+      "</span></b><br>")
+       ) +
+    theme(plot.title = ggtext::element_textbox_simple(
+      size = 13,
+      face = NULL,
+      lineheight = 1.75,
+      padding = margin(5, 5, 0, 5),
+      margin = margin(0, 0, 0, 0),
+      fill = "white")) +
+  theme(plot.title.position = "plot")
+
 ```
 
 
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 45%}
+.remark-code{line-height: 1.5; font-size: 65%}
 ```
 
