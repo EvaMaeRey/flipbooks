@@ -1,0 +1,144 @@
+---
+title: "stats 101 flipbook"
+subtitle: "Visualizaing covariance, correlation"
+author: "<br><br>Gina Reynolds, Feb 2020"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+
+## Covariance 
+
+Covariance is a measure of the joint variability of two random variables. 
+
+Let's have a look at the *population* covariance equation over all:
+
+--
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{n} $$
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 6, message = F, 
+                      warning = F,  comment = "", 
+                      cache = F, fig.height = 7, 
+                      fig.width = 8)
+
+library(flipbookr)
+library(tidyverse)
+```
+
+
+---
+
+
+
+
+
+
+
+
+---
+
+```{r, include = F}
+set.seed(2020)
+library(tidyverse)
+tibble(x = rnorm(20, sd = 20) + 50 ) %>% 
+  mutate(y = .1 * x + rnorm(20, sd = 3)) %>% 
+  mutate(mean_x = mean(x)) %>% 
+  mutate(mean_y = mean(y)) %>% 
+  mutate(area = (x - mean_x)*(y - mean_y)) %>% 
+  mutate(mean_area = mean(area)) %>% 
+  mutate(sd_x = sd(x)) %>% 
+  mutate(sd_y = sd(y)) %>% 
+  mutate(some_x = sd_x) %>% 
+  mutate(some_y = mean_area/some_x) ->
+df
+background_color <- "palegreen4"
+
+ggplot(df) + 
+  theme(legend.position = c(.8, .2)) +
+  aes(x,y) + 
+  theme(rect = element_rect(fill = background_color)) + 
+  theme(text = element_text(color = "white", face = "italic", size = 15)) +
+  theme(panel.background = element_rect(fill = background_color)) +
+  theme(legend.key = element_rect(fill = background_color)) +
+  theme(legend.title = element_blank()) +
+  theme(axis.text = element_text(color = "white")) +
+  theme(axis.ticks = element_line(color = "white")) +
+  labs(title = "Covariance") +
+  theme(panel.grid = element_blank()) +
+  geom_point(size = 3, pch = 21, col = "white", fill = "white", lwd = 3, alpha = .6) + 
+  labs(caption = "Statistical Visualization: Gina Reynolds @EvaMaeRey ") ->
+the_scatterplot; the_scatterplot
+```
+
+`r chunk_reveal("cov_first_steps", break_type = "user", display_type = "output")`
+
+```{r cov_first_steps, eval = F, echo=F}
+the_scatterplot +
+  labs(col = NULL) + #BREAK
+  # 1. mean of x
+  geom_rug(aes(y = NULL), col = "white") +
+  geom_vline(xintercept = mean(df$x), 
+             lty = "dashed", col = "white") + #BREAK
+  # 2. mean of y
+  geom_rug(col = "white", aes(x = NULL)) +
+  geom_hline(yintercept = mean(df$y), 
+             lty = "dashed", col = "white") + #BREAK
+  # difference xi mean x
+  scale_color_manual(breaks = c(FALSE, TRUE), 
+                     label = c("Negative", "Positive"), 
+                     values = c("orchid4", "lightgoldenrod3") )  + 
+  geom_segment(aes(col = x > mean(x), 
+                   xend = mean(x), yend = y), 
+                   arrow = arrow(ends = "first", 
+                                 length = unit(0.1, "inches"))) +
+  labs(col = "") + #BREAK
+  # difference yi mean y
+  geom_segment(aes(col = y > mean(y), 
+                   xend = x, yend = mean(y)), 
+                   arrow = arrow(ends = "first", 
+                                 length = unit(0.1, "inches")))  + #BREAK
+  # multiply differences
+  aes(fill = area > 0) +
+  geom_rect(aes(xmin = mean(x), ymin = mean(y),  
+            ymax = y, xmax = x), 
+            alpha = .2  ) +
+  labs(fill = "") +
+  scale_fill_manual(breaks = c(FALSE, TRUE), label = c("Negative", "Positive"),  values = c("orchid4", "lightgoldenrod3")) + #BREAK
+  annotate(geom = "rect",
+           xmin = mean(df$x), 
+           ymin = mean(df$y),
+           ymax = mean(df$some_y) + mean(df$y),
+           xmax = mean(df$some_x) + mean(df$x),
+            color = "grey35",
+            linetype = "dotted",
+            lwd = 1.5,
+            alpha = .8) +  #BREAK
+  labs(title = "Picture of covariance") +  #BREAK
+  # Pearsons's Correlation 
+  scale_x_continuous(sec.axis = sec_axis(~ (. -mean(df$x))/ sd(df$x))) +
+  geom_vline(xintercept = mean(df$x) + sd(df$x), lty = "dashed", color = "pink") +
+  geom_vline(xintercept = mean(df$x) - sd(df$x), lty = "dashed", color = "pink") + #BREAK
+  scale_y_continuous(sec.axis = sec_axis(~ (. -mean(df$y))/ sd(df$y))) +
+  geom_hline(yintercept = mean(df$y) + sd(df$y), lty = "dashed", color = "pink") +
+  geom_hline(yintercept = mean(df$y) - sd(df$y), lty = "dashed", color = "pink") + #BREAK
+  labs(title = "Picture of covariance and Pearson correlation coefficient") #BREAK
+```
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 30%}
+```
