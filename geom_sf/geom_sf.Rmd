@@ -55,27 +55,30 @@ The map we make will be a simple static map that shows those points.
 
 ---
 
+`r chunk_reveal("wetherspoon")`
 
-```{r, echo=T}
+```{r wetherspoon, include = F}
 library(tidyverse)
 library(rnaturalearth)
 library(readxl)
-wetherspoon_raw <- read_excel("wetherspoon.xlsx")
-
+read_excel("wetherspoon.xlsx") ->
+wetherspoon_raw
+#
 wetherspoon_raw %>%
   janitor::clean_names() %>% 
   select(1:5)  ->
 wetherspoon
-
-wetherspoon
 ```
+
+---
 
 ```{r wether, include = FALSE, echo=F}
 rnaturalearth::ne_countries(
   scale = "medium", returnclass = "sf") %>% 
+  select(name, continent, geometry) %>% 
   filter(name == 'United Kingdom') -> 
-  uk
-
+uk
+#
 ggplot(data = wetherspoon) + 
   ggplot2::geom_sf(data = uk) + 
   geom_point(aes(x = longitude, 
@@ -90,7 +93,6 @@ ggplot(data = wetherspoon) +
 ```
 
 
----
 
 `r chunk_reveal("wether")`
 
@@ -115,12 +117,17 @@ nato_expenditure
 ---
 
 ```{r nato, include = FALSE, echo=F}
+nato_names <- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")
+#
 rnaturalearth::ne_countries(
-  scale = "medium", returnclass = "sf") %>% 
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %>% 
-  left_join(nato_expenditure,by = "name") ->
+  scale = "medium", returnclass = "sf") %>%   
+  select(name, pop_est, gdp_md_est, 
+         continent, geometry) %>%
+  filter(name %in% nato_names) %>% 
+  left_join(nato_expenditure, by = "name") ->
   nato_countries
-
+#
 ggplot(data = nato_countries) + 
   ggplot2::geom_sf(data = nato_countries) + 
     aes(fill = spendingPercap) +

@@ -58,21 +58,190 @@ The map we make will be a simple static map that shows those points.
 
 ---
 
-
+class: split-40
+count: false
+.column[.content[
 
 ```r
-library(tidyverse)
-library(rnaturalearth)
-library(readxl)
-wetherspoon_raw &lt;- read_excel("wetherspoon.xlsx")
-
-wetherspoon_raw %&gt;%
-  janitor::clean_names() %&gt;% 
-  select(1:5)  -&gt;
-wetherspoon
-
-wetherspoon
+*library(tidyverse)
 ```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+*library(rnaturalearth)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+*library(readxl)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+*read_excel("wetherspoon.xlsx")
+```
+]]
+.column[.content[
+
+```
+# A tibble: 213 x 19
+   Name  Location Latitude Longitude `Empire State B… `Chicken Tikka`
+   &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+ 1 The … Leicest…     51.5   -0.129             11.2             8.39
+ 2 The … Whiteha…     51.5   -0.127             11.0             8.39
+ 3 Pend… Holborn…     51.5   -0.115             11.0             8.39
+ 4 The … City of…     51.5   -0.0847            11.0             8.39
+ 5 The … Manches…     53.5   -2.35              13.6             9.15
+ 6 The … Windsor      51.5   -0.609             10.6             8.99
+ 7 The … Beacons…     51.6   -0.627              9.75            8.99
+ 8 Good… Tower H…     51.5   -0.0728            11.0             8.39
+ 9 Cast… Manches…     53.5   -2.36              11.5             8.4 
+10 The … Camden,…     51.5   -0.145             11.2             8.39
+# … with 203 more rows, and 13 more variables: `Gammon afternoon deal` &lt;chr&gt;,
+#   `Chocolate Brownie` &lt;dbl&gt;, `Doom Bar` &lt;dbl&gt;, `Birra Moretti` &lt;dbl&gt;, `Porn
+#   Star at 2 x £12` &lt;chr&gt;, `Porn Star (glass)` &lt;chr&gt;, MEAL &lt;dbl&gt;, Notes &lt;chr&gt;,
+#   `Moretti as a % of a tikka` &lt;dbl&gt;, `Moretti as % of burger` &lt;dbl&gt;, `PRICE
+#   BUCKETS` &lt;chr&gt;, `Food cost £` &lt;dbl&gt;, `Drink cost £` &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+read_excel("wetherspoon.xlsx") -&gt;  
+*wetherspoon_raw
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+read_excel("wetherspoon.xlsx") -&gt;  
+wetherspoon_raw  
+* #
+*wetherspoon_raw
+```
+]]
+.column[.content[
+
+```
+# A tibble: 213 x 19
+   Name  Location Latitude Longitude `Empire State B… `Chicken Tikka`
+   &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+ 1 The … Leicest…     51.5   -0.129             11.2             8.39
+ 2 The … Whiteha…     51.5   -0.127             11.0             8.39
+ 3 Pend… Holborn…     51.5   -0.115             11.0             8.39
+ 4 The … City of…     51.5   -0.0847            11.0             8.39
+ 5 The … Manches…     53.5   -2.35              13.6             9.15
+ 6 The … Windsor      51.5   -0.609             10.6             8.99
+ 7 The … Beacons…     51.6   -0.627              9.75            8.99
+ 8 Good… Tower H…     51.5   -0.0728            11.0             8.39
+ 9 Cast… Manches…     53.5   -2.36              11.5             8.4 
+10 The … Camden,…     51.5   -0.145             11.2             8.39
+# … with 203 more rows, and 13 more variables: `Gammon afternoon deal` &lt;chr&gt;,
+#   `Chocolate Brownie` &lt;dbl&gt;, `Doom Bar` &lt;dbl&gt;, `Birra Moretti` &lt;dbl&gt;, `Porn
+#   Star at 2 x £12` &lt;chr&gt;, `Porn Star (glass)` &lt;chr&gt;, MEAL &lt;dbl&gt;, Notes &lt;chr&gt;,
+#   `Moretti as a % of a tikka` &lt;dbl&gt;, `Moretti as % of burger` &lt;dbl&gt;, `PRICE
+#   BUCKETS` &lt;chr&gt;, `Food cost £` &lt;dbl&gt;, `Drink cost £` &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+read_excel("wetherspoon.xlsx") -&gt;  
+wetherspoon_raw  
+  #
+wetherspoon_raw %&gt;%  
+* janitor::clean_names()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 213 x 19
+   name  location latitude longitude empire_state_bu… chicken_tikka
+   &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;
+ 1 The … Leicest…     51.5   -0.129             11.2           8.39
+ 2 The … Whiteha…     51.5   -0.127             11.0           8.39
+ 3 Pend… Holborn…     51.5   -0.115             11.0           8.39
+ 4 The … City of…     51.5   -0.0847            11.0           8.39
+ 5 The … Manches…     53.5   -2.35              13.6           9.15
+ 6 The … Windsor      51.5   -0.609             10.6           8.99
+ 7 The … Beacons…     51.6   -0.627              9.75          8.99
+ 8 Good… Tower H…     51.5   -0.0728            11.0           8.39
+ 9 Cast… Manches…     53.5   -2.36              11.5           8.4 
+10 The … Camden,…     51.5   -0.145             11.2           8.39
+# … with 203 more rows, and 13 more variables: gammon_afternoon_deal &lt;chr&gt;,
+#   chocolate_brownie &lt;dbl&gt;, doom_bar &lt;dbl&gt;, birra_moretti &lt;dbl&gt;,
+#   porn_star_at_2_x_12 &lt;chr&gt;, porn_star_glass &lt;chr&gt;, meal &lt;dbl&gt;, notes &lt;chr&gt;,
+#   moretti_as_a_percent_of_a_tikka &lt;dbl&gt;, moretti_as_percent_of_burger &lt;dbl&gt;,
+#   price_buckets &lt;chr&gt;, food_cost &lt;dbl&gt;, drink_cost &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+read_excel("wetherspoon.xlsx") -&gt;  
+wetherspoon_raw  
+  #
+wetherspoon_raw %&gt;%  
+  janitor::clean_names() %&gt;%  
+* select(1:5)
+```
+]]
+.column[.content[
 
 ```
 # A tibble: 213 x 5
@@ -90,11 +259,36 @@ wetherspoon
 10 The Ice Wharf       Camden, London          51.5   -0.145               11.2 
 # … with 203 more rows
 ```
+]]
+---
+class: split-40
+count: false
+.column[.content[
 
+```r
+library(tidyverse)  
+library(rnaturalearth)  
+library(readxl)  
+read_excel("wetherspoon.xlsx") -&gt;  
+wetherspoon_raw  
+  #
+wetherspoon_raw %&gt;%  
+  janitor::clean_names() %&gt;%  
+  select(1:5)  -&gt;  
+*wetherspoon
+```
+]]
+.column[.content[
+
+]]
 
 
 
 ---
+
+
+
+
 
 class: split-40
 count: false
@@ -246,40 +440,55 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+* select(name, continent, geometry)
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 241 features and 2 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+                  name     continent                       geometry
+0                Aruba North America MULTIPOLYGON (((-69.89912 1...
+1          Afghanistan          Asia MULTIPOLYGON (((74.89131 37...
+2               Angola        Africa MULTIPOLYGON (((14.19082 -5...
+3             Anguilla North America MULTIPOLYGON (((-63.00122 1...
+4              Albania        Europe MULTIPOLYGON (((20.06396 42...
+5                Aland        Europe MULTIPOLYGON (((20.61133 60...
+6              Andorra        Europe MULTIPOLYGON (((1.706055 42...
+7 United Arab Emirates          Asia MULTIPOLYGON (((53.92783 24...
+8            Argentina South America MULTIPOLYGON (((-64.54917 -...
+9              Armenia          Asia MULTIPOLYGON (((45.55234 40...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
 * filter(name == 'United Kingdom')
 ```
 ]]
 .column[.content[
 
 ```
-Simple feature collection with 1 feature and 63 fields
+Simple feature collection with 1 feature and 2 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -8.144824 ymin: 50.02139 xmax: 1.746582 ymax: 60.83188
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-  scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
-1         1 Admin-0 country         2 United Kingdom    GB1        1     2
-     type          admin adm0_a3 geou_dif        geounit gu_a3 su_dif
-1 Country United Kingdom     GBR        0 United Kingdom   GBR      0
-         subunit su_a3 brk_diff           name      name_long brk_a3
-1 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
-        brk_name brk_group abbrev postal
-1 United Kingdom      &lt;NA&gt;   U.K.     GB
-                                             formal_en formal_fr note_adm0
-1 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
-  note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
-1     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
-   pop_est gdp_md_est pop_year lastcensus gdp_year                 economy
-1 62262000    1977704        0       2011     2009 1. Developed region: G7
-            income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2 wb_a3
-1 1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB   GBR
-  woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb continent region_un
-1     NA        GBR        GBR         NA         NA    Europe    Europe
-        subregion             region_wb name_len long_len abbrev_len tiny
-1 Northern Europe Europe &amp; Central Asia       14       14          4   NA
-  homepart                       geometry
-1        1 MULTIPOLYGON (((-1.065576 5...
+            name continent                       geometry
+1 United Kingdom    Europe MULTIPOLYGON (((-1.065576 5...
 ```
 ]]
 ---
@@ -290,8 +499,9 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-* uk
+*uk
 ```
 ]]
 .column[.content[
@@ -305,26 +515,11 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+* #
 *ggplot(data = wetherspoon)
-```
-]]
-.column[.content[
-&lt;img src="geom_sf_files/figure-html/wether_auto_4_output-1.png" width="864" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-rnaturalearth::ne_countries(  
-  scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name == 'United Kingdom') -&gt;  
-  uk  
-ggplot(data = wetherspoon) +  
-* ggplot2::geom_sf(data = uk)
 ```
 ]]
 .column[.content[
@@ -338,14 +533,12 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
 ggplot(data = wetherspoon) +  
-  ggplot2::geom_sf(data = uk) +  
-* geom_point(aes(x = longitude,
-*                  y = latitude,
-*                  color = empire_state_burger),
-*              alpha = .3)
+* ggplot2::geom_sf(data = uk)
 ```
 ]]
 .column[.content[
@@ -359,15 +552,16 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
 ggplot(data = wetherspoon) +  
   ggplot2::geom_sf(data = uk) +  
-  geom_point(aes(x = longitude,  
-                   y = latitude,  
-                   color = empire_state_burger),  
-               alpha = .3) +  
-*   scale_color_viridis_c()
+* geom_point(aes(x = longitude,
+*                  y = latitude,
+*                  color = empire_state_burger),
+*              alpha = .3)
 ```
 ]]
 .column[.content[
@@ -381,16 +575,17 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
 ggplot(data = wetherspoon) +  
   ggplot2::geom_sf(data = uk) +  
   geom_point(aes(x = longitude,  
                    y = latitude,  
                    color = empire_state_burger),  
                alpha = .3) +  
-    scale_color_viridis_c() +  
-*   labs(color = "Empire State Burger\nCost (pounds)")
+*   scale_color_viridis_c()
 ```
 ]]
 .column[.content[
@@ -404,8 +599,10 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
 ggplot(data = wetherspoon) +  
   ggplot2::geom_sf(data = uk) +  
   geom_point(aes(x = longitude,  
@@ -413,8 +610,7 @@ ggplot(data = wetherspoon) +
                    color = empire_state_burger),  
                alpha = .3) +  
     scale_color_viridis_c() +  
-    labs(color = "Empire State Burger\nCost (pounds)") +  
-*   theme_bw()
+*   labs(color = "Empire State Burger\nCost (pounds)")
 ```
 ]]
 .column[.content[
@@ -428,8 +624,10 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
 ggplot(data = wetherspoon) +  
   ggplot2::geom_sf(data = uk) +  
   geom_point(aes(x = longitude,  
@@ -438,8 +636,7 @@ ggplot(data = wetherspoon) +
                alpha = .3) +  
     scale_color_viridis_c() +  
     labs(color = "Empire State Burger\nCost (pounds)") +  
-    theme_bw() +  
-*   theme(plot.title = element_text(hjust = 0.5))
+*   theme_bw()
 ```
 ]]
 .column[.content[
@@ -453,8 +650,37 @@ count: false
 ```r
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
   filter(name == 'United Kingdom') -&gt;  
-  uk  
+uk  
+  #
+ggplot(data = wetherspoon) +  
+  ggplot2::geom_sf(data = uk) +  
+  geom_point(aes(x = longitude,  
+                   y = latitude,  
+                   color = empire_state_burger),  
+               alpha = .3) +  
+    scale_color_viridis_c() +  
+    labs(color = "Empire State Burger\nCost (pounds)") +  
+    theme_bw() +  
+*   theme(plot.title = element_text(hjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="geom_sf_files/figure-html/wether_auto_11_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, continent, geometry) %&gt;%  
+  filter(name == 'United Kingdom') -&gt;  
+uk  
+  #
 ggplot(data = wetherspoon) +  
   ggplot2::geom_sf(data = uk) +  
   geom_point(aes(x = longitude,  
@@ -469,7 +695,7 @@ ggplot(data = wetherspoon) +
 ```
 ]]
 .column[.content[
-&lt;img src="geom_sf_files/figure-html/wether_auto_11_output-1.png" width="864" /&gt;
+&lt;img src="geom_sf_files/figure-html/wether_auto_12_output-1.png" width="864" /&gt;
 ]]
 
 
@@ -517,6 +743,22 @@ count: false
 .column[.content[
 
 ```r
+*nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",
+*               "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+* #
 *rnaturalearth::ne_countries(
 * scale = "medium", returnclass = "sf")
 ```
@@ -660,142 +902,47 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-* filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States"))
+* select(name, pop_est, gdp_md_est,
+*        continent, geometry)
 ```
 ]]
 .column[.content[
 
 ```
-Simple feature collection with 28 features and 63 fields
+Simple feature collection with 241 features and 4 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -178.1945 ymin: -21.36904 xmax: 179.78 ymax: 83.11611
+bbox:           xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 10 features:
-   scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
-1          1 Admin-0 country         6        Albania    ALB        0     2
-2          1 Admin-0 country         2        Belgium    BEL        0     2
-3          1 Admin-0 country         4       Bulgaria    BGR        0     2
-4          1 Admin-0 country         2         Canada    CAN        0     2
-5          1 Admin-0 country         2        Germany    DEU        0     2
-6          1 Admin-0 country         4        Denmark    DN1        1     2
-7          1 Admin-0 country         2          Spain    ESP        0     2
-8          1 Admin-0 country         6        Estonia    EST        0     2
-9          1 Admin-0 country         2         France    FR1        1     2
-10         1 Admin-0 country         2 United Kingdom    GB1        1     2
-                type          admin adm0_a3 geou_dif        geounit gu_a3
-1  Sovereign country        Albania     ALB        0        Albania   ALB
-2  Sovereign country        Belgium     BEL        0        Belgium   BEL
-3  Sovereign country       Bulgaria     BGR        0       Bulgaria   BGR
-4  Sovereign country         Canada     CAN        0         Canada   CAN
-5  Sovereign country        Germany     DEU        0        Germany   DEU
-6            Country        Denmark     DNK        0        Denmark   DNK
-7  Sovereign country          Spain     ESP        0          Spain   ESP
-8  Sovereign country        Estonia     EST        0        Estonia   EST
-9            Country         France     FRA        0         France   FRA
-10           Country United Kingdom     GBR        0 United Kingdom   GBR
-   su_dif        subunit su_a3 brk_diff           name      name_long brk_a3
-1       0        Albania   ALB        0        Albania        Albania    ALB
-2       0        Belgium   BEL        0        Belgium        Belgium    BEL
-3       0       Bulgaria   BGR        0       Bulgaria       Bulgaria    BGR
-4       0         Canada   CAN        0         Canada         Canada    CAN
-5       0        Germany   DEU        0        Germany        Germany    DEU
-6       0        Denmark   DNK        0        Denmark        Denmark    DNK
-7       0          Spain   ESP        0          Spain          Spain    ESP
-8       0        Estonia   EST        0        Estonia        Estonia    EST
-9       0         France   FRA        0         France         France    FRA
-10      0 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
-         brk_name brk_group abbrev postal
-1         Albania      &lt;NA&gt;   Alb.     AL
-2         Belgium      &lt;NA&gt;  Belg.      B
-3        Bulgaria      &lt;NA&gt;  Bulg.     BG
-4          Canada      &lt;NA&gt;   Can.     CA
-5         Germany      &lt;NA&gt;   Ger.      D
-6         Denmark      &lt;NA&gt;   Den.     DK
-7           Spain      &lt;NA&gt;    Sp.      E
-8         Estonia      &lt;NA&gt;   Est.    EST
-9          France      &lt;NA&gt;    Fr.      F
-10 United Kingdom      &lt;NA&gt;   U.K.     GB
-                                              formal_en formal_fr note_adm0
-1                                   Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
-2                                    Kingdom of Belgium      &lt;NA&gt;      &lt;NA&gt;
-3                                  Republic of Bulgaria      &lt;NA&gt;      &lt;NA&gt;
-4                                                Canada      &lt;NA&gt;      &lt;NA&gt;
-5                           Federal Republic of Germany      &lt;NA&gt;      &lt;NA&gt;
-6                                    Kingdom of Denmark      &lt;NA&gt;      &lt;NA&gt;
-7                                      Kingdom of Spain      &lt;NA&gt;      &lt;NA&gt;
-8                                   Republic of Estonia      &lt;NA&gt;      &lt;NA&gt;
-9                                       French Republic      &lt;NA&gt;      &lt;NA&gt;
-10 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
-   note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
-1      &lt;NA&gt;        Albania     &lt;NA&gt;         1         4         1          6
-2      &lt;NA&gt;        Belgium     &lt;NA&gt;         3         2         1          8
-3      &lt;NA&gt;       Bulgaria     &lt;NA&gt;         4         5         1          8
-4      &lt;NA&gt;         Canada     &lt;NA&gt;         6         6         2          2
-5      &lt;NA&gt;        Germany     &lt;NA&gt;         2         5         5          1
-6      &lt;NA&gt;        Denmark     &lt;NA&gt;         4         1         3         12
-7      &lt;NA&gt;          Spain     &lt;NA&gt;         4         5         5          5
-8      &lt;NA&gt;        Estonia     &lt;NA&gt;         3         2         1         10
-9      &lt;NA&gt;         France     &lt;NA&gt;         7         5         9         11
-10     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
-    pop_est gdp_md_est pop_year lastcensus gdp_year                    economy
-1   3639453      21810       NA       2001       NA       6. Developing region
-2  10414336     389300       NA       2011       NA 2. Developed region: nonG7
-3   7204687      93750       NA       2011       NA 2. Developed region: nonG7
-4  33487208    1300000       NA       2011       NA    1. Developed region: G7
-5  82329758    2918000       NA       2011       NA    1. Developed region: G7
-6   5500510     203600       NA       2011       NA 2. Developed region: nonG7
-7  40525002    1403000       NA       2001       NA 2. Developed region: nonG7
-8   1299371      27410       NA       2000       NA 2. Developed region: nonG7
-9  64057792    2128000       NA         NA       NA    1. Developed region: G7
-10 62262000    1977704        0       2011     2009    1. Developed region: G7
-               income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2
-1  4. Lower middle income        NA    &lt;NA&gt;     AL    ALB    008   008    AL
-2    1. High income: OECD        NA    &lt;NA&gt;     BE    BEL    056   056    BE
-3  3. Upper middle income        NA    &lt;NA&gt;     BG    BGR    100   100    BG
-4    1. High income: OECD        NA    &lt;NA&gt;     CA    CAN    124   124    CA
-5    1. High income: OECD        NA    &lt;NA&gt;     DE    DEU    276   276    DE
-6    1. High income: OECD        NA    &lt;NA&gt;     DK    DNK    208   208    DK
-7    1. High income: OECD        NA    &lt;NA&gt;     ES    ESP    724   724    ES
-8    1. High income: OECD        NA    &lt;NA&gt;     EE    EST    233   233    EE
-9    1. High income: OECD        NA    &lt;NA&gt;     FR    FRA    250   250    FR
-10   1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB
-   wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb     continent
-1    ALB     NA        ALB        ALB         NA         NA        Europe
-2    BEL     NA        BEL        BEL         NA         NA        Europe
-3    BGR     NA        BGR        BGR         NA         NA        Europe
-4    CAN     NA        CAN        CAN         NA         NA North America
-5    DEU     NA        DEU        DEU         NA         NA        Europe
-6    DNK     NA        DNK        DNK         NA         NA        Europe
-7    ESP     NA        ESP        ESP         NA         NA        Europe
-8    EST     NA        EST        EST         NA         NA        Europe
-9    FRA     NA        FRA        FRA         NA         NA        Europe
-10   GBR     NA        GBR        GBR         NA         NA        Europe
-   region_un        subregion             region_wb name_len long_len
-1     Europe  Southern Europe Europe &amp; Central Asia        7        7
-2     Europe   Western Europe Europe &amp; Central Asia        7        7
-3     Europe   Eastern Europe Europe &amp; Central Asia        8        8
-4   Americas Northern America         North America        6        6
-5     Europe   Western Europe Europe &amp; Central Asia        7        7
-6     Europe  Northern Europe Europe &amp; Central Asia        7        7
-7     Europe  Southern Europe Europe &amp; Central Asia        5        5
-8     Europe  Northern Europe Europe &amp; Central Asia        7        7
-9     Europe   Western Europe Europe &amp; Central Asia        6        6
-10    Europe  Northern Europe Europe &amp; Central Asia       14       14
-   abbrev_len tiny homepart                       geometry
-1           4   NA        1 MULTIPOLYGON (((20.06396 42...
-2           5   NA        1 MULTIPOLYGON (((4.816016 51...
-3           5   NA        1 MULTIPOLYGON (((28.58535 43...
-4           4   NA        1 MULTIPOLYGON (((-59.7876 43...
-5           4   NA        1 MULTIPOLYGON (((14.19824 53...
-6           4   NA        1 MULTIPOLYGON (((11.36143 54...
-7           3   NA        1 MULTIPOLYGON (((-17.88794 2...
-8           4   NA        1 MULTIPOLYGON (((22.61738 58...
-9           3   NA        1 MULTIPOLYGON (((55.79736 -2...
-10          4   NA        1 MULTIPOLYGON (((-1.065576 5...
+                  name  pop_est gdp_md_est     continent
+0                Aruba   103065     2258.0 North America
+1          Afghanistan 28400000    22270.0          Asia
+2               Angola 12799293   110300.0        Africa
+3             Anguilla    14436      108.9 North America
+4              Albania  3639453    21810.0        Europe
+5                Aland    27153     1563.0        Europe
+6              Andorra    83888     3660.0        Europe
+7 United Arab Emirates  4798491   184300.0          Asia
+8            Argentina 40913584   573900.0 South America
+9              Armenia  2967004    18770.0          Asia
+                        geometry
+0 MULTIPOLYGON (((-69.89912 1...
+1 MULTIPOLYGON (((74.89131 37...
+2 MULTIPOLYGON (((14.19082 -5...
+3 MULTIPOLYGON (((-63.00122 1...
+4 MULTIPOLYGON (((20.06396 42...
+5 MULTIPOLYGON (((20.61133 60...
+6 MULTIPOLYGON (((1.706055 42...
+7 MULTIPOLYGON (((53.92783 24...
+8 MULTIPOLYGON (((-64.54917 -...
+9 MULTIPOLYGON (((45.55234 40...
 ```
 ]]
 ---
@@ -804,143 +951,48 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-* left_join(nato_expenditure,by = "name")
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+* filter(name %in% nato_names)
 ```
 ]]
 .column[.content[
 
 ```
-Simple feature collection with 28 features and 64 fields
+Simple feature collection with 28 features and 4 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -178.1945 ymin: -21.36904 xmax: 179.78 ymax: 83.11611
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 10 features:
-   scalerank      featurecla labelrank     sovereignt sov_a3 adm0_dif level
-1          1 Admin-0 country         6        Albania    ALB        0     2
-2          1 Admin-0 country         2        Belgium    BEL        0     2
-3          1 Admin-0 country         4       Bulgaria    BGR        0     2
-4          1 Admin-0 country         2         Canada    CAN        0     2
-5          1 Admin-0 country         2        Germany    DEU        0     2
-6          1 Admin-0 country         4        Denmark    DN1        1     2
-7          1 Admin-0 country         2          Spain    ESP        0     2
-8          1 Admin-0 country         6        Estonia    EST        0     2
-9          1 Admin-0 country         2         France    FR1        1     2
-10         1 Admin-0 country         2 United Kingdom    GB1        1     2
-                type          admin adm0_a3 geou_dif        geounit gu_a3
-1  Sovereign country        Albania     ALB        0        Albania   ALB
-2  Sovereign country        Belgium     BEL        0        Belgium   BEL
-3  Sovereign country       Bulgaria     BGR        0       Bulgaria   BGR
-4  Sovereign country         Canada     CAN        0         Canada   CAN
-5  Sovereign country        Germany     DEU        0        Germany   DEU
-6            Country        Denmark     DNK        0        Denmark   DNK
-7  Sovereign country          Spain     ESP        0          Spain   ESP
-8  Sovereign country        Estonia     EST        0        Estonia   EST
-9            Country         France     FRA        0         France   FRA
-10           Country United Kingdom     GBR        0 United Kingdom   GBR
-   su_dif        subunit su_a3 brk_diff           name      name_long brk_a3
-1       0        Albania   ALB        0        Albania        Albania    ALB
-2       0        Belgium   BEL        0        Belgium        Belgium    BEL
-3       0       Bulgaria   BGR        0       Bulgaria       Bulgaria    BGR
-4       0         Canada   CAN        0         Canada         Canada    CAN
-5       0        Germany   DEU        0        Germany        Germany    DEU
-6       0        Denmark   DNK        0        Denmark        Denmark    DNK
-7       0          Spain   ESP        0          Spain          Spain    ESP
-8       0        Estonia   EST        0        Estonia        Estonia    EST
-9       0         France   FRA        0         France         France    FRA
-10      0 United Kingdom   GBR        0 United Kingdom United Kingdom    GBR
-         brk_name brk_group abbrev postal
-1         Albania      &lt;NA&gt;   Alb.     AL
-2         Belgium      &lt;NA&gt;  Belg.      B
-3        Bulgaria      &lt;NA&gt;  Bulg.     BG
-4          Canada      &lt;NA&gt;   Can.     CA
-5         Germany      &lt;NA&gt;   Ger.      D
-6         Denmark      &lt;NA&gt;   Den.     DK
-7           Spain      &lt;NA&gt;    Sp.      E
-8         Estonia      &lt;NA&gt;   Est.    EST
-9          France      &lt;NA&gt;    Fr.      F
-10 United Kingdom      &lt;NA&gt;   U.K.     GB
-                                              formal_en formal_fr note_adm0
-1                                   Republic of Albania      &lt;NA&gt;      &lt;NA&gt;
-2                                    Kingdom of Belgium      &lt;NA&gt;      &lt;NA&gt;
-3                                  Republic of Bulgaria      &lt;NA&gt;      &lt;NA&gt;
-4                                                Canada      &lt;NA&gt;      &lt;NA&gt;
-5                           Federal Republic of Germany      &lt;NA&gt;      &lt;NA&gt;
-6                                    Kingdom of Denmark      &lt;NA&gt;      &lt;NA&gt;
-7                                      Kingdom of Spain      &lt;NA&gt;      &lt;NA&gt;
-8                                   Republic of Estonia      &lt;NA&gt;      &lt;NA&gt;
-9                                       French Republic      &lt;NA&gt;      &lt;NA&gt;
-10 United Kingdom of Great Britain and Northern Ireland      &lt;NA&gt;      &lt;NA&gt;
-   note_brk      name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13
-1      &lt;NA&gt;        Albania     &lt;NA&gt;         1         4         1          6
-2      &lt;NA&gt;        Belgium     &lt;NA&gt;         3         2         1          8
-3      &lt;NA&gt;       Bulgaria     &lt;NA&gt;         4         5         1          8
-4      &lt;NA&gt;         Canada     &lt;NA&gt;         6         6         2          2
-5      &lt;NA&gt;        Germany     &lt;NA&gt;         2         5         5          1
-6      &lt;NA&gt;        Denmark     &lt;NA&gt;         4         1         3         12
-7      &lt;NA&gt;          Spain     &lt;NA&gt;         4         5         5          5
-8      &lt;NA&gt;        Estonia     &lt;NA&gt;         3         2         1         10
-9      &lt;NA&gt;         France     &lt;NA&gt;         7         5         9         11
-10     &lt;NA&gt; United Kingdom     &lt;NA&gt;         6         6         6          3
-    pop_est gdp_md_est pop_year lastcensus gdp_year                    economy
-1   3639453      21810       NA       2001       NA       6. Developing region
-2  10414336     389300       NA       2011       NA 2. Developed region: nonG7
-3   7204687      93750       NA       2011       NA 2. Developed region: nonG7
-4  33487208    1300000       NA       2011       NA    1. Developed region: G7
-5  82329758    2918000       NA       2011       NA    1. Developed region: G7
-6   5500510     203600       NA       2011       NA 2. Developed region: nonG7
-7  40525002    1403000       NA       2001       NA 2. Developed region: nonG7
-8   1299371      27410       NA       2000       NA 2. Developed region: nonG7
-9  64057792    2128000       NA         NA       NA    1. Developed region: G7
-10 62262000    1977704        0       2011     2009    1. Developed region: G7
-               income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2
-1  4. Lower middle income        NA    &lt;NA&gt;     AL    ALB    008   008    AL
-2    1. High income: OECD        NA    &lt;NA&gt;     BE    BEL    056   056    BE
-3  3. Upper middle income        NA    &lt;NA&gt;     BG    BGR    100   100    BG
-4    1. High income: OECD        NA    &lt;NA&gt;     CA    CAN    124   124    CA
-5    1. High income: OECD        NA    &lt;NA&gt;     DE    DEU    276   276    DE
-6    1. High income: OECD        NA    &lt;NA&gt;     DK    DNK    208   208    DK
-7    1. High income: OECD        NA    &lt;NA&gt;     ES    ESP    724   724    ES
-8    1. High income: OECD        NA    &lt;NA&gt;     EE    EST    233   233    EE
-9    1. High income: OECD        NA    &lt;NA&gt;     FR    FRA    250   250    FR
-10   1. High income: OECD        NA    &lt;NA&gt;     GB    GBR    826   826    GB
-   wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb     continent
-1    ALB     NA        ALB        ALB         NA         NA        Europe
-2    BEL     NA        BEL        BEL         NA         NA        Europe
-3    BGR     NA        BGR        BGR         NA         NA        Europe
-4    CAN     NA        CAN        CAN         NA         NA North America
-5    DEU     NA        DEU        DEU         NA         NA        Europe
-6    DNK     NA        DNK        DNK         NA         NA        Europe
-7    ESP     NA        ESP        ESP         NA         NA        Europe
-8    EST     NA        EST        EST         NA         NA        Europe
-9    FRA     NA        FRA        FRA         NA         NA        Europe
-10   GBR     NA        GBR        GBR         NA         NA        Europe
-   region_un        subregion             region_wb name_len long_len
-1     Europe  Southern Europe Europe &amp; Central Asia        7        7
-2     Europe   Western Europe Europe &amp; Central Asia        7        7
-3     Europe   Eastern Europe Europe &amp; Central Asia        8        8
-4   Americas Northern America         North America        6        6
-5     Europe   Western Europe Europe &amp; Central Asia        7        7
-6     Europe  Northern Europe Europe &amp; Central Asia        7        7
-7     Europe  Southern Europe Europe &amp; Central Asia        5        5
-8     Europe  Northern Europe Europe &amp; Central Asia        7        7
-9     Europe   Western Europe Europe &amp; Central Asia        6        6
-10    Europe  Northern Europe Europe &amp; Central Asia       14       14
-   abbrev_len tiny homepart spendingPercap                       geometry
-1           4   NA        1           1.26 MULTIPOLYGON (((20.06396 42...
-2           5   NA        1           0.93 MULTIPOLYGON (((4.816016 51...
-3           5   NA        1           1.61 MULTIPOLYGON (((28.58535 43...
-4           4   NA        1           1.27 MULTIPOLYGON (((-59.7876 43...
-5           4   NA        1           1.36 MULTIPOLYGON (((14.19824 53...
-6           4   NA        1           1.35 MULTIPOLYGON (((11.36143 54...
-7           3   NA        1           0.92 MULTIPOLYGON (((-17.88794 2...
-8           4   NA        1           2.13 MULTIPOLYGON (((22.61738 58...
-9           3   NA        1           1.84 MULTIPOLYGON (((55.79736 -2...
-10          4   NA        1           2.13 MULTIPOLYGON (((-1.065576 5...
+             name  pop_est gdp_md_est     continent
+1         Albania  3639453      21810        Europe
+2         Belgium 10414336     389300        Europe
+3        Bulgaria  7204687      93750        Europe
+4          Canada 33487208    1300000 North America
+5         Germany 82329758    2918000        Europe
+6         Denmark  5500510     203600        Europe
+7           Spain 40525002    1403000        Europe
+8         Estonia  1299371      27410        Europe
+9          France 64057792    2128000        Europe
+10 United Kingdom 62262000    1977704        Europe
+                         geometry
+1  MULTIPOLYGON (((20.06396 42...
+2  MULTIPOLYGON (((4.816016 51...
+3  MULTIPOLYGON (((28.58535 43...
+4  MULTIPOLYGON (((-59.7876 43...
+5  MULTIPOLYGON (((14.19824 53...
+6  MULTIPOLYGON (((11.36143 54...
+7  MULTIPOLYGON (((-17.88794 2...
+8  MULTIPOLYGON (((22.61738 58...
+9  MULTIPOLYGON (((55.79736 -2...
+10 MULTIPOLYGON (((-1.065576 5...
 ```
 ]]
 ---
@@ -949,10 +1001,66 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+* left_join(nato_expenditure, by = "name")
+```
+]]
+.column[.content[
+
+```
+Simple feature collection with 28 features and 5 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -178.1945 ymin: -21.36904 xmax: 179.78 ymax: 83.11611
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 10 features:
+             name  pop_est gdp_md_est     continent spendingPercap
+1         Albania  3639453      21810        Europe           1.26
+2         Belgium 10414336     389300        Europe           0.93
+3        Bulgaria  7204687      93750        Europe           1.61
+4          Canada 33487208    1300000 North America           1.27
+5         Germany 82329758    2918000        Europe           1.36
+6         Denmark  5500510     203600        Europe           1.35
+7           Spain 40525002    1403000        Europe           0.92
+8         Estonia  1299371      27410        Europe           2.13
+9          France 64057792    2128000        Europe           1.84
+10 United Kingdom 62262000    1977704        Europe           2.13
+                         geometry
+1  MULTIPOLYGON (((20.06396 42...
+2  MULTIPOLYGON (((4.816016 51...
+3  MULTIPOLYGON (((28.58535 43...
+4  MULTIPOLYGON (((-59.7876 43...
+5  MULTIPOLYGON (((14.19824 53...
+6  MULTIPOLYGON (((11.36143 54...
+7  MULTIPOLYGON (((-17.88794 2...
+8  MULTIPOLYGON (((22.61738 58...
+9  MULTIPOLYGON (((55.79736 -2...
+10 MULTIPOLYGON (((-1.065576 5...
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
 * nato_countries
 ```
 ]]
@@ -965,49 +1073,18 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+* #
 *ggplot(data = nato_countries)
-```
-]]
-.column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_5_output-1.png" width="864" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-rnaturalearth::ne_countries(  
-  scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
-  nato_countries  
-ggplot(data = nato_countries) +  
-* ggplot2::geom_sf(data = nato_countries)
-```
-]]
-.column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_6_output-1.png" width="864" /&gt;
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-rnaturalearth::ne_countries(  
-  scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
-  nato_countries  
-ggplot(data = nato_countries) +  
-  ggplot2::geom_sf(data = nato_countries) +  
-*   aes(fill = spendingPercap)
 ```
 ]]
 .column[.content[
@@ -1019,15 +1096,19 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
 ggplot(data = nato_countries) +  
-  ggplot2::geom_sf(data = nato_countries) +  
-    aes(fill = spendingPercap) +  
-*   scale_fill_viridis_c(option = "magma")
+* ggplot2::geom_sf(data = nato_countries)
 ```
 ]]
 .column[.content[
@@ -1039,18 +1120,20 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
-    aes(fill = spendingPercap) +  
-    scale_fill_viridis_c(option = "magma") +  
-* ggplot2::coord_sf(xlim = c(-175, 47.5),
-*          ylim = c(23, 85),
-*          expand = FALSE)
+*   aes(fill = spendingPercap)
 ```
 ]]
 .column[.content[
@@ -1062,11 +1145,72 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+*   scale_fill_viridis_c(option = "magma")
+```
+]]
+.column[.content[
+&lt;img src="geom_sf_files/figure-html/nato_auto_10_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
+  nato_countries  
+  #
+ggplot(data = nato_countries) +  
+  ggplot2::geom_sf(data = nato_countries) +  
+    aes(fill = spendingPercap) +  
+    scale_fill_viridis_c(option = "magma") +  
+* ggplot2::coord_sf(xlim = c(-175, 47.5),
+*          ylim = c(23, 85),
+*          expand = FALSE)
+```
+]]
+.column[.content[
+&lt;img src="geom_sf_files/figure-html/nato_auto_11_output-1.png" width="864" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
+rnaturalearth::ne_countries(  
+  scale = "medium", returnclass = "sf") %&gt;%  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
+  nato_countries  
+  #
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
@@ -1080,7 +1224,7 @@ ggplot(data = nato_countries) +
 ```
 ]]
 .column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_10_output-1.png" width="864" /&gt;
+&lt;img src="geom_sf_files/figure-html/nato_auto_12_output-1.png" width="864" /&gt;
 ]]
 ---
 class: split-40
@@ -1088,11 +1232,17 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
@@ -1107,7 +1257,7 @@ ggplot(data = nato_countries) +
 ```
 ]]
 .column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_11_output-1.png" width="864" /&gt;
+&lt;img src="geom_sf_files/figure-html/nato_auto_13_output-1.png" width="864" /&gt;
 ]]
 ---
 class: split-40
@@ -1115,11 +1265,17 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
@@ -1136,7 +1292,7 @@ ggplot(data = nato_countries) +
 ```
 ]]
 .column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_12_output-1.png" width="864" /&gt;
+&lt;img src="geom_sf_files/figure-html/nato_auto_14_output-1.png" width="864" /&gt;
 ]]
 ---
 class: split-40
@@ -1144,11 +1300,17 @@ count: false
 .column[.content[
 
 ```r
+nato_names &lt;- c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary",  
+                "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")  
+  #
 rnaturalearth::ne_countries(  
   scale = "medium", returnclass = "sf") %&gt;%  
-  filter(name %in% c("Albania", "Belgium", "Bulgaria", "Canada", "Croatia", "Czech Republic", "Denmark", "Estonia", "France", "Germany", "Greece", "Hungary", "Iceland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Turkey", "United Kingdom", "United States")) %&gt;%  
-  left_join(nato_expenditure,by = "name") -&gt;  
+  select(name, pop_est, gdp_md_est,  
+         continent, geometry) %&gt;%  
+  filter(name %in% nato_names) %&gt;%  
+  left_join(nato_expenditure, by = "name") -&gt;  
   nato_countries  
+  #
 ggplot(data = nato_countries) +  
   ggplot2::geom_sf(data = nato_countries) +  
     aes(fill = spendingPercap) +  
@@ -1167,7 +1329,7 @@ ggplot(data = nato_countries) +
 ```
 ]]
 .column[.content[
-&lt;img src="geom_sf_files/figure-html/nato_auto_13_output-1.png" width="864" /&gt;
+&lt;img src="geom_sf_files/figure-html/nato_auto_15_output-1.png" width="864" /&gt;
 ]]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
