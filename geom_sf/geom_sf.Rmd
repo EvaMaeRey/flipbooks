@@ -142,8 +142,12 @@ ggplot(data = nato_countries) +
   theme(plot.title = 
             element_text(hjust = 0.5)) + 
   theme(plot.subtitle = 
-            element_text(hjust = 0.5)) 
+            element_text(hjust = 0.5)) ->
+  g
 ```
 
 `r chunk_reveal("nato", break_type = "auto")`
+
+
+
 
