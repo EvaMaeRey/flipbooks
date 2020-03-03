@@ -6,6 +6,8 @@ output: html_document
 ---
 
 
+<!-- add simpsons -->
+
 <div id="needtowrap">
 
 If you need a theoretical exploration of the grammar of graphics and its use with ggplot2, see [a ggplot2 grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/ggplot2_grammar_guide){target="_blank"}.
@@ -132,9 +134,6 @@ knitr::include_graphics("figures/data.table.png")
 
 [#TidyTuesday walk through](https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html){target="_blank"} showcases a few of the beautiful contributions to the #TidyTuesday initiative
 
-<hr>
-
-[simpsona]
 
 <hr>
 

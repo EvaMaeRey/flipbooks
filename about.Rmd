@@ -80,11 +80,11 @@ Here are a few known issues to watch for:
 
 ## Topics
 
-We've collected flipooks for reference into three categories. 
+We've collected flipooks for reference into three categories. You can link to a able of contents from here:  
 
-- [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about)
-- [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about)
-- [Statistical Analysis](https://evamaerey.github.io/statistics/about)
+### [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about){target="_blank"}
+### [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+### [Statistical Analysis](https://evamaerey.github.io/statistics/about){target="_blank"}
 
 
 ## Featured examples
@@ -136,7 +136,7 @@ Since then, there have been a number of changes to the foundational code to impr
 The feedback on the flipbook format has been very encouraging (thank you if you were a part of this!) and a big motivation to keep working on this project.  The ggplot flipbook was a top story on [Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter. 
 
 
-Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/flipbooks/about/cheers_for_flipbooks).
+Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/little_flipbooks_library/about/cheers_for_flipbooks).
 
 Feedback comes from individuals around the world including the following locations!
 
