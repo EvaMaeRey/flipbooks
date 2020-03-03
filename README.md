@@ -35,13 +35,6 @@ time.
 
 </iframe>
 
-## Background
-
-Interested in flipbooks origin story and where the project is headed?
-Check out our
-[about](https://evamaerey.github.io/flipbooks/about/what_the_flipbook)
-page.
-
 ## Do It Yourself
 
 Would you like to make a flipbook? We try to make that easy for you with
@@ -169,7 +162,8 @@ gganimate.
 
 [leaflet for R (interactive
 maps)](https://evamaerey.github.io/flipbooks/leaflet/leaflet#1) walk
-through some interactive map builds using the {leaflet} package
+through some interactive map builds using the {leaflet} package (load
+slow\!).
 
 <hr>
 

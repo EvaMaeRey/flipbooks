@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 
 ### Incrementalism
 
-Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with such code that has been made into a flipbook is different; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
+Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with the same code that has been made into a flipbook is different; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
 
 ### Movie-like presentation of evolution
 
@@ -56,7 +56,7 @@ Would you like to make a flipbook? We try to make that easy for you with {flipbo
 7. Explore your flipbook!
 
 
-Once you have completed steps 1-3, you can also follow along with the [live demo](https://resources.rstudio.com/rstudio-conf-2020/flipbooks-evangeline-reynolds) that I presented at the RStudio Conference, 2020 (the demo is at 6'25"). 
+Once you have completed steps 1-3, you can also follow along with the [live demo](https://resources.rstudio.com/rstudio-conf-2020/flipbooks-evangeline-reynolds) that I presented at the RStudio Conference, 2020 (the demo is at 6'25") --- but consider using the setup code chunk in the template --- I don't do this in the demo. 
 
 The template (step 4) will create the following book, which contains examples of flipbooking modes:
 
@@ -78,9 +78,18 @@ Here are a few known issues to watch for:
     - Output to be displayed in the flipbook must be supported in Xaringan and html
 
 
-## Flipbooks examples
+## Topics
 
-Here at the University of Denver, we've built a few flipbooks.  Here are some of them. 
+We've collected flipooks for reference into three categories. 
+
+- [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about)
+- [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about)
+- [Statistical Analysis](https://evamaerey.github.io/statistics/about)
+
+
+## Featured examples
+
+You can link some flipbooks here: 
 
 
 ```{r, child="flipbook_examples.Rmd"}
@@ -131,7 +140,7 @@ Some of the most encouraging feedback about flipbooks has come from individuals,
 
 Feedback comes from individuals around the world including the following locations!
 
-```{r, results='asis'}
+```{r, results='asis', eval = F}
 library(tidyverse)
 load("details/data_products/tweets.Rdata")
 df %>% 

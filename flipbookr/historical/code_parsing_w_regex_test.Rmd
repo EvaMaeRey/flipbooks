@@ -1,0 +1,196 @@
+---
+title: "Proposed code parsing for flipbooks"
+author: "Gina Reynolds, May 2019"
+output: html_document
+---
+
+
+# Parse code
+
+
+```{r}
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+```{r}
+parse_code
+```
+
+---
+
+```{r}
+library(gapminder)
+library(tidyverse)
+```
+
+
+---
+
+# Example code
+
+```{r the_code, eval = F}
+gapminder %>%             # the data  #REVEAL
+  filter(year == (2000 + 7)) %>%  # subset 
+  ggplot() +              # pipe to ggplot 
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +  
+  # Describing what follows
+  geom_point() + #REVEAL
+  aes(color = 
+        paste("continent", 
+        continent) 
+          ) ->  
+my_plot 
+```
+
+---
+
+```{r}
+local_code <- # for testing w/o knitting
+"gapminder %>%             # the data  #REVEAL
+  filter(year == (2000 + 7)) %>%  # subset 
+  ggplot() +              # pipe to ggplot 
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +  
+  # Describing what follows
+  geom_point() + #REVEAL
+  aes(color = 
+  paste(\"continent\", 
+        continent) 
+          ) ->  
+my_plot "
+```
+
+
+---
+
+```{r}
+knitr:::knit_code$get("the_code")
+```
+
+---
+
+# use parse_code() to pull apart example code
+
+```{r}
+parse_code(knitr:::knit_code$get("the_code")) %>% knitr::kable()
+
+# parse_code(str_split(local_code, "\n")[[1]])
+
+the_parsed <- parse_code(knitr:::knit_code$get("the_code"))
+
+```
+
+
+
+```{r}
+break_points <- function(the_parsed_code_df, user_reveal_defined = F) {
+  
+  parsed <- the_parsed_code_df
+  
+  if (user_reveal_defined == F) {
+    
+    breaks <- parsed$balanced_par
+    
+  } else {
+    
+    breaks <- parsed$user_reveal
+    
+  }
+  
+  (1:length(breaks))[breaks]
+  
+}
+
+break_points(the_parsed)
+
+break_points(the_parsed) ->
+  my_break_points
+```
+
+
+
+# highlighting
+
+from 1 + plus last break point to current break
+
+```{r}
+highlighting <- function(the_break_points){
+  
+  highlight <- list()
+  
+  for (i in 1:length(the_break_points)) {
+    if (i == 1) {  
+      highlight[[i]] <- 1:the_break_points[i]
+    } else {
+      highlight[[i]] <- (the_break_points[i - 1] + 1):the_break_points[i]
+    }
+  }
+
+  highlight
+}
+
+highlighting(my_break_points) 
+highlighting(my_break_points) ->
+  my_highlighting
+```
+
+# Just a reminder how the original reveal function worked
+
+```{r emi_reveal}
+# reveal lines up to `upto` and highlight lines `highlight`
+emi_reveal <- function(name, upto, highlight) {
+content <- knitr:::knit_code$get(name)
+  content[upto] <- gsub("+", "", content[upto], fixed=T)
+  content[highlight] <- paste(content[highlight], "#<<")
+  content[1:upto]
+} 
+
+emi_reveal("the_code", 4, 4)
+
+```
+
+# proposed new reveal
+
+```{r}
+reveal
+```
+
+# reveal at one break point example
+
+```{r}
+reveal("the_code", my_break_points[7], my_highlighting[[7]])
+```
+
+# reveal, and 
+
+```{r}
+partial_knit_chunks
+```
+
+
+```{r}
+partial_knit_chunks(chunk_name = "the_code", title = "Hello World")
+```
+
+```{r}
+apply_reveal
+```
+
+```{r}
+apply_reveal(chunk_name = "the_code", title = "# Hello World")
+```
+
+
+---
+
+`r apply_reveal(chunk_name = "the_code", title = "# Hello World")`
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
