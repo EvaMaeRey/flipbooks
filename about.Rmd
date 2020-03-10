@@ -24,11 +24,11 @@ knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 
 # Flipbooks
 
-*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  
+*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their attractive features is the incrementalism and the movie-like presentation.  
 
 ### Incrementalism
 
-Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with the same code that has been made into a flipbook is different; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
+Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with the same code that has been made into a flipbook is designed to give users a lot of entry and exit ramps; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
 
 ### Movie-like presentation of evolution
 
@@ -41,7 +41,22 @@ knitr::include_url("https://evamaerey.github.io/flipbooks/racing_bars/racing_bar
 ```
 
 
+## Topics
 
+I've sorted the flipook I've created into three categories. You can link to a able of contents from here:  
+
+### [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about){target="_blank"}
+### [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+### [Statistical Analysis](https://evamaerey.github.io/statistics/about){target="_blank"}
+
+
+## Featured examples
+
+You can link some flipbooks here: 
+
+
+```{r, child="flipbook_examples.Rmd"}
+```
 
 ## Create *your own* flipbook
 
@@ -78,22 +93,7 @@ Here are a few known issues to watch for:
     - Output to be displayed in the flipbook must be supported in Xaringan and html
 
 
-## Topics
 
-We've collected flipooks for reference into three categories. You can link to a able of contents from here:  
-
-### [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about){target="_blank"}
-### [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-### [Statistical Analysis](https://evamaerey.github.io/statistics/about){target="_blank"}
-
-
-## Featured examples
-
-You can link some flipbooks here: 
-
-
-```{r, child="flipbook_examples.Rmd"}
-```
 
 ## Implementation
 
@@ -114,7 +114,7 @@ The procedure to automatically parse and reconstruct code was tested and refined
 
 Since then, there have been a number of changes to the foundational code to improve the tool and to extend use cases. Many of the capabilities that have been added are also discussed in the template. 
 
-- Adding more "connection" operators as break points for code (`%>%`, `->`, `%+%`) to enable presentation beyond data visualization (initially we only used the `+`)
+- Adding more "connection" operators as break points for code (`%>%`, `->`, `%+%`, `%$%`) to enable presentation beyond data visualization (initially we only used the `+`)
 - Allowing code wrapping (breaks occur not necessarily at the end of lines) 
 - Determining partial code completeness based on parentheses balancing 
 - Using code parser rather than regular expressions to identify role of text segments 
@@ -136,13 +136,13 @@ Since then, there have been a number of changes to the foundational code to impr
 The feedback on the flipbook format has been very encouraging (thank you if you were a part of this!) and a big motivation to keep working on this project.  The ggplot flipbook was a top story on [Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter. 
 
 
-Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/little_flipbooks_library/about/cheers_for_flipbooks).
+Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/flipbooks/about/cheers_for_flipbooks).
 
 Feedback comes from individuals around the world including the following locations!
 
-```{r, results='asis', eval = F}
+```{r, results='asis', eval = T}
 library(tidyverse)
-load("details/data_products/tweets.Rdata")
+load("about/data_products/tweets.Rdata")
 df %>% 
   select(location) %>% 
   drop_na() %>% 
