@@ -92,10 +92,6 @@ knitr::include_graphics("figures/galton_board.gif")
 
 [leaflet for R (interactive maps)](https://evamaerey.github.io/flipbooks/leaflet/leaflet#1){target="_blank"} walk through some interactive map builds using the {leaflet} package (loads slow!).
 
-
-
-
-
 <hr>
 
 [the racing barchart](https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html){target="_blank"} will give you a chance to flex your ggplot2 and gganimate muscles.
@@ -154,9 +150,9 @@ knitr::include_graphics("figures/pie_donut.gif")
 
 ```{css, echo = F}
 #needtowrap {
-  -webkit-columns: 2;
-  -moz-columns: 2;
-  columns: 2;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+  columns: 3;
 }
 #needtowrap p {
   margin: 0;

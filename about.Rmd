@@ -10,27 +10,28 @@ knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 
 
 
-
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
+<img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
 
 <!-- Original author is de:John Barnes Linnet - Zeitgenössische Illustration (1886), via de.wikipedia -->
-
+*Gina Reynolds, February 2020*
 
 # Flipbooks
 
-*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their attractive features is the incrementalism and the movie-like presentation.  
+*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their attractive features are incrementalism and movie-like presentation.  
 
 ### Incrementalism
 
 Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with the same code that has been made into a flipbook is designed to give users a lot of entry and exit ramps; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
 
-### Movie-like presentation of evolution
+### Movie-like presentation
 
 The presentation of intermediate states on via *slide-show presentation*  platform means that states can be aligned and superimposed.  This way, the audience doesn't need to engage in *visual search* which requires focus and concentration -- but rather effortlessly observes changes as *motion detection*.  Temporal rather than spatial offset makes it easy to notice changes to the code and the resultant changes to the output. 
 
@@ -41,29 +42,39 @@ knitr::include_url("https://evamaerey.github.io/flipbooks/racing_bars/racing_bar
 ```
 
 
-## Topics
-
-I've sorted the flipook I've created into three categories. You can link to a able of contents from here:  
-
-### [Data Wrangling](https://evamaerey.github.io/tidyverse_in_action/about){target="_blank"}
-### [Data Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-### [Statistical Analysis](https://evamaerey.github.io/statistics/about){target="_blank"}
+## Flipbook Topics
 
 
-## Featured examples
 
-You can link some flipbooks here: 
+For easier reference, I've sorted instructive flipooks into three main categories. You can link to guides to further subtopics here:  
+
+<a href="https://evamaerey.github.io/data_manipulation/about" class="button">Data Wrangling</a>
+<a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" class="button">Data Visualization with ggplot2</a>
+<a href="https://evamaerey.github.io/statistics/about" class="button">Statistical Analysis</a>
 
 
-```{r, child="flipbook_examples.Rmd"}
+```{css}
+.button {
+  background-color: #4682b4; /* Blue */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
 ```
+
+
+
 
 ## Create *your own* flipbook
 
 Would you like to make a flipbook? We try to make that easy for you with {flipbookr}. To get started have a look at [A minimal Flipbook](https://evamaerey.github.io/flipbooks/flipbookr/skeleton#1){target="_blank"}, the template for which will be available once you install the flipbook building package [{flipbookr}](https://github.com/EvaMaeRey/flipbookr){target="_blank"}.  The steps to building your first flipbook are as follows:
 
 1. Install the slide show platform Xaringan - `install.packages("xaringan")` 
-2. Install flipbookr - `devtools::install_github("EvaMaeRey/flipbookr")` 
+2. Install flipbookr - `remotes::install_github("EvaMaeRey/flipbookr")` 
 3. restart RStudio
 4. Get the template via: File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook
 5. Use this template to get started or replace with your own pipelines
@@ -93,7 +104,9 @@ Here are a few known issues to watch for:
     - Output to be displayed in the flipbook must be supported in Xaringan and html
 
 
+#### Contributing Feedback
 
+You can contribute feedback via Twitter @EvaMaeRey and via isses on [Github.com/EvaMaeRey/flipbookr](https://github.com/EvaMaeRey/flipbookr).
 
 ## Implementation
 
@@ -129,6 +142,14 @@ Since then, there have been a number of changes to the foundational code to impr
 <!-- https://emitanaka.rbind.io/post/knitr-knitr-code/ -->
 
 
+## Featured examples
+
+You can link some flipbooks here: 
+
+
+```{r, child="flipbook_examples.Rmd"}
+```
+
 
 
 ## Reception
@@ -153,8 +174,9 @@ df %>%
 
 # Acknowledgements
 
-Flipbooks are inspired and enabled by the step-by-step workflow of ggplot2 and other tidyverse tools when using the magrittr pipe, and the knitr/rmarkdown communication tools.  Specifically we are using the rmarkdown slide show presentation tool, `Xaringan`, which is built on the [remark.js](https://yihui.org/en/2017/08/why-xaringan-remark-js/).  
+Flipbooks are inspired and enabled by the step-by-step workflow of ggplot2 and piped workflows enabled by the magrittr package (especially dplyr) and the knitr/rmarkdown communication tools.  Specifically, the rmarkdown slide show presentation tool {xaringan} is used to present the code movies; xaringan is built on [remark.js](https://yihui.org/en/2017/08/why-xaringan-remark-js/).  
 
+Emi Tanaka and Garrick Aden Buie are due enormous thanks for their contributions to getting this project off the ground.  There are numerous other influences, inspirations, and helps for which I'm grateful and which have made the project possible!
 
 
 
