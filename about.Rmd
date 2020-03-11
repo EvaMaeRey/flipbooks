@@ -1,5 +1,5 @@
 ---
-title: ""
+title: " "
 output: html_document
 ---
 
@@ -44,14 +44,16 @@ knitr::include_url("https://evamaerey.github.io/flipbooks/racing_bars/racing_bar
 
 ## Flipbook Topics
 
-
-
 For easier reference, I've sorted instructive flipooks into three main categories. You can link to guides to further subtopics here:  
+
+
 
 <a href="https://evamaerey.github.io/data_manipulation/about" class="button">Data Wrangling</a>
 <a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" class="button">Data Visualization with ggplot2</a>
 <a href="https://evamaerey.github.io/statistics/about" class="button">Statistical Analysis</a>
 
+
+Mostly, I've created these resources while preparing for my classes at the Korbel School of Internationl Studies at the University of Denver.  So many thanks due to my students for being such an amazing and motivating bunch. These repositories are under construction; the data wrangling topic and data visualization topics are taking shape and fairly well developed, while the statistical flipbooks are new and more experimental. 
 
 ```{css}
 .button {
