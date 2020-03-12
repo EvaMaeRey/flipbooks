@@ -10,7 +10,7 @@ output: html_document
 
 <div id="needtowrap">
 
-If you need a theoretical exploration of the grammar of graphics and its use with ggplot2, see [a ggplot2 grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/ggplot2_grammar_guide){target="_blank"}.
+If you need a theoretical exploration of the grammar of graphics and its use with ggplot2, see [a ggplot2 grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}.
 
 ```{r, out.width="85%", fig.align='center', echo = F}
 knitr::include_graphics(c("figures/column_aesthetics.png"))
@@ -27,7 +27,7 @@ knitr::include_graphics(c("figures/geom_pile_on.gif"))
 
 <hr>
 
-[ggplot themes](https://evamaerey.github.io/flipbooks/taming_themes_in_ggplot/taming_ggplot_themes.html){target="_blank"} takes you through 
+[ggplot themes](https://evamaerey.github.io/ggplot2_grammar_guide/taming_themes_in_ggplot/taming_ggplot_themes.html){target="_blank"} takes you through 
 logic of the ggplot2 theme adjustments.
 
 ```{r, out.width="85%", fig.align='center', echo = F}
@@ -67,7 +67,7 @@ knitr::include_graphics("figures/ggtext_klause.gif")
 
 <hr>
 
-[the data cleaning flipbook](https://evamaerey.github.io/flipbooks/data_cleaning/data_cleaning){target="_blank"} gives you some life-changing, magical, and real-life examples of reading data into R and cleaning it (aka "tidying up").  Demonstrates uses of {janitor}, {countrycode}, and {lubridate} as well as regex with {stringr}.
+[the data cleaning flipbook](https://evamaerey.github.io/data_manipulation/data_cleaning/data_cleaning){target="_blank"} gives you some life-changing, magical, and real-life examples of reading data into R and cleaning it (aka "tidying up").  Demonstrates uses of {janitor}, {countrycode}, and {lubridate} as well as regex with {stringr}.
 
 
 ```{r, out.width="85%", fig.align='center', echo = F}
@@ -83,7 +83,7 @@ knitr::include_graphics("figures/ggplot_flipbook_long.gif")
 
 <hr>
 
-[Galton Board](https://evamaerey.github.io/flipbooks/statistics/galton_board.html#1){target="_blank"} shows you how to build your own Galton Board with R, ggplot2, and gganimate.
+[Galton Board](https://evamaerey.github.io/statistics/galton_board.html#1){target="_blank"} shows you how to build your own Galton Board with R, ggplot2, and gganimate.
 
 ```{r, out.width="85%", fig.align='center', echo = F}
 knitr::include_graphics("figures/galton_board.gif")
@@ -121,7 +121,7 @@ knitr::include_graphics("figures/unga_ggplot_lateral.gif")
 
 <hr>
 
-[a data.table flipbook](https://evamaerey.github.io/flipbooks/data.table/data.table){target="_blank"} is an introduction to the popular data manipulation package, {data.table}.
+[a data.table flipbook](https://evamaerey.github.io/data_manipulation/data.table){target="_blank"} is an introduction to the popular data manipulation package, {data.table}.
 
 ```{r, out.width="85%", fig.align='center', echo = F}
 knitr::include_graphics("figures/data.table.png")
