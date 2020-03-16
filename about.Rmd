@@ -25,15 +25,15 @@ knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 
 # Flipbooks
 
-*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their attractive features are incrementalism and movie-like presentation.  
+*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their helpful features are incrementalism and movie-like presentation.  
 
 ### Incrementalism
 
-Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline may feel like a long stretch of highway that has *no exit or entry ramps*.   Interacting with the same code that has been made into a flipbook is designed to give users a lot of entry and exit ramps; in a flipbook the user can isolate and gain insight about *short streches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of their original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
+Long pipelines of code can produce attractive outputs.  But when an observer knows only initial input and final output, a pipeline can feel like a long stretch of highway that has *no exit or entry ramps*.   Flipbook are designed to give users a lot of on and off ramps even for long pipelines; in a flipbook, the users can isolate and gain insight about *short stretches* along the pipeline that are useful for their particular project -- all the while engaged by the creativity brought by the author in pursuit of his or her original goal.  Flipbooks enable us to isolate how individual functions work *in context*.   
 
 ### Movie-like presentation
 
-The presentation of intermediate states on via *slide-show presentation*  platform means that states can be aligned and superimposed.  This way, the audience doesn't need to engage in *visual search* which requires focus and concentration -- but rather effortlessly observes changes as *motion detection*.  Temporal rather than spatial offset makes it easy to notice changes to the code and the resultant changes to the output. 
+The presentation of intermediate states on via *slide-show presentation*  platform means that states can be aligned and superimposed.  This way, the audience doesn't need to engage in *visual search* which requires focus and concentration -- but rather effortlessly observes changes via *motion detection*.  Temporal rather than spatial offset makes it easy to notice changes to the code and the resultant changes to the output. 
 
 To get a sense of how they work, click once in the example box the below to initiate the session; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
 
@@ -65,10 +65,7 @@ For easier reference, I've sorted instructive flipooks into three main categorie
 <a href="https://evamaerey.github.io/statistics/about" class="button">Statistical Analysis</a>
 
 
-Mostly, I've created these resources while preparing for my classes at the Korbel School of Internationl Studies at the University of Denver.  So many thanks due to my students for being such an amazing and motivating bunch. These repositories are under construction; the data wrangling topic and data visualization topics are taking shape and fairly well developed, while the statistical flipbooks are new and more experimental. 
-
-
-
+Mostly, I've created these resources while preparing for my classes at the Korbel School of International Studies at the University of Denver.  So many thanks due to my students for being such an amazing and motivating bunch. These repositories are under construction; the data wrangling topic and data visualization topics are taking shape and fairly well developed, while the statistical flipbooks are new and more experimental. 
 
 
 ## Create *your own* flipbook
@@ -77,14 +74,14 @@ Would you like to make a flipbook? We try to make that easy for you with {flipbo
 
 1. Install the slide show platform Xaringan - `install.packages("xaringan")` 
 2. Install flipbookr - `remotes::install_github("EvaMaeRey/flipbookr")` 
-3. restart RStudio
-4. Get the template via: File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook
+3. restart R
+4. Get the template in RStudio via: File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook
 5. Use this template to get started or replace with your own pipelines
 6. Compile your document - "Knit" in RStudio
 7. Explore your flipbook!
 
 
-Once you have completed steps 1-3, you can also follow along with the [live demo](https://resources.rstudio.com/rstudio-conf-2020/flipbooks-evangeline-reynolds) that I presented at the RStudio Conference, 2020 (the demo is at 6'25") --- but consider using the setup code chunk in the template --- I don't do this in the demo. 
+Once you have completed steps 1-3, you can also follow along with the [live demo](https://resources.rstudio.com/rstudio-conf-2020/flipbooks-evangeline-reynolds) that I presented at the RStudio Conference, 2020 (the demo is at 6'25") --- but consider using the setup code chunk in the template --- I don't do this in the demo!  
 
 The template (step 4) will create the following book, which contains examples of flipbooking modes:
 
@@ -104,11 +101,12 @@ Here are a few known issues to watch for:
 4. Xaringan produces an html file and associated files.  This means:
     - The output is not one, self-contained file
     - Output to be displayed in the flipbook must be supported in Xaringan and html
+5. {flipbookr} is a development package and is subject to change.
 
 
 #### Contributing Feedback
 
-You can contribute feedback via Twitter @EvaMaeRey and via isses on [Github.com/EvaMaeRey/flipbookr](https://github.com/EvaMaeRey/flipbookr).
+We'd love to hear from you!  How is your flipbook building experience?  You can contribute feedback via Twitter @EvaMaeRey and via issues on [Github.com/EvaMaeRey/flipbookr](https://github.com/EvaMaeRey/flipbookr).
 
 ## Implementation
 
@@ -127,7 +125,7 @@ I approached Garrick and Emi in October about working together on "flipbooks".  
 
 The procedure to automatically parse and reconstruct code was tested and refined on small projects.  Then, I created a "flipbook" of a sizable collection of my portfolio of data visualizations, originally created for the initiative #MakeoverMonday.  I publicized the work in February, 2019; *the ggplot flipbook* was met an enthusiastic reception.  
 
-Since then, there have been a number of changes to the foundational code to improve the tool and to extend use cases. Many of the capabilities that have been added are also discussed in the template. 
+Since then, there have been a number of changes to the fundamental code to improve the tool and to extend use cases. Many of the capabilities that have been added are also discussed in the template. 
 
 - Adding more "connection" operators as break points for code (`%>%`, `->`, `%+%`, `%$%`) to enable presentation beyond data visualization (initially we only used the `+`)
 - Allowing code wrapping (breaks occur not necessarily at the end of lines) 
@@ -146,7 +144,7 @@ Since then, there have been a number of changes to the foundational code to impr
 
 ## Featured examples
 
-You can link some flipbooks here: 
+You can link to some flipbooks here: 
 
 
 ```{r, child="flipbook_examples.Rmd"}
@@ -178,7 +176,7 @@ df %>%
 
 Flipbooks are inspired and enabled by the step-by-step workflow of ggplot2 and piped workflows enabled by the magrittr package (especially dplyr) and the knitr/rmarkdown communication tools.  Specifically, the rmarkdown slide show presentation tool {xaringan} is used to present the code movies; xaringan is built on [remark.js](https://yihui.org/en/2017/08/why-xaringan-remark-js/).  
 
-Emi Tanaka and Garrick Aden Buie are due enormous thanks for their contributions to getting this project off the ground.  There are numerous other influences, inspirations, and helps for which I'm grateful and which have made the project possible!
+Emi Tanaka and Garrick Aden Buie are due enormous thanks for their contributions to getting this project off the ground.  There are numerous other influences, inspirations, and helps for which I'm grateful and which have made the project possible!  Many thanks to the #rstats community.  
 
 
 
