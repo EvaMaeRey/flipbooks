@@ -131,8 +131,11 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-* geom_point(shape = 21,
-*            alpha = .5)
+* geom_rect(data = office_ratings %&gt;% filter(episode == 1),
+*           fill = "grey",
+*           xmin = min(office_ratings$air_date) - 60,
+*           ymin = 5, ymax = 10, alpha = .2,
+*           aes(xmax = air_date - 60))
 ```
 ]]
 .column[.content[
@@ -149,9 +152,12 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
-* aes(size = total_votes)
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+* geom_point(shape = 21)
 ```
 ]]
 .column[.content[
@@ -168,10 +174,13 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
-  aes(size = total_votes) +  
-* aes(label = title)
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+* aes(fill = episode)
 ```
 ]]
 .column[.content[
@@ -188,14 +197,14 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
-  aes(size = total_votes) +  
-  aes(label = title) +  
-* ggpmisc::stat_dens2d_filter(geom = "text_repel",
-*                             keep.fraction = 0.25,
-*                             size = 2.8,
-*                             col = "grey30")
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+* aes(size = total_votes)
 ```
 ]]
 .column[.content[
@@ -212,15 +221,15 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-* scale_y_continuous(limits = c(5,10))
+* scale_y_continuous(limits = c(5,10), expand = c(0,0))
 ```
 ]]
 .column[.content[
@@ -237,16 +246,16 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
-* labs(x = NULL)
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+* scale_fill_viridis_c(option = "cividis")
 ```
 ]]
 .column[.content[
@@ -263,17 +272,17 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
-  labs(x = NULL) +  
-* labs(y = NULL)
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+* labs(x = NULL)
 ```
 ]]
 .column[.content[
@@ -290,18 +299,18 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-* labs(size = "Total votes")
+* labs(y = "Rating")
 ```
 ]]
 .column[.content[
@@ -318,19 +327,19 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-* labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run")
+  labs(y = "Rating") +  
+* labs(size = "Total votes:")
 ```
 ]]
 .column[.content[
@@ -347,20 +356,20 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-* labs(subtitle = "Data from on data.world")
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+* labs(fill = "Episode:")
 ```
 ]]
 .column[.content[
@@ -377,21 +386,21 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
-* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday")
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+* labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run")
 ```
 ]]
 .column[.content[
@@ -408,22 +417,22 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
-  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-* theme_minimal(base_family = "Courier")
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+* labs(subtitle = "Data available on data.world")
 ```
 ]]
 .column[.content[
@@ -440,24 +449,23 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
-  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
-* theme(plot.background = element_rect(fill = "grey98",
-*                                      color = "grey90"))
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday")
 ```
 ]]
 .column[.content[
@@ -474,25 +482,25 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
-  theme(plot.background = element_rect(fill = "grey98",  
-                                       color = "grey90")) +  
-* theme(legend.position = c(.25, .1))
+* theme_minimal(base_family = "Courier",
+*               base_size = 12)
 ```
 ]]
 .column[.content[
@@ -509,26 +517,27 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
-  theme(plot.background = element_rect(fill = "grey98",  
-                                       color = "grey90")) +  
-  theme(legend.position = c(.25, .1)) +  
-* theme(legend.direction = "horizontal")
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+* theme(plot.background = element_rect(fill = "grey98",
+*                                      color = "grey90"))
 ```
 ]]
 .column[.content[
@@ -545,27 +554,28 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
   theme(plot.background = element_rect(fill = "grey98",  
                                        color = "grey90")) +  
-  theme(legend.position = c(.25, .1)) +  
-  theme(legend.direction = "horizontal") +  
-* theme(panel.grid = element_line("grey93"))
+* theme(legend.position = c(.35, .1))
 ```
 ]]
 .column[.content[
@@ -582,30 +592,29 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
   theme(plot.background = element_rect(fill = "grey98",  
                                        color = "grey90")) +  
-  theme(legend.position = c(.25, .1)) +  
-  theme(legend.direction = "horizontal") +  
-  theme(panel.grid = element_line("grey93")) +  
-* theme(legend.background =
-*         element_rect(fill = "grey98",
-*                      color = "grey93"))
+  theme(legend.position = c(.35, .1)) +  
+* theme(legend.direction = "horizontal")
 ```
 ]]
 .column[.content[
@@ -622,31 +631,30 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
-  aes(label = title) +  
-  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
-                              keep.fraction = 0.25,  
-                              size = 2.8,  
-                              col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
   theme(plot.background = element_rect(fill = "grey98",  
                                        color = "grey90")) +  
-  theme(legend.position = c(.25, .1)) +  
+  theme(legend.position = c(.35, .1)) +  
   theme(legend.direction = "horizontal") +  
-  theme(panel.grid = element_line("grey93")) +  
-  theme(legend.background =  
-          element_rect(fill = "grey98",  
-                       color = "grey93")) +  
-* theme(plot.title.position = "plot")
+* theme(panel.grid = element_line("grey95"))
 ```
 ]]
 .column[.content[
@@ -663,32 +671,288 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(shape = 21,  
-             alpha = .5) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
   aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  labs(x = NULL) +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+  theme(legend.position = c(.35, .1)) +  
+  theme(legend.direction = "horizontal") +  
+  theme(panel.grid = element_line("grey95")) +  
+* theme(plot.title.position = "plot")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot1_auto_24_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(ggrepel)  
+office_ratings %&gt;%  
+  ggplot() +  
+  aes(x = air_date) +  
+  aes(y = imdb_rating) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+  aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  labs(x = NULL) +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+  theme(legend.position = c(.35, .1)) +  
+  theme(legend.direction = "horizontal") +  
+  theme(panel.grid = element_line("grey95")) +  
+  theme(plot.title.position = "plot") +  
+* geom_vline(data = office_ratings %&gt;%
+*              filter(episode == 1),
+*            linetype = "dashed",
+*            color = "darkgrey",
+*            aes(xintercept = air_date - 60))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot1_auto_25_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(ggrepel)  
+office_ratings %&gt;%  
+  ggplot() +  
+  aes(x = air_date) +  
+  aes(y = imdb_rating) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+  aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  labs(x = NULL) +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+  theme(legend.position = c(.35, .1)) +  
+  theme(legend.direction = "horizontal") +  
+  theme(panel.grid = element_line("grey95")) +  
+  theme(plot.title.position = "plot") +  
+  geom_vline(data = office_ratings %&gt;%  
+               filter(episode == 1),  
+             linetype = "dashed",  
+             color = "darkgrey",  
+             aes(xintercept = air_date - 60)) +  
+* aes(label = title)
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot1_auto_26_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(ggrepel)  
+office_ratings %&gt;%  
+  ggplot() +  
+  aes(x = air_date) +  
+  aes(y = imdb_rating) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+  aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  labs(x = NULL) +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+  theme(legend.position = c(.35, .1)) +  
+  theme(legend.direction = "horizontal") +  
+  theme(panel.grid = element_line("grey95")) +  
+  theme(plot.title.position = "plot") +  
+  geom_vline(data = office_ratings %&gt;%  
+               filter(episode == 1),  
+             linetype = "dashed",  
+             color = "darkgrey",  
+             aes(xintercept = air_date - 60)) +  
+  aes(label = title) +  
+* ggpmisc::stat_dens2d_filter(geom = "text_repel",
+*                             keep.fraction = 0.25,
+*                             size = 2.8,
+*                             col = "grey30")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot1_auto_27_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(ggrepel)  
+office_ratings %&gt;%  
+  ggplot() +  
+  aes(x = air_date) +  
+  aes(y = imdb_rating) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+  aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  labs(x = NULL) +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+  theme(legend.position = c(.35, .1)) +  
+  theme(legend.direction = "horizontal") +  
+  theme(panel.grid = element_line("grey95")) +  
+  theme(plot.title.position = "plot") +  
+  geom_vline(data = office_ratings %&gt;%  
+               filter(episode == 1),  
+             linetype = "dashed",  
+             color = "darkgrey",  
+             aes(xintercept = air_date - 60)) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
                               keep.fraction = 0.25,  
                               size = 2.8,  
                               col = "grey30") +  
-  scale_y_continuous(limits = c(5,10)) +  
+* geom_text(data = office_ratings %&gt;% filter(episode == 1),
+*           aes(label = paste0(c("Season ", rep("", 8)), season),
+*               x = air_date),
+*           hjust = 1, angle = 90, family = "Courier",
+*           y = 9.9, size = 5, color = "#00022E")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot1_auto_28_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(ggrepel)  
+office_ratings %&gt;%  
+  ggplot() +  
+  aes(x = air_date) +  
+  aes(y = imdb_rating) +  
+  geom_rect(data = office_ratings %&gt;% filter(episode == 1),  
+            fill = "grey",  
+            xmin = min(office_ratings$air_date) - 60,  
+            ymin = 5, ymax = 10, alpha = .2,  
+            aes(xmax = air_date - 60)) +  
+  geom_point(shape = 21) +  
+  aes(fill = episode) +  
+  aes(size = total_votes) +  
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +  
+  scale_fill_viridis_c(option = "cividis") +  
   labs(x = NULL) +  
-  labs(y = NULL) +  
-  labs(size = "Total votes") +  
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +  
-  labs(subtitle = "Data from on data.world") +  
+  labs(y = "Rating") +  
+  labs(size = "Total votes:") +  
+  labs(fill = "Episode:") +  
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +  
+  labs(subtitle = "Data available on data.world") +  
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
-  theme_minimal(base_family = "Courier") +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
   theme(plot.background = element_rect(fill = "grey98",  
                                        color = "grey90")) +  
-  theme(legend.position = c(.25, .1)) +  
+  theme(legend.position = c(.35, .1)) +  
   theme(legend.direction = "horizontal") +  
-  theme(panel.grid = element_line("grey93")) +  
-  theme(legend.background =  
-          element_rect(fill = "grey98",  
-                       color = "grey93")) +  
-  theme(plot.title.position = "plot") -&gt;  
-*plot
+  theme(panel.grid = element_line("grey95")) +  
+  theme(plot.title.position = "plot") +  
+  geom_vline(data = office_ratings %&gt;%  
+               filter(episode == 1),  
+             linetype = "dashed",  
+             color = "darkgrey",  
+             aes(xintercept = air_date - 60)) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  geom_text(data = office_ratings %&gt;% filter(episode == 1),  
+            aes(label = paste0(c("Season ", rep("", 8)), season),  
+                x = air_date),  
+            hjust = 1, angle = 90, family = "Courier",  
+            y = 9.9, size = 5, color = "#00022E") -&gt;  
+*g 
 ```
 ]]
 .column[.content[
@@ -704,11 +968,27 @@ count: false
 .column[.content[
 
 ```r
-*plot
+*office_ratings
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/plot2_auto_1_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 188 x 6
+   season episode title             imdb_rating total_votes air_date  
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;       &lt;dbl&gt; &lt;date&gt;    
+ 1      1       1 Pilot                     7.6        3706 2005-03-24
+ 2      1       2 Diversity Day             8.3        3566 2005-03-29
+ 3      1       3 Health Care               7.9        2983 2005-04-05
+ 4      1       4 The Alliance              8.1        2886 2005-04-12
+ 5      1       5 Basketball                8.4        3179 2005-04-19
+ 6      1       6 Hot Girl                  7.8        2852 2005-04-26
+ 7      2       1 The Dundies               8.7        3213 2005-09-20
+ 8      2       2 Sexual Harassment         8.2        2736 2005-09-27
+ 9      2       3 Office Olympics           8.4        2742 2005-10-04
+10      2       4 The Fire                  8.4        2713 2005-10-11
+# … with 178 more rows
+```
 ]]
 ---
 class: split-40
@@ -716,12 +996,28 @@ count: false
 .column[.content[
 
 ```r
-plot +  
-* aes(x = total_votes)
+office_ratings %&gt;%  
+* sample_frac(size = 1, replace = F)
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/plot2_auto_2_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 188 x 6
+   season episode title             imdb_rating total_votes air_date  
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;       &lt;dbl&gt; &lt;date&gt;    
+ 1      8       7 Pam's Replacement         7.7        1563 2011-11-10
+ 2      3       7 Branch Closing            8.5        2260 2006-11-09
+ 3      5       2 Business Ethics           8.3        1990 2008-10-09
+ 4      7      15 PDA                       8.4        1736 2011-02-10
+ 5      3      20 Product Recall            8.7        2409 2007-04-26
+ 6      2       1 The Dundies               8.7        3213 2005-09-20
+ 7      7      14 The Search                8.5        1742 2011-02-03
+ 8      6       2 The Meeting               8.2        1755 2009-09-24
+ 9      4      12 Did I Stutter?            8.4        2087 2008-05-01
+10      5       7 Business Trip             8.2        1867 2008-11-13
+# … with 178 more rows
+```
 ]]
 ---
 class: split-40
@@ -729,9 +1025,9 @@ count: false
 .column[.content[
 
 ```r
-plot +  
-  aes(x = total_votes) +  
-* aes(size = NULL)
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+* ggplot()
 ```
 ]]
 .column[.content[
@@ -743,10 +1039,10 @@ count: false
 .column[.content[
 
 ```r
-plot +  
-  aes(x = total_votes) +  
-  aes(size = NULL) +  
-* scale_y_continuous()
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+* aes(x = total_votes)
 ```
 ]]
 .column[.content[
@@ -758,11 +1054,11 @@ count: false
 .column[.content[
 
 ```r
-plot +  
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
   aes(x = total_votes) +  
-  aes(size = NULL) +  
-  scale_y_continuous() +  
-* scale_x_log10()
+* aes(y = imdb_rating)
 ```
 ]]
 .column[.content[
@@ -774,12 +1070,12 @@ count: false
 .column[.content[
 
 ```r
-plot +  
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
   aes(x = total_votes) +  
-  aes(size = NULL) +  
-  scale_y_continuous() +  
-  scale_x_log10() +  
-* labs(title = "IMBD Votes vs. Ratings for 'The Office' Episodes")
+  aes(y = imdb_rating) +  
+* geom_point(shape = 21)
 ```
 ]]
 .column[.content[
@@ -791,13 +1087,13 @@ count: false
 .column[.content[
 
 ```r
-plot +  
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
   aes(x = total_votes) +  
-  aes(size = NULL) +  
-  scale_y_continuous() +  
-  scale_x_log10() +  
-  labs(title = "IMBD Votes vs. Ratings for 'The Office' Episodes") +  
-* labs(x = "Total Votes")
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+* aes(fill = season)
 ```
 ]]
 .column[.content[
@@ -809,31 +1105,461 @@ count: false
 .column[.content[
 
 ```r
-plot +  
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
   aes(x = total_votes) +  
-  aes(size = NULL) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+* scale_fill_viridis_c(option = "cividis")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_8_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+* scale_y_continuous()
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_9_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+* scale_x_log10()
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_10_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
   scale_y_continuous() +  
   scale_x_log10() +  
-  labs(title = "IMBD Votes vs. Ratings for 'The Office' Episodes") +  
+* labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_11_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+* labs(subtitle = "Data available on data.world")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_12_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_13_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+* labs(x = "Total Votes")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_14_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
   labs(x = "Total Votes") +  
 * labs(y = "Rating")
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/plot2_auto_8_output-1.png" width="576" /&gt;
+&lt;img src="the_office_files/figure-html/plot2_auto_15_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+* aes(size = 3)
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_16_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+* aes(label = title)
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_17_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+* ggpmisc::stat_dens2d_filter(geom = "text_repel",
+*                             keep.fraction = 0.25,
+*                             size = 2.8,
+*                             col = "grey30")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_18_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+* scale_size_identity()
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_19_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  scale_size_identity() +  
+* theme_minimal(base_family = "Courier",
+*               base_size = 12)
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_20_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  scale_size_identity() +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+* theme(legend.position = c(.85, .35))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_21_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  scale_size_identity() +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(legend.position = c(.85, .35)) +  
+* theme(legend.background = element_rect(fill = "grey98",
+*                                      color = "grey90"))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_22_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  scale_size_identity() +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(legend.position = c(.85, .35)) +  
+  theme(legend.background = element_rect(fill = "grey98",  
+                                       color = "grey90")) +  
+* theme(plot.background = element_rect(fill = "grey98",
+*                                      color = "grey90"))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_23_output-1.png" width="576" /&gt;
 ]]
 
 
 
 
 ---
+class: center, middle
 
-
-The flipbooked portion of this presentation was created with the new {flipbookr} package; install with remotes::install_github("EvaMaeRey/flipbookr").
+This presentation was created with the new {flipbookr} package and with {xaringan}.   Info: https://evamaerey.github.io/flipbooks/about. Install  `remotes::install_github("EvaMaeRey/flipbookr")`.
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 65%}
+.remark-code{line-height: 1.5; font-size: 45%}
 &lt;/style&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

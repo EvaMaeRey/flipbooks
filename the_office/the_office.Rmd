@@ -41,32 +41,47 @@ office_ratings %>%
   ggplot() +
   aes(x = air_date) +
   aes(y = imdb_rating) +
-  geom_point(shape = 21,
-             alpha = .5) +
+  geom_rect(data = office_ratings %>% filter(episode == 1),
+            fill = "grey",
+            xmin = min(office_ratings$air_date) - 60,
+            ymin = 5, ymax = 10, alpha = .2,
+            aes(xmax = air_date - 60)) +
+  geom_point(shape = 21) +
+  aes(fill = episode) +
   aes(size = total_votes) +
+  scale_y_continuous(limits = c(5,10), expand = c(0,0)) +
+  scale_fill_viridis_c(option = "cividis") +
+  labs(x = NULL) + 
+  labs(y = "Rating") +
+  labs(size = "Total votes:") +
+  labs(fill = "Episode:") +
+  labs(title = "IMDb Episode Ratings for 'The Office' over its Nine Year Run") +
+  labs(subtitle = "Data available on data.world") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +
+  theme_minimal(base_family = "Courier",
+                base_size = 12) +
+  theme(plot.background = element_rect(fill = "grey98", 
+                                       color = "grey90")) +
+  theme(legend.position = c(.35, .1)) +
+  theme(legend.direction = "horizontal") +
+  theme(panel.grid = element_line("grey95")) +
+  theme(plot.title.position = "plot") +
+  geom_vline(data = office_ratings %>% 
+               filter(episode == 1),
+             linetype = "dashed",
+             color = "darkgrey",
+             aes(xintercept = air_date - 60)) +
   aes(label = title) +
   ggpmisc::stat_dens2d_filter(geom = "text_repel", 
                               keep.fraction = 0.25, 
                               size = 2.8, 
-                              col = "grey30") +
-  scale_y_continuous(limits = c(5,10)) +
-  labs(x = NULL) +
-  labs(y = NULL) +
-  labs(size = "Total votes") +
-  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +
-  labs(subtitle = "Data from on data.world") +
-  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +
-  theme_minimal(base_family = "Courier") +
-  theme(plot.background = element_rect(fill = "grey98", 
-                                       color = "grey90")) +
-  theme(legend.position = c(.25, .1)) +
-  theme(legend.direction = "horizontal") +
-  theme(panel.grid = element_line("grey93")) +
-  theme(legend.background = 
-          element_rect(fill = "grey98", 
-                       color = "grey93")) +
-  theme(plot.title.position = "plot") ->
-plot
+                              col = "grey30") +  
+  geom_text(data = office_ratings %>% filter(episode == 1),
+            aes(label = paste0(c("Season ", rep("", 8)), season),
+                x = air_date),
+            hjust = 1, angle = 90, family = "Courier",
+            y = 9.9, size = 5, color = "#00022E") ->
+g
 ```
 
 ---
@@ -75,22 +90,44 @@ plot
 
 
 ```{r plot2, include=F}
-plot + 
+office_ratings %>% 
+  sample_frac(size = 1, replace = F) %>% 
+  ggplot() +
   aes(x = total_votes) +
-  aes(size = NULL) +
+  aes(y = imdb_rating) +
+  geom_point(shape = 21) +
+  aes(fill = season) +
+  scale_fill_viridis_c(option = "cividis") +
   scale_y_continuous() +
   scale_x_log10() +
-  labs(title = "IMBD Votes vs. Ratings for 'The Office' Episodes") +
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +
+  labs(subtitle = "Data available on data.world") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +
   labs(x = "Total Votes") +
-  labs(y = "Rating")
+  labs(y = "Rating") +
+  aes(size = 3) +
+  aes(label = title) +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.25, 
+                              size = 2.8, 
+                              col = "grey30") +
+  scale_size_identity() +  
+  theme_minimal(base_family = "Courier",
+                base_size = 12) +
+  theme(legend.position = c(.85, .35)) +
+  theme(legend.background = element_rect(fill = "grey98", 
+                                       color = "grey90")) +
+  theme(plot.background = element_rect(fill = "grey98", 
+                                       color = "grey90")) 
+
 ```
 
 ---
+class: center, middle
 
-
-The flipbooked portion of this presentation was created with the new {flipbookr} package; install with remotes::install_github("EvaMaeRey/flipbookr").
+This presentation was created with the new {flipbookr} package and with {xaringan}.   Info: https://evamaerey.github.io/flipbooks/about. Install  `remotes::install_github("EvaMaeRey/flipbookr")`.
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 65%}
+.remark-code{line-height: 1.5; font-size: 45%}
 ```
