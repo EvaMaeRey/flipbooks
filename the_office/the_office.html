@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>‘The Office’ IMBD ratings</title>
+    <title>‘The Office’ IMDb ratings</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, March 2020" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -12,8 +12,8 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ‘The Office’ IMBD ratings
-## #TidyTuesday
+# ‘The Office’ IMDb ratings
+## for #TidyTuesday
 ### Gina Reynolds, March 2020
 
 ---
@@ -26,12 +26,77 @@ class: center, middle, inverse, title-slide
 
 
 
+class: split-40
+count: false
+.column[.content[
+
 ```r
-library(tidyverse)
-url &lt;- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'
-readr::read_csv(url) -&gt;
-  office_ratings
+*library(tidyverse)
 ```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+*url &lt;- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+url &lt;- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'  
+*readr::read_csv(url)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 188 x 6
+   season episode title             imdb_rating total_votes air_date  
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;       &lt;dbl&gt; &lt;date&gt;    
+ 1      1       1 Pilot                     7.6        3706 2005-03-24
+ 2      1       2 Diversity Day             8.3        3566 2005-03-29
+ 3      1       3 Health Care               7.9        2983 2005-04-05
+ 4      1       4 The Alliance              8.1        2886 2005-04-12
+ 5      1       5 Basketball                8.4        3179 2005-04-19
+ 6      1       6 Hot Girl                  7.8        2852 2005-04-26
+ 7      2       1 The Dundies               8.7        3213 2005-09-20
+ 8      2       2 Sexual Harassment         8.2        2736 2005-09-27
+ 9      2       3 Office Olympics           8.4        2742 2005-10-04
+10      2       4 The Fire                  8.4        2713 2005-10-11
+# … with 178 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+url &lt;- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'  
+readr::read_csv(url) -&gt;  
+* office_ratings
+```
+]]
+.column[.content[
+
+]]
+
+
 
 ---
 
@@ -1464,7 +1529,7 @@ office_ratings %&gt;%
   scale_size_identity() +  
   theme_minimal(base_family = "Courier",  
                 base_size = 12) +  
-* theme(legend.position = c(.85, .35))
+* theme(plot.title.position = "plot")
 ```
 ]]
 .column[.content[
@@ -1500,9 +1565,8 @@ office_ratings %&gt;%
   scale_size_identity() +  
   theme_minimal(base_family = "Courier",  
                 base_size = 12) +  
-  theme(legend.position = c(.85, .35)) +  
-* theme(legend.background = element_rect(fill = "grey98",
-*                                      color = "grey90"))
+  theme(plot.title.position = "plot") +  
+* theme(legend.position = c(.85, .35))
 ```
 ]]
 .column[.content[
@@ -1538,6 +1602,46 @@ office_ratings %&gt;%
   scale_size_identity() +  
   theme_minimal(base_family = "Courier",  
                 base_size = 12) +  
+  theme(plot.title.position = "plot") +  
+  theme(legend.position = c(.85, .35)) +  
+* theme(legend.background = element_rect(fill = "grey98",
+*                                      color = "grey90"))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/plot2_auto_23_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+office_ratings %&gt;%  
+  sample_frac(size = 1, replace = F) %&gt;%  
+  ggplot() +  
+  aes(x = total_votes) +  
+  aes(y = imdb_rating) +  
+  geom_point(shape = 21) +  
+  aes(fill = season) +  
+  scale_fill_viridis_c(option = "cividis") +  
+  scale_y_continuous() +  
+  scale_x_log10() +  
+  labs(title = "IMDb Votes vs. Ratings for 'The Office' Episodes") +  
+  labs(subtitle = "Data available on data.world") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +  
+  labs(x = "Total Votes") +  
+  labs(y = "Rating") +  
+  aes(size = 3) +  
+  aes(label = title) +  
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",  
+                              keep.fraction = 0.25,  
+                              size = 2.8,  
+                              col = "grey30") +  
+  scale_size_identity() +  
+  theme_minimal(base_family = "Courier",  
+                base_size = 12) +  
+  theme(plot.title.position = "plot") +  
   theme(legend.position = c(.85, .35)) +  
   theme(legend.background = element_rect(fill = "grey98",  
                                        color = "grey90")) +  
@@ -1546,7 +1650,7 @@ office_ratings %&gt;%
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/plot2_auto_23_output-1.png" width="576" /&gt;
+&lt;img src="the_office_files/figure-html/plot2_auto_24_output-1.png" width="576" /&gt;
 ]]
 
 

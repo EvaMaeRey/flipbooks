@@ -1,6 +1,6 @@
 ---
-title: "'The Office' IMBD ratings"
-subtitle: "#TidyTuesday"
+title: "'The Office' IMDb ratings"
+subtitle: "for #TidyTuesday"
 author: "Gina Reynolds, March 2020"
 output:
   xaringan::moon_reader:
@@ -24,7 +24,10 @@ library(flipbookr)
 
 
 
-```{r}
+
+`r chunk_reveal("scan_in")`
+
+```{r scan_in, include = F}
 library(tidyverse)
 url <- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'
 readr::read_csv(url) ->
@@ -114,6 +117,7 @@ office_ratings %>%
   scale_size_identity() +  
   theme_minimal(base_family = "Courier",
                 base_size = 12) +
+  theme(plot.title.position = "plot") +
   theme(legend.position = c(.85, .35)) +
   theme(legend.background = element_rect(fill = "grey98", 
                                        color = "grey90")) +
