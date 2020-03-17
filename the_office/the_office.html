@@ -3,7 +3,7 @@
   <head>
     <title>‘The Office’ IMBD ratings</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Gina Reynolds, December 2019" />
+    <meta name="author" content="Gina Reynolds, March 2020" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
@@ -14,7 +14,7 @@ class: center, middle, inverse, title-slide
 
 # ‘The Office’ IMBD ratings
 ## #TidyTuesday
-### Gina Reynolds, December 2019
+### Gina Reynolds, March 2020
 
 ---
 
@@ -131,8 +131,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-* geom_point(alpha = .3,
-*            color = "blue")
+* geom_point(shape = 21,
+*            alpha = .5)
 ```
 ]]
 .column[.content[
@@ -149,8 +149,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
 * aes(size = total_votes)
 ```
 ]]
@@ -168,8 +168,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
 * aes(label = title)
 ```
@@ -188,8 +188,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
 * ggpmisc::stat_dens2d_filter(geom = "text_repel",
@@ -212,8 +212,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -237,8 +237,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -263,8 +263,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -290,8 +290,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -318,8 +318,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -347,8 +347,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -377,8 +377,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -408,8 +408,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -440,8 +440,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -474,8 +474,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -509,8 +509,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -545,8 +545,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -582,8 +582,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -622,8 +622,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -663,8 +663,8 @@ office_ratings %&gt;%
   ggplot() +  
   aes(x = air_date) +  
   aes(y = imdb_rating) +  
-  geom_point(alpha = .3,  
-             color = "blue") +  
+  geom_point(shape = 21,  
+             alpha = .5) +  
   aes(size = total_votes) +  
   aes(label = title) +  
   ggpmisc::stat_dens2d_filter(geom = "text_repel",  
@@ -688,7 +688,7 @@ office_ratings %&gt;%
           element_rect(fill = "grey98",  
                        color = "grey93")) +  
   theme(plot.title.position = "plot") -&gt;  
-*my_plot
+*plot
 ```
 ]]
 .column[.content[
@@ -704,7 +704,7 @@ count: false
 .column[.content[
 
 ```r
-*my_plot
+*plot
 ```
 ]]
 .column[.content[
@@ -716,7 +716,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
 * aes(x = total_votes)
 ```
 ]]
@@ -729,7 +729,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
 * aes(size = NULL)
 ```
@@ -743,7 +743,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
   aes(size = NULL) +  
 * scale_y_continuous()
@@ -758,7 +758,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
   aes(size = NULL) +  
   scale_y_continuous() +  
@@ -774,7 +774,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
   aes(size = NULL) +  
   scale_y_continuous() +  
@@ -791,7 +791,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
   aes(size = NULL) +  
   scale_y_continuous() +  
@@ -809,7 +809,7 @@ count: false
 .column[.content[
 
 ```r
-my_plot +  
+plot +  
   aes(x = total_votes) +  
   aes(size = NULL) +  
   scale_y_continuous() +  
@@ -829,7 +829,7 @@ my_plot +
 ---
 
 
-The flipbooked portion of this presentation was created with the new {flipbookr} package. Get it at remotes::install_github("EvaMaeRey/flipbookr")
+The flipbooked portion of this presentation was created with the new {flipbookr} package; install with remotes::install_github("EvaMaeRey/flipbookr").
 
 
 &lt;style type="text/css"&gt;

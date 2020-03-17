@@ -1,7 +1,7 @@
 ---
 title: "'The Office' IMBD ratings"
 subtitle: "#TidyTuesday"
-author: "Gina Reynolds, December 2019"
+author: "Gina Reynolds, March 2020"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -41,8 +41,8 @@ office_ratings %>%
   ggplot() +
   aes(x = air_date) +
   aes(y = imdb_rating) +
-  geom_point(alpha = .3, 
-             color = "blue") +
+  geom_point(shape = 21,
+             alpha = .5) +
   aes(size = total_votes) +
   aes(label = title) +
   ggpmisc::stat_dens2d_filter(geom = "text_repel", 
@@ -66,7 +66,7 @@ office_ratings %>%
           element_rect(fill = "grey98", 
                        color = "grey93")) +
   theme(plot.title.position = "plot") ->
-my_plot
+plot
 ```
 
 ---
@@ -75,7 +75,7 @@ my_plot
 
 
 ```{r plot2, include=F}
-my_plot + 
+plot + 
   aes(x = total_votes) +
   aes(size = NULL) +
   scale_y_continuous() +
