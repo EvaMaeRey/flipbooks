@@ -1,0 +1,96 @@
+---
+title: "'The Office' IMBD ratings"
+subtitle: "#TidyTuesday"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 8, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+```
+
+
+
+```{r}
+library(tidyverse)
+url <- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv'
+readr::read_csv(url) ->
+  office_ratings
+```
+
+---
+
+`r chunk_reveal("plot1")`
+
+```{r plot1, include=F}
+library(ggrepel)
+office_ratings %>% 
+  ggplot() +
+  aes(x = air_date) +
+  aes(y = imdb_rating) +
+  geom_point(alpha = .3, 
+             color = "blue") +
+  aes(size = total_votes) +
+  aes(label = title) +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.25, 
+                              size = 2.8, 
+                              col = "grey30") +
+  scale_y_continuous(limits = c(5,10)) +
+  labs(x = NULL) +
+  labs(y = NULL) +
+  labs(size = "Total votes") +
+  labs(title = "IMBD Episode Ratings for 'The Office' over its Nine Year Run") +
+  labs(subtitle = "Data from on data.world") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday") +
+  theme_minimal(base_family = "Courier") +
+  theme(plot.background = element_rect(fill = "grey98", 
+                                       color = "grey90")) +
+  theme(legend.position = c(.25, .1)) +
+  theme(legend.direction = "horizontal") +
+  theme(panel.grid = element_line("grey93")) +
+  theme(legend.background = 
+          element_rect(fill = "grey98", 
+                       color = "grey93")) +
+  theme(plot.title.position = "plot") ->
+my_plot
+```
+
+---
+
+`r chunk_reveal("plot2")`
+
+
+```{r plot2, include=F}
+my_plot + 
+  aes(x = total_votes) +
+  aes(size = NULL) +
+  scale_y_continuous() +
+  scale_x_log10() +
+  labs(title = "IMBD Votes vs. Ratings for 'The Office' Episodes") +
+  labs(x = "Total Votes") +
+  labs(y = "Rating")
+```
+
+---
+
+
+The flipbooked portion of this presentation was created with the new {flipbookr} package; install with remotes::install_github("EvaMaeRey/flipbookr").
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 65%}
+```
