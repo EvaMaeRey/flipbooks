@@ -1,0 +1,146 @@
+---
+title: "Tracking COVID-19"
+subtitle: "John Burn-Murdoch's plot for FT"
+author: "Edited by Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = TRUE, fig.retina = 3)
+library(flipbookr)
+```
+
+---
+
+Likely to be discussing this visualization in my Data Viz class, Spring 2020. 
+
+
+---
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">NEW on coronavirus: many western countries may soon face Italy’s situation<br><br>Case numbers since outbreaks began in several countries have tracked a ~33% daily rise. This is as true for UK, France, Germany as Italy; the latter is simply further down the path <a href="https://t.co/VcSZISFxzF">https://t.co/VcSZISFxzF</a> <a href="https://t.co/xM6wXuMk4n">pic.twitter.com/xM6wXuMk4n</a></p>&mdash; John Burn-Murdoch (@jburnmurdoch) <a href="https://twitter.com/jburnmurdoch/status/1237737352879112194?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">See the little backgrounds that make the country names in this plot easier to read?<a href="https://twitter.com/jburnmurdoch?ref_src=twsrc%5Etfw">@jburnmurdoch</a> was kind enough to share his <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code so I could see how it was made (<a href="https://t.co/F7K171s4FR">https://t.co/F7K171s4FR</a>). <br><br>Learned about the shadowtext package by <a href="https://twitter.com/guangchuangyu?ref_src=twsrc%5Etfw">@guangchuangyu</a>: <a href="https://t.co/YKz3h4piKv">https://t.co/YKz3h4piKv</a> <a href="https://t.co/1wYTSUvZuS">https://t.co/1wYTSUvZuS</a></p>&mdash; David Keyes (@dgkeyes) <a href="https://twitter.com/dgkeyes/status/1237812892189093888?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+---
+
+`r chunk_reveal("data_prep")`
+
+```{r data_prep, include=F}
+library(tidyverse)
+url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+read_csv(url) %>%
+  gather(date, cases, 5:ncol(.)) %>%
+  mutate(date = as.Date(date, "%m/%d/%y")) %>%
+  group_by(country = `Country/Region`, date) %>%
+  summarise(cases = sum(cases)) %>%
+  filter(country != "Others" & 
+           country != "Mainland China") %>%
+  bind_rows(
+    tibble(country = "Republic of Korea", 
+           date = as.Date("2020-03-11"), 
+           cases = 7755)
+  ) %>%
+  group_by(country) %>%
+  mutate(days_since_100 = 
+           as.numeric(date - min(date[cases >= 100]))) %>%
+  ungroup() %>%
+  filter(is.finite(days_since_100)) %>% 
+  group_by(country) %>%
+  mutate(new_cases = cases - cases[days_since_100 == 0]) %>%
+  filter(sum(cases >= 100) >= 5) %>%
+  filter(cases >= 100) %>% 
+  bind_rows(
+    tibble(country = "33% daily rise", 
+           days_since_100 = 0:18) %>%
+      mutate(cases = 100*1.33^days_since_100)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    country = country %>% 
+      str_replace_all("( SAR)|( \\(.+)|(Republic of )", "")
+  ) ->
+data
+```
+
+
+---
+
+```{r}
+color_assignments <- c("UK" = "#ce3140", "US" = "#EB5E8D", 
+                       "Italy" = "black", "France" = "#c2b7af", 
+                       "Germany" = "#c2b7af", "Hong Kong" = "#1E8FCC", 
+                       "Iran" = "#9dbf57", "Japan" = "#208fce", 
+                       "Singapore" = "#1E8FCC", 
+                       "Korea" = "#208fce", "Belgium" = "#c2b7af", 
+                       "Netherlands" = "#c2b7af", 
+                       "Norway" = "#c2b7af", "Spain" = "#c2b7af", 
+                       "Sweden" = "#c2b7af", "Switzerland" = "#c2b7af", 
+                       "33% daily rise" = "#D9CCC3")
+```
+
+---
+
+`r chunk_reveal("plot")`
+
+```{r plot, include = F}
+data %>% 
+  ggplot() +
+  aes(x = days_since_100) +
+  aes(y = cases) +
+  aes(col = country) +
+  geom_hline(yintercept = 100) +
+  geom_vline(xintercept = 0) +
+  geom_line(size = 0.8) +
+  geom_point(pch = 21, size = 1) +
+  scale_y_log10(expand = expand_scale(add = c(0,0.1)), 
+                breaks = c(100, 200, 500, 1000, 
+                           2000, 5000, 10000)) +
+  scale_x_continuous(expand = expand_scale(add = c(0,1))) +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    legend.position = "none",
+    plot.margin = margin(3,15,3,3,"mm")
+  ) +
+  coord_cartesian(clip = "off") +
+  scale_colour_manual(values = color_assignments) +
+  shadowtext::geom_shadowtext(
+    aes(label = paste0(" ",country)), 
+    hjust = 0, vjust = 0, 
+    data = . %>% 
+      group_by(country) %>% 
+      top_n(1, days_since_100), 
+    bg.color = "white") +
+  labs(x = "Number of days since 100th case", 
+       y = "", 
+       subtitle = "Total number of cases")
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
