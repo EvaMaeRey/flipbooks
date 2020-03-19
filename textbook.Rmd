@@ -1,0 +1,98 @@
+---
+title: "The R Flipbook Textbook"
+subtitle: "A introduction to data manipulation, visualization and statistical analysis using code-output co-evolution (flipbooks)"
+author: "Evangeline Reynolds"
+date: "3/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# [Data manipulation and management](https://evamaerey.github.io/data_manipulation/about){target="_blank"}
+
+### Basics
+
+- [Arithmetic operations, data types and structures, function](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
+- [data types and structures](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
+- [Functions](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
+
+### Data manipulation with the tidyverse
+
+- [One-stream data manipulation](https://evamaerey.github.io/data_manipulation/one_stream_wrangle.html#3){target="_blank}
+- [Logical operators (Booleans)](https://evamaerey.github.io/data_manipulation/booleans.html#3){target="_blank}
+- [Summarizing](https://evamaerey.github.io/data_manipulation/summarize.html#3){target="_blank}
+- [Shape transformation (wide <---> long)](https://evamaerey.github.io/data_manipulation/long_to_wide_and_back.html#3){target="_blank}
+- [Bringing streams together: Joins and Binds](https://evamaerey.github.io/data_manipulation/joining_data.html){target="_blank"}
+
+
+### Data Cleaning Examples
+
+- [Reading data into R](https://evamaerey.github.io/data_manipulation/data_cleaning/data_cleaning){target="_blank"}
+- Examples of data cleaning pipelines including using {janitor}
+- String Manipulation with {stringr}
+- Using Counry IDs like ISO3C, WB with {country coder}
+- Date manipulation with {lubridate}
+
+
+### More data manipulation tools
+
+- [Manipulation with base R and logical indexing](https://evamaerey.github.io/data_manipulation/logical_indexing.html){target="_blank"}
+- [Manipulation with data.table (under construction)](https://evamaerey.github.io/data_manipulation/data.table.html){target="_blank"}
+
+
+# [Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+
+### ggplot2
+
+- [A ggplot2 grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [geoms pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [ggplot2 theme control](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+
+### base graphics
+
+
+
+### spatial visualization
+
+-
+
+# [Statistical Analysis](https://evamaerey.github.io/statistics/about)
+
+### Building intuition 
+
+- [Galton Board: The binomial distribution](https://evamaerey.github.io/statistics/galton_board.html){target="_blank"}
+- [Covariance, Variance, Standard Deviation, Correlation](https://evamaerey.github.io/statistics/covariance_correlation.html){target="_blank"}
+- [Cool with Statistical Independence](https://evamaerey.github.io/statistics/statistical_independence.html){target="_blank"}
+
+### Statistical tests
+
+- [Basics of Bivariate Statistical Tests](https://evamaerey.github.io/statistics/basic_bivariate_statistical_tests.html){target="_blank"}
+
+  - correlation test
+  - t.test
+  - anova
+  - chi-squared
+  
+  
+  
+### Modeling
+
+- [Ordinary Least Squares Modeling](https://evamaerey.github.io/statistics/ols.html){target="_blank"}
+- [Difference-in-Difference](https://evamaerey.github.io/statistics/difference_in_difference.html){target="_blank"}
+
+
+### Resampling methods
+
+- [Bootstrapped confidence intervals](https://evamaerey.github.io/statistics/bootstrap.html){target="_blank"}
+
+
+# Acknowledgements:
+
+Like so many textbooks, this one is born out of teaching experience. I have been lucky enough to teach several obligatory methodology courses at the University of Denver.  While it is lovely to teach electives, where students select into courses, I think we grow the most as teachers when students are diverse and perhaps don't come in with a "warm" attitude toward the subject matter. 
+
+a desire to put tools into the hands of my students.  As such, there has been 
+
+This text book is under construction.  Much of the material doesn't have a lot of context, because these flipbooks were originally only focused on communicating how to get things done in R.  I hope to be enhancing the flipbooks to provide more context alongside the coding pipeline material that presently dominates.  

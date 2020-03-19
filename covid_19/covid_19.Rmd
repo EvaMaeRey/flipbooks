@@ -27,7 +27,7 @@ library(flipbookr)
 
 ---
 
-Likely to be discussing this visualization in my Data Viz class, Spring 2020. 
+Likely to be discussing this visualization in my Data Viz class, Spring
 
 
 ---
