@@ -21,7 +21,7 @@ output:
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
-                      cache = TRUE, fig.retina = 3)
+                      cache = T, fig.retina = 3)
 library(flipbookr)
 ```
 
@@ -41,6 +41,21 @@ Likely to be discussing this visualization in my Data Viz class, Spring
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">See the little backgrounds that make the country names in this plot easier to read?<a href="https://twitter.com/jburnmurdoch?ref_src=twsrc%5Etfw">@jburnmurdoch</a> was kind enough to share his <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code so I could see how it was made (<a href="https://t.co/F7K171s4FR">https://t.co/F7K171s4FR</a>). <br><br>Learned about the shadowtext package by <a href="https://twitter.com/guangchuangyu?ref_src=twsrc%5Etfw">@guangchuangyu</a>: <a href="https://t.co/YKz3h4piKv">https://t.co/YKz3h4piKv</a> <a href="https://t.co/1wYTSUvZuS">https://t.co/1wYTSUvZuS</a></p>&mdash; David Keyes (@dgkeyes) <a href="https://twitter.com/dgkeyes/status/1237812892189093888?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+---
+
+# getting data
+
+```{r, eval = F}
+url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+
+# if file hasn't already been downloaded, download
+if (!file.exists("time_series_19-covid-Confirmed-2020-03-19.csv")){
+download.file(url, 
+              destfile = 
+                "time_series_19-covid-Confirmed-2020-03-19.csv") 
+  } # 2020-03-19
+```
+
 
 
 ---
@@ -49,20 +64,21 @@ Likely to be discussing this visualization in my Data Viz class, Spring
 
 ```{r data_prep, include=F}
 library(tidyverse)
-url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
-read_csv(url) %>%
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %>%
   gather(date, cases, 5:ncol(.)) %>%
   mutate(date = as.Date(date, "%m/%d/%y")) %>%
   group_by(country = `Country/Region`, date) %>%
   summarise(cases = sum(cases)) %>%
   filter(country != "Others" & 
-           country != "Mainland China") %>%
+           country != "China") %>%
   bind_rows(
     tibble(country = "Republic of Korea", 
            date = as.Date("2020-03-11"), 
            cases = 7755)
   ) %>%
   group_by(country) %>%
+  filter(date <= as.Date("2020-03-11")) %>% #my addition - this is when plot was built
+  filter(country != "Cruise Ship") %>% #my addition
   mutate(days_since_100 = 
            as.numeric(date - min(date[cases >= 100]))) %>%
   ungroup() %>%
@@ -88,6 +104,9 @@ data
 ---
 
 ```{r}
+data %>% 
+  distinct(country)
+
 color_assignments <- c("UK" = "#ce3140", "US" = "#EB5E8D", 
                        "Italy" = "black", "France" = "#c2b7af", 
                        "Germany" = "#c2b7af", "Hong Kong" = "#1E8FCC", 
@@ -96,8 +115,7 @@ color_assignments <- c("UK" = "#ce3140", "US" = "#EB5E8D",
                        "Korea" = "#208fce", "Belgium" = "#c2b7af", 
                        "Netherlands" = "#c2b7af", 
                        "Norway" = "#c2b7af", "Spain" = "#c2b7af", 
-                       "Sweden" = "#c2b7af", "Switzerland" = "#c2b7af", 
-                       "33% daily rise" = "#D9CCC3")
+                       "Sweden" = "#c2b7af", "Switzerland" = "#c2b7af")
 ```
 
 ---
@@ -109,11 +127,11 @@ data %>%
   ggplot() +
   aes(x = days_since_100) +
   aes(y = cases) +
-  aes(col = country) +
   geom_hline(yintercept = 100) +
   geom_vline(xintercept = 0) +
-  geom_line(size = 0.8) +
   geom_point(pch = 21, size = 1) +
+  aes(col = country) +
+  geom_line(size = 0.8) +
   scale_y_log10(expand = expand_scale(add = c(0,0.1)), 
                 breaks = c(100, 200, 500, 1000, 
                            2000, 5000, 10000)) +
@@ -126,16 +144,71 @@ data %>%
   ) +
   coord_cartesian(clip = "off") +
   scale_colour_manual(values = color_assignments) +
-  shadowtext::geom_shadowtext(
-    aes(label = paste0(" ",country)), 
-    hjust = 0, vjust = 0, 
-    data = . %>% 
+  aes(label = paste0(" ",country)) +
+  shadowtext::geom_shadowtext(data = . %>% 
       group_by(country) %>% 
       top_n(1, days_since_100), 
-    bg.color = "white") +
+    hjust = 0, vjust = 0, 
+    bg.color = "snow2") +
   labs(x = "Number of days since 100th case", 
        y = "", 
-       subtitle = "Total number of cases")
+       subtitle = "Total number of cases") +
+  theme(plot.background = element_rect(fill = "snow"))
+```
+
+
+
+
+---
+
+r chunk_reveal("alonso", lang = "python")`
+
+```{python alonso, eval = F}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+plt.style.use('seaborn')
+```
+
+---
+
+r chunk_reveal("dataclean", lang = "python")`
+
+
+```{python dataclean, eval = F}
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')
+total_cases[["France", "Italy"]].tail(3)
+cases100_France = total_cases.query("France > 100")["France"]
+days100_France = np.arange(len(cases100_France))
+cases100_Italy = total_cases.query("Italy > 100")["Italy"]
+days100_Italy = np.arange(len(cases100_Italy))
+```
+
+
+---
+
+r chunk_reveal("alonso2", lang = "python")`
+
+
+```{python alonso2, eval = F}
+fig, ax = plt.subplots(figsize=(10,7))
+plt.plot(days100_France, cases100_France, label='France', linewidth=2, marker='o')
+plt.plot(days100_Italy, cases100_Italy, label='Italy',  linewidth=2, marker='o')
+plt.plot(np.array([14, 15, 16, 17]), np.array([6604, 7730, 9134, 10995]), label='France (ESRI)', linewidth=2, marker='o')
+plt.axvline(9, color='green', linestyle='dashed')
+plt.annotate('<-  Italy closes schools and universities',  (9.2,20000.0), color='green', fontsize='x-large')
+plt.axvline(13, color='green', linestyle='dashed')
+plt.annotate('<-  Italy\n       lockdown', (13.3, 14000.0), color='green', fontsize='x-large'  )
+plt.axvline(14, color='blue', linestyle='dashed')
+plt.annotate('<-  France closes schools\n       and universities', (14.4,1000), color='blue', fontsize='x-large')
+plt.axvline(15, color='darkred', linestyle='dashed')
+plt.annotate('<-  France lockdown', (15.2,700),  color='darkred', fontsize='x-large')
+ax.set_title('COVID-19: Number of known cases vs number of days since 100 cases',  fontsize='x-large')
+ax.set_xlabel('number of days since 100 cases', fontsize='x-large')
+ax.set_ylabel('number of known cases', fontsize='x-large')
+plt.legend(fontsize='x-large')
+plt.yscale("log"); plt.show()
+ax.set_xticks(np.arange(len(cases100_Italy))); plt.show()
 ```
 
 

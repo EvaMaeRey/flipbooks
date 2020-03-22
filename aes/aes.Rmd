@@ -1,0 +1,169 @@
+---
+title: "`aes` is pronounced 'ask for representation'"
+subtitle: "ggplot2::aes()"
+author: "Gina Reynolds, March 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+---
+class: center, middle
+
+
+Let's see how we get this representation using ggplot2.  First we'll do a walk through in a quirky way.  Then look at the same plot build with the normal syntax.  
+
+
+
+---
+
+`r chunk_reveal("short_for")`
+
+```{r, short_for, include = F}
+ASK_FOR_REPRESENTATION <- aes
+CHANGE_FROM_DEFAULT_LABEL <- labs
+gapminder::gapminder %>% 
+  filter(year == 2002) %>% 
+  ggplot() +
+  ASK_FOR_REPRESENTATION(x = gdpPercap) +
+  ASK_FOR_REPRESENTATION(y = lifeExp) +
+  geom_point() +
+  ASK_FOR_REPRESENTATION(color = continent) +
+  ASK_FOR_REPRESENTATION(shape = continent) +
+  ASK_FOR_REPRESENTATION(size = pop) +
+  CHANGE_FROM_DEFAULT_LABEL(x = "GDP Per cap") +
+  CHANGE_FROM_DEFAULT_LABEL(y = "Life Expectancy") +
+  CHANGE_FROM_DEFAULT_LABEL(size = "Population") +
+  CHANGE_FROM_DEFAULT_LABEL(color = "") +
+  CHANGE_FROM_DEFAULT_LABEL(shape = "") +
+  CHANGE_FROM_DEFAULT_LABEL(title = "Life Expectancy v. GDP per Cap in 2002") +
+  CHANGE_FROM_DEFAULT_LABEL(subtitle = "Data source: gapminder package in R") +
+  CHANGE_FROM_DEFAULT_LABEL(caption = "Viz: Gina Reynolds @EvaMaeRey")
+```
+
+---
+class: middle, center
+
+*Now the normal ggplot2 syntax*
+
+---
+
+`r chunk_reveal("normal")`
+
+```{r, normal, include = F}
+# the normal way ...
+gapminder::gapminder %>% 
+  filter(year == 2002) %>% 
+  ggplot() +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +
+  aes(color = continent) +
+  aes(size = pop) +
+  labs(x = "GDP Per cap") +
+  labs(y = "Life Expectancy") +
+  labs(size = "Population") +
+  labs(color = "") +
+  labs(title = "Life Expectancy v. GDP per Cap in 2002") +
+  labs(subtitle = "Data source: gapminder package in R") +
+  labs(caption = "Viz: Gina Reynolds @EvaMaeRey")
+```
+
+---
+class: centered, middle
+
+*The flipbooked portion of this presentation was created with the new {flipbookr} package.  Info: https://github.com/EvaMaeRey/flipbookr* 
+
+
+
+
+---
+
+r chunk_reveal("what_representation", break_type = "user", display_type = "output")`
+
+```{r what_representation, include = F}
+tibble(num_id = 1:10, id = c("Alicia", "Brian", "Candice", "Doug", "Emily", 
+              "Frank", "Gary", "Harry", "Ingrid", "Jasmine"), height = round(rnorm(10), 1) + 10) %>% 
+  ggplot() +
+  labs(title = "What aesthetics can do \nrepresentative work for us?") +
+  theme_void(base_size = 15) +
+  aes(x = height) +
+  aes(y = 0) +
+  labs(subtitle = "x position") + 
+  aes(label = paste(id, height, sep = ":")) +
+  ggrepel::geom_text_repel(force = 4, 
+                           color = "black",
+                           size = 3,
+                           alpha = 1) ->
+base
+base +
+  geom_point(shape = "|",
+             size = 2) + #BREAK
+  labs(title = NULL) -> 
+x_position_aes
+base +   
+  aes(y = height, x = 0) +
+  labs(subtitle = "y position") +
+  geom_point(shape = "_",
+             size = 2) + #BREAK
+  labs(title = NULL) -> 
+y_position_aes
+base +
+  aes(x = 0, y = num_id) +
+  scale_y_reverse() +
+  aes(fill = height) +
+  labs(subtitle = "color") +
+  scale_fill_viridis_c() + 
+  scale_x_continuous(expand = c(1,1)) +
+  geom_tile(width = .2, height = .8,
+            alpha = .7) + #BREAK
+  labs(title = NULL) -> 
+color_aes
+base +
+  aes(x = 0, y = num_id) +
+  scale_y_reverse() +
+  geom_point(shape = "diamond") +
+  aes(size = height) + #BREAK
+  labs(title = NULL) -> 
+size_aes
+base +
+  aes(x = 0, y = id) +
+  scale_y_reverse() +
+  labs(subtitle = "size") + 
+  aes(size = NULL) +
+  aes(alpha = height) +
+  geom_tile(width = .2, height = .8,
+            alpha = .7) +
+  labs(subtitle = "transparency") + #BREAK
+  labs(title = NULL) -> 
+transparency_aes 
+```
+
+---
+
+
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```

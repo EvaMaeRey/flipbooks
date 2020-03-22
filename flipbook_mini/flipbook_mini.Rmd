@@ -1,0 +1,124 @@
+---
+title: "A sudo-blogpost: toward embedding a Flipbook Mini in HTML"
+author: "Gina Reynolds"
+date: "March 21, 2020"
+output: html_document
+---
+
+*Why sudo? I couldn't get this embedding technique to work yet with blogdown ...*
+
+[Xaringan](https://github.com/yihui/xaringan){target="_blank"} is a fantastic rmarkdown presentation tool developed by Yihui Xie, which uses remark.js as its platform. (Yihui Xie has a lot to say about how great remark.js itself in a [blogpost](https://yihui.org/en/2017/08/why-xaringan-remark-js/){target="_blank"} -- worth a read.)  
+
+One shortcoming of the format is that the slide shows are not self-contained. So a presentation is usually a whole collection of files.   This is obviously true for the *flipbooks* created with the {xaringan} platform. 
+
+Having so many files might feel a bit overwhelming, especially when it comes time to share your work. So some time ago, I had the idea of working on something self-contained: a flipbook mini (yup like ipod mini). All the preprocessing is the same as for the Xaringan platform.  Input code is parsed and reconstructed into partial builds.  Then code itself is printed in a plot object and is pasted along side the redered code to produce a frame of the flipbook.  This is done for each partial build of the code.  The resultant side-by-side figures are then combined into a gif for the movie effect. 
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">And checking out new magic in <a href="https://twitter.com/hashtag/ggforce?src=hash&amp;ref_src=twsrc%5Etfw">#ggforce</a>. Adapted from <a href="https://twitter.com/thomasp85?ref_src=twsrc%5Etfw">@thomasp85</a>&#39;s examples: <a href="https://t.co/aYMKuV7uIn">https://t.co/aYMKuV7uIn</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/LNpci0h8OL">pic.twitter.com/LNpci0h8OL</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1162680699834556418?ref_src=twsrc%5Etfw">August 17, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+At the RStudio conference someone asked if flipbooks can be embedded in blog posts or other html documents. By conference time, I thought I'd have the mini to demo --- but I didn't, as a lot of work needed to be done on fundamental {flipbookr} internal functions.  
+
+I also didn't think of directly embedding into html.  But this is an obviously good idea and I've worked out a way to embed directly:   after the gif is saved out with flipbookr::chunk_create_gif_flipbook(), we can pull it back in to embed it (this is done with knitr::include_graphics()). 
+
+The {flipookr} function used to get all this done is `chunk_gif_flipbook_embed()`. 
+
+Sadly, this doesn't "just work" in blogdown!  I was just trying to use my methods, and failed with blogdown and moved here, wanting to be done with it for now.  (I think this has to do with file paths in blogdown) 
+
+And what I've done feels awkward so if there are better ways of going about it, do let me know! Check out the details of the implementation [here](https://github.com/EvaMaeRey/flipbookr/blob/master/R/mini.R).  I'd love to have this all stable enough for *students* to use in the classroom.
+
+So here's the set up:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+library(tidyverse)
+library(flipbookr)
+```
+
+
+Then you need input code chunk that you'll refer to by name (I'm calling it *"my_source_code_chunk"*, and I have echo set to TRUE, and eval = F but you can do echo = F):
+
+```{r my_source_code_chunk, echo = T, eval = F}
+ggplot(data = cars) + 
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(shape = 21, 
+             alpha = .8,
+             size = 5,
+             color = "white") +
+  aes(fill = dist) +
+  scale_fill_viridis_c(option = "magma", end = .7) +
+  labs(title = "That cars data again!") +
+  theme_minimal() +
+  theme(plot.background = element_rect(fill = "grey95")) 
+```
+
+----
+
+# Show me the build!
+
+I'm also echoing the code.  It produces the gif (saved externally) and then embeds it in the html file. 
+
+```{r, echo = T}
+chunk_gif_flipbook_embed(chunk_name = "my_source_code_chunk",
+                         title = "Side-by-side co-evolution!") 
+```
+
+----
+
+# Or maybe just output is of interest?
+
+
+```{r, echo = T}
+chunk_gif_flipbook_embed(chunk_name = "my_source_code_chunk",
+                         title = "That's pretty!", 
+                         display_type = "output") 
+```
+
+----
+
+# Or maybe just code is of interest?
+
+
+
+```{r, echo = T}
+chunk_gif_flipbook_embed(chunk_name = "my_source_code_chunk",
+                         title = "What do you think this will build?", 
+                         display_type = "code") 
+```
+
+# Limitations...
+
+1. Haven't figured out the blogdown implementation. 
+2. The flipbook mini function  works with **plot outputs** *only* for the time being.  
+3. Also, Claus Wilke has noted that the flipbooks aspect ratio control needs some work -- which is really apparent in the flipbook mini and is also an issue on the {xaringan} platform.  This has been duely noted and is logged as an issue in the development package --- help welcome!  It's something that I thought I could address with allowing an out.width and out.height argument, but this hasn't worked so far.  I haven't worked on this problem for the minis at all yet 
+4. Because of limitations 1 and 2, this "mini" part of the project is very much in development.
+
+# More ways of embedding...
+
+Another way you can share flipbooks via embedding is using the knitr function include_url() within a code chunk.
+
+```{r}
+knitr::include_url("https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html")
+```
+
+# Template
+
+A flipbook mini template is available in RStudio when you install flipbookr.  Steps to use it:  
+
+1. Install the slide show platform Xaringan - install.packages("xaringan")
+1. Install flipbookr - remotes::install_github("EvaMaeRey/flipbookr")
+1. restart R
+1. Get the template in RStudio via: File -> New File -> RMarkdown -> From  Template -> Embedding a Minimal Flipbook
+1. Use this template to get started or replace with your *plot only* own pipelines
+1. Compile your document - “Knit” in RStudio
+1. Explore your flipbook!
+
+
+# Spread the word and giving feedback
+
+Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgement, for example: 
+
+
+
+> **The flipbooked portion of this presentation was created with the {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")**

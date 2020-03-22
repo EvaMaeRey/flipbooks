@@ -84,7 +84,7 @@ office_ratings %>%
                 x = air_date),
             hjust = 1, angle = 90, family = "Courier",
             y = 9.9, size = 5, color = "#00022E") ->
-g
+g1
 ```
 
 ---
@@ -122,9 +122,33 @@ office_ratings %>%
   theme(legend.background = element_rect(fill = "grey98", 
                                        color = "grey90")) +
   theme(plot.background = element_rect(fill = "grey98", 
-                                       color = "grey90")) 
-
+                                       color = "grey90")) ->
+g2
 ```
+
+
+---
+
+`r chunk_reveal("patch")`
+
+
+```{r patch, eval = F, echo = F}
+g1 +
+  labs(title = NULL) +
+  labs(subtitle = NULL) +
+  labs(caption = NULL) ->
+  g1
+g2 +
+  labs(title = NULL) +
+  labs(subtitle = NULL) +
+  labs(caption = NULL) ->
+  g2
+library(patchwork)
+(g1 + g2) /
+  g1
+```
+
+
 
 ---
 class: center, middle

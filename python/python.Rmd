@@ -24,7 +24,6 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE,
 library(flipbookr)
 library(tidyverse)
 library(reticulate)
-# use_virtualenv("r-reticulate")
 ```
 
 ```{r just_for_evamaerey, cache = FALSE, echo = FALSE, eval = T}
@@ -143,33 +142,7 @@ def length_times_width(df):
 ```
 
 
----
 
-
-`r chunk_reveal("iris", lang = "python", left_assign = T)`
-
-
-```{python iris}
-xobject = load_iris()
-xobject = pd.DataFrame(xobject.data,columns=xobject.feature_names)
-xobject.pipe(remove_units).pipe(length_times_width)
-```
-
----
-
-`r chunk_reveal("iris2", lang = "python", left_assign = T)`
-
-
-```{python iris2}
-xobject = load_iris()
-xobject = pd.DataFrame(xobject.data,columns=xobject.feature_names)
-xobject.pipe(remove_units)
-xobject.pipe(length_times_width)
-```
-
-
-
----
 
 
 

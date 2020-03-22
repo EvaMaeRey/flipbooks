@@ -1,0 +1,122 @@
+---
+title: "The art of flipbooking"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+https://docs.google.com/spreadsheets/u/2/d/e/2PACX-1vRwAqp96T9sYYq2-i7Tj0pvTf6XVHjDSMIKBdZHXiCGGdNC0ypEU9NbngS8mxea55JuCFuua1MUeOj5/pubhtml#
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+`r chunk_reveal("positive_rate")`
+
+```{r positive_rate, include = F}
+readxl::read_xlsx("covid_19_tracking_2020_03_20.xlsx") %>%
+  janitor::clean_names() %>% 
+  data.frame() %>% 
+  mutate(date = lubridate::ymd(date)) %>% 
+  full_join(tibble(state = state.abb, state.region)) ->
+covid_19_data
+covid_19_data %>% 
+  arrange(date) %>% 
+  filter(state == "CO") %>% 
+  ggplot() +
+  aes(x = total) +
+  aes(y = positive) +
+  geom_point() +
+  geom_line(data = tibble(x = (1:100)^3,
+                    y_01 = x *.01,
+                    y_03 = x * .03,
+                    y_10 = x*.1,
+                    y_30 = x*.3,
+                    y_100 = x*1) %>% 
+              gather("rate", "y", 2:6),
+            aes(x = x, y = y, 
+                group = rate),
+            color = "blue") +
+  aes(color = as.numeric(date)) +
+  scale_color_viridis_c() +
+  scale_x_log10() +
+  scale_y_log10() +
+  guides(color = F) ->
+g
+g %+%
+  (covid_19_data %>% filter(state.region == "West")) +
+  facet_wrap(~state) 
+```
+
+
+
+---
+
+
+```{r, fig.width=10, fig.height=10}
+covid_19_data %>% 
+  arrange(date) %>% 
+  filter(state.region == "West") %>% 
+  ggplot() +
+  aes(x = date) +
+  aes(y = total) +
+  geom_area() +
+  geom_area(aes(y = positive),
+            fill = "magenta") +
+  facet_wrap(~state) +
+  theme_minimal(base_size = 20)
+
+
+covid_19_data %>% 
+  arrange(date) %>% 
+  filter(state.region == "West") %>% 
+  ggplot() +
+  aes(x = date) +
+  aes(y = positive) +
+  geom_area() +
+  geom_area(aes(y = death),
+            fill = "magenta") +
+  facet_wrap(~state) +
+  theme_minimal(base_size = 20)
+
+
+covid_19_data %>% 
+  arrange(date) %>% 
+  filter(state.region == "West") %>% 
+  ggplot() +
+  aes(x = date) +
+  aes(y = death) +
+  geom_area() +
+  facet_wrap(~state) +
+  theme_minimal(base_size = 20) 
+
+
+```
+
+
+
+
+---
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```
