@@ -140,8 +140,8 @@ schrute::theoffice %>%
                             character)) %>% 
   filter(character != "Man") %>% 
   mutate(character_lag = lag(character)) %>% 
-  slice(-1, -n()) %>% 
   select(character, character_lag) %>% 
+  slice(-1) %>% 
   filter(character != character_lag) %>% 
   igraph::graph_from_data_frame() %>% 
   tidygraph::as_tbl_graph(graph) %>% 
@@ -149,7 +149,6 @@ schrute::theoffice %>%
   mutate(degree = tidygraph::centrality_degree()) %>% 
   ggraph::ggraph(layout = "kk", ) +
   theme_void(base_family = "Courier") +
-  theme(text = element_text(color = "grey90")) +
   theme(plot.background = element_rect(fill = "steelblue4", 
                                        color = "grey90")) +
   ggraph::geom_edge_fan(alpha = .15,
@@ -163,16 +162,18 @@ schrute::theoffice %>%
                          aes(label = name),
                          color = "grey90",
                          family = "Courier") +
-  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +
-  labs(subtitle = "Connection drawn for temporally adjacent speakers") +
-  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R") ->
-g3
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +
+  theme(text = element_text(color = "grey90")) +
+  labs(subtitle = " Connection drawn for temporally adjacent speakers") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ") +
+  labs(size = "Degree\nCentrality") +
+  theme(legend.position = c(.85,.2))
 ```
 
 
 
 
----
+
 
 
 

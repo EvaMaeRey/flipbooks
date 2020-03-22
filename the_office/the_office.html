@@ -2066,27 +2066,26 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-* slice(-1, -n())
+* select(character, character_lag)
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 226 x 13
-   index season episode episode_name director writer character text 
-   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
- 1     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
- 2     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
- 3     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
- 4     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
- 5     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
- 6     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
- 7     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
- 8     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
- 9    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
-10    11 01     01      Pilot        Ken Kwa… Ricky… Michael   Any …
-# … with 216 more rows, and 5 more variables: text_w_direction &lt;chr&gt;,
-#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;, character_lag &lt;chr&gt;
+# A tibble: 228 x 2
+   character character_lag
+   &lt;chr&gt;     &lt;chr&gt;        
+ 1 Michael   &lt;NA&gt;         
+ 2 Jim       Michael      
+ 3 Michael   Jim          
+ 4 Jim       Michael      
+ 5 Michael   Jim          
+ 6 Michael   Michael      
+ 7 Michael   Michael      
+ 8 Pam       Michael      
+ 9 Michael   Pam          
+10 Pam       Michael      
+# … with 218 more rows
 ```
 ]]
 ---
@@ -2105,14 +2104,14 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
-* select(character, character_lag)
+  select(character, character_lag) %&gt;%  
+* slice(-1)
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 226 x 2
+# A tibble: 227 x 2
    character character_lag
    &lt;chr&gt;     &lt;chr&gt;        
  1 Jim       Michael      
@@ -2125,7 +2124,7 @@ schrute::theoffice %&gt;%
  8 Michael   Pam          
  9 Pam       Michael      
 10 Michael   Pam          
-# … with 216 more rows
+# … with 217 more rows
 ```
 ]]
 ---
@@ -2144,15 +2143,15 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
 * filter(character != character_lag)
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 205 x 2
+# A tibble: 206 x 2
    character character_lag
    &lt;chr&gt;     &lt;chr&gt;        
  1 Jim       Michael      
@@ -2165,7 +2164,7 @@ schrute::theoffice %&gt;%
  8 Michael   Pam          
  9 Pam       Michael      
 10 Michael   Pam          
-# … with 195 more rows
+# … with 196 more rows
 ```
 ]]
 ---
@@ -2184,8 +2183,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
 * igraph::graph_from_data_frame()
 ```
@@ -2193,9 +2192,9 @@ schrute::theoffice %&gt;%
 .column[.content[
 
 ```
-IGRAPH 5280a23 DN-- 13 205 -- 
+IGRAPH 41b2f2d DN-- 13 206 -- 
 + attr: name (v/c)
-+ edges from 5280a23 (vertex names):
++ edges from 41b2f2d (vertex names):
  [1] Jim    -&gt;Michael Michael-&gt;Jim     Jim    -&gt;Michael Michael-&gt;Jim    
  [5] Pam    -&gt;Michael Michael-&gt;Pam     Pam    -&gt;Michael Michael-&gt;Pam    
  [9] Pam    -&gt;Michael Michael-&gt;Pam     Pam    -&gt;Michael Michael-&gt;Pam    
@@ -2223,8 +2222,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
 * tidygraph::as_tbl_graph(graph)
@@ -2233,7 +2232,7 @@ schrute::theoffice %&gt;%
 .column[.content[
 
 ```
-# A tbl_graph: 13 nodes and 205 edges
+# A tbl_graph: 13 nodes and 206 edges
 #
 # A directed multigraph with 1 component
 #
@@ -2248,13 +2247,13 @@ schrute::theoffice %&gt;%
 6 Todd Packer
 # … with 7 more rows
 #
-# Edge Data: 205 x 2
+# Edge Data: 206 x 2
    from    to
   &lt;int&gt; &lt;int&gt;
 1     1     2
 2     2     1
 3     1     2
-# … with 202 more rows
+# … with 203 more rows
 ```
 ]]
 ---
@@ -2273,8 +2272,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2284,7 +2283,7 @@ schrute::theoffice %&gt;%
 .column[.content[
 
 ```
-# A tbl_graph: 13 nodes and 205 edges
+# A tbl_graph: 13 nodes and 206 edges
 #
 # A directed multigraph with 1 component
 #
@@ -2299,13 +2298,13 @@ schrute::theoffice %&gt;%
 6 Todd Packer
 # … with 7 more rows
 #
-# Edge Data: 205 x 2
+# Edge Data: 206 x 2
    from    to
   &lt;int&gt; &lt;int&gt;
 1     1     2
 2     2     1
 3     1     2
-# … with 202 more rows
+# … with 203 more rows
 ```
 ]]
 ---
@@ -2324,8 +2323,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2336,14 +2335,14 @@ schrute::theoffice %&gt;%
 .column[.content[
 
 ```
-# A tbl_graph: 13 nodes and 205 edges
+# A tbl_graph: 13 nodes and 206 edges
 #
 # A directed multigraph with 1 component
 #
 # Node Data: 13 x 2 (active)
   name        degree
   &lt;chr&gt;        &lt;dbl&gt;
-1 Jim             31
+1 Jim             32
 2 Michael         71
 3 Pam             38
 4 Dwight          25
@@ -2351,13 +2350,13 @@ schrute::theoffice %&gt;%
 6 Todd Packer      3
 # … with 7 more rows
 #
-# Edge Data: 205 x 2
+# Edge Data: 206 x 2
    from    to
   &lt;int&gt; &lt;int&gt;
 1     1     2
 2     2     1
 3     1     2
-# … with 202 more rows
+# … with 203 more rows
 ```
 ]]
 ---
@@ -2376,8 +2375,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2405,8 +2404,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2435,8 +2434,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2444,7 +2443,8 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-* theme(text = element_text(color = "grey90"))
+* theme(plot.background = element_rect(fill = "steelblue4",
+*                                      color = "grey90"))
 ```
 ]]
 .column[.content[
@@ -2466,8 +2466,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2475,9 +2475,10 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
-* theme(plot.background = element_rect(fill = "steelblue4",
-*                                      color = "grey90"))
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+* ggraph::geom_edge_fan(alpha = .15,
+*                       color = "orange")
 ```
 ]]
 .column[.content[
@@ -2499,8 +2500,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2508,11 +2509,15 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
-* ggraph::geom_edge_fan(alpha = .15,
-*                       color = "orange")
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+* ggraph::geom_node_point(shape = 21,
+*                         fill = "grey80",
+*                         color = "grey50",
+*                         aes(size = degree,
+*                             color = degree))
 ```
 ]]
 .column[.content[
@@ -2534,8 +2539,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2543,16 +2548,19 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
                         color = "orange") +  
-* ggraph::geom_node_point(shape = 21,
-*                         fill = "grey80",
-*                         color = "grey50",
-*                         aes(size = degree,
-*                             color = degree))
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+* ggraph::geom_node_text(nudge_y = .15,
+*                        aes(label = name),
+*                        color = "grey90",
+*                        family = "Courier")
 ```
 ]]
 .column[.content[
@@ -2574,8 +2582,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2583,7 +2591,6 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
@@ -2593,10 +2600,11 @@ schrute::theoffice %&gt;%
                           color = "grey50",  
                           aes(size = degree,  
                               color = degree)) +  
-* ggraph::geom_node_text(nudge_y = .15,
-*                        aes(label = name),
-*                        color = "grey90",
-*                        family = "Courier")
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+* labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...")
 ```
 ]]
 .column[.content[
@@ -2618,8 +2626,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2627,7 +2635,6 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
@@ -2641,7 +2648,8 @@ schrute::theoffice %&gt;%
                          aes(label = name),  
                          color = "grey90",  
                          family = "Courier") +  
-* labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...")
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+* theme(text = element_text(color = "grey90"))
 ```
 ]]
 .column[.content[
@@ -2663,8 +2671,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2672,7 +2680,6 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
@@ -2686,8 +2693,9 @@ schrute::theoffice %&gt;%
                          aes(label = name),  
                          color = "grey90",  
                          family = "Courier") +  
-  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
-* labs(subtitle = "Connection drawn for temporally adjacent speakers")
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  theme(text = element_text(color = "grey90")) +  
+* labs(subtitle = " Connection drawn for temporally adjacent speakers")
 ```
 ]]
 .column[.content[
@@ -2709,8 +2717,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2718,7 +2726,6 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
@@ -2732,9 +2739,10 @@ schrute::theoffice %&gt;%
                          aes(label = name),  
                          color = "grey90",  
                          family = "Courier") +  
-  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
-  labs(subtitle = "Connection drawn for temporally adjacent speakers") +  
-* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R")
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  theme(text = element_text(color = "grey90")) +  
+  labs(subtitle = " Connection drawn for temporally adjacent speakers") +  
+* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ")
 ```
 ]]
 .column[.content[
@@ -2756,8 +2764,8 @@ schrute::theoffice %&gt;%
                             character)) %&gt;%  
   filter(character != "Man") %&gt;%  
   mutate(character_lag = lag(character)) %&gt;%  
-  slice(-1, -n()) %&gt;%  
   select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
   filter(character != character_lag) %&gt;%  
   igraph::graph_from_data_frame() %&gt;%  
   tidygraph::as_tbl_graph(graph) %&gt;%  
@@ -2765,7 +2773,6 @@ schrute::theoffice %&gt;%
   mutate(degree = tidygraph::centrality_degree()) %&gt;%  
   ggraph::ggraph(layout = "kk", ) +  
   theme_void(base_family = "Courier") +  
-  theme(text = element_text(color = "grey90")) +  
   theme(plot.background = element_rect(fill = "steelblue4",  
                                        color = "grey90")) +  
   ggraph::geom_edge_fan(alpha = .15,  
@@ -2779,14 +2786,64 @@ schrute::theoffice %&gt;%
                          aes(label = name),  
                          color = "grey90",  
                          family = "Courier") +  
-  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
-  labs(subtitle = "Connection drawn for temporally adjacent speakers") +  
-  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R") -&gt;  
-*g3
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  theme(text = element_text(color = "grey90")) +  
+  labs(subtitle = " Connection drawn for temporally adjacent speakers") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ") +  
+* labs(size = "Degree\nCentrality")
 ```
 ]]
 .column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_23_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
 
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  slice(-1) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  theme(text = element_text(color = "grey90")) +  
+  labs(subtitle = " Connection drawn for temporally adjacent speakers") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ") +  
+  labs(size = "Degree\nCentrality") +  
+* theme(legend.position = c(.85,.2))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_24_output-1.png" width="576" /&gt;
 ]]
 
 
@@ -2795,7 +2852,7 @@ schrute::theoffice %&gt;%
 
 
 
----
+
 
 
 
