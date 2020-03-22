@@ -1883,11 +1883,28 @@ count: false
 .column[.content[
 
 ```r
-*g1
+*schrute::theoffice
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_1_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 55,130 x 12
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     1 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 2     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 3     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 4     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 5     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 6     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 7     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 8     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 9     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+10    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+# … with 55,120 more rows, and 4 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;
+```
 ]]
 ---
 class: split-40
@@ -1898,12 +1915,29 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-* labs(title = NULL)
+schrute::theoffice %&gt;%  
+* filter(season == "01" &amp; episode == "01" )
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_2_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 229 x 12
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     1 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 2     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 3     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 4     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 5     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 6     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 7     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 8     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 9     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+10    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+# … with 219 more rows, and 4 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;
+```
 ]]
 ---
 class: split-40
@@ -1914,13 +1948,32 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-* labs(subtitle = NULL)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+* mutate(character = ifelse(character == "Michel",
+*                           "Michael",
+*                           character))
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_3_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 229 x 12
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     1 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 2     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 3     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 4     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 5     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 6     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 7     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 8     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 9     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+10    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+# … with 219 more rows, and 4 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;
+```
 ]]
 ---
 class: split-40
@@ -1931,14 +1984,33 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-* labs(caption = NULL)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+* filter(character != "Man")
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_4_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 228 x 12
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     1 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 2     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 3     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 4     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 5     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 6     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 7     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 8     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 9     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+10    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+# … with 218 more rows, and 4 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;
+```
 ]]
 ---
 class: split-40
@@ -1949,15 +2021,34 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-* g1
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+* mutate(character_lag = lag(character))
 ```
 ]]
 .column[.content[
 
+```
+# A tibble: 228 x 13
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     1 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 2     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 3     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 4     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 5     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 6     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 7     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 8     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 9     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+10    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+# … with 218 more rows, and 5 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;, character_lag &lt;chr&gt;
+```
 ]]
 ---
 class: split-40
@@ -1968,16 +2059,35 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-*g2
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+* slice(-1, -n())
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_6_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 226 x 13
+   index season episode episode_name director writer character text 
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
+ 1     2 01     01      Pilot        Ken Kwa… Ricky… Jim       Oh, …
+ 2     3 01     01      Pilot        Ken Kwa… Ricky… Michael   So y…
+ 3     4 01     01      Pilot        Ken Kwa… Ricky… Jim       Actu…
+ 4     5 01     01      Pilot        Ken Kwa… Ricky… Michael   All …
+ 5     6 01     01      Pilot        Ken Kwa… Ricky… Michael   Yes,…
+ 6     7 01     01      Pilot        Ken Kwa… Ricky… Michael   I've…
+ 7     8 01     01      Pilot        Ken Kwa… Ricky… Pam       Well…
+ 8     9 01     01      Pilot        Ken Kwa… Ricky… Michael   If y…
+ 9    10 01     01      Pilot        Ken Kwa… Ricky… Pam       What?
+10    11 01     01      Pilot        Ken Kwa… Ricky… Michael   Any …
+# … with 216 more rows, and 5 more variables: text_w_direction &lt;chr&gt;,
+#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;, character_lag &lt;chr&gt;
+```
 ]]
 ---
 class: split-40
@@ -1988,17 +2098,35 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-* labs(title = NULL)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+* select(character, character_lag)
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_7_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 226 x 2
+   character character_lag
+   &lt;chr&gt;     &lt;chr&gt;        
+ 1 Jim       Michael      
+ 2 Michael   Jim          
+ 3 Jim       Michael      
+ 4 Michael   Jim          
+ 5 Michael   Michael      
+ 6 Michael   Michael      
+ 7 Pam       Michael      
+ 8 Michael   Pam          
+ 9 Pam       Michael      
+10 Michael   Pam          
+# … with 216 more rows
+```
 ]]
 ---
 class: split-40
@@ -2009,18 +2137,36 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-* labs(subtitle = NULL)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+* filter(character != character_lag)
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_8_output-1.png" width="576" /&gt;
+
+```
+# A tibble: 205 x 2
+   character character_lag
+   &lt;chr&gt;     &lt;chr&gt;        
+ 1 Jim       Michael      
+ 2 Michael   Jim          
+ 3 Jim       Michael      
+ 4 Michael   Jim          
+ 5 Pam       Michael      
+ 6 Michael   Pam          
+ 7 Pam       Michael      
+ 8 Michael   Pam          
+ 9 Pam       Michael      
+10 Michael   Pam          
+# … with 195 more rows
+```
 ]]
 ---
 class: split-40
@@ -2031,19 +2177,35 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-* labs(caption = NULL)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+* igraph::graph_from_data_frame()
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_9_output-1.png" width="576" /&gt;
+
+```
+IGRAPH 5280a23 DN-- 13 205 -- 
++ attr: name (v/c)
++ edges from 5280a23 (vertex names):
+ [1] Jim    -&gt;Michael Michael-&gt;Jim     Jim    -&gt;Michael Michael-&gt;Jim    
+ [5] Pam    -&gt;Michael Michael-&gt;Pam     Pam    -&gt;Michael Michael-&gt;Pam    
+ [9] Pam    -&gt;Michael Michael-&gt;Pam     Pam    -&gt;Michael Michael-&gt;Pam    
+[13] Dwight -&gt;Michael Jim    -&gt;Dwight  Michael-&gt;Jim     Jim    -&gt;Michael
+[17] Michael-&gt;Jim     Dwight -&gt;Michael Michael-&gt;Dwight  Dwight -&gt;Michael
+[21] Michael-&gt;Dwight  Jim    -&gt;Michael Michael-&gt;Jim     Jim    -&gt;Michael
+[25] Michael-&gt;Jim     Jan    -&gt;Michael Michael-&gt;Jan     Jan    -&gt;Michael
+[29] Michael-&gt;Jan     Jan    -&gt;Michael Michael-&gt;Jan     Jan    -&gt;Michael
++ ... omitted several edges
+```
 ]]
 ---
 class: split-40
@@ -2054,20 +2216,46 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-* g2
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+* tidygraph::as_tbl_graph(graph)
 ```
 ]]
 .column[.content[
 
+```
+# A tbl_graph: 13 nodes and 205 edges
+#
+# A directed multigraph with 1 component
+#
+# Node Data: 13 x 1 (active)
+  name       
+  &lt;chr&gt;      
+1 Jim        
+2 Michael    
+3 Pam        
+4 Dwight     
+5 Jan        
+6 Todd Packer
+# … with 7 more rows
+#
+# Edge Data: 205 x 2
+   from    to
+  &lt;int&gt; &lt;int&gt;
+1     1     2
+2     2     1
+3     1     2
+# … with 202 more rows
+```
 ]]
 ---
 class: split-40
@@ -2078,21 +2266,47 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g2  
-*library(patchwork)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+* tidygraph::activate(nodes)
 ```
 ]]
 .column[.content[
 
+```
+# A tbl_graph: 13 nodes and 205 edges
+#
+# A directed multigraph with 1 component
+#
+# Node Data: 13 x 1 (active)
+  name       
+  &lt;chr&gt;      
+1 Jim        
+2 Michael    
+3 Pam        
+4 Dwight     
+5 Jan        
+6 Todd Packer
+# … with 7 more rows
+#
+# Edge Data: 205 x 2
+   from    to
+  &lt;int&gt; &lt;int&gt;
+1     1     2
+2     2     1
+3     1     2
+# … with 202 more rows
+```
 ]]
 ---
 class: split-40
@@ -2103,22 +2317,48 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g2  
-library(patchwork)  
-*(g1 + g2)
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+* mutate(degree = tidygraph::centrality_degree())
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_12_output-1.png" width="576" /&gt;
+
+```
+# A tbl_graph: 13 nodes and 205 edges
+#
+# A directed multigraph with 1 component
+#
+# Node Data: 13 x 2 (active)
+  name        degree
+  &lt;chr&gt;        &lt;dbl&gt;
+1 Jim             31
+2 Michael         71
+3 Pam             38
+4 Dwight          25
+5 Jan             12
+6 Todd Packer      3
+# … with 7 more rows
+#
+# Edge Data: 205 x 2
+   from    to
+  &lt;int&gt; &lt;int&gt;
+1     1     2
+2     2     1
+3     1     2
+# … with 202 more rows
+```
 ]]
 ---
 class: split-40
@@ -2129,24 +2369,434 @@ count: false
 .column[.content[
 
 ```r
-g1 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g1  
-g2 +  
-  labs(title = NULL) +  
-  labs(subtitle = NULL) +  
-  labs(caption = NULL) -&gt;  
-  g2  
-library(patchwork)  
-(g1 + g2) /  
-* g1
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+* ggraph::ggraph(layout = "kk", )
 ```
 ]]
 .column[.content[
-&lt;img src="the_office_files/figure-html/patch_auto_13_output-1.png" width="576" /&gt;
+&lt;img src="the_office_files/figure-html/schrute_auto_13_output-1.png" width="576" /&gt;
 ]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+* theme_void(base_family = "Courier")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_14_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+* theme(text = element_text(color = "grey90"))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_15_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+* theme(plot.background = element_rect(fill = "steelblue4",
+*                                      color = "grey90"))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_16_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+* ggraph::geom_edge_fan(alpha = .15,
+*                       color = "orange")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_17_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+* ggraph::geom_node_point(shape = 21,
+*                         fill = "grey80",
+*                         color = "grey50",
+*                         aes(size = degree,
+*                             color = degree))
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_18_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+* ggraph::geom_node_text(nudge_y = .15,
+*                        aes(label = name),
+*                        color = "grey90",
+*                        family = "Courier")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_19_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+* labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_20_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+* labs(subtitle = "Connection drawn for temporally adjacent speakers")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_21_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  labs(subtitle = "Connection drawn for temporally adjacent speakers") +  
+* labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R")
+```
+]]
+.column[.content[
+&lt;img src="the_office_files/figure-html/schrute_auto_22_output-1.png" width="576" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+schrute::theoffice %&gt;%  
+  filter(season == "01" &amp; episode == "01" ) %&gt;%  
+  mutate(character = ifelse(character == "Michel",  
+                            "Michael",  
+                            character)) %&gt;%  
+  filter(character != "Man") %&gt;%  
+  mutate(character_lag = lag(character)) %&gt;%  
+  slice(-1, -n()) %&gt;%  
+  select(character, character_lag) %&gt;%  
+  filter(character != character_lag) %&gt;%  
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  mutate(degree = tidygraph::centrality_degree()) %&gt;%  
+  ggraph::ggraph(layout = "kk", ) +  
+  theme_void(base_family = "Courier") +  
+  theme(text = element_text(color = "grey90")) +  
+  theme(plot.background = element_rect(fill = "steelblue4",  
+                                       color = "grey90")) +  
+  ggraph::geom_edge_fan(alpha = .15,  
+                        color = "orange") +  
+  ggraph::geom_node_point(shape = 21,  
+                          fill = "grey80",  
+                          color = "grey50",  
+                          aes(size = degree,  
+                              color = degree)) +  
+  ggraph::geom_node_text(nudge_y = .15,  
+                         aes(label = name),  
+                         color = "grey90",  
+                         family = "Courier") +  
+  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +  
+  labs(subtitle = "Connection drawn for temporally adjacent speakers") +  
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R") -&gt;  
+*g3
+```
+]]
+.column[.content[
+
+]]
+
+
+
+
+
+
+
+---
+
 
 
 

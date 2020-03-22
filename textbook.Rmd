@@ -10,6 +10,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Preface
+
+Like so many textbooks, this one is born out of teaching experience. 
+
+At the moment "textbook" is a bit aspirational. The book is really the collection of a bunch of flipbooks developed ad-hoc for teaching. Making them logically and logistically hang together is a work in progress.  
+
+Also, much of the material doesn't have a lot of context or discussion, because these *flipbooks* were originally only focused on communicating *how to get things done*; I'd *explain concepts* in class in separate materials.  But, I hope to be enhancing the flipbooks to provide more context and discussion alongside the coding pipelines that now dominates the books.  
+
+Please feel free to be in touch with suggestions on how to improve the "R Flipbook Textbook". 
+
 
 # [Data manipulation and management](https://evamaerey.github.io/data_manipulation/about){target="_blank"}
 
@@ -47,9 +57,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### ggplot2
 
-- [A ggplot2 grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-- [geoms pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-- [ggplot2 theme control](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [A {ggplot2} grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [a `geom_*` pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [a ggplot2 `theme()` grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 
 ### base graphics
 
@@ -57,15 +67,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### spatial visualization
 
--
+- [geom_sf](https://evamaerey.github.io/flipbooks/geom_sf/geom_sf)
 
 # [Statistical Analysis](https://evamaerey.github.io/statistics/about)
 
 ### Building intuition 
 
-- [Galton Board: The binomial distribution](https://evamaerey.github.io/statistics/galton_board.html){target="_blank"}
+- [Central Limit Theorem](https://evamaerey.github.io/statistics/central_limit_theorem.html){target="_blank"}
+- [Galton Board](https://evamaerey.github.io/statistics/galton_board.html){target="_blank"}
 - [Covariance, Variance, Standard Deviation, Correlation](https://evamaerey.github.io/statistics/covariance_correlation.html){target="_blank"}
 - [Cool with Statistical Independence](https://evamaerey.github.io/statistics/statistical_independence.html){target="_blank"}
+- [Bayes Theorem]()
 
 ### Statistical tests
 
@@ -76,11 +88,9 @@ knitr::opts_chunk$set(echo = TRUE)
   - anova
   - chi-squared
   
-  
-  
 ### Modeling
 
-- [Ordinary Least Squares Modeling](https://evamaerey.github.io/statistics/ols.html){target="_blank"}
+- [Ordinary Least Squares](https://evamaerey.github.io/statistics/ols.html){target="_blank"}
 - [Difference-in-Difference](https://evamaerey.github.io/statistics/difference_in_difference.html){target="_blank"}
 
 
@@ -91,8 +101,3 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Acknowledgements:
 
-Like so many textbooks, this one is born out of teaching experience. I have been lucky enough to teach several obligatory methodology courses at the University of Denver.  While it is lovely to teach electives, where students select into courses, I think we grow the most as teachers when students are diverse and perhaps don't come in with a "warm" attitude toward the subject matter. 
-
-a desire to put tools into the hands of my students.  As such, there has been 
-
-This text book is under construction.  Much of the material doesn't have a lot of context, because these flipbooks were originally only focused on communicating how to get things done in R.  I hope to be enhancing the flipbooks to provide more context alongside the coding pipeline material that presently dominates.  

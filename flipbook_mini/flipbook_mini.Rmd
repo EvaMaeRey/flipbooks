@@ -9,7 +9,7 @@ output: html_document
 
 [Xaringan](https://github.com/yihui/xaringan){target="_blank"} is a fantastic rmarkdown presentation tool developed by Yihui Xie, which uses remark.js as its platform. (Yihui Xie has a lot to say about how great remark.js itself in a [blogpost](https://yihui.org/en/2017/08/why-xaringan-remark-js/){target="_blank"} -- worth a read.)  
 
-One shortcoming of the format is that the slide shows are not self-contained. So a presentation is usually a whole collection of files.   This is obviously true for the *flipbooks* created with the {xaringan} platform. 
+One shortcoming of the format is that the slide shows are not self-contained. So a presentation is usually a whole collection of files.   This is obviously true for *flipbooks* created with the {xaringan} platform. 
 
 Having so many files might feel a bit overwhelming, especially when it comes time to share your work. So some time ago, I had the idea of working on something self-contained: a flipbook mini (yup like ipod mini). All the preprocessing is the same as for the Xaringan platform.  Input code is parsed and reconstructed into partial builds.  Then code itself is printed in a plot object and is pasted along side the rendered code to produce a frame of the flipbook.  This is done for each partial build of the code.  The resultant side-by-side figures are then combined into a gif for the movie effect. 
 

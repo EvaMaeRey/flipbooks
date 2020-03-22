@@ -129,7 +129,51 @@ g2
 
 ---
 
-`r chunk_reveal("patch")`
+`r chunk_reveal("schrute")`
+
+
+```{r schrute, include = F}
+schrute::theoffice %>% 
+  filter(season == "01" & episode == "01" ) %>% 
+  mutate(character = ifelse(character == "Michel", 
+                            "Michael", 
+                            character)) %>% 
+  filter(character != "Man") %>% 
+  mutate(character_lag = lag(character)) %>% 
+  slice(-1, -n()) %>% 
+  select(character, character_lag) %>% 
+  filter(character != character_lag) %>% 
+  igraph::graph_from_data_frame() %>% 
+  tidygraph::as_tbl_graph(graph) %>% 
+  tidygraph::activate(nodes) %>%
+  mutate(degree = tidygraph::centrality_degree()) %>% 
+  ggraph::ggraph(layout = "kk", ) +
+  theme_void(base_family = "Courier") +
+  theme(text = element_text(color = "grey90")) +
+  theme(plot.background = element_rect(fill = "steelblue4", 
+                                       color = "grey90")) +
+  ggraph::geom_edge_fan(alpha = .15,
+                        color = "orange") +
+  ggraph::geom_node_point(shape = 21,
+                          fill = "grey80",
+                          color = "grey50",
+                          aes(size = degree, 
+                              color = degree)) +
+  ggraph::geom_node_text(nudge_y = .15,
+                         aes(label = name),
+                         color = "grey90",
+                         family = "Courier") +
+  labs(title = "Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +
+  labs(subtitle = "Connection drawn for temporally adjacent speakers") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R") ->
+g3
+```
+
+
+
+
+---
+
 
 
 ```{r patch, eval = F, echo = F}
@@ -145,7 +189,8 @@ g2 +
   g2
 library(patchwork)
 (g1 + g2) /
-  g1
+  g3
+
 ```
 
 
