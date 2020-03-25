@@ -15,10 +15,21 @@ output:
 
 
 
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">We&#39;re have no way of measuring the number of cases. This is a chart showing the number of **detected** cases. Is a rapid increase in detected cases a good thing or bad thing? That&#39;s not at all clear. <a href="https://t.co/XYoRV97DDK">https://t.co/XYoRV97DDK</a></p>&mdash; Nate Silver (@NateSilver538) <a href="https://twitter.com/NateSilver538/status/1241117375228977153?ref_src=twsrc%5Etfw">March 20, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Today, they reported 189 positives, along with 175 yesterday, as compared with an average of 106 positives per day in the 7 days before that. So, not great on the surface... new cases increased by 70%! But you also have to look at the number of tests.<a href="https://t.co/Goa27xcI1b">https://t.co/Goa27xcI1b</a></p>&mdash; Nate Silver (@NateSilver538) <a href="https://twitter.com/NateSilver538/status/1241113755846684673?ref_src=twsrc%5Etfw">March 20, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+
 https://docs.google.com/spreadsheets/u/2/d/e/2PACX-1vRwAqp96T9sYYq2-i7Tj0pvTf6XVHjDSMIKBdZHXiCGGdNC0ypEU9NbngS8mxea55JuCFuua1MUeOj5/pubhtml#
 
 
-```{r setup, include = F}
+```{r setup2, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
@@ -45,11 +56,11 @@ covid_19_data %>%
   aes(y = positive) +
   geom_point() +
   geom_line(data = tibble(x = (1:100)^3,
-                    y_01 = x *.01,
+                    y_01 = x * .01,
                     y_03 = x * .03,
-                    y_10 = x*.1,
-                    y_30 = x*.3,
-                    y_100 = x*1) %>% 
+                    y_10 = x * .1,
+                    y_30 = x * .3,
+                    y_100 = x * 1) %>% 
               gather("rate", "y", 2:6),
             aes(x = x, y = y, 
                 group = rate),
@@ -118,5 +129,5 @@ covid_19_data %>%
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 60%}
 ```

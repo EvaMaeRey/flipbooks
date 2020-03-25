@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>The art of flipbooking</title>
     <meta charset="utf-8" />
@@ -19,6 +19,20 @@ class: center, middle, inverse, title-slide
 ---
 
 
+
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;We&amp;#39;re have no way of measuring the number of cases. This is a chart showing the number of **detected** cases. Is a rapid increase in detected cases a good thing or bad thing? That&amp;#39;s not at all clear. &lt;a href="https://t.co/XYoRV97DDK"&gt;https://t.co/XYoRV97DDK&lt;/a&gt;&lt;/p&gt;&amp;mdash; Nate Silver (@NateSilver538) &lt;a href="https://twitter.com/NateSilver538/status/1241117375228977153?ref_src=twsrc%5Etfw"&gt;March 20, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+---
+
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Today, they reported 189 positives, along with 175 yesterday, as compared with an average of 106 positives per day in the 7 days before that. So, not great on the surface... new cases increased by 70%! But you also have to look at the number of tests.&lt;a href="https://t.co/Goa27xcI1b"&gt;https://t.co/Goa27xcI1b&lt;/a&gt;&lt;/p&gt;&amp;mdash; Nate Silver (@NateSilver538) &lt;a href="https://twitter.com/NateSilver538/status/1241113755846684673?ref_src=twsrc%5Etfw"&gt;March 20, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+
+
+https://docs.google.com/spreadsheets/u/2/d/e/2PACX-1vRwAqp96T9sYYq2-i7Tj0pvTf6XVHjDSMIKBdZHXiCGGdNC0ypEU9NbngS8mxea55JuCFuua1MUeOj5/pubhtml#
 
 
 
@@ -4451,11 +4465,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
 * geom_line(data = tibble(x = (1:100)^3,
-*                   y_01 = x *.01,
+*                   y_01 = x * .01,
 *                   y_03 = x * .03,
-*                   y_10 = x*.1,
-*                   y_30 = x*.3,
-*                   y_100 = x*1) %&gt;%
+*                   y_10 = x * .1,
+*                   y_30 = x * .3,
+*                   y_100 = x * 1) %&gt;%
 *             gather("rate", "y", 2:6),
 *           aes(x = x, y = y,
 *               group = rate),
@@ -4488,11 +4502,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4526,11 +4540,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4565,11 +4579,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4605,11 +4619,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4646,11 +4660,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4688,11 +4702,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4731,11 +4745,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4775,11 +4789,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4820,11 +4834,11 @@ covid_19_data %&gt;%
   aes(y = positive) +  
   geom_point() +  
   geom_line(data = tibble(x = (1:100)^3,  
-                    y_01 = x *.01,  
+                    y_01 = x * .01,  
                     y_03 = x * .03,  
-                    y_10 = x*.1,  
-                    y_30 = x*.3,  
-                    y_100 = x*1) %&gt;%  
+                    y_10 = x * .1,  
+                    y_30 = x * .3,  
+                    y_100 = x * 1) %&gt;%  
               gather("rate", "y", 2:6),  
             aes(x = x, y = y,  
                 group = rate),  
@@ -4906,7 +4920,7 @@ covid_19_data %&gt;%
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 80%}
+.remark-code{line-height: 1.5; font-size: 60%}
 &lt;/style&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
@@ -4955,9 +4969,35 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -4966,7 +5006,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

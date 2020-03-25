@@ -1,6 +1,6 @@
 ---
-title: "Tracking COVID-19"
-subtitle: "John Burn-Murdoch's plot for FT"
+title: "A collection of COVID-19 Data Visualization"
+subtitle: ""
 author: "Edited by Gina Reynolds, March 2020"
 output:
   xaringan::moon_reader:
@@ -21,8 +21,9 @@ output:
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
-                      cache = T, fig.retina = 3)
+                      cache = F, fig.retina = 3)
 library(flipbookr)
+library(tidyverse)
 ```
 
 ---
@@ -59,6 +60,8 @@ download.file(url,
 
 
 ---
+
+
 
 `r chunk_reveal("data_prep")`
 
@@ -161,9 +164,9 @@ data %>%
 
 ---
 
-r chunk_reveal("alonso", lang = "python")`
+`r chunk_reveal("alonso", lang = "python")`
 
-```{python alonso, eval = F}
+```{python alonso, include = F}
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -172,10 +175,10 @@ plt.style.use('seaborn')
 
 ---
 
-r chunk_reveal("dataclean", lang = "python")`
+`r chunk_reveal("dataclean", lang = "python")`
 
 
-```{python dataclean, eval = F}
+```{python dataclean, include = F}
 total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')
 total_cases[["France", "Italy"]].tail(3)
 cases100_France = total_cases.query("France > 100")["France"]
@@ -187,29 +190,39 @@ days100_Italy = np.arange(len(cases100_Italy))
 
 ---
 
-r chunk_reveal("alonso2", lang = "python")`
+`r chunk_reveal("alonso2", lang = "python")`
 
 
-```{python alonso2, eval = F}
-fig, ax = plt.subplots(figsize=(10,7))
-plt.plot(days100_France, cases100_France, label='France', linewidth=2, marker='o')
-plt.plot(days100_Italy, cases100_Italy, label='Italy',  linewidth=2, marker='o')
-plt.plot(np.array([14, 15, 16, 17]), np.array([6604, 7730, 9134, 10995]), label='France (ESRI)', linewidth=2, marker='o')
+```{python alonso2, include = F}
+fig, ax = plt.subplots(figsize = (10,7))
+plt.plot(days100_France, cases100_France, 
+    label='France', linewidth = 2, marker='o')
+plt.plot(days100_Italy, cases100_Italy, 
+    label='Italy',  linewidth = 2, marker='o')
+plt.plot(np.array([14, 15, 16, 17]), 
+    np.array([6604, 7730, 9134, 10995]), 
+    label='France (ESRI)', linewidth=2, marker='o')
 plt.axvline(9, color='green', linestyle='dashed')
-plt.annotate('<-  Italy closes schools and universities',  (9.2,20000.0), color='green', fontsize='x-large')
+plt.annotate('Italy closes schools\n and universities  ->',  
+    (3.7, 5000.0), color='green', fontsize='x-large')
 plt.axvline(13, color='green', linestyle='dashed')
-plt.annotate('<-  Italy\n       lockdown', (13.3, 14000.0), color='green', fontsize='x-large'  )
+plt.annotate('Italy\n lockdown ->', 
+    (9.5, 8000.0), color='green', fontsize='x-large'  )
 plt.axvline(14, color='blue', linestyle='dashed')
-plt.annotate('<-  France closes schools\n       and universities', (14.4,1000), color='blue', fontsize='x-large')
+plt.annotate('<-  France closes schools\n       and universities', 
+    (14.4, 5000), color='blue', fontsize='x-large')
 plt.axvline(15, color='darkred', linestyle='dashed')
-plt.annotate('<-  France lockdown', (15.2,700),  color='darkred', fontsize='x-large')
-ax.set_title('COVID-19: Number of known cases vs number of days since 100 cases',  fontsize='x-large')
+plt.annotate('<-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')
 ax.set_xlabel('number of days since 100 cases', fontsize='x-large')
-ax.set_ylabel('number of known cases', fontsize='x-large')
-plt.legend(fontsize='x-large')
+ax.set_ylabel('number of known cases', fontsize = 'x-large')
+plt.legend(fontsize = 'x-large')
 plt.yscale("log"); plt.show()
-ax.set_xticks(np.arange(len(cases100_Italy))); plt.show()
+ax.set_xticks(np.arange(len(cases100_Italy)))
 ```
+
 
 
 
