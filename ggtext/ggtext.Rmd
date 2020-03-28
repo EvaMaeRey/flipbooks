@@ -114,10 +114,61 @@ g +
 
 ```
 
+---
+
+Demoing some of what Claus Demoed
+
+---
+
+`r flipbookr::chunk_reveal("claus_ggtext")`
+
+```{r claus_ggtext, include = F}
+library(ggtext)
+iris %>% 
+  mutate(my_var = 
+           glue::glue("*{Species}* (Species)")) %>% 
+  mutate(my_color = 
+           case_when(Species == "setosa" ~ "#009456",
+                     Species == "versicolor" ~ "#827139",
+                     Species == "virginica" ~ "#938290")) %>% 
+  select(my_var, my_color, everything()) ->
+prepped
+
+prepped %>% 
+  ggplot() + 
+  aes(x = my_var) +
+  aes(y = Sepal.Width) +
+  geom_boxplot() +
+  geom_jitter(width = .2,
+              height = 0,
+              alpha = .5) +
+  aes(fill = my_color) +
+  scale_fill_identity() +
+  coord_flip() + 
+  ggtitle("hello *goodbye*") +
+  theme(plot.title = 
+          element_markdown()) +
+  theme(axis.text.y = 
+          element_markdown()) +
+  geom_richtext(data = . %>% 
+                  group_by(Species, my_var, my_color) %>% 
+                  summarise(the_mean = mean(Sepal.Width)),
+                aes(y = the_mean, 
+                    label = glue::glue(
+                      "*mean* = {the_mean} <br>*mean*<sup>2</sup> = {the_mean^2}"))
+                ) ->
+g
+
+g %+% 
+  (prepped %>% 
+     mutate(my_var = 
+              glue::glue("<i style='color:{my_color}'>{Species}</i> ({Species})")))
+```
+
 
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 65%}
+.remark-code{line-height: 1.5; font-size: 55%}
 ```
 

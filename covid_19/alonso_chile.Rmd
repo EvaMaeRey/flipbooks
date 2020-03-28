@@ -75,39 +75,36 @@ r2 = [x + barWidth for x in r1]; r2
 
 ---
 
-`r chunk_reveal("alonso5", lang = "python")`
+`r chunk_reveal("alonso5", lang = "python", break_type = "non_seq")`
 
 
 ```{python alonso5, include = F} 
 # Make the plot
-from matplotlib import interactive
-interactive(True)
 fig, ax = plt.subplots(figsize=(10,7))
-for i, val in enumerate(bars1):
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')
-for i, val in enumerate(bars2):
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')
+for i, val in enumerate(bars1):   #BREAK2
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2
+for i, val in enumerate(bars2):  #BREAK2
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2
 
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3
+  edgecolor='white', #BREAK3
+  label='Doble con respecto a 4 días antes') #BREAK3
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4
+  edgecolor='white', #BREAK4
+  label='Casos confirmados totales') #BREAK4
 
 # Add xticks on the middle of the group bars
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',
-  fontsize='x-large')
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')
-plt.ylabel('número de casos confirmados totales', 
-  fontsize='x-large')
-plt.xticks([r + barWidth for r in range(len(bars1))], 
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'], 
-  fontsize='x-large')
-  
-plt.bar(r1, bars1, color='C0', width = barWidth, 
-  edgecolor='white', 
-  label='Doble con respecto a 4 días antes')
-plt.bar(r2, bars2, color='C1', width = barWidth, 
-  edgecolor='white',
-  label='Casos confirmados totales') 
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5
+  fontsize='x-large') #BREAK5
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large') #BREAK6
+plt.ylabel('número de casos confirmados totales', #BREAK7
+  fontsize='x-large') #BREAK7
+plt.xticks([r + barWidth for r in range(len(bars1))], #BREAK8
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'], #BREAK8
+  fontsize='x-large') #BREAK8
   
 # Create legend and Show graphic
-plt.legend(fontsize='x-large')
+plt.legend(fontsize='x-large') #BREAK9
 plt.show()
 ```
 

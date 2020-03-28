@@ -470,454 +470,18 @@ count: false
 .column[.content[
 
 ```python
-*# Make the plot
-```
-]]
-.column[.content[
-
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
 # Make the plot  
-*from matplotlib import interactive
-```
-]]
-.column[.content[
-
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-*interactive(True)
-```
-]]
-.column[.content[
-
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-*fig, ax = plt.subplots(figsize=(10,7))
-```
-]]
-.column[.content[
-
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
 fig, ax = plt.subplots(figsize=(10,7))  
-*for i, val in enumerate(bars1):
-*  ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_5_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-*for i, val in enumerate(bars2):
-*  ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_6_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-*# Add xticks on the middle of the group bars
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_7_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
 
 
 # Add xticks on the middle of the group bars  
-*plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',
-* fontsize='x-large')
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_8_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-*plt.xlabel('fecha (día/mes)', fontsize = 'x-large')
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_9_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-*plt.ylabel('número de casos confirmados totales',
-* fontsize='x-large')
-```
-]]
-.column[.content[
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_10_output-1.png" width="960" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-*plt.xticks([r + barWidth for r in range(len(bars1))],
-* ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],
-* fontsize='x-large')
-```
-]]
-.column[.content[
-
-```
-([&lt;matplotlib.axis.XTick object at 0x1a15c4e0f0&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c3a048&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c3acc0&gt;, &lt;matplotlib.axis.XTick object at 0x110bc00f0&gt;, &lt;matplotlib.axis.XTick object at 0x110bc0080&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c1da90&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
-```
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-plt.xticks([r + barWidth for r in range(len(bars1))],  
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
-  fontsize='x-large')  
-
-*plt.bar(r1, bars1, color='C0', width = barWidth,
-* edgecolor='white',
-* label='Doble con respecto a 4 días antes')
-```
-]]
-.column[.content[
-
-```
-([&lt;matplotlib.axis.XTick object at 0x1a1d615ac8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d615b00&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6151d0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d69f710&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d69fe80&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6a2630&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-plt.xticks([r + barWidth for r in range(len(bars1))],  
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
-  fontsize='x-large')  
-
-plt.bar(r1, bars1, color='C0', width = barWidth,  
-  edgecolor='white',  
-  label='Doble con respecto a 4 días antes')  
-*plt.bar(r2, bars2, color='C1', width = barWidth,
-* edgecolor='white',
-* label='Casos confirmados totales')
-```
-]]
-.column[.content[
-
-```
-([&lt;matplotlib.axis.XTick object at 0x1a1d6e3e10&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6c3f98&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6d63c8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d615588&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d70ecc0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d719470&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-plt.xticks([r + barWidth for r in range(len(bars1))],  
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
-  fontsize='x-large')  
-
-plt.bar(r1, bars1, color='C0', width = barWidth,  
-  edgecolor='white',  
-  label='Doble con respecto a 4 días antes')  
-plt.bar(r2, bars2, color='C1', width = barWidth,  
-  edgecolor='white',  
-  label='Casos confirmados totales')  
-
-*# Create legend and Show graphic
-```
-]]
-.column[.content[
-
-```
-([&lt;matplotlib.axis.XTick object at 0x1a1d73ae80&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d73acc0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d73e9e8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d781ac8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d786278&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7869e8&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```python
-# Make the plot  
-from matplotlib import interactive  
-interactive(True)  
-fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
-
-
-# Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-plt.xticks([r + barWidth for r in range(len(bars1))],  
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
-  fontsize='x-large')  
-
-plt.bar(r1, bars1, color='C0', width = barWidth,  
-  edgecolor='white',  
-  label='Doble con respecto a 4 días antes')  
-plt.bar(r2, bars2, color='C1', width = barWidth,  
-  edgecolor='white',  
-  label='Casos confirmados totales')  
 
 # Create legend and Show graphic  
-*plt.legend(fontsize='x-large')
+plt.show()  
 ```
 ]]
 .column[.content[
-
-```
-([&lt;matplotlib.axis.XTick object at 0x1a1d7b9a20&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7b96d8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7b9828&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d8012e8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d801a58&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d808208&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-
-```
-&lt;Container object of 6 artists&gt;
-```
-
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_15_output-1.png" width="960" /&gt;
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_1_output-1.png" width="960" /&gt;
 ]]
 ---
 class: split-40
@@ -929,42 +493,86 @@ count: false
 
 ```python
 # Make the plot  
-from matplotlib import interactive  
-interactive(True)  
 fig, ax = plt.subplots(figsize=(10,7))  
-for i, val in enumerate(bars1):  
-   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
-for i, val in enumerate(bars2):  
-   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+*for i, val in enumerate(bars1):   #BREAK2
+*  ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2
+*for i, val in enumerate(bars2):  #BREAK2
+*  ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2
 
 
 # Add xticks on the middle of the group bars  
-plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
-  fontsize='x-large')  
-plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
-plt.ylabel('número de casos confirmados totales',  
-  fontsize='x-large')  
-plt.xticks([r + barWidth for r in range(len(bars1))],  
-  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
-  fontsize='x-large')  
-
-plt.bar(r1, bars1, color='C0', width = barWidth,  
-  edgecolor='white',  
-  label='Doble con respecto a 4 días antes')  
-plt.bar(r2, bars2, color='C1', width = barWidth,  
-  edgecolor='white',  
-  label='Casos confirmados totales')  
 
 # Create legend and Show graphic  
-plt.legend(fontsize='x-large')  
-*plt.show()
+plt.show()  
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_2_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+*plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3
+* edgecolor='white', #BREAK3
+* label='Doble con respecto a 4 días antes') #BREAK3
+
+# Add xticks on the middle of the group bars  
+
+# Create legend and Show graphic  
+plt.show()  
 ```
 ]]
 .column[.content[
 
 ```
-([&lt;matplotlib.axis.XTick object at 0x110cc1208&gt;, &lt;matplotlib.axis.XTick object at 0x110cbdac8&gt;, &lt;matplotlib.axis.XTick object at 0x110bc7dd8&gt;, &lt;matplotlib.axis.XTick object at 0x110b734a8&gt;, &lt;matplotlib.axis.XTick object at 0x110b73b70&gt;, &lt;matplotlib.axis.XTick object at 0x110b8e908&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+&lt;Container object of 6 artists&gt;
 ```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_3_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+*plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4
+* edgecolor='white', #BREAK4
+* label='Casos confirmados totales') #BREAK4
+
+# Add xticks on the middle of the group bars  
+
+# Create legend and Show graphic  
+plt.show()  
+```
+]]
+.column[.content[
 
 ```
 &lt;Container object of 6 artists&gt;
@@ -974,7 +582,247 @@ plt.legend(fontsize='x-large')
 &lt;Container object of 6 artists&gt;
 ```
 
-&lt;img src="alonso_chile_files/figure-html/alonso5_auto_16_output-1.png" width="960" /&gt;
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_4_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4  
+  edgecolor='white', #BREAK4  
+  label='Casos confirmados totales') #BREAK4  
+
+# Add xticks on the middle of the group bars  
+*plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5
+* fontsize='x-large') #BREAK5
+
+# Create legend and Show graphic  
+plt.show()  
+```
+]]
+.column[.content[
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_5_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4  
+  edgecolor='white', #BREAK4  
+  label='Casos confirmados totales') #BREAK4  
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5  
+  fontsize='x-large') #BREAK5  
+*plt.xlabel('fecha (día/mes)', fontsize = 'x-large') #BREAK6
+
+# Create legend and Show graphic  
+plt.show()  
+```
+]]
+.column[.content[
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_6_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4  
+  edgecolor='white', #BREAK4  
+  label='Casos confirmados totales') #BREAK4  
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5  
+  fontsize='x-large') #BREAK5  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large') #BREAK6  
+*plt.ylabel('número de casos confirmados totales', #BREAK7
+* fontsize='x-large') #BREAK7
+
+# Create legend and Show graphic  
+plt.show()  
+```
+]]
+.column[.content[
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_7_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4  
+  edgecolor='white', #BREAK4  
+  label='Casos confirmados totales') #BREAK4  
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5  
+  fontsize='x-large') #BREAK5  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large') #BREAK6  
+plt.ylabel('número de casos confirmados totales', #BREAK7  
+  fontsize='x-large') #BREAK7  
+*plt.xticks([r + barWidth for r in range(len(bars1))], #BREAK8
+* ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'], #BREAK8
+* fontsize='x-large') #BREAK8
+
+# Create legend and Show graphic  
+plt.show()  
+```
+]]
+.column[.content[
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+([&lt;matplotlib.axis.XTick object at 0x10f377ef0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1bfa7710&gt;, &lt;matplotlib.axis.XTick object at 0x10f46a588&gt;, &lt;matplotlib.axis.XTick object at 0x1a1cd28160&gt;, &lt;matplotlib.axis.XTick object at 0x1a1cd28860&gt;, &lt;matplotlib.axis.XTick object at 0x1a1ccc4160&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_8_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):   #BREAK2  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large') #BREAK2  
+for i, val in enumerate(bars2):  #BREAK2  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  #BREAK2  
+
+plt.bar(r1, bars1, color='C0', width = barWidth, #BREAK3  
+  edgecolor='white', #BREAK3  
+  label='Doble con respecto a 4 días antes') #BREAK3  
+plt.bar(r2, bars2, color='C1', width = barWidth, #BREAK4  
+  edgecolor='white', #BREAK4  
+  label='Casos confirmados totales') #BREAK4  
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado', #BREAK5  
+  fontsize='x-large') #BREAK5  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large') #BREAK6  
+plt.ylabel('número de casos confirmados totales', #BREAK7  
+  fontsize='x-large') #BREAK7  
+plt.xticks([r + barWidth for r in range(len(bars1))], #BREAK8  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'], #BREAK8  
+  fontsize='x-large') #BREAK8  
+
+# Create legend and Show graphic  
+*plt.legend(fontsize='x-large') #BREAK9
+plt.show()  
+```
+]]
+.column[.content[
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a14762898&gt;, &lt;matplotlib.axis.XTick object at 0x10f3915f8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1992b208&gt;, &lt;matplotlib.axis.XTick object at 0x1a1992bac8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1bf8c710&gt;, &lt;matplotlib.axis.XTick object at 0x1a1bf8cfd0&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_non_seq_9_output-1.png" width="960" /&gt;
 ]]
 
 
