@@ -1,0 +1,117 @@
+---
+title: "A collection of COVID-19 Data Visualization"
+subtitle: ""
+author: "Edited by Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+---
+
+
+
+`r chunk_reveal("alonso3", lang = "python")`
+
+```{python alonso3, include = F}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+plt.style.use('seaborn')
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",
+  index_col='date')
+total_cases = total_cases.fillna(method='pad')
+Chile_total_cases = total_cases["Chile"]
+Chile_total_cases = Chile_total_cases[Chile_total_cases >= 1]
+Chile = pd.Series()
+counter = 0
+for i, v in Chile_total_cases.items():
+  if counter % 4 == 0:
+    Chile[i] = v
+  counter += 1
+```
+
+
+---
+
+`r chunk_reveal("alonso4", lang = "python")`
+
+
+```{python alonso4, include = F}
+# set width of bar
+barWidth = 0.4
+ 
+# set height of bar
+bars1 = [1, 2, 10, 46, 150, 684]
+bars2 = [1, 5, 23, 75, 342, 746]
+ 
+# Set position of bar on X axis
+r1 = np.arange(len(bars1)); r1
+r2 = [x + barWidth for x in r1]; r2
+```
+
+
+---
+
+`r chunk_reveal("alonso5", lang = "python")`
+
+
+```{python alonso5, include = F} 
+# Make the plot
+from matplotlib import interactive
+interactive(True)
+fig, ax = plt.subplots(figsize=(10,7))
+for i, val in enumerate(bars1):
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')
+for i, val in enumerate(bars2):
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')
+
+
+# Add xticks on the middle of the group bars
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',
+  fontsize='x-large')
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')
+plt.ylabel('número de casos confirmados totales', 
+  fontsize='x-large')
+plt.xticks([r + barWidth for r in range(len(bars1))], 
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'], 
+  fontsize='x-large')
+  
+plt.bar(r1, bars1, color='C0', width = barWidth, 
+  edgecolor='white', 
+  label='Doble con respecto a 4 días antes')
+plt.bar(r2, bars2, color='C1', width = barWidth, 
+  edgecolor='white',
+  label='Casos confirmados totales') 
+  
+# Create legend and Show graphic
+plt.legend(fontsize='x-large')
+plt.show()
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

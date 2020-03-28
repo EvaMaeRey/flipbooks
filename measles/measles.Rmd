@@ -1,0 +1,133 @@
+---
+title: "Measles Data"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+This book uses measles data from the Wall Street Journal.  I don't totally trust the variable that I'm mapping with is mmr -- it is supposed to be Measles, Mumps and Rubella vaccinations.  There are a lot of schools where the % vaccinated is zero.  This seems implausible, but I haven't hunted down the reason or what zero might mean. So the graph just take the data at face value, which is probably wrong. 
+
+
+---
+
+# tidytuesday's cleaning
+
+The cleaning steps are from TidyTuesday.  
+
+
+---
+
+`r chunk_reveal("clean")`
+
+```{r clean, include = F}
+library(tidyverse)
+library(rvest)
+
+url_wsj <- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"
+
+read_csv(url_wsj) ->
+wsj_raw
+
+list_of_urls <- "https://github.com/WSJ/measles-data/tree/master/individual-states"
+
+list_of_urls %>% 
+  read_html() %>% 
+  html_table() %>% 
+  .[[1]] %>% 
+  select(Name) %>% 
+  mutate(Name = str_remove(Name, 
+                           "\\.csv")) %>% 
+  filter(str_length(Name) > 3, 
+         str_length(Name) < 20) %>% 
+  pull(Name) ->
+raw_states
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %>% 
+  map(read_csv) ->
+all_states
+
+all_states %>% 
+  purrr::map(~select(., state, name, lat, lng)) %>% 
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %>% 
+  bind_rows() %>% 
+  filter(!is.na(lat)) ->
+clean_states
+
+wsj_raw %>% 
+  left_join(clean_states, by = c("name", "state")) ->
+measles
+```
+
+---
+
+
+```{r}
+measles %>% 
+ ggplot() +
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +
+  aes(x = mmr) +
+  geom_histogram()
+```
+
+
+---
+
+`r chunk_reveal("plot")`
+
+```{r plot, include = F}
+measles %>% 
+  filter(year == "2018-19") %>%
+  filter(lng < 0) %>% 
+  mutate(mmr_range = case_when(mmr < 15 ~ "low",
+                               mmr >= 15 & mmr < 85 ~ " medium",
+                               mmr >= 85 ~ "  high")) %>% 
+  ggplot() +
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +
+  aes(x = lng) +
+  aes(y = lat) +
+  geom_point(alpha = .02) +
+  aes(color = mmr) +
+  theme_minimal() +
+  coord_map(projection = "mollweide") +
+  scale_colour_viridis_c(direction = -1, end = .7) +
+  facet_wrap(~mmr_range, nrow = 2) +
+  geom_point(data = . %>% 
+               select(-mmr_range) ,
+             color = "grey") +
+  geom_point(alpha = .02, 
+             color = "magenta") +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  labs(y = NULL) +
+  labs(x = NULL) 
+```
+
+
+
+
+---
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

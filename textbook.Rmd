@@ -1,10 +1,15 @@
 ---
 title: "The R Flipbook Textbook"
-subtitle: "A introduction to data manipulation, visualization and statistical analysis using code-output co-evolution (flipbooks)"
-author: "Evangeline Reynolds"
-date: "3/18/2020"
-output: html_document
+subtitle: "A introduction to data manipulation, visualization, and statistical analysis"
+author: "[Evangeline 'Gina' Reynolds](https://evangelinereynolds.netlify.com/)"
+date: "March 2020"
+output: 
+  html_document:
+    theme: yeti
+    highlight: monochrome
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -12,13 +17,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Preface
 
-Like so many textbooks, this one is born out of teaching experience. 
+Like so many textbooks, this one is born out of a teaching observation:   *bite-sized pieces  are good for digestion*.  Moving incrementally through material is more comprehensible and less overwhelming.  The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output. 
 
-At the moment "textbook" is a bit aspirational. The book is really the collection of a bunch of flipbooks developed ad-hoc for teaching. Making them logically and logistically hang together is a work in progress.  
+At the moment "textbook" is a bit aspirational. The source material for the book project was a motley crew of flipbooks that I developed *ad-hoc* for teaching or for fun. Organizing these one-off projects to logically hang together is a work in progress.  Moreover, the material doesn't have a lot of context or discussion --- *flipbooks* were originally only focused on communicating *how to get things done*. So this textbook will benefit from more context and discussion alongside the coding pipelines now dominating book; this will likely happen as I teach the material. Until then, students and educators might think of the project as more of a reference book --- hopefully still useful. 
 
-Also, much of the material doesn't have a lot of context or discussion, because these *flipbooks* were originally only focused on communicating *how to get things done*; I'd *explain concepts* in class in separate materials.  But, I hope to be enhancing the flipbooks to provide more context and discussion alongside the coding pipelines that now dominates the books.  
+Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* organization or content. 
 
-Please feel free to be in touch with suggestions on how to improve the "R Flipbook Textbook". 
+
+*Content not appropriate for your course?  Learn more about building your own flipbooks with {flipbookr} [here](https://evamaerey.github.io/flipbooks/about){target="_blank"}*.
 
 
 # [Data manipulation and management](https://evamaerey.github.io/data_manipulation/about){target="_blank"}
@@ -26,8 +32,8 @@ Please feel free to be in touch with suggestions on how to improve the "R Flipbo
 ### Basics
 
 - [Arithmetic operations, data types and structures, function](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
-- [data types and structures](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
-- [Functions](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
+- [Data types and structures](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
+- [First Functions](https://evamaerey.github.io/data_manipulation/arithmetic_and_data_types.html){target="_blank"}
 
 ### Data manipulation with the tidyverse
 
@@ -43,7 +49,7 @@ Please feel free to be in touch with suggestions on how to improve the "R Flipbo
 - [Reading data into R](https://evamaerey.github.io/data_manipulation/data_cleaning/data_cleaning){target="_blank"}
 - Examples of data cleaning pipelines including using {janitor}
 - String Manipulation with {stringr}
-- Using Counry IDs like ISO3C, WB with {country coder}
+- Using Country IDs like ISO3C, WB with {country coder}
 - Date manipulation with {lubridate}
 
 
@@ -58,14 +64,15 @@ Please feel free to be in touch with suggestions on how to improve the "R Flipbo
 ### ggplot2
 
 - [A {ggplot2} grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-- [a `geom_*` pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
-- [a ggplot2 `theme()` grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [geom_* pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [a {ggplot2} *theme* grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+- [the ggplot flipbook - example gallery](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"}
 
-### base graphics
+### Base R Graphics
 
 
 
-### spatial visualization
+### Spatial Visualization
 
 - [geom_sf](https://evamaerey.github.io/flipbooks/geom_sf/geom_sf)
 
@@ -99,5 +106,15 @@ Please feel free to be in touch with suggestions on how to improve the "R Flipbo
 - [Bootstrapped confidence intervals](https://evamaerey.github.io/statistics/bootstrap.html){target="_blank"}
 
 
+
+
+### Case Studies (To be added)
+
+
 # Acknowledgements:
 
+There would be no flipbooks without great APIs and communication tools.  I'm particularly grateful to Yihui Xie for the Rmarkdown tools, and particularly for Xaringan upon which flipbooks are built. 
+
+I'm also grateful to Hadley Wickham and his team for ggplot - the design of which was *the* inspiration for the flipbooks project.  And to Hadley Wickham, Stefan Milton Bache, and others who have had made tools for and have provided great educational materials on sequential and incremental workflows in data manipulation and analysis. 
+
+There would also be no flipbooks without the amazing hackers [Emi Tanaka](https://emitanaka.rbind.io/post/knitr-knitr-code/){target="_blank"} and [Garrick Aden-Buie](https://www.garrickadenbuie.com/blog/decouple-code-and-output-in-xaringan-slides/){target="_blank"}, whose insights and efforts were critical in getting the "flipbooks" project off the ground. 

@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A collection of COVID-19 Data Visualization</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Edited by Gina Reynolds, March 2020" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A collection of COVID-19 Data Visualization
+### Edited by Gina Reynolds, March 2020
+
+---
+
+
+
+
+
+
+---
+
+Likely to be discussing this visualization in my Data Viz class, Spring
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*import numpy as np
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+*import matplotlib.pyplot as plt
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+*import pandas as pd
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+*plt.style.use('seaborn')
+```
+]]
+.column[.content[
+
+]]
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+*total_cases[["France", "Italy"]].tail(3)
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+*cases100_France = total_cases.query("France &gt; 100")["France"]
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+*days100_France = np.arange(len(cases100_France))
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+days100_France = np.arange(len(cases100_France))  
+*cases100_Italy = total_cases.query("Italy &gt; 100")["Italy"]
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+days100_France = np.arange(len(cases100_France))  
+cases100_Italy = total_cases.query("Italy &gt; 100")["Italy"]  
+*days100_Italy = np.arange(len(cases100_Italy))
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*fig, ax = plt.subplots(figsize = (10,7))
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+*plt.plot(days100_France, cases100_France,
+*   label='France', linewidth = 2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_2_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+*plt.plot(days100_Italy, cases100_Italy,
+*   label='Italy',  linewidth = 2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_3_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+*plt.plot(np.array([14, 15, 16, 17]),
+*   np.array([6604, 7730, 9134, 10995]),
+*   label='France (ESRI)', linewidth=2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_4_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+*plt.axvline(9, color='green', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_5_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+*plt.annotate('Italy closes schools  \n and universities  -&gt; ',
+*   (3.5, 5000.0), color='green', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_6_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+*plt.axvline(13, color='green', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_7_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+*plt.annotate('Italy\n lockdown -&gt; ',
+*   (9.3, 8000.0), color='green', fontsize='x-large'  )
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_8_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+*plt.axvline(14, color='blue', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_9_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+*plt.annotate('&lt;-  France closes schools\n       and universities',
+*   (14.4, 5000), color='blue', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_10_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+*plt.axvline(15, color='darkred', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_11_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+*plt.annotate('&lt;-  France lockdown', (15.2, 700),
+*   color='darkred', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_12_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+*ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',
+*   fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_13_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+*ax.set_xlabel('number of days since 100 cases',
+*   fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_14_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+*ax.set_ylabel('number of known cases', fontsize = 'x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_15_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+*plt.legend(fontsize = 'x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_16_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+plt.legend(fontsize = 'x-large')  
+*plt.yscale("log"); plt.show()
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_17_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 5000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+plt.legend(fontsize = 'x-large')  
+plt.yscale("log"); plt.show()  
+*ax.set_xticks(np.arange(len(cases100_Italy)))
+```
+]]
+.column[.content[
+&lt;img src="alonso_italy_france_files/figure-html/alonso2_auto_18_output-1.png" width="960" /&gt;
+
+```
+[&lt;matplotlib.axis.XTick object at 0x10ecd9080&gt;, &lt;matplotlib.axis.XTick object at 0x10bde7cf8&gt;, &lt;matplotlib.axis.XTick object at 0x10ecea240&gt;, &lt;matplotlib.axis.XTick object at 0x10e992518&gt;, &lt;matplotlib.axis.XTick object at 0x10ea17278&gt;, &lt;matplotlib.axis.XTick object at 0x10e98f048&gt;, &lt;matplotlib.axis.XTick object at 0x10ea0cb70&gt;, &lt;matplotlib.axis.XTick object at 0x10ed92eb8&gt;, &lt;matplotlib.axis.XTick object at 0x10e97ffd0&gt;, &lt;matplotlib.axis.XTick object at 0x10eda07b8&gt;, &lt;matplotlib.axis.XTick object at 0x10bde74e0&gt;, &lt;matplotlib.axis.XTick object at 0x10e939d30&gt;, &lt;matplotlib.axis.XTick object at 0x10bf349b0&gt;, &lt;matplotlib.axis.XTick object at 0x10e94e860&gt;, &lt;matplotlib.axis.XTick object at 0x10e94e240&gt;, &lt;matplotlib.axis.XTick object at 0x10bf2d860&gt;, &lt;matplotlib.axis.XTick object at 0x10bf2d9e8&gt;, &lt;matplotlib.axis.XTick object at 0x10e93fcf8&gt;, &lt;matplotlib.axis.XTick object at 0x10e94bef0&gt;, &lt;matplotlib.axis.XTick object at 0x10ea1e2e8&gt;, &lt;matplotlib.axis.XTick object at 0x10ea1e780&gt;, &lt;matplotlib.axis.XTick object at 0x10e9970f0&gt;, &lt;matplotlib.axis.XTick object at 0x10ecc6940&gt;]
+```
+]]
+
+
+
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

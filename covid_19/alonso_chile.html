@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A collection of COVID-19 Data Visualization</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Edited by Gina Reynolds, March 2020" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A collection of COVID-19 Data Visualization
+### Edited by Gina Reynolds, March 2020
+
+---
+
+
+
+
+
+
+
+
+---
+
+
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*import numpy as np
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+*import matplotlib.pyplot as plt
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+*import pandas as pd
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+*import seaborn as sns
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+*plt.style.use('seaborn')
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+*total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",
+* index_col='date')
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+*total_cases = total_cases.fillna(method='pad')
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+total_cases = total_cases.fillna(method='pad')  
+*Chile_total_cases = total_cases["Chile"]
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+total_cases = total_cases.fillna(method='pad')  
+Chile_total_cases = total_cases["Chile"]  
+*Chile_total_cases = Chile_total_cases[Chile_total_cases &gt;= 1]
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+total_cases = total_cases.fillna(method='pad')  
+Chile_total_cases = total_cases["Chile"]  
+Chile_total_cases = Chile_total_cases[Chile_total_cases &gt;= 1]  
+*Chile = pd.Series()
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+total_cases = total_cases.fillna(method='pad')  
+Chile_total_cases = total_cases["Chile"]  
+Chile_total_cases = Chile_total_cases[Chile_total_cases &gt;= 1]  
+Chile = pd.Series()  
+*counter = 0
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+import seaborn as sns  
+plt.style.use('seaborn')  
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/ecdc/total_cases.csv",  
+  index_col='date')  
+total_cases = total_cases.fillna(method='pad')  
+Chile_total_cases = total_cases["Chile"]  
+Chile_total_cases = Chile_total_cases[Chile_total_cases &gt;= 1]  
+Chile = pd.Series()  
+counter = 0  
+*for i, v in Chile_total_cases.items():
+* if counter % 4 == 0:
+*   Chile[i] = v
+* counter += 1
+```
+]]
+.column[.content[
+
+]]
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*# set width of bar
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+*barWidth = 0.4
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+*# set height of bar
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+# set height of bar  
+*bars1 = [1, 2, 10, 46, 150, 684]
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+# set height of bar  
+bars1 = [1, 2, 10, 46, 150, 684]  
+*bars2 = [1, 5, 23, 75, 342, 746]
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+# set height of bar  
+bars1 = [1, 2, 10, 46, 150, 684]  
+bars2 = [1, 5, 23, 75, 342, 746]  
+
+*# Set position of bar on X axis
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+# set height of bar  
+bars1 = [1, 2, 10, 46, 150, 684]  
+bars2 = [1, 5, 23, 75, 342, 746]  
+
+# Set position of bar on X axis  
+*r1 = np.arange(len(bars1)); r1
+```
+]]
+.column[.content[
+
+```
+array([0, 1, 2, 3, 4, 5])
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# set width of bar  
+barWidth = 0.4  
+
+# set height of bar  
+bars1 = [1, 2, 10, 46, 150, 684]  
+bars2 = [1, 5, 23, 75, 342, 746]  
+
+# Set position of bar on X axis  
+r1 = np.arange(len(bars1)); r1  
+*r2 = [x + barWidth for x in r1]; r2
+```
+]]
+.column[.content[
+
+```
+array([0, 1, 2, 3, 4, 5])
+```
+
+```
+[0.4, 1.4, 2.4, 3.4, 4.4, 5.4]
+```
+]]
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*# Make the plot
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+*from matplotlib import interactive
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+*interactive(True)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+*fig, ax = plt.subplots(figsize=(10,7))
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+*for i, val in enumerate(bars1):
+*  ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_5_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+*for i, val in enumerate(bars2):
+*  ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_6_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+*# Add xticks on the middle of the group bars
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_7_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+*plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',
+* fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_8_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+*plt.xlabel('fecha (día/mes)', fontsize = 'x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_9_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+*plt.ylabel('número de casos confirmados totales',
+* fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_10_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+*plt.xticks([r + barWidth for r in range(len(bars1))],
+* ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],
+* fontsize='x-large')
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a15c4e0f0&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c3a048&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c3acc0&gt;, &lt;matplotlib.axis.XTick object at 0x110bc00f0&gt;, &lt;matplotlib.axis.XTick object at 0x110bc0080&gt;, &lt;matplotlib.axis.XTick object at 0x1a15c1da90&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+plt.xticks([r + barWidth for r in range(len(bars1))],  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
+  fontsize='x-large')  
+
+*plt.bar(r1, bars1, color='C0', width = barWidth,
+* edgecolor='white',
+* label='Doble con respecto a 4 días antes')
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a1d615ac8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d615b00&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6151d0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d69f710&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d69fe80&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6a2630&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+plt.xticks([r + barWidth for r in range(len(bars1))],  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
+  fontsize='x-large')  
+
+plt.bar(r1, bars1, color='C0', width = barWidth,  
+  edgecolor='white',  
+  label='Doble con respecto a 4 días antes')  
+*plt.bar(r2, bars2, color='C1', width = barWidth,
+* edgecolor='white',
+* label='Casos confirmados totales')
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a1d6e3e10&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6c3f98&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d6d63c8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d615588&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d70ecc0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d719470&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+plt.xticks([r + barWidth for r in range(len(bars1))],  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
+  fontsize='x-large')  
+
+plt.bar(r1, bars1, color='C0', width = barWidth,  
+  edgecolor='white',  
+  label='Doble con respecto a 4 días antes')  
+plt.bar(r2, bars2, color='C1', width = barWidth,  
+  edgecolor='white',  
+  label='Casos confirmados totales')  
+
+*# Create legend and Show graphic
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a1d73ae80&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d73acc0&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d73e9e8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d781ac8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d786278&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7869e8&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+plt.xticks([r + barWidth for r in range(len(bars1))],  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
+  fontsize='x-large')  
+
+plt.bar(r1, bars1, color='C0', width = barWidth,  
+  edgecolor='white',  
+  label='Doble con respecto a 4 días antes')  
+plt.bar(r2, bars2, color='C1', width = barWidth,  
+  edgecolor='white',  
+  label='Casos confirmados totales')  
+
+# Create legend and Show graphic  
+*plt.legend(fontsize='x-large')
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x1a1d7b9a20&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7b96d8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d7b9828&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d8012e8&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d801a58&gt;, &lt;matplotlib.axis.XTick object at 0x1a1d808208&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_15_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+# Make the plot  
+from matplotlib import interactive  
+interactive(True)  
+fig, ax = plt.subplots(figsize=(10,7))  
+for i, val in enumerate(bars1):  
+   ax.text(i-0.1, val+10, str(int(val)), fontsize='x-large')  
+for i, val in enumerate(bars2):  
+   ax.text(i+0.3, val+10, str(int(val)), fontsize='x-large')  
+
+
+# Add xticks on the middle of the group bars  
+plt.title('COVID-19: Número de casos confirmados totales cada 4 días desde el primer caso confirmado',  
+  fontsize='x-large')  
+plt.xlabel('fecha (día/mes)', fontsize = 'x-large')  
+plt.ylabel('número de casos confirmados totales',  
+  fontsize='x-large')  
+plt.xticks([r + barWidth for r in range(len(bars1))],  
+  ['04/03', '08/03', '12/03', '16/03', '20/03', '24/03'],  
+  fontsize='x-large')  
+
+plt.bar(r1, bars1, color='C0', width = barWidth,  
+  edgecolor='white',  
+  label='Doble con respecto a 4 días antes')  
+plt.bar(r2, bars2, color='C1', width = barWidth,  
+  edgecolor='white',  
+  label='Casos confirmados totales')  
+
+# Create legend and Show graphic  
+plt.legend(fontsize='x-large')  
+*plt.show()
+```
+]]
+.column[.content[
+
+```
+([&lt;matplotlib.axis.XTick object at 0x110cc1208&gt;, &lt;matplotlib.axis.XTick object at 0x110cbdac8&gt;, &lt;matplotlib.axis.XTick object at 0x110bc7dd8&gt;, &lt;matplotlib.axis.XTick object at 0x110b734a8&gt;, &lt;matplotlib.axis.XTick object at 0x110b73b70&gt;, &lt;matplotlib.axis.XTick object at 0x110b8e908&gt;], &lt;a list of 6 Text xticklabel objects&gt;)
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+```
+&lt;Container object of 6 artists&gt;
+```
+
+&lt;img src="alonso_chile_files/figure-html/alonso5_auto_16_output-1.png" width="960" /&gt;
+]]
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,4208 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Measles Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, December 2019" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Measles Data
+## With flipbookr and xaringan
+### Gina Reynolds, December 2019
+
+---
+
+
+
+
+
+
+---
+
+This book uses measles data from the Wall Street Journal.  I don't totally trust the variable that I'm mapping with is mmr -- it is supposed to be Measles, Mumps and Rubella vaccinations.  There are a lot of schools where the % vaccinated is zero.  This seems implausible, but I haven't hunted down the reason or what zero might mean. So the graph just take the data at face value. 
+
+
+---
+
+# tidytuesday's cleaning
+
+The cleaning steps are from TidyTuesday.  
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*library(tidyverse)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+*library(rvest)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+*url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+*read_csv(url_wsj)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 46,411 x 14
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 46,401 more rows, and 3 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+*wsj_raw
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+*list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+*list_of_urls
+```
+]]
+.column[.content[
+
+```
+[1] "https://github.com/WSJ/measles-data/tree/master/individual-states"
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+* read_html()
+```
+]]
+.column[.content[
+
+```
+{html_document}
+&lt;html lang="en"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body class="logged-out env-production min-width-lg"&gt;\n    \n\n  &lt;div cla ...
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+* html_table()
+```
+]]
+.column[.content[
+
+```
+[[1]]
+   Type                                      Name
+1    NA                                        ..
+2    NA Failed to load latest commit information.
+3    NA                               arizona.csv
+4    NA                              arkansas.csv
+5    NA                            california.csv
+6    NA                              colorado.csv
+7    NA                            conneticut.csv
+8    NA                               florida.csv
+9    NA                                 idaho.csv
+10   NA                              illinois.csv
+11   NA                                  iowa.csv
+12   NA                                 maine.csv
+13   NA                        massachusettes.csv
+14   NA                              michigan.csv
+15   NA                             minnesota.csv
+16   NA                              missouri.csv
+17   NA                               montana.csv
+18   NA                             newJersey.csv
+19   NA                               newYork.csv
+20   NA                         northCarolina.csv
+21   NA                           northDakota.csv
+22   NA                                  ohio.csv
+23   NA                              oklahoma.csv
+24   NA                                oregon.csv
+25   NA                          pennsylvania.csv
+26   NA                           rhodeIsland.csv
+27   NA                           southDakota.csv
+28   NA                             tennessee.csv
+29   NA                                 texas.csv
+30   NA                                  utah.csv
+31   NA                               vermont.csv
+32   NA                            washington.csv
+33   NA                             wisconsin.csv
+                       Latest commit message
+1                                           
+2  Failed to load latest commit information.
+3                                           
+4                                           
+5                                           
+6                                           
+7                       Publish measles data
+8                                           
+9                                           
+10                                          
+11                                          
+12                                          
+13                                          
+14                                          
+15                                          
+16                                          
+17                                          
+18                                          
+19                                          
+20                                          
+21                                          
+22                                          
+23                                          
+24                                          
+25                                          
+26                                          
+27                                          
+28                      Publish measles data
+29                      Publish measles data
+30                                          
+31                                          
+32                                          
+33                                          
+                                 Commit time
+1                                           
+2  Failed to load latest commit information.
+3                                           
+4                                           
+5                                           
+6                                           
+7                               Feb 11, 2020
+8                                           
+9                                           
+10                                          
+11                                          
+12                                          
+13                                          
+14                                          
+15                                          
+16                                          
+17                                          
+18                                          
+19                                          
+20                                          
+21                                          
+22                                          
+23                                          
+24                                          
+25                                          
+26                                          
+27                                          
+28                              Feb 11, 2020
+29                              Feb 11, 2020
+30                                          
+31                                          
+32                                          
+33                                          
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+* .[[1]]
+```
+]]
+.column[.content[
+
+```
+   Type                                      Name
+1    NA                                        ..
+2    NA Failed to load latest commit information.
+3    NA                               arizona.csv
+4    NA                              arkansas.csv
+5    NA                            california.csv
+6    NA                              colorado.csv
+7    NA                            conneticut.csv
+8    NA                               florida.csv
+9    NA                                 idaho.csv
+10   NA                              illinois.csv
+11   NA                                  iowa.csv
+12   NA                                 maine.csv
+13   NA                        massachusettes.csv
+14   NA                              michigan.csv
+15   NA                             minnesota.csv
+16   NA                              missouri.csv
+17   NA                               montana.csv
+18   NA                             newJersey.csv
+19   NA                               newYork.csv
+20   NA                         northCarolina.csv
+21   NA                           northDakota.csv
+22   NA                                  ohio.csv
+23   NA                              oklahoma.csv
+24   NA                                oregon.csv
+25   NA                          pennsylvania.csv
+26   NA                           rhodeIsland.csv
+27   NA                           southDakota.csv
+28   NA                             tennessee.csv
+29   NA                                 texas.csv
+30   NA                                  utah.csv
+31   NA                               vermont.csv
+32   NA                            washington.csv
+33   NA                             wisconsin.csv
+                       Latest commit message
+1                                           
+2  Failed to load latest commit information.
+3                                           
+4                                           
+5                                           
+6                                           
+7                       Publish measles data
+8                                           
+9                                           
+10                                          
+11                                          
+12                                          
+13                                          
+14                                          
+15                                          
+16                                          
+17                                          
+18                                          
+19                                          
+20                                          
+21                                          
+22                                          
+23                                          
+24                                          
+25                                          
+26                                          
+27                                          
+28                      Publish measles data
+29                      Publish measles data
+30                                          
+31                                          
+32                                          
+33                                          
+                                 Commit time
+1                                           
+2  Failed to load latest commit information.
+3                                           
+4                                           
+5                                           
+6                                           
+7                               Feb 11, 2020
+8                                           
+9                                           
+10                                          
+11                                          
+12                                          
+13                                          
+14                                          
+15                                          
+16                                          
+17                                          
+18                                          
+19                                          
+20                                          
+21                                          
+22                                          
+23                                          
+24                                          
+25                                          
+26                                          
+27                                          
+28                              Feb 11, 2020
+29                              Feb 11, 2020
+30                                          
+31                                          
+32                                          
+33                                          
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+* select(Name)
+```
+]]
+.column[.content[
+
+```
+                                        Name
+1                                         ..
+2  Failed to load latest commit information.
+3                                arizona.csv
+4                               arkansas.csv
+5                             california.csv
+6                               colorado.csv
+7                             conneticut.csv
+8                                florida.csv
+9                                  idaho.csv
+10                              illinois.csv
+11                                  iowa.csv
+12                                 maine.csv
+13                        massachusettes.csv
+14                              michigan.csv
+15                             minnesota.csv
+16                              missouri.csv
+17                               montana.csv
+18                             newJersey.csv
+19                               newYork.csv
+20                         northCarolina.csv
+21                           northDakota.csv
+22                                  ohio.csv
+23                              oklahoma.csv
+24                                oregon.csv
+25                          pennsylvania.csv
+26                           rhodeIsland.csv
+27                           southDakota.csv
+28                             tennessee.csv
+29                                 texas.csv
+30                                  utah.csv
+31                               vermont.csv
+32                            washington.csv
+33                             wisconsin.csv
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+* mutate(Name = str_remove(Name,
+*                          "\\.csv"))
+```
+]]
+.column[.content[
+
+```
+                                        Name
+1                                         ..
+2  Failed to load latest commit information.
+3                                    arizona
+4                                   arkansas
+5                                 california
+6                                   colorado
+7                                 conneticut
+8                                    florida
+9                                      idaho
+10                                  illinois
+11                                      iowa
+12                                     maine
+13                            massachusettes
+14                                  michigan
+15                                 minnesota
+16                                  missouri
+17                                   montana
+18                                 newJersey
+19                                   newYork
+20                             northCarolina
+21                               northDakota
+22                                      ohio
+23                                  oklahoma
+24                                    oregon
+25                              pennsylvania
+26                               rhodeIsland
+27                               southDakota
+28                                 tennessee
+29                                     texas
+30                                      utah
+31                                   vermont
+32                                washington
+33                                 wisconsin
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+* filter(str_length(Name) &gt; 3,
+*        str_length(Name) &lt; 20)
+```
+]]
+.column[.content[
+
+```
+             Name
+1         arizona
+2        arkansas
+3      california
+4        colorado
+5      conneticut
+6         florida
+7           idaho
+8        illinois
+9            iowa
+10          maine
+11 massachusettes
+12       michigan
+13      minnesota
+14       missouri
+15        montana
+16      newJersey
+17        newYork
+18  northCarolina
+19    northDakota
+20           ohio
+21       oklahoma
+22         oregon
+23   pennsylvania
+24    rhodeIsland
+25    southDakota
+26      tennessee
+27          texas
+28           utah
+29        vermont
+30     washington
+31      wisconsin
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+* pull(Name)
+```
+]]
+.column[.content[
+
+```
+ [1] "arizona"        "arkansas"       "california"     "colorado"      
+ [5] "conneticut"     "florida"        "idaho"          "illinois"      
+ [9] "iowa"           "maine"          "massachusettes" "michigan"      
+[13] "minnesota"      "missouri"       "montana"        "newJersey"     
+[17] "newYork"        "northCarolina"  "northDakota"    "ohio"          
+[21] "oklahoma"       "oregon"         "pennsylvania"   "rhodeIsland"   
+[25] "southDakota"    "tennessee"      "texas"          "utah"          
+[29] "vermont"        "washington"     "wisconsin"     
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+*raw_states
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+*glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv")
+```
+]]
+.column[.content[
+
+```
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/arizona.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/arkansas.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/california.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/colorado.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/conneticut.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/florida.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/idaho.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/illinois.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/iowa.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/maine.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/massachusettes.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/michigan.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/minnesota.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/missouri.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/montana.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/newJersey.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/newYork.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/northCarolina.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/northDakota.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/ohio.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/oklahoma.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/oregon.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/pennsylvania.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/rhodeIsland.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/southDakota.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/tennessee.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/texas.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/utah.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/vermont.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/washington.csv
+https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/wisconsin.csv
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+* map(read_csv)
+```
+]]
+.column[.content[
+
+```
+[[1]]
+# A tibble: 1,343 x 13
+   index state year  name  type  city  county enroll   mmr  xmed  xper   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa…     51   100  0     0     31.3
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima       22   100  0     0     32.2
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima       85   100  0     0     32.1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric…     60   100  0     0     33.5
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric…     43   100  2.33  2.33  33.5
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric…     36   100  0     0     33.4
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric…     24   100  0     4.17  33.5
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma       22   100  0     0     32.7
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric…     26   100  0     0     33.4
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma       78   100  0     0     32.5
+# … with 1,333 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[2]]
+# A tibble: 481 x 9
+   index state    year   name                 city      enroll   mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Arkansas 2018-… Maumelle Charter El… Maumelle     717  96.1  34.9 -92.4
+ 2     2 Arkansas 2018-… Thomas C Brunson El… Warren       279  95.7  33.6 -92.1
+ 3     3 Arkansas 2018-… Parkway Elementary   Alexander    508  94.9  34.6 -92.5
+ 4     4 Arkansas 2018-… Sunnymede Elementary Fort Smi…    656  94.1  35.4 -94.4
+ 5     5 Arkansas 2018-… Don Roberts Element… Little R…    992  93.8  34.8 -92.5
+ 6     6 Arkansas 2018-… Rena Elementary      Van Buren    485  93.6  35.5 -94.4
+ 7     7 Arkansas 2018-… Jefferson Elementary Little R…    412  93.4  34.8 -92.3
+ 8     8 Arkansas 2018-… John P. Woods Eleme… Fort Smi…    631  93.3  35.4 -94.3
+ 9     9 Arkansas 2018-… Perrin Elementary    Benton       689  93.2  34.6 -92.6
+10    10 Arkansas 2018-… Springhill Elementa… Bryant       524  92.7  34.7 -92.5
+# … with 471 more rows
+
+[[3]]
+# A tibble: 8,066 x 15
+   index state year  name  type  city  county enroll   mmr overall  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 Cali… 2018… Abby… Publ… Teme… River…    137    99      96     2 NA   
+ 2     2 Cali… 2018… Abra… Publ… Sant… Orange    135    99      99     1 NA   
+ 3     3 Cali… 2018… Achi… Publ… Oakl… Alame…    116    99      99     1 NA   
+ 4     4 Cali… 2018… Ada … Publ… Hunt… Orange    100    99      97     0 NA   
+ 5     5 Cali… 2018… Adam… Publ… Sant… Santa…    121    99      99     1 NA   
+ 6     6 Cali… 2018… Adam… Publ… Sant… Santa…    126    99      98     1 NA   
+ 7     7 Cali… 2018… Adda… Publ… Fres… Fresno    124    99      93     0 NA   
+ 8     8 Cali… 2018… Agua… Publ… Cath… River…    118    99      99     1 NA   
+ 9     9 Cali… 2018… Akir… Publ… Fres… Fresno    105    99      99     1 NA   
+10    10 Cali… 2018… Alam… Publ… Murr… River…    149    99      97     1 NA   
+# … with 8,056 more rows, and 3 more variables: xrel &lt;lgl&gt;, lat &lt;chr&gt;,
+#   lng &lt;chr&gt;
+
+[[4]]
+# A tibble: 1,319 x 15
+   index state year  name  type  county district enroll   mmr overall  xmed
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Colo… 2017… A Ne… Kind… Adams  Harriso…      3   100   100       0
+ 2     2 Colo… 2017… Abid… Kind… Jeffe… Denver …      4   100   100       0
+ 3     3 Colo… 2017… Acad… Kind… Dougl… Academy…     66   100    93.9     0
+ 4     4 Colo… 2017… Adve… Kind… Adams  Colorad…     32   100   100       0
+ 5     5 Colo… 2017… Agui… Kind… Las A… Greeley…     11   100    81.8     0
+ 6     6 Colo… 2017… All … Kind… Arapa… Poudre …     34   100    97.1     0
+ 7     7 Colo… 2017… Alsu… Kind… Adams  Academy…     66   100    97.0     0
+ 8     8 Colo… 2017… Alta… Kind… Prowe… Jeffers…     20   100    90       0
+ 9     9 Colo… 2017… Ambl… Kind… Arapa… Adams-A…     16   100    93.8     0
+10    10 Colo… 2017… Ames… Kind… Denver Greeley…     63   100   100       0
+# … with 1,309 more rows, and 4 more variables: xper &lt;dbl&gt;, xrel &lt;dbl&gt;,
+#   lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[5]]
+# A tibble: 751 x 12
+   index state  year   name     type  city  county   mmr  xmed  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Conne… 2017-… A. Ward… Publ… Suff… Hartf…   100     0     0  42.0 -72.7
+ 2     2 Conne… 2017-… Academy… Publ… Rock… Hartf…   100     0     0  41.6 -72.7
+ 3     3 Conne… 2017-… Alfred … Publ… Weth… Hartf…   100     0     0  41.7 -72.7
+ 4     4 Conne… 2017-… Andrew … Publ… Naug… New H…   100     0     0  41.5 -73.1
+ 5     5 Conne… 2017-… Anna Re… Publ… Newi… Hartf…   100     0     0  41.7 -72.7
+ 6     6 Conne… 2017-… Augusta… Publ… New … New H…   100     0     0  41.3 -72.9
+ 7     7 Conne… 2017-… Barlow … Publ… Ridg… Fairf…   100     0     0  41.3 -73.5
+ 8     8 Conne… 2017-… Beecher  Publ… New … New H…   100     0     0  41.3 -73.0
+ 9     9 Conne… 2017-… Benjami… Publ… Meri… New H…   100     0     0  41.5 -72.8
+10    10 Conne… 2017-… Betance… Publ… Hart… Hartf…   100     0     0  41.8 -72.7
+# … with 741 more rows
+
+[[6]]
+# A tibble: 2,242 x 13
+   index state year  name  district enroll mmr   overall  xmed xper   xrel   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Flor… 2018… Adva… Hillsbo…     52 NA        100     0 NA        0  28.0
+ 2     2 Flor… 2018… Apal… Franklin     36 NA        100     0 NA        0  29.7
+ 3     3 Flor… 2018… Arli… Duval        42 NA        100     0 NA        0  30.3
+ 4     4 Flor… 2018… Bard… Pinellas     68 NA        100     0 NA        0  27.9
+ 5     5 Flor… 2018… Bayv… Duval        57 NA        100     0 NA        0  30.3
+ 6     6 Flor… 2018… Blin… Deaf/Bl…      4 NA        100     0 NA        0  29.9
+ 7     7 Flor… 2018… Bonn… Orange       90 NA        100     0 NA        0  28.6
+ 8     8 Flor… 2018… Brad… Manatee      74 NA        100     0 NA        0  27.4
+ 9     9 Flor… 2018… Brig… Broward       4 NA        100     0 NA        0  26.3
+10    10 Flor… 2018… Brow… Broward      53 NA        100     0 NA        0  26.1
+# … with 2,232 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[7]]
+# A tibble: 475 x 13
+   index state year  name  city  county district enrollment overall  xmed  xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Idaho 2018… Amit… Boise Ada    Boise            44     100     0     0
+ 2     2 Idaho 2018… Beac… Lewi… Nez P… Private           5     100     0     0
+ 3     3 Idaho 2018… Bois… Boise Ada    Private           3     100     0     0
+ 4     4 Idaho 2018… Calv… Poca… Banno… Private           7     100     0     0
+ 5     5 Idaho 2018… Cave… Leno… Nez P… Orofino           3     100     0     0
+ 6     6 Idaho 2018… Clov… Boise Ada    Private           9     100     0     0
+ 7     7 Idaho 2018… Coeu… Desm… Benew… Private           6     100     0     0
+ 8     8 Idaho 2018… Culd… Culd… Nez P… Culdesac          7     100     0     0
+ 9     9 Idaho 2018… Down… Down… Banno… Marsh V…          9     100     0     0
+10    10 Idaho 2018… Eagl… Eagle Ada    Private           7     100     0     0
+# … with 465 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[8]]
+# A tibble: 3,574 x 15
+   index state year  name  city  county enroll   mmr overall  xmed xper   xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Illi… 2018… 7th … Caho… Saint…    228   100 NA          0 NA        0
+ 2     2 Illi… 2018… 8th … Caho… Saint…    244   100 NA          0 NA        0
+ 3     3 Illi… 2018… A Mo… Des … Cook        6   100 NA          0 NA        0
+ 4     4 Illi… 2018… A Mo… Arli… Cook       21   100 NA          0 NA        0
+ 5     5 Illi… 2018… A St… Chic… Cook       14   100 NA          0 NA        0
+ 6     6 Illi… 2018… A St… &lt;NA&gt;  &lt;NA&gt;       20   100 NA          0 NA        0
+ 7     7 Illi… 2018… A-Ka… Chic… Cook        9   100 NA          0 NA        0
+ 8     8 Illi… 2018… Abe … Cice… Cook      833   100 NA          0 NA        0
+ 9     9 Illi… 2018… Acad… Posen Cook        6   100 NA          0 NA        0
+10    10 Illi… 2018… Acer… Chic… Cook      261   100 NA          0 NA        0
+# … with 3,564 more rows, and 3 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;,
+#   matcher &lt;chr&gt;
+
+[[9]]
+# A tibble: 978 x 9
+   index state year    name                  county   enroll overall   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Iowa  2018-19 Blessed Sacrament     Black H…    100     100  42.5 -92.4
+ 2     2 Iowa  2018-19 Calmar Festina Spill… Winnesh…    120     100  43.2 -91.9
+ 3     3 Iowa  2018-19 Central Springs Elem… Worth       105     100  43.3 -93.2
+ 4     4 Iowa  2018-19 Delhi Elementary      Delaware    174     100  42.4 -91.3
+ 5     5 Iowa  2018-19 ExiraElk Horn-Kimbal… Shelby      170     100  41.6 -95.1
+ 6     6 Iowa  2018-19 Fredericksburg Elem   Chickas…    138     100  43.0 -92.2
+ 7     7 Iowa  2018-19 George Elementary     Lyon        117     100  43.3 -96.0
+ 8     8 Iowa  2018-19 Glidden-Ralston Elem… Carroll     179     100  42.1 -94.7
+ 9     9 Iowa  2018-19 Ruthven-Ayrshire Ele… Palo Al…    113     100  43.1 -94.9
+10    10 Iowa  2018-19 Salem Elementary      Henry       105     100  40.9 -91.6
+# … with 968 more rows
+
+[[10]]
+# A tibble: 353 x 12
+   index state year   name     county enroll   mmr  xmed  xper  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Maine 2018-… Alexand… Washi…      2   100     0  0        0  44.1 -70.2
+ 2     2 Maine 2018-… Alton E… Penob…      4   100     0  0        0  44.1 -70.2
+ 3     3 Maine 2018-… Andover… Oxford      5   100     0  0        0  44.3 -70.1
+ 4     4 Maine 2018-… Appleto… Knox       17   100     0  0        0  44.3 -69.3
+ 5     5 Maine 2018-… Atwood … Kenne…     69   100     0  0        0  44.1 -70.4
+ 6     6 Maine 2018-… Beals E… Washi…      6   100     0  0        0  44.1 -70.2
+ 7     7 Maine 2018-… Belgrad… Kenne…     39   100     0  0        0  44.1 -70.2
+ 8     8 Maine 2018-… Brixham… York        9   100     0 11.1      0  46.6 -67.9
+ 9     9 Maine 2018-… Calais … Washi…     39   100     0  0        0  46.1 -67.9
+10    10 Maine 2018-… Canaan … Somer…     29   100     0  3.45     0  47.2 -67.9
+# … with 343 more rows
+
+[[11]]
+# A tibble: 1,374 x 11
+   index state    year   name       type  city    county   mmr  xmed   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Massach… 2018-… A Drewicz… Publ… Lynn    Essex    100   0    42.5 -71.0
+ 2     2 Massach… 2018-… Abraham L… Publ… New Be… Brist…   100   0    41.7 -70.9
+ 3     3 Massach… 2018-… Alfred J … Publ… New Be… Brist…   100   0    41.6 -70.9
+ 4     4 Massach… 2018-… Alice Bea… Publ… Spring… Hampd…   100   0    42.1 -72.5
+ 5     5 Massach… 2018-… Allendale… Publ… Pittsf… Berks…   100   0    42.5 -73.2
+ 6     6 Massach… 2018-… Alma Del … Publ… New Be… Brist…   100   0    41.7 -70.9
+ 7     7 Massach… 2018-… Amesbury … Publ… Amesbu… Essex    100   0    42.9 -70.9
+ 8     8 Massach… 2018-… Amvet Blvd Publ… North … Brist…   100   0    42.0 -71.3
+ 9     9 Massach… 2018-… Anna E Ba… Publ… Chicop… Hampd…   100   0    42.2 -72.6
+10    10 Massach… 2018-… Annie E F… Publ… Westbo… Worce…   100   1.1  42.3 -71.6
+# … with 1,364 more rows
+
+[[12]]
+# A tibble: 1,899 x 14
+   index state year  name  county district enroll mmr   overall  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 Mich… 2018… Acad… Oakla… Bloomfi…     12 NA        100     0 NA   
+ 2     2 Mich… 2018… Adam… Kent   Grandvi…     32 NA        100     0 NA   
+ 3     3 Mich… 2018… AGBU… Oakla… AGBU Al…     27 NA        100     0 NA   
+ 4     4 Mich… 2018… Anch… Kent   Godwin …     10 NA        100     0 NA   
+ 5     5 Mich… 2018… Angu… Macomb Warren …     65 NA        100     0 NA   
+ 6     6 Mich… 2018… Ann … Detro… Detroit…     24 NA        100     0 NA   
+ 7     7 Mich… 2018… Arbo… Calho… Arbor A…     41 NA        100     0 NA   
+ 8     8 Mich… 2018… ASA … Detro… Detroit…     12 NA        100     0 NA   
+ 9     9 Mich… 2018… Aubu… Bay    Bay Cit…     17 NA        100     0 NA   
+10    10 Mich… 2018… Augu… Kalam… Augusta…     12 NA        100     0 NA   
+# … with 1,889 more rows, and 3 more variables: xrel &lt;lgl&gt;, lat &lt;dbl&gt;,
+#   lng &lt;dbl&gt;
+
+[[13]]
+# A tibble: 1,289 x 13
+   index state year  name  county enroll   mmr overall  xmed  xper xrel  lat  
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;chr&gt;
+ 1     1 Minn… 2017… Appl… Lac q…     41   100 NA          0     0 NA    45.1…
+ 2     2 Minn… 2017… Argy… Marsh…     24   100 NA          0     0 NA    48.3…
+ 3     3 Minn… 2017… Ashb… Grant      23   100 NA          0     0 NA    46.0…
+ 4     4 Minn… 2017… Ava … Henne…     17   100 NA          0     0 NA    45.0…
+ 5     5 Minn… 2017… Bana… Henne…     11   100 NA          0     0 NA    44.9…
+ 6     6 Minn… 2017… Bert… Todd       38   100 NA          0     0 NA    46.2…
+ 7     7 Minn… 2017… Beth… Henne…     10   100 NA          0     0 NA    44.8…
+ 8     8 Minn… 2017… Blak… Henne…     34   100 NA          0     0 NA    44.9…
+ 9     9 Minn… 2017… Broo… Washi…     91   100 NA          0     0 NA    44.9…
+10    10 Minn… 2017… Brow… Todd       40   100 NA          0     0 NA    46.0…
+# … with 1,279 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[14]]
+# A tibble: 484 x 12
+   index state  year   name    city    mmr overall xmed  xper  xrel    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Misso… 2018-… Agape … Stoc…    99 NA      NA    NA    NA     37.7 -93.8
+ 2     2 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.4
+ 3     3 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 4     4 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 5     5 Misso… 2018-… All Sa… St P…    99 NA      NA    NA    NA     38.8 -90.6
+ 6     6 Misso… 2018-… Assump… St. …    99 NA      NA    NA    NA     38.5 -90.4
+ 7     7 Misso… 2018-… Atonem… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 8     8 Misso… 2018-… Blesse… Ferg…    99 NA      NA    NA    NA     38.7 -90.3
+ 9     9 Misso… 2018-… Centra… Clay…    99 NA      NA    NA    NA     38.6 -90.3
+10    10 Misso… 2018-… Chamin… St. …    99 NA      NA    NA    NA     38.6 -90.4
+# … with 474 more rows
+
+[[15]]
+# A tibble: 567 x 10
+   index state  year   name            county   enroll   mmr  xmed lat       lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1     1 Monta… 2017-… Acadia Montana  Silver …     64   100     0 46.013… -113.
+ 2     2 Monta… 2017-… Anna Jeffries … Glacier     105   100     0 48.640… -112.
+ 3     3 Monta… 2017-… Ashland         Rosebud      75   100     0 45.594… -106.
+ 4     4 Monta… 2017-… Atonement Luth… Yellows…     26   100     0 45.815… -108.
+ 5     5 Monta… 2017-… Big Stone       Cascade      38   100     0 47.400… -111.
+ 6     6 Monta… 2017-… Blackfeet Earl… Glacier      76   100     0 48.637… -112.
+ 7     7 Monta… 2017-… Child Start He… Missoula    318   100     0 46.771… -114.
+ 8     8 Monta… 2017-… Crow Agency     Big Horn    315   100     0 45.605… -107.
+ 9     9 Monta… 2017-… Dodson Schools… Phillips     82   100     0 48.350… -108.
+10    10 Monta… 2017-… Eastern Montan… Dawson       40   100     0 47.100… -105.
+# … with 557 more rows
+
+[[16]]
+# A tibble: 2,149 x 11
+   index name         state  county enroll overall  xmed  xrel xper    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 A. Harry Mo… New J… Hudson     13     100    NA    NA NA     40.7 -74.1
+ 2     2 A. Russell … New J… Union      63     100    NA    NA NA     39.9 -75.0
+ 3     3 A.V. Ceres … New J… Middl…    139     100    NA    NA NA     40.5 -74.3
+ 4     4 Aaron Decker New J… Morris     81     100    NA    NA NA     41.0 -74.4
+ 5     5 Abington Av… New J… Essex      87     100    NA    NA NA     40.8 -74.2
+ 6     6 Abraham Lin… New J… Bergen     41     100    NA    NA NA     41.0 -74.2
+ 7     7 Abraham Lin… New J… Bergen     71     100    NA    NA NA     40.9 -74.1
+ 8     8 Academy at … New J… Bergen      9     100    NA    NA NA     40.8 -74.1
+ 9     9 Academy of … New J… Bergen     43     100    NA    NA NA     40.8 -74.0
+10    10 Academy Of … New J… Bergen     25     100    NA    NA NA     40.9 -74.0
+# … with 2,139 more rows
+
+[[17]]
+# A tibble: 3,645 x 15
+   index state year  name  type  city  county enroll   mmr overal  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 New … 2017… A Ch… Priv… East… Queens NA       100  100    0    NA   
+ 2     2 New … 2017… A Fa… Priv… Broo… Kings  NA       100   98.8  1.18 NA   
+ 3     3 New … 2017… Aabr… Priv… Coll… Queens NA       100  100    0    NA   
+ 4     4 New … 2017… Abra… Publ… Glen… Warren NA       100  100    0    NA   
+ 5     5 New … 2017… Abun… Priv… King… Ulster NA       100   75    0    NA   
+ 6     6 New … 2017… Acad… Priv… Bronx Bronx  NA       100  100    0    NA   
+ 7     7 New … 2017… Acad… Priv… Alba… Albany NA       100   98.3  0    NA   
+ 8     8 New … 2017… Adel… Priv… Broo… Kings  NA       100  100    0    NA   
+ 9     9 New … 2017… Adir… Priv… Wilm… Clint… NA       100  100    0    NA   
+10    10 New … 2017… Ahi … Priv… Broo… Kings  NA       100  100    0    NA   
+# … with 3,635 more rows, and 3 more variables: xrel &lt;dbl&gt;, lat &lt;dbl&gt;,
+#   lng &lt;dbl&gt;
+
+[[18]]
+# A tibble: 1,767 x 16
+   index state year  name  address city  county district enroll mmr   overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt;   &lt;lgl&gt; &lt;chr&gt;  &lt;lgl&gt;    &lt;chr&gt;  &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 Nort… 2018… A T … NA      NA    Cabar… NA       132    NA        100
+ 2     2 Nort… 2018… A.C.… NA      NA    Cabar… NA       44     NA        100
+ 3     3 Nort… 2018… ABC … NA      NA    David… NA       1      NA        100
+ 4     4 Nort… 2018… Agap… NA      NA    Ashe   NA       3      NA        100
+ 5     5 Nort… 2018… Agap… NA      NA    Frank… NA       1      NA        100
+ 6     6 Nort… 2018… Ahos… NA      NA    Hertf… NA       32     NA        100
+ 7     7 Nort… 2018… Alam… NA      NA    Alama… NA       15     NA        100
+ 8     8 Nort… 2018… Alam… NA      NA    Guilf… NA       79     NA        100
+ 9     9 Nort… 2018… Albe… NA      NA    Pasqu… NA       15     NA        100
+10    10 Nort… 2018… Albe… NA      NA    Craven NA       70     NA        100
+# … with 1,757 more rows, and 5 more variables: xmed &lt;dbl&gt;, xper &lt;lgl&gt;,
+#   xrel &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[19]]
+# A tibble: 293 x 15
+   index state year  name  city  county district enroll   mmr overall  xmed
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 Nort… 2017… Anam… Anam… McHen… NA            7   100 NA          0
+ 2     2 Nort… 2017… Ashl… Ashl… McInt… NA           11   100 NA          0
+ 3     3 Nort… 2017… Ashl… Fargo McInt… NA            9   100 NA          0
+ 4     4 Nort… 2017… Barn… Wimb… Barnes NA           14   100 NA          0
+ 5     5 Nort… 2017… Bel … Minot Ward   NA           39   100 NA          0
+ 6     6 Nort… 2017… Belf… Belf… Stark  NA           20   100 NA          0
+ 7     7 Nort… 2017… Bert… Bert… Ward   NA           20   100 NA          0
+ 8     8 Nort… 2017… Bott… Bott… Botti… NA           50   100 NA          2
+ 9     9 Nort… 2017… Bowb… Bowb… Burke  NA            8   100 NA          0
+10    10 Nort… 2017… Burk… Lign… Burke  NA            5   100 NA          0
+# … with 283 more rows, and 4 more variables: xper &lt;dbl&gt;, xrel &lt;dbl&gt;,
+#   lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[20]]
+# A tibble: 2,137 x 13
+   index state year  name  type  city  county enroll   mmr overall  xmed   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Ohio  2018… Acad… Publ… Tole… Lucas      22   100    95.4     0  41.6
+ 2     2 Ohio  2018… Adri… Publ… Sout… Cuyah…     62   100    95.2     0  41.5
+ 3     3 Ohio  2018… All … Priv… Cinc… Hamil…     52   100   100       0  39.2
+ 4     4 Ohio  2018… All … Priv… Colu… Frank…     38   100   100       0  39.9
+ 5     5 Ohio  2018… All … Priv… Ross… Wood       23   100    95.6     0  41.6
+ 6     6 Ohio  2018… Andr… Priv… Will… Lake       11   100   100       0  41.6
+ 7     7 Ohio  2018… Annu… Priv… Cinc… Hamil…     15   100   100       0  39.1
+ 8     8 Ohio  2018… Antw… Publ… Antw… Pauld…     64   100    98.4     0  41.2
+ 9     9 Ohio  2018… Appl… Publ… Brun… Medina     80   100    98.8     0  41.2
+10    10 Ohio  2018… Babe… Publ… Tren… Butler    201   100    99.5     0  39.5
+# … with 2,127 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[21]]
+# A tibble: 965 x 11
+   index state  name       city    county  overall  xmed xrel  xper    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Oklah… Adams Ele… Enid    Garfie…     100     0 NA    NA     36.4 -97.8
+ 2     2 Oklah… Adams Ele… Oklaho… Oklaho…     100     0 NA    NA     35.4 -97.6
+ 3     3 Oklah… Alex Elem… Alex    Grady       100     0 NA    NA     34.9 -97.8
+ 4     4 Oklah… Allen Pub… Allen   Pontot…     100     0 NA    NA     34.9 -96.4
+ 5     5 Oklah… Andrew Jo… Oklaho… Oklaho…     100     0 NA    NA     35.6 -97.6
+ 6     6 Oklah… Asher Ele… Asher   Pottaw…     100     0 NA    NA     35.0 -96.9
+ 7     7 Oklah… Ator Elem… Owasso  Tulsa       100     0 NA    NA     36.3 -95.9
+ 8     8 Oklah… Benningto… Bennin… Bryan       100     0 NA    NA     34.0 -96.0
+ 9     9 Oklah… Bradley E… Drumri… Creek       100     0 NA    NA     36.0 -96.6
+10    10 Oklah… Bray-Doyl… Marlow  Stephe…     100     0 NA    NA     34.6 -97.8
+# … with 955 more rows
+
+[[22]]
+# A tibble: 733 x 13
+   index state year  name  county enroll   mmr overall  xmed  xper xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Oreg… 2018… Big … Wasco       1 100      88.2 0         0 NA     44.8
+ 2     2 Oreg… 2018… Cair… Malhe…     17 100     100   0         0 NA     44.0
+ 3     3 Oreg… 2018… Jasp… Lane        1 100     100   0         0 NA     44.0
+ 4     4 Oreg… 2018… Jord… Malhe…      1 100     100   0         0 NA     43.0
+ 5     5 Oreg… 2018… Life… Umati…      2 100     100   0         0 NA     45.9
+ 6     6 Oreg… 2018… Morr… Morrow      2 100      96.2 0         0 NA     45.9
+ 7     7 Oreg… 2018… Nyss… Malhe…    102 100     100   0         0 NA     43.9
+ 8     8 Oreg… 2018… W W … Malhe…      1 100     100   0         0 NA     42.9
+ 9     9 Oreg… 2018… Warm… Jeffe…     75 100     100   0         0 NA     44.8
+10    10 Oreg… 2018… W L … Washi…     45  99.7    97.5 0.280     0 NA     45.5
+# … with 723 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[23]]
+# A tibble: 1,635 x 10
+   index state     year name              type  city    enroll   mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;             &lt;lgl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Pennsyl…  2017 Afton Elementary  NA    Yardley     95   100  40.2 -74.9
+ 2     2 Pennsyl…  2017 Aldan Elementary  NA    Aldan       25   100  39.9 -75.3
+ 3     3 Pennsyl…  2017 Amosland Element… NA    Morton      64   100  39.9 -75.3
+ 4     4 Pennsyl…  2017 Andrew Maier Ele… NA    Blandon     37   100  40.4 -75.9
+ 5     5 Pennsyl…  2017 Antonia Pantoja … NA    Philad…    100   100  40.0 -75.1
+ 6     6 Pennsyl…  2017 Appleman Element… NA    Benton      60   100  41.2 -76.4
+ 7     7 Pennsyl…  2017 Arlington Height… NA    Stroud…     46   100  41.0 -75.2
+ 8     8 Pennsyl…  2017 Arrowhead Elemen… NA    Colleg…     67   100  40.2 -75.4
+ 9     9 Pennsyl…  2017 Arthur Street El… NA    Hazlet…    134   100  41.0 -76.0
+10    10 Pennsyl…  2017 Asa Packer Eleme… NA    Bethle…     55   100  40.7 -75.4
+# … with 1,625 more rows
+
+[[24]]
+# A tibble: 230 x 13
+   index state year  name  city  enroll mmr   overall  xmed xper  xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Rhod… 2018… St. … Barr…     11 NA      100    0    NA    NA     41.8
+ 2     2 Rhod… 2018… Barr… Barr…     10 NA       60    0    NA    NA     41.8
+ 3     3 Rhod… 2018… Mont… Barr…     NA NA       NA   NA    NA    NA     41.8
+ 4     4 Rhod… 2018… Naya… Barr…     81 NA       92.6  7.41 NA    NA     41.7
+ 5     5 Rhod… 2018… Prim… Barr…     64 NA      100    0    NA    NA     41.8
+ 6     6 Rhod… 2018… Sowa… Barr…     60 NA       96.7  1.67 NA    NA     41.8
+ 7     7 Rhod… 2018… Our … Bris…      9 NA       55.6  0    NA    NA     41.7
+ 8     8 Rhod… 2018… Colt… Bris…     52 NA      100    0    NA    NA     41.7
+ 9     9 Rhod… 2018… Guit… Bris…     40 NA       62.5 10    NA    NA     41.7
+10    10 Rhod… 2018… Rock… Bris…     44 NA      100    0    NA    NA     41.7
+# … with 220 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[25]]
+# A tibble: 380 x 9
+   index state     year    name             county     enroll   mmr   lat    lng
+   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1     1 South Da… 2017-18 Lower Brule Ele… Lyman          33   100  44.1  -99.6
+ 2     2 South Da… 2017-18 Alcester-Hudson… Union          21   100  43.0  -96.6
+ 3     3 South Da… 2017-18 Andes Central E… Charles M…     32   100  43.2  -98.5
+ 4     4 South Da… 2017-18 Arlington Eleme… Kingsbury      21   100  44.4  -97.1
+ 5     5 South Da… 2017-18 Baltic Elementa… Minnehaha      37   100  43.8  -96.7
+ 6     6 South Da… 2017-18 Ban Dek Montess… Lincoln         4   100  43.5  -96.7
+ 7     7 South Da… 2017-18 Batesland        Ogalala L…     13   100  43.1 -102. 
+ 8     8 South Da… 2017-18 Beadle Elementa… Yankton        59   100  44.1 -103. 
+ 9     9 South Da… 2017-18 Bennett Co Elem… Bennett        41   100  43.2 -102. 
+10    10 South Da… 2017-18 Beresford Eleme… Union          49   100  43.1  -96.8
+# … with 370 more rows
+
+[[26]]
+# A tibble: 1,004 x 11
+   index state  year   name        county enroll overall  xmed  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Tenne… 2018-… Adamsville… McNai…     77     100     0     0  35.2 -88.4
+ 2     2 Tenne… 2018-… Allardt El… Fentr…     35     100     0     0  36.4 -84.9
+ 3     3 Tenne… 2018-… Allons Ele… Overt…     40     100     0     0  36.4 -85.3
+ 4     4 Tenne… 2018-… Andrew Joh… Sulli…     84     100     0     0  36.5 -82.5
+ 5     5 Tenne… 2018-… Arrow Acad… Shelby     17     100     0     0  35.1 -90.0
+ 6     6 Tenne… 2018-… Ashland Ci… Cheat…     89     100     0     0  36.3 -87.1
+ 7     7 Tenne… 2018-… Aspire Eas… Shelby     84     100     0     0  35.1 -89.8
+ 8     8 Tenne… 2018-… Auburn Ele… Cannon     10     100     0     0  35.9 -86.1
+ 9     9 Tenne… 2018-… Baileyton … Greene     31     100     0     0  36.3 -82.8
+10    10 Tenne… 2018-… Barret's C… Shelby     50     100     0     0  35.3 -89.7
+# … with 994 more rows
+
+[[27]]
+# A tibble: 777 x 8
+   index state year    name                           county     mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                          &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Texas 2018-19 Abundant Life Christian        Galvest…   100  29.4 -95.0
+ 2     2 Texas 2018-19 Accelerated Intermediate Acad… Harris     100  29.6 -95.5
+ 3     3 Texas 2018-19 Adventist Christian Academy O… Montgom…   100  30.3 -95.4
+ 4     4 Texas 2018-19 Akiba Academy of Dallas        Dallas     100  32.9 -96.8
+ 5     5 Texas 2018-19 All Saints Catholic School Fo… Tarrant    100  32.8 -97.4
+ 6     6 Texas 2018-19 All Saints Catholic School Of… Dallas     100  33.0 -96.8
+ 7     7 Texas 2018-19 Amigos Por Vida-Friends For L… Harris     100  29.7 -95.5
+ 8     8 Texas 2018-19 Ann And Nate Levine Academy-A… Dallas     100  33.0 -96.8
+ 9     9 Texas 2018-19 Assumption Catholic            Harris     100  29.9 -95.4
+10    10 Texas 2018-19 Athens Christian Preparatory … Henders…   100  32.2 -95.8
+# … with 767 more rows
+
+[[28]]
+# A tibble: 602 x 14
+   index state year  name  type  city  county enroll   mmr  xmed  xper  xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Utah  2017… Anti… Publ… Anti… Garfi…      4   100     0     0     0
+ 2     2 Utah  2017… Bles… Priv… Sandy Salt …    128   100     0     0     0
+ 3     3 Utah  2017… Bluf… Publ… Bluff San J…    100   100     0     0     0
+ 4     4 Utah  2017… Book… Publ… Gree… Emery      10   100     0     0     0
+ 5     5 Utah  2017… Cany… Publ… Ogden Weber      12   100     0     0     0
+ 6     6 Utah  2017… Chan… Publ… Drap… Salt …    468   100     0     0     0
+ 7     7 Utah  2017… Cora… Publ… Wash… Washi…    521   100     0     0     0
+ 8     8 Utah  2017… Esca… Publ… Salt… Salt …    462   100     0     0     0
+ 9     9 Utah  2017… Eure… Publ… Eure… Juab       92   100     0     0     0
+10    10 Utah  2017… Flam… Publ… Dutc… Dagge…     36   100     0     0     0
+# … with 592 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[29]]
+# A tibble: 349 x 13
+   index state year  name  county enroll   mmr overall xmed  xper  xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Verm… 2018… Addi… Addis…     65   100   100   NA    NA    NA     44.1
+ 2     2 Verm… 2018… Alle… Rutla…     20   100   100   NA    NA    NA     43.6
+ 3     3 Verm… 2018… Brig… Essex      87   100    97.7 NA    NA    NA     44.8
+ 4     4 Verm… 2018… Broo… Orange     13   100    92.3 NA    NA    NA     44.0
+ 5     5 Verm… 2018… Burk… Caled…     68   100   100   NA    NA    NA     44.6
+ 6     6 Verm… 2018… Burk… Caled…    193   100   100   NA    NA    NA     44.6
+ 7     7 Verm… 2018… Cana… Essex     167   100    98.8 NA    NA    NA     45.0
+ 8     8 Verm… 2018… Cast… Rutla…     98   100    91.8 NA    NA    NA     43.6
+ 9     9 Verm… 2018… Chri… Washi…     84   100    98.8 NA    NA    NA     43.9
+10    10 Verm… 2018… Comm… Windh…     37   100    97.3 NA    NA    NA     42.9
+# … with 339 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[30]]
+# A tibble: 1,567 x 13
+   index name  state city  county enrollment   mmr overall  xmed  xrel  xper
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Acad… Wash… Mary… Snoho…          1   100   100       0     0  0   
+ 2     2 Alfa… Wash… Seat… King            1   100   100       0     0  0   
+ 3     3 Almi… Wash… Almi… Linco…          3   100   100       0     0  0   
+ 4     4 Amer… Wash… Bell… King           13   100   100       0     0  0   
+ 5     5 Appl… Wash… Yaki… Yakima         69   100   100       0     0  0   
+ 6     6 Appl… Wash… Seat… King            2   100   100       0     0  0   
+ 7     7 Beac… Wash… Lumm… Whatc…         10   100    90       0     0  0   
+ 8     8 Bel-… Wash… Bell… King           39   100   100       0     0  0   
+ 9     9 Bell… Wash… Bell… King           26   100   100       0     0  0   
+10    10 Bert… Wash… Seat… King           36   100    97.2     0     0  2.78
+# … with 1,557 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[31]]
+# A tibble: 1,515 x 17
+   index state year  name  type  address city  county district enroll mmr  
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;    &lt;lgl&gt;  &lt;lgl&gt;
+ 1     1 Wisc… 2018… Al B… NA    NA      Bara… Sauk   NA       NA     NA   
+ 2     2 Wisc… 2018… Alba… NA    NA      Alba… Green  NA       NA     NA   
+ 3     3 Wisc… 2018… Alma… NA    NA      Alma  Buffa… NA       NA     NA   
+ 4     4 Wisc… 2018… Arca… NA    NA      Arca… Tremp… NA       NA     NA   
+ 5     5 Wisc… 2018… Argy… NA    NA      Argy… Lafay… NA       NA     NA   
+ 6     6 Wisc… 2018… Assu… NA    NA      Dura… Pepin  NA       NA     NA   
+ 7     7 Wisc… 2018… Aubu… NA    NA      Aubu… Wood   NA       NA     NA   
+ 8     8 Wisc… 2018… Augu… NA    NA      Augu… Eau C… NA       NA     NA   
+ 9     9 Wisc… 2018… Bade… NA    NA      Milw… Milwa… NA       NA     NA   
+10    10 Wisc… 2018… Bann… NA    NA      Stev… Porta… NA       NA     NA   
+# … with 1,505 more rows, and 6 more variables: overall &lt;dbl&gt;, xmed &lt;lgl&gt;,
+#   xper &lt;dbl&gt;, xrel &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+*all_states
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+*all_states
+```
+]]
+.column[.content[
+
+```
+[[1]]
+# A tibble: 1,343 x 13
+   index state year  name  type  city  county enroll   mmr  xmed  xper   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa…     51   100  0     0     31.3
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima       22   100  0     0     32.2
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima       85   100  0     0     32.1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric…     60   100  0     0     33.5
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric…     43   100  2.33  2.33  33.5
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric…     36   100  0     0     33.4
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric…     24   100  0     4.17  33.5
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma       22   100  0     0     32.7
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric…     26   100  0     0     33.4
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma       78   100  0     0     32.5
+# … with 1,333 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[2]]
+# A tibble: 481 x 9
+   index state    year   name                 city      enroll   mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;                &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Arkansas 2018-… Maumelle Charter El… Maumelle     717  96.1  34.9 -92.4
+ 2     2 Arkansas 2018-… Thomas C Brunson El… Warren       279  95.7  33.6 -92.1
+ 3     3 Arkansas 2018-… Parkway Elementary   Alexander    508  94.9  34.6 -92.5
+ 4     4 Arkansas 2018-… Sunnymede Elementary Fort Smi…    656  94.1  35.4 -94.4
+ 5     5 Arkansas 2018-… Don Roberts Element… Little R…    992  93.8  34.8 -92.5
+ 6     6 Arkansas 2018-… Rena Elementary      Van Buren    485  93.6  35.5 -94.4
+ 7     7 Arkansas 2018-… Jefferson Elementary Little R…    412  93.4  34.8 -92.3
+ 8     8 Arkansas 2018-… John P. Woods Eleme… Fort Smi…    631  93.3  35.4 -94.3
+ 9     9 Arkansas 2018-… Perrin Elementary    Benton       689  93.2  34.6 -92.6
+10    10 Arkansas 2018-… Springhill Elementa… Bryant       524  92.7  34.7 -92.5
+# … with 471 more rows
+
+[[3]]
+# A tibble: 8,066 x 15
+   index state year  name  type  city  county enroll   mmr overall  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 Cali… 2018… Abby… Publ… Teme… River…    137    99      96     2 NA   
+ 2     2 Cali… 2018… Abra… Publ… Sant… Orange    135    99      99     1 NA   
+ 3     3 Cali… 2018… Achi… Publ… Oakl… Alame…    116    99      99     1 NA   
+ 4     4 Cali… 2018… Ada … Publ… Hunt… Orange    100    99      97     0 NA   
+ 5     5 Cali… 2018… Adam… Publ… Sant… Santa…    121    99      99     1 NA   
+ 6     6 Cali… 2018… Adam… Publ… Sant… Santa…    126    99      98     1 NA   
+ 7     7 Cali… 2018… Adda… Publ… Fres… Fresno    124    99      93     0 NA   
+ 8     8 Cali… 2018… Agua… Publ… Cath… River…    118    99      99     1 NA   
+ 9     9 Cali… 2018… Akir… Publ… Fres… Fresno    105    99      99     1 NA   
+10    10 Cali… 2018… Alam… Publ… Murr… River…    149    99      97     1 NA   
+# … with 8,056 more rows, and 3 more variables: xrel &lt;lgl&gt;, lat &lt;chr&gt;,
+#   lng &lt;chr&gt;
+
+[[4]]
+# A tibble: 1,319 x 15
+   index state year  name  type  county district enroll   mmr overall  xmed
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Colo… 2017… A Ne… Kind… Adams  Harriso…      3   100   100       0
+ 2     2 Colo… 2017… Abid… Kind… Jeffe… Denver …      4   100   100       0
+ 3     3 Colo… 2017… Acad… Kind… Dougl… Academy…     66   100    93.9     0
+ 4     4 Colo… 2017… Adve… Kind… Adams  Colorad…     32   100   100       0
+ 5     5 Colo… 2017… Agui… Kind… Las A… Greeley…     11   100    81.8     0
+ 6     6 Colo… 2017… All … Kind… Arapa… Poudre …     34   100    97.1     0
+ 7     7 Colo… 2017… Alsu… Kind… Adams  Academy…     66   100    97.0     0
+ 8     8 Colo… 2017… Alta… Kind… Prowe… Jeffers…     20   100    90       0
+ 9     9 Colo… 2017… Ambl… Kind… Arapa… Adams-A…     16   100    93.8     0
+10    10 Colo… 2017… Ames… Kind… Denver Greeley…     63   100   100       0
+# … with 1,309 more rows, and 4 more variables: xper &lt;dbl&gt;, xrel &lt;dbl&gt;,
+#   lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[5]]
+# A tibble: 751 x 12
+   index state  year   name     type  city  county   mmr  xmed  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Conne… 2017-… A. Ward… Publ… Suff… Hartf…   100     0     0  42.0 -72.7
+ 2     2 Conne… 2017-… Academy… Publ… Rock… Hartf…   100     0     0  41.6 -72.7
+ 3     3 Conne… 2017-… Alfred … Publ… Weth… Hartf…   100     0     0  41.7 -72.7
+ 4     4 Conne… 2017-… Andrew … Publ… Naug… New H…   100     0     0  41.5 -73.1
+ 5     5 Conne… 2017-… Anna Re… Publ… Newi… Hartf…   100     0     0  41.7 -72.7
+ 6     6 Conne… 2017-… Augusta… Publ… New … New H…   100     0     0  41.3 -72.9
+ 7     7 Conne… 2017-… Barlow … Publ… Ridg… Fairf…   100     0     0  41.3 -73.5
+ 8     8 Conne… 2017-… Beecher  Publ… New … New H…   100     0     0  41.3 -73.0
+ 9     9 Conne… 2017-… Benjami… Publ… Meri… New H…   100     0     0  41.5 -72.8
+10    10 Conne… 2017-… Betance… Publ… Hart… Hartf…   100     0     0  41.8 -72.7
+# … with 741 more rows
+
+[[6]]
+# A tibble: 2,242 x 13
+   index state year  name  district enroll mmr   overall  xmed xper   xrel   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Flor… 2018… Adva… Hillsbo…     52 NA        100     0 NA        0  28.0
+ 2     2 Flor… 2018… Apal… Franklin     36 NA        100     0 NA        0  29.7
+ 3     3 Flor… 2018… Arli… Duval        42 NA        100     0 NA        0  30.3
+ 4     4 Flor… 2018… Bard… Pinellas     68 NA        100     0 NA        0  27.9
+ 5     5 Flor… 2018… Bayv… Duval        57 NA        100     0 NA        0  30.3
+ 6     6 Flor… 2018… Blin… Deaf/Bl…      4 NA        100     0 NA        0  29.9
+ 7     7 Flor… 2018… Bonn… Orange       90 NA        100     0 NA        0  28.6
+ 8     8 Flor… 2018… Brad… Manatee      74 NA        100     0 NA        0  27.4
+ 9     9 Flor… 2018… Brig… Broward       4 NA        100     0 NA        0  26.3
+10    10 Flor… 2018… Brow… Broward      53 NA        100     0 NA        0  26.1
+# … with 2,232 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[7]]
+# A tibble: 475 x 13
+   index state year  name  city  county district enrollment overall  xmed  xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Idaho 2018… Amit… Boise Ada    Boise            44     100     0     0
+ 2     2 Idaho 2018… Beac… Lewi… Nez P… Private           5     100     0     0
+ 3     3 Idaho 2018… Bois… Boise Ada    Private           3     100     0     0
+ 4     4 Idaho 2018… Calv… Poca… Banno… Private           7     100     0     0
+ 5     5 Idaho 2018… Cave… Leno… Nez P… Orofino           3     100     0     0
+ 6     6 Idaho 2018… Clov… Boise Ada    Private           9     100     0     0
+ 7     7 Idaho 2018… Coeu… Desm… Benew… Private           6     100     0     0
+ 8     8 Idaho 2018… Culd… Culd… Nez P… Culdesac          7     100     0     0
+ 9     9 Idaho 2018… Down… Down… Banno… Marsh V…          9     100     0     0
+10    10 Idaho 2018… Eagl… Eagle Ada    Private           7     100     0     0
+# … with 465 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[8]]
+# A tibble: 3,574 x 15
+   index state year  name  city  county enroll   mmr overall  xmed xper   xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Illi… 2018… 7th … Caho… Saint…    228   100 NA          0 NA        0
+ 2     2 Illi… 2018… 8th … Caho… Saint…    244   100 NA          0 NA        0
+ 3     3 Illi… 2018… A Mo… Des … Cook        6   100 NA          0 NA        0
+ 4     4 Illi… 2018… A Mo… Arli… Cook       21   100 NA          0 NA        0
+ 5     5 Illi… 2018… A St… Chic… Cook       14   100 NA          0 NA        0
+ 6     6 Illi… 2018… A St… &lt;NA&gt;  &lt;NA&gt;       20   100 NA          0 NA        0
+ 7     7 Illi… 2018… A-Ka… Chic… Cook        9   100 NA          0 NA        0
+ 8     8 Illi… 2018… Abe … Cice… Cook      833   100 NA          0 NA        0
+ 9     9 Illi… 2018… Acad… Posen Cook        6   100 NA          0 NA        0
+10    10 Illi… 2018… Acer… Chic… Cook      261   100 NA          0 NA        0
+# … with 3,564 more rows, and 3 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;,
+#   matcher &lt;chr&gt;
+
+[[9]]
+# A tibble: 978 x 9
+   index state year    name                  county   enroll overall   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Iowa  2018-19 Blessed Sacrament     Black H…    100     100  42.5 -92.4
+ 2     2 Iowa  2018-19 Calmar Festina Spill… Winnesh…    120     100  43.2 -91.9
+ 3     3 Iowa  2018-19 Central Springs Elem… Worth       105     100  43.3 -93.2
+ 4     4 Iowa  2018-19 Delhi Elementary      Delaware    174     100  42.4 -91.3
+ 5     5 Iowa  2018-19 ExiraElk Horn-Kimbal… Shelby      170     100  41.6 -95.1
+ 6     6 Iowa  2018-19 Fredericksburg Elem   Chickas…    138     100  43.0 -92.2
+ 7     7 Iowa  2018-19 George Elementary     Lyon        117     100  43.3 -96.0
+ 8     8 Iowa  2018-19 Glidden-Ralston Elem… Carroll     179     100  42.1 -94.7
+ 9     9 Iowa  2018-19 Ruthven-Ayrshire Ele… Palo Al…    113     100  43.1 -94.9
+10    10 Iowa  2018-19 Salem Elementary      Henry       105     100  40.9 -91.6
+# … with 968 more rows
+
+[[10]]
+# A tibble: 353 x 12
+   index state year   name     county enroll   mmr  xmed  xper  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Maine 2018-… Alexand… Washi…      2   100     0  0        0  44.1 -70.2
+ 2     2 Maine 2018-… Alton E… Penob…      4   100     0  0        0  44.1 -70.2
+ 3     3 Maine 2018-… Andover… Oxford      5   100     0  0        0  44.3 -70.1
+ 4     4 Maine 2018-… Appleto… Knox       17   100     0  0        0  44.3 -69.3
+ 5     5 Maine 2018-… Atwood … Kenne…     69   100     0  0        0  44.1 -70.4
+ 6     6 Maine 2018-… Beals E… Washi…      6   100     0  0        0  44.1 -70.2
+ 7     7 Maine 2018-… Belgrad… Kenne…     39   100     0  0        0  44.1 -70.2
+ 8     8 Maine 2018-… Brixham… York        9   100     0 11.1      0  46.6 -67.9
+ 9     9 Maine 2018-… Calais … Washi…     39   100     0  0        0  46.1 -67.9
+10    10 Maine 2018-… Canaan … Somer…     29   100     0  3.45     0  47.2 -67.9
+# … with 343 more rows
+
+[[11]]
+# A tibble: 1,374 x 11
+   index state    year   name       type  city    county   mmr  xmed   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Massach… 2018-… A Drewicz… Publ… Lynn    Essex    100   0    42.5 -71.0
+ 2     2 Massach… 2018-… Abraham L… Publ… New Be… Brist…   100   0    41.7 -70.9
+ 3     3 Massach… 2018-… Alfred J … Publ… New Be… Brist…   100   0    41.6 -70.9
+ 4     4 Massach… 2018-… Alice Bea… Publ… Spring… Hampd…   100   0    42.1 -72.5
+ 5     5 Massach… 2018-… Allendale… Publ… Pittsf… Berks…   100   0    42.5 -73.2
+ 6     6 Massach… 2018-… Alma Del … Publ… New Be… Brist…   100   0    41.7 -70.9
+ 7     7 Massach… 2018-… Amesbury … Publ… Amesbu… Essex    100   0    42.9 -70.9
+ 8     8 Massach… 2018-… Amvet Blvd Publ… North … Brist…   100   0    42.0 -71.3
+ 9     9 Massach… 2018-… Anna E Ba… Publ… Chicop… Hampd…   100   0    42.2 -72.6
+10    10 Massach… 2018-… Annie E F… Publ… Westbo… Worce…   100   1.1  42.3 -71.6
+# … with 1,364 more rows
+
+[[12]]
+# A tibble: 1,899 x 14
+   index state year  name  county district enroll mmr   overall  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 Mich… 2018… Acad… Oakla… Bloomfi…     12 NA        100     0 NA   
+ 2     2 Mich… 2018… Adam… Kent   Grandvi…     32 NA        100     0 NA   
+ 3     3 Mich… 2018… AGBU… Oakla… AGBU Al…     27 NA        100     0 NA   
+ 4     4 Mich… 2018… Anch… Kent   Godwin …     10 NA        100     0 NA   
+ 5     5 Mich… 2018… Angu… Macomb Warren …     65 NA        100     0 NA   
+ 6     6 Mich… 2018… Ann … Detro… Detroit…     24 NA        100     0 NA   
+ 7     7 Mich… 2018… Arbo… Calho… Arbor A…     41 NA        100     0 NA   
+ 8     8 Mich… 2018… ASA … Detro… Detroit…     12 NA        100     0 NA   
+ 9     9 Mich… 2018… Aubu… Bay    Bay Cit…     17 NA        100     0 NA   
+10    10 Mich… 2018… Augu… Kalam… Augusta…     12 NA        100     0 NA   
+# … with 1,889 more rows, and 3 more variables: xrel &lt;lgl&gt;, lat &lt;dbl&gt;,
+#   lng &lt;dbl&gt;
+
+[[13]]
+# A tibble: 1,289 x 13
+   index state year  name  county enroll   mmr overall  xmed  xper xrel  lat  
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;chr&gt;
+ 1     1 Minn… 2017… Appl… Lac q…     41   100 NA          0     0 NA    45.1…
+ 2     2 Minn… 2017… Argy… Marsh…     24   100 NA          0     0 NA    48.3…
+ 3     3 Minn… 2017… Ashb… Grant      23   100 NA          0     0 NA    46.0…
+ 4     4 Minn… 2017… Ava … Henne…     17   100 NA          0     0 NA    45.0…
+ 5     5 Minn… 2017… Bana… Henne…     11   100 NA          0     0 NA    44.9…
+ 6     6 Minn… 2017… Bert… Todd       38   100 NA          0     0 NA    46.2…
+ 7     7 Minn… 2017… Beth… Henne…     10   100 NA          0     0 NA    44.8…
+ 8     8 Minn… 2017… Blak… Henne…     34   100 NA          0     0 NA    44.9…
+ 9     9 Minn… 2017… Broo… Washi…     91   100 NA          0     0 NA    44.9…
+10    10 Minn… 2017… Brow… Todd       40   100 NA          0     0 NA    46.0…
+# … with 1,279 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[14]]
+# A tibble: 484 x 12
+   index state  year   name    city    mmr overall xmed  xper  xrel    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Misso… 2018-… Agape … Stoc…    99 NA      NA    NA    NA     37.7 -93.8
+ 2     2 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.4
+ 3     3 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 4     4 Misso… 2018-… All Sa… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 5     5 Misso… 2018-… All Sa… St P…    99 NA      NA    NA    NA     38.8 -90.6
+ 6     6 Misso… 2018-… Assump… St. …    99 NA      NA    NA    NA     38.5 -90.4
+ 7     7 Misso… 2018-… Atonem… Flor…    99 NA      NA    NA    NA     38.8 -90.3
+ 8     8 Misso… 2018-… Blesse… Ferg…    99 NA      NA    NA    NA     38.7 -90.3
+ 9     9 Misso… 2018-… Centra… Clay…    99 NA      NA    NA    NA     38.6 -90.3
+10    10 Misso… 2018-… Chamin… St. …    99 NA      NA    NA    NA     38.6 -90.4
+# … with 474 more rows
+
+[[15]]
+# A tibble: 567 x 10
+   index state  year   name            county   enroll   mmr  xmed lat       lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1     1 Monta… 2017-… Acadia Montana  Silver …     64   100     0 46.013… -113.
+ 2     2 Monta… 2017-… Anna Jeffries … Glacier     105   100     0 48.640… -112.
+ 3     3 Monta… 2017-… Ashland         Rosebud      75   100     0 45.594… -106.
+ 4     4 Monta… 2017-… Atonement Luth… Yellows…     26   100     0 45.815… -108.
+ 5     5 Monta… 2017-… Big Stone       Cascade      38   100     0 47.400… -111.
+ 6     6 Monta… 2017-… Blackfeet Earl… Glacier      76   100     0 48.637… -112.
+ 7     7 Monta… 2017-… Child Start He… Missoula    318   100     0 46.771… -114.
+ 8     8 Monta… 2017-… Crow Agency     Big Horn    315   100     0 45.605… -107.
+ 9     9 Monta… 2017-… Dodson Schools… Phillips     82   100     0 48.350… -108.
+10    10 Monta… 2017-… Eastern Montan… Dawson       40   100     0 47.100… -105.
+# … with 557 more rows
+
+[[16]]
+# A tibble: 2,149 x 11
+   index name         state  county enroll overall  xmed  xrel xper    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 A. Harry Mo… New J… Hudson     13     100    NA    NA NA     40.7 -74.1
+ 2     2 A. Russell … New J… Union      63     100    NA    NA NA     39.9 -75.0
+ 3     3 A.V. Ceres … New J… Middl…    139     100    NA    NA NA     40.5 -74.3
+ 4     4 Aaron Decker New J… Morris     81     100    NA    NA NA     41.0 -74.4
+ 5     5 Abington Av… New J… Essex      87     100    NA    NA NA     40.8 -74.2
+ 6     6 Abraham Lin… New J… Bergen     41     100    NA    NA NA     41.0 -74.2
+ 7     7 Abraham Lin… New J… Bergen     71     100    NA    NA NA     40.9 -74.1
+ 8     8 Academy at … New J… Bergen      9     100    NA    NA NA     40.8 -74.1
+ 9     9 Academy of … New J… Bergen     43     100    NA    NA NA     40.8 -74.0
+10    10 Academy Of … New J… Bergen     25     100    NA    NA NA     40.9 -74.0
+# … with 2,139 more rows
+
+[[17]]
+# A tibble: 3,645 x 15
+   index state year  name  type  city  county enroll   mmr overal  xmed xper 
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+ 1     1 New … 2017… A Ch… Priv… East… Queens NA       100  100    0    NA   
+ 2     2 New … 2017… A Fa… Priv… Broo… Kings  NA       100   98.8  1.18 NA   
+ 3     3 New … 2017… Aabr… Priv… Coll… Queens NA       100  100    0    NA   
+ 4     4 New … 2017… Abra… Publ… Glen… Warren NA       100  100    0    NA   
+ 5     5 New … 2017… Abun… Priv… King… Ulster NA       100   75    0    NA   
+ 6     6 New … 2017… Acad… Priv… Bronx Bronx  NA       100  100    0    NA   
+ 7     7 New … 2017… Acad… Priv… Alba… Albany NA       100   98.3  0    NA   
+ 8     8 New … 2017… Adel… Priv… Broo… Kings  NA       100  100    0    NA   
+ 9     9 New … 2017… Adir… Priv… Wilm… Clint… NA       100  100    0    NA   
+10    10 New … 2017… Ahi … Priv… Broo… Kings  NA       100  100    0    NA   
+# … with 3,635 more rows, and 3 more variables: xrel &lt;dbl&gt;, lat &lt;dbl&gt;,
+#   lng &lt;dbl&gt;
+
+[[18]]
+# A tibble: 1,767 x 16
+   index state year  name  address city  county district enroll mmr   overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt;   &lt;lgl&gt; &lt;chr&gt;  &lt;lgl&gt;    &lt;chr&gt;  &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 Nort… 2018… A T … NA      NA    Cabar… NA       132    NA        100
+ 2     2 Nort… 2018… A.C.… NA      NA    Cabar… NA       44     NA        100
+ 3     3 Nort… 2018… ABC … NA      NA    David… NA       1      NA        100
+ 4     4 Nort… 2018… Agap… NA      NA    Ashe   NA       3      NA        100
+ 5     5 Nort… 2018… Agap… NA      NA    Frank… NA       1      NA        100
+ 6     6 Nort… 2018… Ahos… NA      NA    Hertf… NA       32     NA        100
+ 7     7 Nort… 2018… Alam… NA      NA    Alama… NA       15     NA        100
+ 8     8 Nort… 2018… Alam… NA      NA    Guilf… NA       79     NA        100
+ 9     9 Nort… 2018… Albe… NA      NA    Pasqu… NA       15     NA        100
+10    10 Nort… 2018… Albe… NA      NA    Craven NA       70     NA        100
+# … with 1,757 more rows, and 5 more variables: xmed &lt;dbl&gt;, xper &lt;lgl&gt;,
+#   xrel &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[19]]
+# A tibble: 293 x 15
+   index state year  name  city  county district enroll   mmr overall  xmed
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 Nort… 2017… Anam… Anam… McHen… NA            7   100 NA          0
+ 2     2 Nort… 2017… Ashl… Ashl… McInt… NA           11   100 NA          0
+ 3     3 Nort… 2017… Ashl… Fargo McInt… NA            9   100 NA          0
+ 4     4 Nort… 2017… Barn… Wimb… Barnes NA           14   100 NA          0
+ 5     5 Nort… 2017… Bel … Minot Ward   NA           39   100 NA          0
+ 6     6 Nort… 2017… Belf… Belf… Stark  NA           20   100 NA          0
+ 7     7 Nort… 2017… Bert… Bert… Ward   NA           20   100 NA          0
+ 8     8 Nort… 2017… Bott… Bott… Botti… NA           50   100 NA          2
+ 9     9 Nort… 2017… Bowb… Bowb… Burke  NA            8   100 NA          0
+10    10 Nort… 2017… Burk… Lign… Burke  NA            5   100 NA          0
+# … with 283 more rows, and 4 more variables: xper &lt;dbl&gt;, xrel &lt;dbl&gt;,
+#   lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[20]]
+# A tibble: 2,137 x 13
+   index state year  name  type  city  county enroll   mmr overall  xmed   lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Ohio  2018… Acad… Publ… Tole… Lucas      22   100    95.4     0  41.6
+ 2     2 Ohio  2018… Adri… Publ… Sout… Cuyah…     62   100    95.2     0  41.5
+ 3     3 Ohio  2018… All … Priv… Cinc… Hamil…     52   100   100       0  39.2
+ 4     4 Ohio  2018… All … Priv… Colu… Frank…     38   100   100       0  39.9
+ 5     5 Ohio  2018… All … Priv… Ross… Wood       23   100    95.6     0  41.6
+ 6     6 Ohio  2018… Andr… Priv… Will… Lake       11   100   100       0  41.6
+ 7     7 Ohio  2018… Annu… Priv… Cinc… Hamil…     15   100   100       0  39.1
+ 8     8 Ohio  2018… Antw… Publ… Antw… Pauld…     64   100    98.4     0  41.2
+ 9     9 Ohio  2018… Appl… Publ… Brun… Medina     80   100    98.8     0  41.2
+10    10 Ohio  2018… Babe… Publ… Tren… Butler    201   100    99.5     0  39.5
+# … with 2,127 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[21]]
+# A tibble: 965 x 11
+   index state  name       city    county  overall  xmed xrel  xper    lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Oklah… Adams Ele… Enid    Garfie…     100     0 NA    NA     36.4 -97.8
+ 2     2 Oklah… Adams Ele… Oklaho… Oklaho…     100     0 NA    NA     35.4 -97.6
+ 3     3 Oklah… Alex Elem… Alex    Grady       100     0 NA    NA     34.9 -97.8
+ 4     4 Oklah… Allen Pub… Allen   Pontot…     100     0 NA    NA     34.9 -96.4
+ 5     5 Oklah… Andrew Jo… Oklaho… Oklaho…     100     0 NA    NA     35.6 -97.6
+ 6     6 Oklah… Asher Ele… Asher   Pottaw…     100     0 NA    NA     35.0 -96.9
+ 7     7 Oklah… Ator Elem… Owasso  Tulsa       100     0 NA    NA     36.3 -95.9
+ 8     8 Oklah… Benningto… Bennin… Bryan       100     0 NA    NA     34.0 -96.0
+ 9     9 Oklah… Bradley E… Drumri… Creek       100     0 NA    NA     36.0 -96.6
+10    10 Oklah… Bray-Doyl… Marlow  Stephe…     100     0 NA    NA     34.6 -97.8
+# … with 955 more rows
+
+[[22]]
+# A tibble: 733 x 13
+   index state year  name  county enroll   mmr overall  xmed  xper xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Oreg… 2018… Big … Wasco       1 100      88.2 0         0 NA     44.8
+ 2     2 Oreg… 2018… Cair… Malhe…     17 100     100   0         0 NA     44.0
+ 3     3 Oreg… 2018… Jasp… Lane        1 100     100   0         0 NA     44.0
+ 4     4 Oreg… 2018… Jord… Malhe…      1 100     100   0         0 NA     43.0
+ 5     5 Oreg… 2018… Life… Umati…      2 100     100   0         0 NA     45.9
+ 6     6 Oreg… 2018… Morr… Morrow      2 100      96.2 0         0 NA     45.9
+ 7     7 Oreg… 2018… Nyss… Malhe…    102 100     100   0         0 NA     43.9
+ 8     8 Oreg… 2018… W W … Malhe…      1 100     100   0         0 NA     42.9
+ 9     9 Oreg… 2018… Warm… Jeffe…     75 100     100   0         0 NA     44.8
+10    10 Oreg… 2018… W L … Washi…     45  99.7    97.5 0.280     0 NA     45.5
+# … with 723 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[23]]
+# A tibble: 1,635 x 10
+   index state     year name              type  city    enroll   mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;             &lt;lgl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Pennsyl…  2017 Afton Elementary  NA    Yardley     95   100  40.2 -74.9
+ 2     2 Pennsyl…  2017 Aldan Elementary  NA    Aldan       25   100  39.9 -75.3
+ 3     3 Pennsyl…  2017 Amosland Element… NA    Morton      64   100  39.9 -75.3
+ 4     4 Pennsyl…  2017 Andrew Maier Ele… NA    Blandon     37   100  40.4 -75.9
+ 5     5 Pennsyl…  2017 Antonia Pantoja … NA    Philad…    100   100  40.0 -75.1
+ 6     6 Pennsyl…  2017 Appleman Element… NA    Benton      60   100  41.2 -76.4
+ 7     7 Pennsyl…  2017 Arlington Height… NA    Stroud…     46   100  41.0 -75.2
+ 8     8 Pennsyl…  2017 Arrowhead Elemen… NA    Colleg…     67   100  40.2 -75.4
+ 9     9 Pennsyl…  2017 Arthur Street El… NA    Hazlet…    134   100  41.0 -76.0
+10    10 Pennsyl…  2017 Asa Packer Eleme… NA    Bethle…     55   100  40.7 -75.4
+# … with 1,625 more rows
+
+[[24]]
+# A tibble: 230 x 13
+   index state year  name  city  enroll mmr   overall  xmed xper  xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Rhod… 2018… St. … Barr…     11 NA      100    0    NA    NA     41.8
+ 2     2 Rhod… 2018… Barr… Barr…     10 NA       60    0    NA    NA     41.8
+ 3     3 Rhod… 2018… Mont… Barr…     NA NA       NA   NA    NA    NA     41.8
+ 4     4 Rhod… 2018… Naya… Barr…     81 NA       92.6  7.41 NA    NA     41.7
+ 5     5 Rhod… 2018… Prim… Barr…     64 NA      100    0    NA    NA     41.8
+ 6     6 Rhod… 2018… Sowa… Barr…     60 NA       96.7  1.67 NA    NA     41.8
+ 7     7 Rhod… 2018… Our … Bris…      9 NA       55.6  0    NA    NA     41.7
+ 8     8 Rhod… 2018… Colt… Bris…     52 NA      100    0    NA    NA     41.7
+ 9     9 Rhod… 2018… Guit… Bris…     40 NA       62.5 10    NA    NA     41.7
+10    10 Rhod… 2018… Rock… Bris…     44 NA      100    0    NA    NA     41.7
+# … with 220 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[25]]
+# A tibble: 380 x 9
+   index state     year    name             county     enroll   mmr   lat    lng
+   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1     1 South Da… 2017-18 Lower Brule Ele… Lyman          33   100  44.1  -99.6
+ 2     2 South Da… 2017-18 Alcester-Hudson… Union          21   100  43.0  -96.6
+ 3     3 South Da… 2017-18 Andes Central E… Charles M…     32   100  43.2  -98.5
+ 4     4 South Da… 2017-18 Arlington Eleme… Kingsbury      21   100  44.4  -97.1
+ 5     5 South Da… 2017-18 Baltic Elementa… Minnehaha      37   100  43.8  -96.7
+ 6     6 South Da… 2017-18 Ban Dek Montess… Lincoln         4   100  43.5  -96.7
+ 7     7 South Da… 2017-18 Batesland        Ogalala L…     13   100  43.1 -102. 
+ 8     8 South Da… 2017-18 Beadle Elementa… Yankton        59   100  44.1 -103. 
+ 9     9 South Da… 2017-18 Bennett Co Elem… Bennett        41   100  43.2 -102. 
+10    10 South Da… 2017-18 Beresford Eleme… Union          49   100  43.1  -96.8
+# … with 370 more rows
+
+[[26]]
+# A tibble: 1,004 x 11
+   index state  year   name        county enroll overall  xmed  xrel   lat   lng
+   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Tenne… 2018-… Adamsville… McNai…     77     100     0     0  35.2 -88.4
+ 2     2 Tenne… 2018-… Allardt El… Fentr…     35     100     0     0  36.4 -84.9
+ 3     3 Tenne… 2018-… Allons Ele… Overt…     40     100     0     0  36.4 -85.3
+ 4     4 Tenne… 2018-… Andrew Joh… Sulli…     84     100     0     0  36.5 -82.5
+ 5     5 Tenne… 2018-… Arrow Acad… Shelby     17     100     0     0  35.1 -90.0
+ 6     6 Tenne… 2018-… Ashland Ci… Cheat…     89     100     0     0  36.3 -87.1
+ 7     7 Tenne… 2018-… Aspire Eas… Shelby     84     100     0     0  35.1 -89.8
+ 8     8 Tenne… 2018-… Auburn Ele… Cannon     10     100     0     0  35.9 -86.1
+ 9     9 Tenne… 2018-… Baileyton … Greene     31     100     0     0  36.3 -82.8
+10    10 Tenne… 2018-… Barret's C… Shelby     50     100     0     0  35.3 -89.7
+# … with 994 more rows
+
+[[27]]
+# A tibble: 777 x 8
+   index state year    name                           county     mmr   lat   lng
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                          &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Texas 2018-19 Abundant Life Christian        Galvest…   100  29.4 -95.0
+ 2     2 Texas 2018-19 Accelerated Intermediate Acad… Harris     100  29.6 -95.5
+ 3     3 Texas 2018-19 Adventist Christian Academy O… Montgom…   100  30.3 -95.4
+ 4     4 Texas 2018-19 Akiba Academy of Dallas        Dallas     100  32.9 -96.8
+ 5     5 Texas 2018-19 All Saints Catholic School Fo… Tarrant    100  32.8 -97.4
+ 6     6 Texas 2018-19 All Saints Catholic School Of… Dallas     100  33.0 -96.8
+ 7     7 Texas 2018-19 Amigos Por Vida-Friends For L… Harris     100  29.7 -95.5
+ 8     8 Texas 2018-19 Ann And Nate Levine Academy-A… Dallas     100  33.0 -96.8
+ 9     9 Texas 2018-19 Assumption Catholic            Harris     100  29.9 -95.4
+10    10 Texas 2018-19 Athens Christian Preparatory … Henders…   100  32.2 -95.8
+# … with 767 more rows
+
+[[28]]
+# A tibble: 602 x 14
+   index state year  name  type  city  county enroll   mmr  xmed  xper  xrel
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Utah  2017… Anti… Publ… Anti… Garfi…      4   100     0     0     0
+ 2     2 Utah  2017… Bles… Priv… Sandy Salt …    128   100     0     0     0
+ 3     3 Utah  2017… Bluf… Publ… Bluff San J…    100   100     0     0     0
+ 4     4 Utah  2017… Book… Publ… Gree… Emery      10   100     0     0     0
+ 5     5 Utah  2017… Cany… Publ… Ogden Weber      12   100     0     0     0
+ 6     6 Utah  2017… Chan… Publ… Drap… Salt …    468   100     0     0     0
+ 7     7 Utah  2017… Cora… Publ… Wash… Washi…    521   100     0     0     0
+ 8     8 Utah  2017… Esca… Publ… Salt… Salt …    462   100     0     0     0
+ 9     9 Utah  2017… Eure… Publ… Eure… Juab       92   100     0     0     0
+10    10 Utah  2017… Flam… Publ… Dutc… Dagge…     36   100     0     0     0
+# … with 592 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[29]]
+# A tibble: 349 x 13
+   index state year  name  county enroll   mmr overall xmed  xper  xrel    lat
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt;
+ 1     1 Verm… 2018… Addi… Addis…     65   100   100   NA    NA    NA     44.1
+ 2     2 Verm… 2018… Alle… Rutla…     20   100   100   NA    NA    NA     43.6
+ 3     3 Verm… 2018… Brig… Essex      87   100    97.7 NA    NA    NA     44.8
+ 4     4 Verm… 2018… Broo… Orange     13   100    92.3 NA    NA    NA     44.0
+ 5     5 Verm… 2018… Burk… Caled…     68   100   100   NA    NA    NA     44.6
+ 6     6 Verm… 2018… Burk… Caled…    193   100   100   NA    NA    NA     44.6
+ 7     7 Verm… 2018… Cana… Essex     167   100    98.8 NA    NA    NA     45.0
+ 8     8 Verm… 2018… Cast… Rutla…     98   100    91.8 NA    NA    NA     43.6
+ 9     9 Verm… 2018… Chri… Washi…     84   100    98.8 NA    NA    NA     43.9
+10    10 Verm… 2018… Comm… Windh…     37   100    97.3 NA    NA    NA     42.9
+# … with 339 more rows, and 1 more variable: lng &lt;dbl&gt;
+
+[[30]]
+# A tibble: 1,567 x 13
+   index name  state city  county enrollment   mmr overall  xmed  xrel  xper
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 Acad… Wash… Mary… Snoho…          1   100   100       0     0  0   
+ 2     2 Alfa… Wash… Seat… King            1   100   100       0     0  0   
+ 3     3 Almi… Wash… Almi… Linco…          3   100   100       0     0  0   
+ 4     4 Amer… Wash… Bell… King           13   100   100       0     0  0   
+ 5     5 Appl… Wash… Yaki… Yakima         69   100   100       0     0  0   
+ 6     6 Appl… Wash… Seat… King            2   100   100       0     0  0   
+ 7     7 Beac… Wash… Lumm… Whatc…         10   100    90       0     0  0   
+ 8     8 Bel-… Wash… Bell… King           39   100   100       0     0  0   
+ 9     9 Bell… Wash… Bell… King           26   100   100       0     0  0   
+10    10 Bert… Wash… Seat… King           36   100    97.2     0     0  2.78
+# … with 1,557 more rows, and 2 more variables: lat &lt;dbl&gt;, lng &lt;dbl&gt;
+
+[[31]]
+# A tibble: 1,515 x 17
+   index state year  name  type  address city  county district enroll mmr  
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;    &lt;lgl&gt;  &lt;lgl&gt;
+ 1     1 Wisc… 2018… Al B… NA    NA      Bara… Sauk   NA       NA     NA   
+ 2     2 Wisc… 2018… Alba… NA    NA      Alba… Green  NA       NA     NA   
+ 3     3 Wisc… 2018… Alma… NA    NA      Alma  Buffa… NA       NA     NA   
+ 4     4 Wisc… 2018… Arca… NA    NA      Arca… Tremp… NA       NA     NA   
+ 5     5 Wisc… 2018… Argy… NA    NA      Argy… Lafay… NA       NA     NA   
+ 6     6 Wisc… 2018… Assu… NA    NA      Dura… Pepin  NA       NA     NA   
+ 7     7 Wisc… 2018… Aubu… NA    NA      Aubu… Wood   NA       NA     NA   
+ 8     8 Wisc… 2018… Augu… NA    NA      Augu… Eau C… NA       NA     NA   
+ 9     9 Wisc… 2018… Bade… NA    NA      Milw… Milwa… NA       NA     NA   
+10    10 Wisc… 2018… Bann… NA    NA      Stev… Porta… NA       NA     NA   
+# … with 1,505 more rows, and 6 more variables: overall &lt;dbl&gt;, xmed &lt;lgl&gt;,
+#   xper &lt;dbl&gt;, xrel &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+* purrr::map(~select(., state, name, lat, lng))
+```
+]]
+.column[.content[
+
+```
+[[1]]
+# A tibble: 1,343 x 4
+   state   name                                       lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arizona A J Mitchell Elementary                   31.3 -111.
+ 2 Arizona Academy Del Sol                           32.2 -111.
+ 3 Arizona Academy Del Sol - Hope                    32.1 -111.
+ 4 Arizona Academy Of Mathematics And Science South  33.5 -112.
+ 5 Arizona Acclaim Academy                           33.5 -112.
+ 6 Arizona Alfred F Garcia                           33.4 -112.
+ 7 Arizona All Aboard Charter                        33.5 -112.
+ 8 Arizona Amerischools Academy - Yuma South Campus  32.7 -115.
+ 9 Arizona Arizona Cultural Academy                  33.4 -112.
+10 Arizona Arizona Desert Elementary                 32.5 -115.
+# … with 1,333 more rows
+
+[[2]]
+# A tibble: 481 x 4
+   state    name                          lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arkansas Maumelle Charter Elementary  34.9 -92.4
+ 2 Arkansas Thomas C Brunson Elementary  33.6 -92.1
+ 3 Arkansas Parkway Elementary           34.6 -92.5
+ 4 Arkansas Sunnymede Elementary         35.4 -94.4
+ 5 Arkansas Don Roberts Elementary       34.8 -92.5
+ 6 Arkansas Rena Elementary              35.5 -94.4
+ 7 Arkansas Jefferson Elementary         34.8 -92.3
+ 8 Arkansas John P. Woods Elementary     35.4 -94.3
+ 9 Arkansas Perrin Elementary            34.6 -92.6
+10 Arkansas Springhill Elementary        34.7 -92.5
+# … with 471 more rows
+
+[[3]]
+# A tibble: 8,066 x 4
+   state      name                          lat       lng        
+   &lt;chr&gt;      &lt;chr&gt;                         &lt;chr&gt;     &lt;chr&gt;      
+ 1 California Abby Reinke Elementary        33.492008 -117.087291
+ 2 California Abraham Lincoln Elementary    33.741155 -117.902009
+ 3 California Achieve Academy               37.782075 -122.226605
+ 4 California Ada Clegg Elementary          33.747813 -118.018803
+ 5 California Adam William Laird Elementary 34.936178 -120.442216
+ 6 California Adams Elementary              34.432489 -119.73455 
+ 7 California Addams Elementary             36.764231 -119.836821
+ 8 California Agua Caliente Elementary      33.825092 -116.489982
+ 9 California Akira Yokomi Elementary       36.747118 -119.783363
+10 California Alamos Elementary             33.563452 -117.110627
+# … with 8,056 more rows
+
+[[4]]
+# A tibble: 1,319 x 4
+   state    name                         lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;
+ 1 Colorado A New Generation            39.8 -104.
+ 2 Colorado Abiding Hope Preschool Inc  39.6 -105.
+ 3 Colorado Academy Charter             39.4 -105.
+ 4 Colorado Adventure Elementary        39.8 -105.
+ 5 Colorado Aguilar K-12 Schools        38.1 -103.
+ 6 Colorado All Souls Catholic          39.6 -105.
+ 7 Colorado Alsup Elementary            39.8 -105.
+ 8 Colorado Alta Vista Charter          38.1 -103.
+ 9 Colorado Ambleside                   39.6 -105.
+10 Colorado Amesse Elementary           39.8 -105.
+# … with 1,309 more rows
+
+[[5]]
+# A tibble: 751 x 4
+   state       name                                              lat   lng
+   &lt;chr&gt;       &lt;chr&gt;                                           &lt;dbl&gt; &lt;dbl&gt;
+ 1 Connecticut A. Ward Spaulding                                42.0 -72.7
+ 2 Connecticut Academy Of Aerospace And Engineering Elementary  41.6 -72.7
+ 3 Connecticut Alfred W. Hanmer                                 41.7 -72.7
+ 4 Connecticut Andrew Avenue                                    41.5 -73.1
+ 5 Connecticut Anna Reynolds                                    41.7 -72.7
+ 6 Connecticut Augusta Lewis Troup                              41.3 -72.9
+ 7 Connecticut Barlow Mountain Elementary                       41.3 -73.5
+ 8 Connecticut Beecher                                          41.3 -73.0
+ 9 Connecticut Benjamin Franklin                                41.5 -72.8
+10 Connecticut Betances Early Reading Lab Magnet                41.8 -72.7
+# … with 741 more rows
+
+[[6]]
+# A tibble: 2,242 x 4
+   state   name                                lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Florida Advantage Academy Of Hillsborough  28.0 -82.1
+ 2 Florida Apalachicola Bay Charter           29.7 -85.0
+ 3 Florida Arlington Heights Elementary       30.3 -81.6
+ 4 Florida Bardmoor Elementary                27.9 -82.8
+ 5 Florida Bayview Elementary                 30.3 -81.7
+ 6 Florida Blind Pk-8 School (Fsdb)           29.9 -81.3
+ 7 Florida Bonneville Elementary              28.6 -81.2
+ 8 Florida Braden River Elementary            27.4 -82.4
+ 9 Florida Bright Horizons                    26.3 -80.1
+10 Florida Broward Estates Elementary         26.1 -80.2
+# … with 2,232 more rows
+
+[[7]]
+# A tibble: 475 x 4
+   state name                                          lat   lng
+   &lt;chr&gt; &lt;chr&gt;                                       &lt;dbl&gt; &lt;dbl&gt;
+ 1 Idaho Amity Elementary                             43.6 -116.
+ 2 Idaho Beacon Christian                             46.4 -117.
+ 3 Idaho Boise River Montessori                       43.6 -116.
+ 4 Idaho Calvary Chapel Christian School - Pocatello  42.9 -112.
+ 5 Idaho Cavendish-Teakean Elementary                 46.5 -117.
+ 6 Idaho Cloverdale Christian Dayschool               43.6 -116.
+ 7 Idaho Coeur D'Alene Tribal                         47.1 -117.
+ 8 Idaho Culdesac                                     46.4 -117.
+ 9 Idaho Downey Elementary                            42.4 -112.
+10 Idaho Eagle Adventist Christian                    43.7 -116.
+# … with 465 more rows
+
+[[8]]
+# A tibble: 3,574 x 4
+   state    name                               lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Illinois 7th Grade Academy                 38.6 -90.1
+ 2 Illinois 8th Grade Academy                 38.6 -90.1
+ 3 Illinois A Mothers Touch Learning Academy  42.0 -87.9
+ 4 Illinois A Mothers Touch Lrning Center     42.1 -88.0
+ 5 Illinois A Step Ahead Academy              41.7 -87.7
+ 6 Illinois A Step Up Career Academy          41.6 -87.6
+ 7 Illinois A-Karrasel                        41.9 -87.8
+ 8 Illinois Abe Lincoln Elementary            41.8 -87.8
+ 9 Illinois Academic Mastery Academy          41.6 -87.6
+10 Illinois Acero Chtr - Bartolome de las     41.9 -87.7
+# … with 3,564 more rows
+
+[[9]]
+# A tibble: 978 x 4
+   state name                                  lat   lng
+   &lt;chr&gt; &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 Iowa  Blessed Sacrament                    42.5 -92.4
+ 2 Iowa  Calmar Festina Spillville Catholic   43.2 -91.9
+ 3 Iowa  Central Springs Elem. Manly Campus   43.3 -93.2
+ 4 Iowa  Delhi Elementary                     42.4 -91.3
+ 5 Iowa  ExiraElk Horn-Kimballton Elementary  41.6 -95.1
+ 6 Iowa  Fredericksburg Elem                  43.0 -92.2
+ 7 Iowa  George Elementary                    43.3 -96.0
+ 8 Iowa  Glidden-Ralston Elementary           42.1 -94.7
+ 9 Iowa  Ruthven-Ayrshire Elementary          43.1 -94.9
+10 Iowa  Salem Elementary                     40.9 -91.6
+# … with 968 more rows
+
+[[10]]
+# A tibble: 353 x 4
+   state name                             lat   lng
+   &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt; &lt;dbl&gt;
+ 1 Maine Alexander Elementary            44.1 -70.2
+ 2 Maine Alton Elementary                44.1 -70.2
+ 3 Maine Andover Elementary              44.3 -70.1
+ 4 Maine Appleton Village                44.3 -69.3
+ 5 Maine Atwood Primary                  44.1 -70.4
+ 6 Maine Beals Elementary                44.1 -70.2
+ 7 Maine Belgrade Central School Rsu 18  44.1 -70.2
+ 8 Maine Brixham Montessori Friends      46.6 -67.9
+ 9 Maine Calais Elementary               46.1 -67.9
+10 Maine Canaan Elementary               47.2 -67.9
+# … with 343 more rows
+
+[[11]]
+# A tibble: 1,374 x 4
+   state         name                    lat   lng
+   &lt;chr&gt;         &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 Massachusetts A Drewicz Elementary   42.5 -71.0
+ 2 Massachusetts Abraham Lincoln        41.7 -70.9
+ 3 Massachusetts Alfred J Gomes         41.6 -70.9
+ 4 Massachusetts Alice Beal Elementary  42.1 -72.5
+ 5 Massachusetts Allendale Elementary   42.5 -73.2
+ 6 Massachusetts Alma Del Mar Charter   41.7 -70.9
+ 7 Massachusetts Amesbury Elementary    42.9 -70.9
+ 8 Massachusetts Amvet Blvd             42.0 -71.3
+ 9 Massachusetts Anna E Barry           42.2 -72.6
+10 Massachusetts Annie E Fales          42.3 -71.6
+# … with 1,364 more rows
+
+[[12]]
+# A tibble: 1,899 x 4
+   state    name                                  lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 Michigan Academy of Sacred Heart              42.6 -83.2
+ 2 Michigan Adams Christian                      42.9 -85.7
+ 3 Michigan AGBU Alex-Marie Manoogian            42.5 -83.2
+ 4 Michigan Anchor Point Christian               42.9 -85.7
+ 5 Michigan Angus Elementary                     42.5 -83.1
+ 6 Michigan Ann Arbor Trail Magnet               42.3 -83.3
+ 7 Michigan Arbor Academy                        42.3 -85.2
+ 8 Michigan ASA Higher Learning Preparatory Sch  42.4 -83.1
+ 9 Michigan Auburn Area Catholic                 43.6 -84.1
+10 Michigan Augusta Academy                      42.3 -85.4
+# … with 1,889 more rows
+
+[[13]]
+# A tibble: 1,289 x 4
+   state     name                              lat          lng
+   &lt;chr&gt;     &lt;chr&gt;                             &lt;chr&gt;      &lt;dbl&gt;
+ 1 Minnesota Appleton Elementary               45.1960686 -96.0
+ 2 Minnesota Argyle Elementary                 48.33247   -96.8
+ 3 Minnesota Ashby Elementary                  46.09193   -95.8
+ 4 Minnesota Ava Maria Academy                 45.0831293 -93.5
+ 5 Minnesota Banaadir South K-8                44.9505072 -93.2
+ 6 Minnesota Bertha Elementary                 46.262716  -95.1
+ 7 Minnesota Bethany Academy                   44.82652   -93.3
+ 8 Minnesota Blake Lower School-Hopkins Campus 44.9223192 -93.4
+ 9 Minnesota Brookview Elementary              44.932881  -92.9
+10 Minnesota Browerville Elementary            46.085998  -94.9
+# … with 1,279 more rows
+
+[[14]]
+# A tibble: 484 x 4
+   state    name                               lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Missouri Agape Boarding                    37.7 -93.8
+ 2 Missouri All Saints Academy- St Ferdinand  38.8 -90.4
+ 3 Missouri All Saints Academy- St Norbert    38.8 -90.3
+ 4 Missouri All Saints Academy-St Rose Phill  38.8 -90.3
+ 5 Missouri All Saints                        38.8 -90.6
+ 6 Missouri Assumption                        38.5 -90.4
+ 7 Missouri Atonement Lutheran                38.8 -90.3
+ 8 Missouri Blessed Teresa Of Calcutta Sch    38.7 -90.3
+ 9 Missouri Central Christian                 38.6 -90.3
+10 Missouri Chaminade College Prep            38.6 -90.4
+# … with 474 more rows
+
+[[15]]
+# A tibble: 567 x 4
+   state   name                           lat          lng
+   &lt;chr&gt;   &lt;chr&gt;                          &lt;chr&gt;      &lt;dbl&gt;
+ 1 Montana Acadia Montana                 46.0133825 -113.
+ 2 Montana Anna Jeffries Elementary       48.640888  -112.
+ 3 Montana Ashland                        45.594903  -106.
+ 4 Montana Atonement Lutheran Preschool   45.8154276 -108.
+ 5 Montana Big Stone                      47.400636  -111.
+ 6 Montana Blackfeet Early Childhood Cntr 48.637319  -112.
+ 7 Montana Child Start Head Start         46.7716769 -114.
+ 8 Montana Crow Agency                    45.605624  -107.
+ 9 Montana Dodson Schools Prek-12         48.3505689 -108.
+10 Montana Eastern Montana Head Start     47.1003625 -105.
+# … with 557 more rows
+
+[[16]]
+# A tibble: 2,149 x 4
+   state      name                                  lat   lng
+   &lt;chr&gt;      &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 New Jersey A. Harry Moore                       40.7 -74.1
+ 2 New Jersey A. Russell Knight Elementary         39.9 -75.0
+ 3 New Jersey A.V. Ceres Elementary                40.5 -74.3
+ 4 New Jersey Aaron Decker                         41.0 -74.4
+ 5 New Jersey Abington Avenue                      40.8 -74.2
+ 6 New Jersey Abraham Lincoln - Wykoff             41.0 -74.2
+ 7 New Jersey Abraham Lincoln 6 - Garfield         40.9 -74.1
+ 8 New Jersey Academy at St. Mary                  40.8 -74.1
+ 9 New Jersey Academy of Our Lady of Grace         40.8 -74.0
+10 New Jersey Academy Of Our Lady Of Mount Carmel  40.9 -74.0
+# … with 2,139 more rows
+
+[[17]]
+# A tibble: 3,645 x 4
+   state    name                                     lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;
+ 1 New York A Child's Place                         40.8 -73.9
+ 2 New York A Fantis Parochial                      40.7 -74.0
+ 3 New York Aabr/New York Child Learning Institute  40.8 -73.8
+ 4 New York Abraham Wing                            43.3 -73.6
+ 5 New York Abundant Life Academy                   41.9 -74.0
+ 6 New York Academy Mt St Ursula                    40.9 -73.9
+ 7 New York Academy Of The Holy Names - Upper       42.7 -73.8
+ 8 New York Adelphi Academy                         40.6 -74.0
+ 9 New York Adirondack Christian                    44.4 -73.8
+10 New York Ahi Ezer Yeshiva                        40.6 -74.0
+# … with 3,635 more rows
+
+[[18]]
+# A tibble: 1,767 x 4
+   state          name                                    lat   lng
+   &lt;chr&gt;          &lt;chr&gt;                                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 North Carolina A T Allen Elementary                   35.4 -80.5
+ 2 North Carolina A.C.E. Academy                         35.3 -80.7
+ 3 North Carolina ABC of NC Child Develop. Ctr           36.0 -80.3
+ 4 North Carolina Agape Christian                        36.4 -81.5
+ 5 North Carolina Agape International Christian Academy  36.0 -78.5
+ 6 North Carolina Ahoskie Christian                      36.3 -77.0
+ 7 North Carolina Alamance Christian                     36.1 -79.4
+ 8 North Carolina Alamance Elementary                    36.0 -79.7
+ 9 North Carolina Albemarle                              36.3 -76.3
+10 North Carolina Albert H Bangert Elementary            35.1 -77.1
+# … with 1,757 more rows
+
+[[19]]
+# A tibble: 293 x 4
+   state        name                             lat    lng
+   &lt;chr&gt;        &lt;chr&gt;                          &lt;dbl&gt;  &lt;dbl&gt;
+ 1 North Dakota Anamoose Elementary             47.9 -100. 
+ 2 North Dakota Ashley Elementary               46.0  -99.4
+ 3 North Dakota Ashley Elementary               46.9  -96.8
+ 4 North Dakota Barnes County North Elementary  47.1  -98.4
+ 5 North Dakota Bel Air Elementary              48.2 -101. 
+ 6 North Dakota Belfield Elementary             46.9 -103. 
+ 7 North Dakota Berthold Elementary             48.3 -102. 
+ 8 North Dakota Bottineau Elementary            48.8 -100. 
+ 9 North Dakota Bowbells Elementary             48.8 -102. 
+10 North Dakota Burke Central Elementary        48.9 -103. 
+# … with 283 more rows
+
+[[20]]
+# A tibble: 2,137 x 4
+   state name                                lat   lng
+   &lt;chr&gt; &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Ohio  Academy Of Educational Excellence  41.6 -83.6
+ 2 Ohio  Adrian Elementary                  41.5 -81.5
+ 3 Ohio  All Saints                         39.2 -84.4
+ 4 Ohio  All Saints Academy                 39.9 -82.9
+ 5 Ohio  All Saints Catholic                41.6 -83.6
+ 6 Ohio  Andrews Osborne Academy            41.6 -81.4
+ 7 Ohio  Annunciation                       39.1 -84.5
+ 8 Ohio  Antwerp Local Elementary           41.2 -84.7
+ 9 Ohio  Applewood Elementary               41.2 -81.8
+10 Ohio  Babeck Early Childhood             39.5 -84.5
+# … with 2,127 more rows
+
+[[21]]
+# A tibble: 965 x 4
+   state    name                        lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;
+ 1 Oklahoma Adams Elementary           36.4 -97.8
+ 2 Oklahoma Adams Elementary           35.4 -97.6
+ 3 Oklahoma Alex Elementary            34.9 -97.8
+ 4 Oklahoma Allen Public Schools       34.9 -96.4
+ 5 Oklahoma Andrew Johnson Elementary  35.6 -97.6
+ 6 Oklahoma Asher Elementary           35.0 -96.9
+ 7 Oklahoma Ator Elementary            36.3 -95.9
+ 8 Oklahoma Bennington Public Schools  34.0 -96.0
+ 9 Oklahoma Bradley Elementary         36.0 -96.6
+10 Oklahoma Bray-Doyle Elementary      34.6 -97.8
+# … with 955 more rows
+
+[[22]]
+# A tibble: 733 x 4
+   state  name                             lat   lng
+   &lt;chr&gt;  &lt;chr&gt;                          &lt;dbl&gt; &lt;dbl&gt;
+ 1 Oregon Big Muddy Elementary            44.8 -120.
+ 2 Oregon Cairo Elementary                44.0 -117.
+ 3 Oregon Jasper Mountain Center          44.0 -123.
+ 4 Oregon Jordan Valley Elementary        43.0 -117.
+ 5 Oregon Lifeways Day Treatment Program  45.9 -119.
+ 6 Oregon Morrow Education Center         45.9 -120.
+ 7 Oregon Nyssa Elementary                43.9 -117.
+ 8 Oregon W W Jonelementary Elementary    42.9 -118.
+ 9 Oregon Warm Springs K-8 Academy        44.8 -121.
+10 Oregon W L Henry Elementary            45.5 -123.
+# … with 723 more rows
+
+[[23]]
+# A tibble: 1,635 x 4
+   state        name                                lat   lng
+   &lt;chr&gt;        &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Pennsylvania Afton Elementary                   40.2 -74.9
+ 2 Pennsylvania Aldan Elementary                   39.9 -75.3
+ 3 Pennsylvania Amosland Elementary                39.9 -75.3
+ 4 Pennsylvania Andrew Maier Elementary            40.4 -75.9
+ 5 Pennsylvania Antonia Pantoja Community Charter  40.0 -75.1
+ 6 Pennsylvania Appleman Elementary                41.2 -76.4
+ 7 Pennsylvania Arlington Heights Elementary       41.0 -75.2
+ 8 Pennsylvania Arrowhead Elementary               40.2 -75.4
+ 9 Pennsylvania Arthur Street Elementary           41.0 -76.0
+10 Pennsylvania Asa Packer Elementary              40.7 -75.4
+# … with 1,625 more rows
+
+[[24]]
+# A tibble: 230 x 4
+   state        name                              lat   lng
+   &lt;chr&gt;        &lt;chr&gt;                           &lt;dbl&gt; &lt;dbl&gt;
+ 1 Rhode Island St. Luke                         41.8 -71.4
+ 2 Rhode Island Barrington Christian Academy     41.8 -71.3
+ 3 Rhode Island Montessori Centre of Barrington  41.8 -71.3
+ 4 Rhode Island Nayatt                           41.7 -71.3
+ 5 Rhode Island Primrose Hill                    41.8 -71.3
+ 6 Rhode Island Sowams Elementary                41.8 -71.3
+ 7 Rhode Island Our Lady of Mount Carmel         41.7 -71.3
+ 8 Rhode Island Colt Andrews                     41.7 -71.3
+ 9 Rhode Island Guiteras Elementary              41.7 -71.3
+10 Rhode Island Rockwell                         41.7 -71.3
+# … with 220 more rows
+
+[[25]]
+# A tibble: 380 x 4
+   state        name                         lat    lng
+   &lt;chr&gt;        &lt;chr&gt;                      &lt;dbl&gt;  &lt;dbl&gt;
+ 1 South Dakota Lower Brule Elementary      44.1  -99.6
+ 2 South Dakota Alcester-Hudson Elementary  43.0  -96.6
+ 3 South Dakota Andes Central Elementary    43.2  -98.5
+ 4 South Dakota Arlington Elementary        44.4  -97.1
+ 5 South Dakota Baltic Elementary           43.8  -96.7
+ 6 South Dakota Ban Dek Montessori          43.5  -96.7
+ 7 South Dakota Batesland                   43.1 -102. 
+ 8 South Dakota Beadle Elementary           44.1 -103. 
+ 9 South Dakota Bennett Co Elementary       43.2 -102. 
+10 South Dakota Beresford Elementary        43.1  -96.8
+# … with 370 more rows
+
+[[26]]
+# A tibble: 1,004 x 4
+   state     name                               lat   lng
+   &lt;chr&gt;     &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Tennessee Adamsville Elementary             35.2 -88.4
+ 2 Tennessee Allardt Elementary                36.4 -84.9
+ 3 Tennessee Allons Elementary                 36.4 -85.3
+ 4 Tennessee Andrew Johnson Elementary School  36.5 -82.5
+ 5 Tennessee Arrow Academy Of Excellence       35.1 -90.0
+ 6 Tennessee Ashland City Elementary           36.3 -87.1
+ 7 Tennessee Aspire East Academy               35.1 -89.8
+ 8 Tennessee Auburn Elementary                 35.9 -86.1
+ 9 Tennessee Baileyton Elementary              36.3 -82.8
+10 Tennessee Barret's Chapel Elementary        35.3 -89.7
+# … with 994 more rows
+
+[[27]]
+# A tibble: 777 x 4
+   state name                                       lat   lng
+   &lt;chr&gt; &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Texas Abundant Life Christian                   29.4 -95.0
+ 2 Texas Accelerated Intermediate Academy          29.6 -95.5
+ 3 Texas Adventist Christian Academy Of Texas      30.3 -95.4
+ 4 Texas Akiba Academy of Dallas                   32.9 -96.8
+ 5 Texas All Saints Catholic School Fort Worth     32.8 -97.4
+ 6 Texas All Saints Catholic School Of Dallas      33.0 -96.8
+ 7 Texas Amigos Por Vida-Friends For Life Pub Cht  29.7 -95.5
+ 8 Texas Ann And Nate Levine Academy-A Solomon Sc  33.0 -96.8
+ 9 Texas Assumption Catholic                       29.9 -95.4
+10 Texas Athens Christian Preparatory Academy      32.2 -95.8
+# … with 767 more rows
+
+[[28]]
+# A tibble: 602 x 4
+   state name                        lat   lng
+   &lt;chr&gt; &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;
+ 1 Utah  Antimony Elementary        38.1 -112.
+ 2 Utah  Blessed Sacrament          40.6 -112.
+ 3 Utah  Bluff Elementary           37.3 -110.
+ 4 Utah  Book Cliff Elementary      39.0 -110.
+ 5 Utah  Canyon View                41.2 -112.
+ 6 Utah  Channing Hall              40.5 -112.
+ 7 Utah  Coral Canyon Elementary    37.2 -113.
+ 8 Utah  Escalante Elementary -Slc  40.8 -112.
+ 9 Utah  Eureka Elementary          40.0 -112.
+10 Utah  Flaming Gorge Elementary   40.9 -109.
+# … with 592 more rows
+
+[[29]]
+# A tibble: 349 x 4
+   state   name                         lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;
+ 1 Vermont Addison Central             44.1  44.1
+ 2 Vermont Allen Street Campus         43.6 -73.0
+ 3 Vermont Brighton Elementary         44.8 -71.9
+ 4 Vermont Brookhaven Learning Center  44.0 -72.4
+ 5 Vermont Burke Mountain Academy      44.6 -71.9
+ 6 Vermont Burke Town                  44.6  44.6
+ 7 Vermont Canaan Schools              45.0  45.0
+ 8 Vermont Castleton Village           43.6 -73.2
+ 9 Vermont Christ Covenant             43.9 -72.7
+10 Vermont Community Schoolhouse       42.9 -72.6
+# … with 339 more rows
+
+[[30]]
+# A tibble: 1,567 x 4
+   state      name                                     lat   lng
+   &lt;chr&gt;      &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;
+ 1 Washington Academy Nw - Marysville Campus          47.8 -122.
+ 2 Washington Alfajer                                 47.6 -122.
+ 3 Washington Almira Elementary                       47.7 -119.
+ 4 Washington America's Child Montessori              47.6 -122.
+ 5 Washington Apple Valley Elementary                 46.6 -121.
+ 6 Washington Applied Scholastics Academy Of Seattle  47.7 -122.
+ 7 Washington Beach Elem                              48.7 -123.
+ 8 Washington Bel-Red Bilingual Academy               47.6 -122.
+ 9 Washington Bellevue Montessori                     47.6 -122.
+10 Washington Bertschi                                47.6 -122.
+# … with 1,557 more rows
+
+[[31]]
+# A tibble: 1,515 x 4
+   state     name                    lat   lng
+   &lt;chr&gt;     &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 Wisconsin Al Behrman Elementary  43.5 -89.7
+ 2 Wisconsin Albany Elementary      42.7 -89.4
+ 3 Wisconsin Alma Elementary        44.4 -91.9
+ 4 Wisconsin Arcadia Elementary     44.3 -91.5
+ 5 Wisconsin Argyle Elementary      42.7 -89.9
+ 6 Wisconsin Assumption Catholic    44.6 -92.0
+ 7 Wisconsin Auburndale Elementary  44.6 -90.0
+ 8 Wisconsin Augusta Elementary     44.7 -91.1
+ 9 Wisconsin Bader Hillel Academy   43.1 -87.9
+10 Wisconsin Bannach Elementary     44.5 -89.5
+# … with 1,505 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+* purrr::map(~mutate_at(., vars(lat, lng), as.numeric))
+```
+]]
+.column[.content[
+
+```
+[[1]]
+# A tibble: 1,343 x 4
+   state   name                                       lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arizona A J Mitchell Elementary                   31.3 -111.
+ 2 Arizona Academy Del Sol                           32.2 -111.
+ 3 Arizona Academy Del Sol - Hope                    32.1 -111.
+ 4 Arizona Academy Of Mathematics And Science South  33.5 -112.
+ 5 Arizona Acclaim Academy                           33.5 -112.
+ 6 Arizona Alfred F Garcia                           33.4 -112.
+ 7 Arizona All Aboard Charter                        33.5 -112.
+ 8 Arizona Amerischools Academy - Yuma South Campus  32.7 -115.
+ 9 Arizona Arizona Cultural Academy                  33.4 -112.
+10 Arizona Arizona Desert Elementary                 32.5 -115.
+# … with 1,333 more rows
+
+[[2]]
+# A tibble: 481 x 4
+   state    name                          lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arkansas Maumelle Charter Elementary  34.9 -92.4
+ 2 Arkansas Thomas C Brunson Elementary  33.6 -92.1
+ 3 Arkansas Parkway Elementary           34.6 -92.5
+ 4 Arkansas Sunnymede Elementary         35.4 -94.4
+ 5 Arkansas Don Roberts Elementary       34.8 -92.5
+ 6 Arkansas Rena Elementary              35.5 -94.4
+ 7 Arkansas Jefferson Elementary         34.8 -92.3
+ 8 Arkansas John P. Woods Elementary     35.4 -94.3
+ 9 Arkansas Perrin Elementary            34.6 -92.6
+10 Arkansas Springhill Elementary        34.7 -92.5
+# … with 471 more rows
+
+[[3]]
+# A tibble: 8,066 x 4
+   state      name                            lat   lng
+   &lt;chr&gt;      &lt;chr&gt;                         &lt;dbl&gt; &lt;dbl&gt;
+ 1 California Abby Reinke Elementary         33.5 -117.
+ 2 California Abraham Lincoln Elementary     33.7 -118.
+ 3 California Achieve Academy                37.8 -122.
+ 4 California Ada Clegg Elementary           33.7 -118.
+ 5 California Adam William Laird Elementary  34.9 -120.
+ 6 California Adams Elementary               34.4 -120.
+ 7 California Addams Elementary              36.8 -120.
+ 8 California Agua Caliente Elementary       33.8 -116.
+ 9 California Akira Yokomi Elementary        36.7 -120.
+10 California Alamos Elementary              33.6 -117.
+# … with 8,056 more rows
+
+[[4]]
+# A tibble: 1,319 x 4
+   state    name                         lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;
+ 1 Colorado A New Generation            39.8 -104.
+ 2 Colorado Abiding Hope Preschool Inc  39.6 -105.
+ 3 Colorado Academy Charter             39.4 -105.
+ 4 Colorado Adventure Elementary        39.8 -105.
+ 5 Colorado Aguilar K-12 Schools        38.1 -103.
+ 6 Colorado All Souls Catholic          39.6 -105.
+ 7 Colorado Alsup Elementary            39.8 -105.
+ 8 Colorado Alta Vista Charter          38.1 -103.
+ 9 Colorado Ambleside                   39.6 -105.
+10 Colorado Amesse Elementary           39.8 -105.
+# … with 1,309 more rows
+
+[[5]]
+# A tibble: 751 x 4
+   state       name                                              lat   lng
+   &lt;chr&gt;       &lt;chr&gt;                                           &lt;dbl&gt; &lt;dbl&gt;
+ 1 Connecticut A. Ward Spaulding                                42.0 -72.7
+ 2 Connecticut Academy Of Aerospace And Engineering Elementary  41.6 -72.7
+ 3 Connecticut Alfred W. Hanmer                                 41.7 -72.7
+ 4 Connecticut Andrew Avenue                                    41.5 -73.1
+ 5 Connecticut Anna Reynolds                                    41.7 -72.7
+ 6 Connecticut Augusta Lewis Troup                              41.3 -72.9
+ 7 Connecticut Barlow Mountain Elementary                       41.3 -73.5
+ 8 Connecticut Beecher                                          41.3 -73.0
+ 9 Connecticut Benjamin Franklin                                41.5 -72.8
+10 Connecticut Betances Early Reading Lab Magnet                41.8 -72.7
+# … with 741 more rows
+
+[[6]]
+# A tibble: 2,242 x 4
+   state   name                                lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Florida Advantage Academy Of Hillsborough  28.0 -82.1
+ 2 Florida Apalachicola Bay Charter           29.7 -85.0
+ 3 Florida Arlington Heights Elementary       30.3 -81.6
+ 4 Florida Bardmoor Elementary                27.9 -82.8
+ 5 Florida Bayview Elementary                 30.3 -81.7
+ 6 Florida Blind Pk-8 School (Fsdb)           29.9 -81.3
+ 7 Florida Bonneville Elementary              28.6 -81.2
+ 8 Florida Braden River Elementary            27.4 -82.4
+ 9 Florida Bright Horizons                    26.3 -80.1
+10 Florida Broward Estates Elementary         26.1 -80.2
+# … with 2,232 more rows
+
+[[7]]
+# A tibble: 475 x 4
+   state name                                          lat   lng
+   &lt;chr&gt; &lt;chr&gt;                                       &lt;dbl&gt; &lt;dbl&gt;
+ 1 Idaho Amity Elementary                             43.6 -116.
+ 2 Idaho Beacon Christian                             46.4 -117.
+ 3 Idaho Boise River Montessori                       43.6 -116.
+ 4 Idaho Calvary Chapel Christian School - Pocatello  42.9 -112.
+ 5 Idaho Cavendish-Teakean Elementary                 46.5 -117.
+ 6 Idaho Cloverdale Christian Dayschool               43.6 -116.
+ 7 Idaho Coeur D'Alene Tribal                         47.1 -117.
+ 8 Idaho Culdesac                                     46.4 -117.
+ 9 Idaho Downey Elementary                            42.4 -112.
+10 Idaho Eagle Adventist Christian                    43.7 -116.
+# … with 465 more rows
+
+[[8]]
+# A tibble: 3,574 x 4
+   state    name                               lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Illinois 7th Grade Academy                 38.6 -90.1
+ 2 Illinois 8th Grade Academy                 38.6 -90.1
+ 3 Illinois A Mothers Touch Learning Academy  42.0 -87.9
+ 4 Illinois A Mothers Touch Lrning Center     42.1 -88.0
+ 5 Illinois A Step Ahead Academy              41.7 -87.7
+ 6 Illinois A Step Up Career Academy          41.6 -87.6
+ 7 Illinois A-Karrasel                        41.9 -87.8
+ 8 Illinois Abe Lincoln Elementary            41.8 -87.8
+ 9 Illinois Academic Mastery Academy          41.6 -87.6
+10 Illinois Acero Chtr - Bartolome de las     41.9 -87.7
+# … with 3,564 more rows
+
+[[9]]
+# A tibble: 978 x 4
+   state name                                  lat   lng
+   &lt;chr&gt; &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 Iowa  Blessed Sacrament                    42.5 -92.4
+ 2 Iowa  Calmar Festina Spillville Catholic   43.2 -91.9
+ 3 Iowa  Central Springs Elem. Manly Campus   43.3 -93.2
+ 4 Iowa  Delhi Elementary                     42.4 -91.3
+ 5 Iowa  ExiraElk Horn-Kimballton Elementary  41.6 -95.1
+ 6 Iowa  Fredericksburg Elem                  43.0 -92.2
+ 7 Iowa  George Elementary                    43.3 -96.0
+ 8 Iowa  Glidden-Ralston Elementary           42.1 -94.7
+ 9 Iowa  Ruthven-Ayrshire Elementary          43.1 -94.9
+10 Iowa  Salem Elementary                     40.9 -91.6
+# … with 968 more rows
+
+[[10]]
+# A tibble: 353 x 4
+   state name                             lat   lng
+   &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt; &lt;dbl&gt;
+ 1 Maine Alexander Elementary            44.1 -70.2
+ 2 Maine Alton Elementary                44.1 -70.2
+ 3 Maine Andover Elementary              44.3 -70.1
+ 4 Maine Appleton Village                44.3 -69.3
+ 5 Maine Atwood Primary                  44.1 -70.4
+ 6 Maine Beals Elementary                44.1 -70.2
+ 7 Maine Belgrade Central School Rsu 18  44.1 -70.2
+ 8 Maine Brixham Montessori Friends      46.6 -67.9
+ 9 Maine Calais Elementary               46.1 -67.9
+10 Maine Canaan Elementary               47.2 -67.9
+# … with 343 more rows
+
+[[11]]
+# A tibble: 1,374 x 4
+   state         name                    lat   lng
+   &lt;chr&gt;         &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 Massachusetts A Drewicz Elementary   42.5 -71.0
+ 2 Massachusetts Abraham Lincoln        41.7 -70.9
+ 3 Massachusetts Alfred J Gomes         41.6 -70.9
+ 4 Massachusetts Alice Beal Elementary  42.1 -72.5
+ 5 Massachusetts Allendale Elementary   42.5 -73.2
+ 6 Massachusetts Alma Del Mar Charter   41.7 -70.9
+ 7 Massachusetts Amesbury Elementary    42.9 -70.9
+ 8 Massachusetts Amvet Blvd             42.0 -71.3
+ 9 Massachusetts Anna E Barry           42.2 -72.6
+10 Massachusetts Annie E Fales          42.3 -71.6
+# … with 1,364 more rows
+
+[[12]]
+# A tibble: 1,899 x 4
+   state    name                                  lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 Michigan Academy of Sacred Heart              42.6 -83.2
+ 2 Michigan Adams Christian                      42.9 -85.7
+ 3 Michigan AGBU Alex-Marie Manoogian            42.5 -83.2
+ 4 Michigan Anchor Point Christian               42.9 -85.7
+ 5 Michigan Angus Elementary                     42.5 -83.1
+ 6 Michigan Ann Arbor Trail Magnet               42.3 -83.3
+ 7 Michigan Arbor Academy                        42.3 -85.2
+ 8 Michigan ASA Higher Learning Preparatory Sch  42.4 -83.1
+ 9 Michigan Auburn Area Catholic                 43.6 -84.1
+10 Michigan Augusta Academy                      42.3 -85.4
+# … with 1,889 more rows
+
+[[13]]
+# A tibble: 1,289 x 4
+   state     name                                lat   lng
+   &lt;chr&gt;     &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Minnesota Appleton Elementary                45.2 -96.0
+ 2 Minnesota Argyle Elementary                  48.3 -96.8
+ 3 Minnesota Ashby Elementary                   46.1 -95.8
+ 4 Minnesota Ava Maria Academy                  45.1 -93.5
+ 5 Minnesota Banaadir South K-8                 45.0 -93.2
+ 6 Minnesota Bertha Elementary                  46.3 -95.1
+ 7 Minnesota Bethany Academy                    44.8 -93.3
+ 8 Minnesota Blake Lower School-Hopkins Campus  44.9 -93.4
+ 9 Minnesota Brookview Elementary               44.9 -92.9
+10 Minnesota Browerville Elementary             46.1 -94.9
+# … with 1,279 more rows
+
+[[14]]
+# A tibble: 484 x 4
+   state    name                               lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Missouri Agape Boarding                    37.7 -93.8
+ 2 Missouri All Saints Academy- St Ferdinand  38.8 -90.4
+ 3 Missouri All Saints Academy- St Norbert    38.8 -90.3
+ 4 Missouri All Saints Academy-St Rose Phill  38.8 -90.3
+ 5 Missouri All Saints                        38.8 -90.6
+ 6 Missouri Assumption                        38.5 -90.4
+ 7 Missouri Atonement Lutheran                38.8 -90.3
+ 8 Missouri Blessed Teresa Of Calcutta Sch    38.7 -90.3
+ 9 Missouri Central Christian                 38.6 -90.3
+10 Missouri Chaminade College Prep            38.6 -90.4
+# … with 474 more rows
+
+[[15]]
+# A tibble: 567 x 4
+   state   name                             lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                          &lt;dbl&gt; &lt;dbl&gt;
+ 1 Montana Acadia Montana                  46.0 -113.
+ 2 Montana Anna Jeffries Elementary        48.6 -112.
+ 3 Montana Ashland                         45.6 -106.
+ 4 Montana Atonement Lutheran Preschool    45.8 -108.
+ 5 Montana Big Stone                       47.4 -111.
+ 6 Montana Blackfeet Early Childhood Cntr  48.6 -112.
+ 7 Montana Child Start Head Start          46.8 -114.
+ 8 Montana Crow Agency                     45.6 -107.
+ 9 Montana Dodson Schools Prek-12          48.4 -108.
+10 Montana Eastern Montana Head Start      47.1 -105.
+# … with 557 more rows
+
+[[16]]
+# A tibble: 2,149 x 4
+   state      name                                  lat   lng
+   &lt;chr&gt;      &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;
+ 1 New Jersey A. Harry Moore                       40.7 -74.1
+ 2 New Jersey A. Russell Knight Elementary         39.9 -75.0
+ 3 New Jersey A.V. Ceres Elementary                40.5 -74.3
+ 4 New Jersey Aaron Decker                         41.0 -74.4
+ 5 New Jersey Abington Avenue                      40.8 -74.2
+ 6 New Jersey Abraham Lincoln - Wykoff             41.0 -74.2
+ 7 New Jersey Abraham Lincoln 6 - Garfield         40.9 -74.1
+ 8 New Jersey Academy at St. Mary                  40.8 -74.1
+ 9 New Jersey Academy of Our Lady of Grace         40.8 -74.0
+10 New Jersey Academy Of Our Lady Of Mount Carmel  40.9 -74.0
+# … with 2,139 more rows
+
+[[17]]
+# A tibble: 3,645 x 4
+   state    name                                     lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;
+ 1 New York A Child's Place                         40.8 -73.9
+ 2 New York A Fantis Parochial                      40.7 -74.0
+ 3 New York Aabr/New York Child Learning Institute  40.8 -73.8
+ 4 New York Abraham Wing                            43.3 -73.6
+ 5 New York Abundant Life Academy                   41.9 -74.0
+ 6 New York Academy Mt St Ursula                    40.9 -73.9
+ 7 New York Academy Of The Holy Names - Upper       42.7 -73.8
+ 8 New York Adelphi Academy                         40.6 -74.0
+ 9 New York Adirondack Christian                    44.4 -73.8
+10 New York Ahi Ezer Yeshiva                        40.6 -74.0
+# … with 3,635 more rows
+
+[[18]]
+# A tibble: 1,767 x 4
+   state          name                                    lat   lng
+   &lt;chr&gt;          &lt;chr&gt;                                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 North Carolina A T Allen Elementary                   35.4 -80.5
+ 2 North Carolina A.C.E. Academy                         35.3 -80.7
+ 3 North Carolina ABC of NC Child Develop. Ctr           36.0 -80.3
+ 4 North Carolina Agape Christian                        36.4 -81.5
+ 5 North Carolina Agape International Christian Academy  36.0 -78.5
+ 6 North Carolina Ahoskie Christian                      36.3 -77.0
+ 7 North Carolina Alamance Christian                     36.1 -79.4
+ 8 North Carolina Alamance Elementary                    36.0 -79.7
+ 9 North Carolina Albemarle                              36.3 -76.3
+10 North Carolina Albert H Bangert Elementary            35.1 -77.1
+# … with 1,757 more rows
+
+[[19]]
+# A tibble: 293 x 4
+   state        name                             lat    lng
+   &lt;chr&gt;        &lt;chr&gt;                          &lt;dbl&gt;  &lt;dbl&gt;
+ 1 North Dakota Anamoose Elementary             47.9 -100. 
+ 2 North Dakota Ashley Elementary               46.0  -99.4
+ 3 North Dakota Ashley Elementary               46.9  -96.8
+ 4 North Dakota Barnes County North Elementary  47.1  -98.4
+ 5 North Dakota Bel Air Elementary              48.2 -101. 
+ 6 North Dakota Belfield Elementary             46.9 -103. 
+ 7 North Dakota Berthold Elementary             48.3 -102. 
+ 8 North Dakota Bottineau Elementary            48.8 -100. 
+ 9 North Dakota Bowbells Elementary             48.8 -102. 
+10 North Dakota Burke Central Elementary        48.9 -103. 
+# … with 283 more rows
+
+[[20]]
+# A tibble: 2,137 x 4
+   state name                                lat   lng
+   &lt;chr&gt; &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Ohio  Academy Of Educational Excellence  41.6 -83.6
+ 2 Ohio  Adrian Elementary                  41.5 -81.5
+ 3 Ohio  All Saints                         39.2 -84.4
+ 4 Ohio  All Saints Academy                 39.9 -82.9
+ 5 Ohio  All Saints Catholic                41.6 -83.6
+ 6 Ohio  Andrews Osborne Academy            41.6 -81.4
+ 7 Ohio  Annunciation                       39.1 -84.5
+ 8 Ohio  Antwerp Local Elementary           41.2 -84.7
+ 9 Ohio  Applewood Elementary               41.2 -81.8
+10 Ohio  Babeck Early Childhood             39.5 -84.5
+# … with 2,127 more rows
+
+[[21]]
+# A tibble: 965 x 4
+   state    name                        lat   lng
+   &lt;chr&gt;    &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;
+ 1 Oklahoma Adams Elementary           36.4 -97.8
+ 2 Oklahoma Adams Elementary           35.4 -97.6
+ 3 Oklahoma Alex Elementary            34.9 -97.8
+ 4 Oklahoma Allen Public Schools       34.9 -96.4
+ 5 Oklahoma Andrew Johnson Elementary  35.6 -97.6
+ 6 Oklahoma Asher Elementary           35.0 -96.9
+ 7 Oklahoma Ator Elementary            36.3 -95.9
+ 8 Oklahoma Bennington Public Schools  34.0 -96.0
+ 9 Oklahoma Bradley Elementary         36.0 -96.6
+10 Oklahoma Bray-Doyle Elementary      34.6 -97.8
+# … with 955 more rows
+
+[[22]]
+# A tibble: 733 x 4
+   state  name                             lat   lng
+   &lt;chr&gt;  &lt;chr&gt;                          &lt;dbl&gt; &lt;dbl&gt;
+ 1 Oregon Big Muddy Elementary            44.8 -120.
+ 2 Oregon Cairo Elementary                44.0 -117.
+ 3 Oregon Jasper Mountain Center          44.0 -123.
+ 4 Oregon Jordan Valley Elementary        43.0 -117.
+ 5 Oregon Lifeways Day Treatment Program  45.9 -119.
+ 6 Oregon Morrow Education Center         45.9 -120.
+ 7 Oregon Nyssa Elementary                43.9 -117.
+ 8 Oregon W W Jonelementary Elementary    42.9 -118.
+ 9 Oregon Warm Springs K-8 Academy        44.8 -121.
+10 Oregon W L Henry Elementary            45.5 -123.
+# … with 723 more rows
+
+[[23]]
+# A tibble: 1,635 x 4
+   state        name                                lat   lng
+   &lt;chr&gt;        &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;
+ 1 Pennsylvania Afton Elementary                   40.2 -74.9
+ 2 Pennsylvania Aldan Elementary                   39.9 -75.3
+ 3 Pennsylvania Amosland Elementary                39.9 -75.3
+ 4 Pennsylvania Andrew Maier Elementary            40.4 -75.9
+ 5 Pennsylvania Antonia Pantoja Community Charter  40.0 -75.1
+ 6 Pennsylvania Appleman Elementary                41.2 -76.4
+ 7 Pennsylvania Arlington Heights Elementary       41.0 -75.2
+ 8 Pennsylvania Arrowhead Elementary               40.2 -75.4
+ 9 Pennsylvania Arthur Street Elementary           41.0 -76.0
+10 Pennsylvania Asa Packer Elementary              40.7 -75.4
+# … with 1,625 more rows
+
+[[24]]
+# A tibble: 230 x 4
+   state        name                              lat   lng
+   &lt;chr&gt;        &lt;chr&gt;                           &lt;dbl&gt; &lt;dbl&gt;
+ 1 Rhode Island St. Luke                         41.8 -71.4
+ 2 Rhode Island Barrington Christian Academy     41.8 -71.3
+ 3 Rhode Island Montessori Centre of Barrington  41.8 -71.3
+ 4 Rhode Island Nayatt                           41.7 -71.3
+ 5 Rhode Island Primrose Hill                    41.8 -71.3
+ 6 Rhode Island Sowams Elementary                41.8 -71.3
+ 7 Rhode Island Our Lady of Mount Carmel         41.7 -71.3
+ 8 Rhode Island Colt Andrews                     41.7 -71.3
+ 9 Rhode Island Guiteras Elementary              41.7 -71.3
+10 Rhode Island Rockwell                         41.7 -71.3
+# … with 220 more rows
+
+[[25]]
+# A tibble: 380 x 4
+   state        name                         lat    lng
+   &lt;chr&gt;        &lt;chr&gt;                      &lt;dbl&gt;  &lt;dbl&gt;
+ 1 South Dakota Lower Brule Elementary      44.1  -99.6
+ 2 South Dakota Alcester-Hudson Elementary  43.0  -96.6
+ 3 South Dakota Andes Central Elementary    43.2  -98.5
+ 4 South Dakota Arlington Elementary        44.4  -97.1
+ 5 South Dakota Baltic Elementary           43.8  -96.7
+ 6 South Dakota Ban Dek Montessori          43.5  -96.7
+ 7 South Dakota Batesland                   43.1 -102. 
+ 8 South Dakota Beadle Elementary           44.1 -103. 
+ 9 South Dakota Bennett Co Elementary       43.2 -102. 
+10 South Dakota Beresford Elementary        43.1  -96.8
+# … with 370 more rows
+
+[[26]]
+# A tibble: 1,004 x 4
+   state     name                               lat   lng
+   &lt;chr&gt;     &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Tennessee Adamsville Elementary             35.2 -88.4
+ 2 Tennessee Allardt Elementary                36.4 -84.9
+ 3 Tennessee Allons Elementary                 36.4 -85.3
+ 4 Tennessee Andrew Johnson Elementary School  36.5 -82.5
+ 5 Tennessee Arrow Academy Of Excellence       35.1 -90.0
+ 6 Tennessee Ashland City Elementary           36.3 -87.1
+ 7 Tennessee Aspire East Academy               35.1 -89.8
+ 8 Tennessee Auburn Elementary                 35.9 -86.1
+ 9 Tennessee Baileyton Elementary              36.3 -82.8
+10 Tennessee Barret's Chapel Elementary        35.3 -89.7
+# … with 994 more rows
+
+[[27]]
+# A tibble: 777 x 4
+   state name                                       lat   lng
+   &lt;chr&gt; &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Texas Abundant Life Christian                   29.4 -95.0
+ 2 Texas Accelerated Intermediate Academy          29.6 -95.5
+ 3 Texas Adventist Christian Academy Of Texas      30.3 -95.4
+ 4 Texas Akiba Academy of Dallas                   32.9 -96.8
+ 5 Texas All Saints Catholic School Fort Worth     32.8 -97.4
+ 6 Texas All Saints Catholic School Of Dallas      33.0 -96.8
+ 7 Texas Amigos Por Vida-Friends For Life Pub Cht  29.7 -95.5
+ 8 Texas Ann And Nate Levine Academy-A Solomon Sc  33.0 -96.8
+ 9 Texas Assumption Catholic                       29.9 -95.4
+10 Texas Athens Christian Preparatory Academy      32.2 -95.8
+# … with 767 more rows
+
+[[28]]
+# A tibble: 602 x 4
+   state name                        lat   lng
+   &lt;chr&gt; &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;
+ 1 Utah  Antimony Elementary        38.1 -112.
+ 2 Utah  Blessed Sacrament          40.6 -112.
+ 3 Utah  Bluff Elementary           37.3 -110.
+ 4 Utah  Book Cliff Elementary      39.0 -110.
+ 5 Utah  Canyon View                41.2 -112.
+ 6 Utah  Channing Hall              40.5 -112.
+ 7 Utah  Coral Canyon Elementary    37.2 -113.
+ 8 Utah  Escalante Elementary -Slc  40.8 -112.
+ 9 Utah  Eureka Elementary          40.0 -112.
+10 Utah  Flaming Gorge Elementary   40.9 -109.
+# … with 592 more rows
+
+[[29]]
+# A tibble: 349 x 4
+   state   name                         lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;
+ 1 Vermont Addison Central             44.1  44.1
+ 2 Vermont Allen Street Campus         43.6 -73.0
+ 3 Vermont Brighton Elementary         44.8 -71.9
+ 4 Vermont Brookhaven Learning Center  44.0 -72.4
+ 5 Vermont Burke Mountain Academy      44.6 -71.9
+ 6 Vermont Burke Town                  44.6  44.6
+ 7 Vermont Canaan Schools              45.0  45.0
+ 8 Vermont Castleton Village           43.6 -73.2
+ 9 Vermont Christ Covenant             43.9 -72.7
+10 Vermont Community Schoolhouse       42.9 -72.6
+# … with 339 more rows
+
+[[30]]
+# A tibble: 1,567 x 4
+   state      name                                     lat   lng
+   &lt;chr&gt;      &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;
+ 1 Washington Academy Nw - Marysville Campus          47.8 -122.
+ 2 Washington Alfajer                                 47.6 -122.
+ 3 Washington Almira Elementary                       47.7 -119.
+ 4 Washington America's Child Montessori              47.6 -122.
+ 5 Washington Apple Valley Elementary                 46.6 -121.
+ 6 Washington Applied Scholastics Academy Of Seattle  47.7 -122.
+ 7 Washington Beach Elem                              48.7 -123.
+ 8 Washington Bel-Red Bilingual Academy               47.6 -122.
+ 9 Washington Bellevue Montessori                     47.6 -122.
+10 Washington Bertschi                                47.6 -122.
+# … with 1,557 more rows
+
+[[31]]
+# A tibble: 1,515 x 4
+   state     name                    lat   lng
+   &lt;chr&gt;     &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 Wisconsin Al Behrman Elementary  43.5 -89.7
+ 2 Wisconsin Albany Elementary      42.7 -89.4
+ 3 Wisconsin Alma Elementary        44.4 -91.9
+ 4 Wisconsin Arcadia Elementary     44.3 -91.5
+ 5 Wisconsin Argyle Elementary      42.7 -89.9
+ 6 Wisconsin Assumption Catholic    44.6 -92.0
+ 7 Wisconsin Auburndale Elementary  44.6 -90.0
+ 8 Wisconsin Augusta Elementary     44.7 -91.1
+ 9 Wisconsin Bader Hillel Academy   43.1 -87.9
+10 Wisconsin Bannach Elementary     44.5 -89.5
+# … with 1,505 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+* bind_rows()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 44,943 x 4
+   state   name                                       lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arizona A J Mitchell Elementary                   31.3 -111.
+ 2 Arizona Academy Del Sol                           32.2 -111.
+ 3 Arizona Academy Del Sol - Hope                    32.1 -111.
+ 4 Arizona Academy Of Mathematics And Science South  33.5 -112.
+ 5 Arizona Acclaim Academy                           33.5 -112.
+ 6 Arizona Alfred F Garcia                           33.4 -112.
+ 7 Arizona All Aboard Charter                        33.5 -112.
+ 8 Arizona Amerischools Academy - Yuma South Campus  32.7 -115.
+ 9 Arizona Arizona Cultural Academy                  33.4 -112.
+10 Arizona Arizona Desert Elementary                 32.5 -115.
+# … with 44,933 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+  bind_rows() %&gt;%  
+* filter(!is.na(lat))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 44,859 x 4
+   state   name                                       lat   lng
+   &lt;chr&gt;   &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt;
+ 1 Arizona A J Mitchell Elementary                   31.3 -111.
+ 2 Arizona Academy Del Sol                           32.2 -111.
+ 3 Arizona Academy Del Sol - Hope                    32.1 -111.
+ 4 Arizona Academy Of Mathematics And Science South  33.5 -112.
+ 5 Arizona Acclaim Academy                           33.5 -112.
+ 6 Arizona Alfred F Garcia                           33.4 -112.
+ 7 Arizona All Aboard Charter                        33.5 -112.
+ 8 Arizona Amerischools Academy - Yuma South Campus  32.7 -115.
+ 9 Arizona Arizona Cultural Academy                  33.4 -112.
+10 Arizona Arizona Desert Elementary                 32.5 -115.
+# … with 44,849 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+  bind_rows() %&gt;%  
+  filter(!is.na(lat)) -&gt;  
+*clean_states
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+  bind_rows() %&gt;%  
+  filter(!is.na(lat)) -&gt;  
+clean_states  
+
+*wsj_raw
+```
+]]
+.column[.content[
+
+```
+# A tibble: 46,411 x 14
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 46,401 more rows, and 3 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+  bind_rows() %&gt;%  
+  filter(!is.na(lat)) -&gt;  
+clean_states  
+
+wsj_raw %&gt;%  
+* left_join(clean_states, by = c("name", "state"))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 66,113 x 16
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 66,103 more rows, and 5 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+library(rvest)  
+
+url_wsj &lt;- "https://raw.githubusercontent.com/WSJ/measles-data/master/all-measles-rates.csv"  
+
+read_csv(url_wsj) -&gt;  
+wsj_raw  
+
+list_of_urls &lt;- "https://github.com/WSJ/measles-data/tree/master/individual-states"  
+
+list_of_urls %&gt;%  
+  read_html() %&gt;%  
+  html_table() %&gt;%  
+  .[[1]] %&gt;%  
+  select(Name) %&gt;%  
+  mutate(Name = str_remove(Name,  
+                           "\\.csv")) %&gt;%  
+  filter(str_length(Name) &gt; 3,  
+         str_length(Name) &lt; 20) %&gt;%  
+  pull(Name) -&gt;  
+raw_states  
+
+glue::glue("https://raw.githubusercontent.com/WSJ/measles-data/master/individual-states/{raw_states}.csv") %&gt;%  
+  map(read_csv) -&gt;  
+all_states  
+
+all_states %&gt;%  
+  purrr::map(~select(., state, name, lat, lng)) %&gt;%  
+  purrr::map(~mutate_at(., vars(lat, lng), as.numeric)) %&gt;%  
+  bind_rows() %&gt;%  
+  filter(!is.na(lat)) -&gt;  
+clean_states  
+
+wsj_raw %&gt;%  
+  left_join(clean_states, by = c("name", "state")) -&gt;  
+*measles
+```
+]]
+.column[.content[
+
+]]
+
+
+
+---
+
+
+
+```r
+measles %&gt;% 
+ ggplot() +
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +
+  aes(x = mmr) +
+  geom_histogram()
+```
+
+&lt;img src="measles_files/figure-html/unnamed-chunk-1-1.png" width="432" /&gt;
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*measles
+```
+]]
+.column[.content[
+
+```
+# A tibble: 66,113 x 16
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 66,103 more rows, and 5 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+* filter(year == "2018-19")
+```
+]]
+.column[.content[
+
+```
+# A tibble: 48,075 x 16
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 48,065 more rows, and 5 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+* filter(lng &lt; 0)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 46,451 x 16
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 46,441 more rows, and 5 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+* mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",
+*                              mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",
+*                              mmr &gt;= 85 ~ "  high"))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 46,451 x 17
+   index state year  name  type  city  county district enroll   mmr overall
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1 Ariz… 2018… A J … Publ… Noga… Santa… NA           51   100      -1
+ 2     2 Ariz… 2018… Acad… Char… Tucs… Pima   NA           22   100      -1
+ 3     3 Ariz… 2018… Acad… Char… Tucs… Pima   NA           85   100      -1
+ 4     4 Ariz… 2018… Acad… Char… Phoe… Maric… NA           60   100      -1
+ 5     5 Ariz… 2018… Accl… Char… Phoe… Maric… NA           43   100      -1
+ 6     6 Ariz… 2018… Alfr… Publ… Phoe… Maric… NA           36   100      -1
+ 7     7 Ariz… 2018… All … Char… Phoe… Maric… NA           24   100      -1
+ 8     8 Ariz… 2018… Amer… Char… Yuma  Yuma   NA           22   100      -1
+ 9     9 Ariz… 2018… Ariz… Priv… Phoe… Maric… NA           26   100      -1
+10    10 Ariz… 2018… Ariz… Publ… San … Yuma   NA           78   100      -1
+# … with 46,441 more rows, and 6 more variables: xrel &lt;lgl&gt;, xmed &lt;dbl&gt;,
+#   xper &lt;dbl&gt;, lat &lt;dbl&gt;, lng &lt;dbl&gt;, mmr_range &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+* labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19")
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+* aes(x = lng)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+* aes(y = lat)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+* geom_point(alpha = .02)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+* aes(color = mmr)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+* theme_minimal()
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_11_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+* coord_map(projection = "mollweide")
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_12_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+* scale_colour_viridis_c(direction = -1, end = .7)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_13_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+* facet_wrap(~mmr_range, nrow = 2)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_14_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+* geom_point(data = . %&gt;%
+*              select(-mmr_range) ,
+*            color = "grey")
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_15_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+* geom_point(alpha = .02,
+*            color = "magenta")
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_16_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+  geom_point(alpha = .02,  
+             color = "magenta") +  
+* theme(legend.position = "none")
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_17_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+  geom_point(alpha = .02,  
+             color = "magenta") +  
+  theme(legend.position = "none") +  
+* theme(axis.text.x = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_18_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+  geom_point(alpha = .02,  
+             color = "magenta") +  
+  theme(legend.position = "none") +  
+  theme(axis.text.x = element_blank()) +  
+* theme(axis.text.y = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_19_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+  geom_point(alpha = .02,  
+             color = "magenta") +  
+  theme(legend.position = "none") +  
+  theme(axis.text.x = element_blank()) +  
+  theme(axis.text.y = element_blank()) +  
+* labs(y = NULL)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_20_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+measles %&gt;%  
+  filter(year == "2018-19") %&gt;%  
+  filter(lng &lt; 0) %&gt;%  
+  mutate(mmr_range = case_when(mmr &lt; 15 ~ "low",  
+                               mmr &gt;= 15 &amp; mmr &lt; 85 ~ " medium",  
+                               mmr &gt;= 85 ~ "  high")) %&gt;%  
+  ggplot() +  
+  labs(title = "School's Measles, Mumps, and Rubella (MMR) vaccination rate, 2018-19") +  
+  aes(x = lng) +  
+  aes(y = lat) +  
+  geom_point(alpha = .02) +  
+  aes(color = mmr) +  
+  theme_minimal() +  
+  coord_map(projection = "mollweide") +  
+  scale_colour_viridis_c(direction = -1, end = .7) +  
+  facet_wrap(~mmr_range, nrow = 2) +  
+  geom_point(data = . %&gt;%  
+               select(-mmr_range) ,  
+             color = "grey") +  
+  geom_point(alpha = .02,  
+             color = "magenta") +  
+  theme(legend.position = "none") +  
+  theme(axis.text.x = element_blank()) +  
+  theme(axis.text.y = element_blank()) +  
+  labs(y = NULL) +  
+* labs(x = NULL)
+```
+]]
+.column[.content[
+&lt;img src="measles_files/figure-html/plot_auto_21_output-1.png" width="432" /&gt;
+]]
+
+
+
+
+
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
