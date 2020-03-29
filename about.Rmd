@@ -7,9 +7,6 @@ output: html_document
 knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 ```
 
-
-
-
 <img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
 <img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
 <img width="10%" src="figures/linnet_kineograph_1886.jpg"/>
@@ -25,7 +22,7 @@ knitr::opts_chunk$set(echo = F, message = F, fig.align = "center")
 
 # Flipbooks
 
-*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal may help you digest longer manipulation and analysis pipelines as well as plot builds.  Two of their helpful features are incrementalism and movie-like presentation.  
+*Flipbooks* present code step-by-step and side-by-side with its output. The incremental code/result reveal help people digest longer manipulation and analysis pipelines as well as plot builds.  Two helpful features are incrementalism and movie-like presentation.  
 
 ### Incrementalism
 
@@ -174,12 +171,8 @@ df %>%
 
 # Acknowledgements
 
-Flipbooks are inspired and enabled by the step-by-step workflow of ggplot2 and piped workflows enabled by the magrittr package (especially dplyr) and the knitr/rmarkdown communication tools.  Specifically, the rmarkdown slide show presentation tool {xaringan} is used to present the code movies; xaringan is built on [remark.js](https://yihui.org/en/2017/08/why-xaringan-remark-js/).  
+Flipbooks are inspired and enabled by the step-by-step workflow of ggplot2 and piped workflows enabled by the magrittr package and data manipulation packages especially dplyr/tidyr and the knitr/rmarkdown communication tools.  Specifically, the rmarkdown slide show presentation tool {xaringan} is used to present the code movies; xaringan is built on [remark.js](https://yihui.org/en/2017/08/why-xaringan-remark-js/).  
 
 Emi Tanaka and Garrick Aden Buie are due enormous thanks for their contributions to getting this project off the ground.  There are numerous other influences, inspirations, and helps for which I'm grateful and which have made the project possible!  Many thanks to the #rstats community.  
-
-
-
-
 
 

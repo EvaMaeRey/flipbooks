@@ -23,8 +23,6 @@ Like so many textbooks, this one is born out of teaching observations:
 
 2. *Students are less likely to get excited about scripted, reproducible workflow if they strain to get the dang analysis "going" just the once.*
 
-
-
 The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling --- but also digestible examples --- student may be better positioned to solve analytic problems independently.  *To my current students, if you are reading this:  don't struggle alone for too long, of course. I'm here to help!*
 
 At the moment calling this work a "textbook" is a bit of an overstatement. The source material for the book project was a motley crew of flipbooks that I developed *ad-hoc* for teaching or for fun. Organizing these one-off projects to logically hang together is a work in progress.  
@@ -96,6 +94,7 @@ Data visualization is a powerful tool for analysis.  Let's dive in.
 ### The "Grammar of Graphics" framework
 
 *The "grammar of graphics" has helped data visualizers to understanding and use the deep connections between chart types.* 
+
 - [What's a pie chart?](https://evamaerey.github.io/pie_chart/pie_chart.html){target="_blank"}
 
 
