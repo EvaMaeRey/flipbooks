@@ -1,0 +1,131 @@
+---
+title: "A collection of COVID-19 Data Visualization"
+subtitle: ""
+author: "Edited by Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+Likely to be discussing this visualization in my Data Viz class, Spring
+
+
+---
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">NEW on coronavirus: many western countries may soon face Italy’s situation<br><br>Case numbers since outbreaks began in several countries have tracked a ~33% daily rise. This is as true for UK, France, Germany as Italy; the latter is simply further down the path <a href="https://t.co/VcSZISFxzF">https://t.co/VcSZISFxzF</a> <a href="https://t.co/xM6wXuMk4n">pic.twitter.com/xM6wXuMk4n</a></p>&mdash; John Burn-Murdoch (@jburnmurdoch) <a href="https://twitter.com/jburnmurdoch/status/1237737352879112194?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">See the little backgrounds that make the country names in this plot easier to read?<a href="https://twitter.com/jburnmurdoch?ref_src=twsrc%5Etfw">@jburnmurdoch</a> was kind enough to share his <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code so I could see how it was made (<a href="https://t.co/F7K171s4FR">https://t.co/F7K171s4FR</a>). <br><br>Learned about the shadowtext package by <a href="https://twitter.com/guangchuangyu?ref_src=twsrc%5Etfw">@guangchuangyu</a>: <a href="https://t.co/YKz3h4piKv">https://t.co/YKz3h4piKv</a> <a href="https://t.co/1wYTSUvZuS">https://t.co/1wYTSUvZuS</a></p>&mdash; David Keyes (@dgkeyes) <a href="https://twitter.com/dgkeyes/status/1237812892189093888?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+# getting data
+
+```{r, eval = F}
+url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+
+# if file hasn't already been downloaded, download
+if (!file.exists("time_series_19-covid-Confirmed-2020-03-19.csv")){
+download.file(url, 
+              destfile = 
+                "time_series_19-covid-Confirmed-2020-03-19.csv") 
+  } # 2020-03-19
+```
+
+
+
+---
+
+
+`r chunk_reveal("data_prep")`
+
+```{r data_prep, include=F}
+library(tidyverse)
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %>%
+  gather(key = "date", 
+         value = "num_cases",
+         5:ncol(.))  %>%
+  mutate(date = lubridate::mdy(date)) %>%
+  janitor::clean_names() %>% 
+  filter(country_region != "Cruise Ship") %>% 
+  group_by(country_region, date) %>% 
+  summarize(num_cases = sum(num_cases)) ->
+data_long
+
+data_long %>% 
+  group_by(country_region) %>% 
+  summarize(max_cases = max(num_cases)) %>% 
+  arrange(-max_cases) %>% 
+  slice(1:20) ->
+top_20
+```
+
+`r chunk_reveal("data_plot")`
+
+```{r data_plot, include=F}
+options(scipen = 10)
+top_20 %>% 
+  left_join(data_long) %>% 
+  ggplot() +
+  aes(x = date) +
+  aes(y = num_cases) +
+  geom_line() +
+  aes(group = country_region) +
+  scale_y_log10() +
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),
+                limits = c(100, 100000)) ->
+g
+
+data_long %>% 
+  filter(num_cases > 100) %>% 
+  group_by(country_region) %>% 
+  mutate(first_data_w_100 = min(date)) %>%
+  mutate(days_since_100 = date - first_data_w_100) ->
+data_long_since_100
+
+g %+%
+  (top_20 %>% 
+  left_join(data_long_since_100)) +
+  aes(x = days_since_100) +
+  theme_minimal() +
+  facet_wrap(~ country_region) +
+  geom_line(data = . %>%
+              mutate(country_region2 = country_region) %>% 
+              select(-country_region),
+            aes(group = country_region2),
+            color = "grey") +
+  geom_line(color = "magenta")
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
