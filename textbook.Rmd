@@ -19,13 +19,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Like so many textbooks, this one is born out of teaching observations:   
 
+1. *Students usually do great following any single step in an analysis.  Little bites are easily digestible.* 
 
-1. *It's hard to get students excited about scripted, reproducible workflow if they have trouble getting the dang analysis to "go" just the once.*
-
-2. *Students usually don't have any problem following a single step in an analysis.  Little bites are easily digestible.* 
+2. *Students are less likely to get excited about scripted, reproducible workflow if they strain to get the dang analysis "going" just the once.*
 
 
-The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling, but also digestible examples, student may be better positioned to solve analytic problems independently.  *To my current students, if you are reading this:  don't struggle alone for too long, of course. I'm here to help!*
+
+The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling --- but also digestible examples --- student may be better positioned to solve analytic problems independently.  *To my current students, if you are reading this:  don't struggle alone for too long, of course. I'm here to help!*
 
 At the moment calling this work a "textbook" is a bit of an overstatement. The source material for the book project was a motley crew of flipbooks that I developed *ad-hoc* for teaching or for fun. Organizing these one-off projects to logically hang together is a work in progress.  
 
@@ -37,7 +37,25 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 *Content not appropriate for your course?  Learn more about building your own flipbooks with {flipbookr} [here](https://evamaerey.github.io/flipbooks/about){target="_blank"}*.
 
 
+# Case Studies
+
+
+
+*Let's start with the good stuff.  Let's get motivated. Where are we headed anyway? Is it worth it?  (If you haven't guessed already, I hope you'll find it totally is!)*
+
+
+- [Racing Bar Chart](https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html){target="_blank"}
+- [The Simpsons](){target="_blank"}
+- [](){target="_blank"}
+
+> He who has a why to live can bear almost any how. – Friedrich Nietzsche
+
 # [Data manipulation and management](https://evamaerey.github.io/data_manipulation/about){target="_blank"}
+
+
+*A data project often actually starts with some perhaps not-so-good stuff, understanding your data, data manipulation and management.  Sometimes this is called "data wrangling" because of the possible struggles that arise in getting your data ready for the fun part --- data visualization and analysis.*
+
+> Wrangle. “From Middle English wranglen, from Low German wrangeln (“to wrangle”), frequentative form of Low German wrangen (“to struggle, make an uproar”) and German rangeln (“to wrestle”).
 
 ### Basics
 
@@ -49,7 +67,7 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 
 - [One-stream data manipulation](https://evamaerey.github.io/data_manipulation/one_stream_wrangle.html#3){target="_blank}
 - [Logical operators (Booleans)](https://evamaerey.github.io/data_manipulation/booleans.html#3){target="_blank}
-- [Summarizing](https://evamaerey.github.io/data_manipulation/summarize.html#3){target="_blank}
+- [Summarizing/Aggregation](https://evamaerey.github.io/data_manipulation/summarize.html#3){target="_blank}
 - [Shape transformation (wide <---> long)](https://evamaerey.github.io/data_manipulation/long_to_wide_and_back.html#3){target="_blank}
 - [Bringing streams together: Joins and Binds](https://evamaerey.github.io/data_manipulation/joining_data.html){target="_blank"}
 
@@ -71,22 +89,38 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 
 # [Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 
+Data visualization is a powerful tool for analysis.  Let's dive in. 
+
+> The greatest value of a picture is when it forces us to notice what we never expected to see. – John Tukey
+
+### The "Grammar of Graphics" framework
+
+*The "grammar of graphics" has helped data visualizers to understanding and use the deep connections between chart types.* 
+- [What's a pie chart?](https://evamaerey.github.io/pie_chart/pie_chart.html){target="_blank"}
+
+
+
 ### ggplot2
+
+*ggplot2 is a popular implementation of the grammar of graphics.  "A {ggplot2} grammar guide" is designed to orient you to organization (grammar if you will) of this particular implementation. Then check out the "geom pile on" which returns to the topic of geoms --- there are tons!  Also themes are treated separately --- there's kind of a whole additional grammar to learn there.  Finally look at the ggplot flipbook to see the grammar in action.*  
 
 - [A {ggplot2} grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 - [geom_* pile on](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 - [a {ggplot2} *theme* grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 - [the ggplot flipbook - example gallery](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"}
 
+> The transferrable skills from ggplot2 are not the idiosyncracies of plotting syntax, but a powerful way of thinking about visualisation, as a way of mapping between variables and the visual properties of geometric objects that you can perceive. --- Hadley Wickham
+
 ### Base R Graphics
 
+- [nothing here yet]
 
 
-### Spatial Visualization
+# [Statistical Analysis](https://evamaerey.github.io/statistics/about){target="_blank"}
 
-- [geom_sf](https://evamaerey.github.io/flipbooks/geom_sf/geom_sf)
 
-# [Statistical Analysis](https://evamaerey.github.io/statistics/about)
+*Statistical analysis is about quantifying strengths of relationships and uncertainty.*
+
 
 ### Building intuition 
 
@@ -94,9 +128,10 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 - [Galton Board](https://evamaerey.github.io/statistics/galton_board.html){target="_blank"}
 - [Covariance, Variance, Standard Deviation, Correlation](https://evamaerey.github.io/statistics/covariance_correlation.html){target="_blank"}
 - [Cool with Statistical Independence](https://evamaerey.github.io/statistics/statistical_independence.html){target="_blank"}
-- [Bayes Theorem]()
+- [Bayes Theorem](){target="_blank"}
 
 ### Statistical tests
+
 
 - [Basics of Bivariate Statistical Tests](https://evamaerey.github.io/statistics/basic_bivariate_statistical_tests.html){target="_blank"}
 
@@ -105,10 +140,13 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
   - anova
   - chi-squared
   
+> 'For my part I know nothing with any certainty, but the sight of the stars makes me dream.' – Vincent Van Gogh | 'When one admits that nothing is certain one must, I think, also add that some things are more nearly certain than others.' Bertrand Russell.
+  
 ### Modeling
 
 - [Ordinary Least Squares](https://evamaerey.github.io/statistics/ols.html){target="_blank"}
-- [Difference-in-Difference](https://evamaerey.github.io/statistics/difference_in_difference.html){target="_blank"}
+
+
 
 
 ### Resampling methods
@@ -116,15 +154,46 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 - [Bootstrapped confidence intervals](https://evamaerey.github.io/statistics/bootstrap.html){target="_blank"}
 
 
+### Causal inference
 
 
-### Case Studies (To be added)
+
+- [Difference-in-Difference](https://evamaerey.github.io/statistics/difference_in_difference.html){target="_blank"}
+
+> I shall be telling this with a sigh; Somewhere ages and ages hence: Two roads diverged in a wood, and I — I took the one less traveled by, And that has made all the difference. - Robert Frost
+
+> Shall I compare thee to a summer’s day? - Shakespeare
+
+## Special topics
+
+### Temporal
+
+- [placeholder]
+
+### Spatial
+
+> "I am told there are people who do not care for maps, and I find it hard to believe." Robert Louis Stevenson
+
+You are likely to enjoy consuming and making spatial visualizations.
+
+- [ggplot and geom_sf](https://evamaerey.github.io/flipbooks/geom_sf/geom_sf.html){target="_blank"}
+- [leaflet (loads slow, and for some people not at all!)](https://evamaerey.github.io/flipbooks/leaflet/leaflet.html){target="_blank"}
+
+### Networks
+
+> "Tell me thy company and I will tell thee what thou art." Miguel de Cervantes, Don Quixote (1605-1615)
+
+- ["The Office" interactions](https://evamaerey.github.io/flipbooks/the_office/the_office.html#83)
+
+### Text
+
+- []()
 
 
 # Acknowledgements:
 
-There would be no flipbooks without great APIs and communication tools.  I'm particularly grateful to Yihui Xie for the Rmarkdown tools, and particularly for Xaringan upon which flipbooks are built. 
+There would be no flipbooks without a great communication tool and great APIs.  I'm so grateful to Yihui Xie and his team for the Rmarkdown tools, and particularly for Xaringan upon which flipbooks are built. 
 
-I'm also grateful to Hadley Wickham and his team for ggplot - the design of which was *the* initialy inspiration for the flipbooks project.  And to Hadley Wickham, Stefan Milton Bache, and others who have had made tools for sequential and incremental workflows in data manipulation and analysis. 
+I'm also grateful to Hadley Wickham and his team for ggplot  which was *the* initialy inspiration for the flipbooks project.  And to Hadley Wickham, Stefan Milton Bache, and others who have had made tools for sequential and incremental workflows in data manipulation and analysis. 
 
-There would also be no flipbooks without the luminary and helpful hackers [Emi Tanaka](https://emitanaka.rbind.io/post/knitr-knitr-code/){target="_blank"} and [Garrick Aden-Buie](https://www.garrickadenbuie.com/blog/decouple-code-and-output-in-xaringan-slides/){target="_blank"}, whose insights and efforts were critical in getting the "flipbooks" project off the ground. 
+There would also be no flipbooks without the luminaries and helpful hackers [Emi Tanaka](https://emitanaka.rbind.io/post/knitr-knitr-code/){target="_blank"} and [Garrick Aden-Buie](https://www.garrickadenbuie.com/blog/decouple-code-and-output-in-xaringan-slides/){target="_blank"}, whose insights and efforts were critical in getting the "flipbooks" project off the ground.  Three cheers for Emi and Garrick!
