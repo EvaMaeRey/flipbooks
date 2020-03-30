@@ -1,0 +1,3746 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Vizualization of COVID-19</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Edited, Gina Reynolds, March 2020" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data Vizualization of COVID-19
+### Edited, Gina Reynolds, March 2020
+
+---
+
+
+
+
+
+
+---
+
+This collection was inspired by John Burns-Murdoch.  He's making some of the most compelling visualizations of this crisis --- at this point, I'd consider his series of COVID-19 figures ast *the* reference point for data vis during this crisis.
+
+
+---
+
+Here is one of his visualizations.
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;NEW on coronavirus: many western countries may soon face Italy’s situation&lt;br&gt;&lt;br&gt;Case numbers since outbreaks began in several countries have tracked a ~33% daily rise. This is as true for UK, France, Germany as Italy; the latter is simply further down the path &lt;a href="https://t.co/VcSZISFxzF"&gt;https://t.co/VcSZISFxzF&lt;/a&gt; &lt;a href="https://t.co/xM6wXuMk4n"&gt;pic.twitter.com/xM6wXuMk4n&lt;/a&gt;&lt;/p&gt;&amp;mdash; John Burn-Murdoch (@jburnmurdoch) &lt;a href="https://twitter.com/jburnmurdoch/status/1237737352879112194?ref_src=twsrc%5Etfw"&gt;March 11, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+---
+
+From David Keyes, I learned that he'd shared his code.  
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;See the little backgrounds that make the country names in this plot easier to read?&lt;a href="https://twitter.com/jburnmurdoch?ref_src=twsrc%5Etfw"&gt;@jburnmurdoch&lt;/a&gt; was kind enough to share his &lt;a href="https://twitter.com/hashtag/rstats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstats&lt;/a&gt; code so I could see how it was made (&lt;a href="https://t.co/F7K171s4FR"&gt;https://t.co/F7K171s4FR&lt;/a&gt;). &lt;br&gt;&lt;br&gt;Learned about the shadowtext package by &lt;a href="https://twitter.com/guangchuangyu?ref_src=twsrc%5Etfw"&gt;@guangchuangyu&lt;/a&gt;: &lt;a href="https://t.co/YKz3h4piKv"&gt;https://t.co/YKz3h4piKv&lt;/a&gt; &lt;a href="https://t.co/1wYTSUvZuS"&gt;https://t.co/1wYTSUvZuS&lt;/a&gt;&lt;/p&gt;&amp;mdash; David Keyes (@dgkeyes) &lt;a href="https://twitter.com/dgkeyes/status/1237812892189093888?ref_src=twsrc%5Etfw"&gt;March 11, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+
+
+Right after David tweeted this out, I lightly edited John's code to make it apropriate for the flipbook format --- very little adjustment was required.  I'm teaching data viz this spring, so this figure --- and how it's built --- is of interest.  I shared that work with David and John, but John didn't respond, and I've since taken the work down.  
+
+Meanwhile there were a growning number of data visualizations produced by my peers, which much more local focuses --- how were their *homes* being affected.  I've approached them about sharing their work in the "flipbook" format, which communicates the decisions they've made as visualization designers.  
+
+---
+
+In the last couple days, I've created a few plots inspired by John's FT work (i.e. emulating his work --- using my own ggplot know-how instead of his code base) --- and actually going out of the way to try to capture some of the likely decision-making process.  But the work fall well short of the polished product John delivers, with its thematic choices and annotation layers --- and I think these are key to really "selling" the visualization.  Emulation is something that data visualization practicioners do often, but it is important tho think about to what extent is appropriate.  A good discussion is [here](http://www.storytellingwithdata.com/blog/2019/4/1/swdchallenge-emulate), in the context of StoryTellingWithData's "Emulate" Challenge, back in April 2019.  
+
+In what follows, I start with the contributed code (very lightly edited to allow for code walk through.  The emulation of John's work follows.  I think data viz should be understood as a series of insights and decisions.  Walking through many of the insights and decisions help explicitly deliver that message; communicating data viz as process is a message that other visualizers espouse (see the concluding comments of [Chalabi](https://www.lib.ncsu.edu/news/data-visualization-in-the-age-of-%E2%80%9Cfake-news%E2%80%9D)). That's what's being done here, but also with *code* along side the output.  
+
+---
+
+# Alonso Silva
+
+[Alonso Silva](https://scholar.google.com/citations?user=sjlsVQ0AAAAJ&amp;hl=en)  @alonsosilva is a Chilean mathematician residing in France.  He is a senior researcher at at Safran Tech.  He uses the Python programming language and the Matplotlib plotting library to visualize data. He's a family friend. 
+
+
+He has [blogged](https://medium.com/@alonso.silva/crecimiento-del-n%C3%BAmero-de-casos-confirmados-de-coronavirus-en-chile-bcb1ca4ad9ac) about concern for spread in Chile (in Spanish) on Medium.
+
+---
+
+
+
+
+
+
+
+---
+
+Likely to be discussing this visualization in my Data Viz class, Spring
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*import numpy as np
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+*import matplotlib.pyplot as plt
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+*import pandas as pd
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+*plt.style.use('seaborn')
+```
+]]
+.column[.content[
+
+]]
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+*total_cases[["France", "Italy"]].tail(3)
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+*cases100_France = total_cases.query("France &gt; 100")["France"]
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+*days100_France = np.arange(len(cases100_France))
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+days100_France = np.arange(len(cases100_France))  
+*cases100_Italy = total_cases.query("Italy &gt; 100")["Italy"]
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+total_cases = pd.read_csv("https://covid.ourworldindata.org/data/total_cases.csv", index_col='date')  
+total_cases[["France", "Italy"]].tail(3)  
+cases100_France = total_cases.query("France &gt; 100")["France"]  
+days100_France = np.arange(len(cases100_France))  
+cases100_Italy = total_cases.query("Italy &gt; 100")["Italy"]  
+*days100_Italy = np.arange(len(cases100_Italy))
+```
+]]
+.column[.content[
+
+```
+            France    Italy
+date                       
+2020-03-15  4469.0  21157.0
+2020-03-16  5380.0  24747.0
+2020-03-17  6573.0  27980.0
+```
+]]
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+*fig, ax = plt.subplots(figsize = (10,7))
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+*plt.plot(days100_France, cases100_France,
+*   label='France', linewidth = 2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_2_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+*plt.plot(days100_Italy, cases100_Italy,
+*   label='Italy',  linewidth = 2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_3_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+*plt.plot(np.array([14, 15, 16, 17]),
+*   np.array([6604, 7730, 9134, 10995]),
+*   label='France (ESRI)', linewidth=2, marker='o')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_4_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+*plt.axvline(9, color='green', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_5_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+*plt.annotate('Italy closes schools  \n and universities  -&gt; ',
+*   (3.5, 5000.0), color='green', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_6_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+*plt.axvline(13, color='green', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_7_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+*plt.annotate('Italy\n lockdown -&gt; ',
+*   (9.3, 8000.0), color='green', fontsize='x-large'  )
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_8_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+*plt.axvline(14, color='blue', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_9_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+*plt.annotate('&lt;-  France closes schools\n       and universities',
+*   (14.4, 3000), color='blue', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_10_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+*plt.axvline(15, color='darkred', linestyle='dashed')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_11_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+*plt.annotate('&lt;-  France lockdown', (15.2, 700),
+*   color='darkred', fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_12_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+*ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',
+*   fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_13_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+*ax.set_xlabel('number of days since 100 cases',
+*   fontsize='x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_14_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+*ax.set_ylabel('number of known cases', fontsize = 'x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_15_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+*plt.legend(fontsize = 'x-large')
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_16_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+plt.legend(fontsize = 'x-large')  
+*plt.yscale("log"); plt.show()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_17_output-1.png" width="960" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```python
+fig, ax = plt.subplots(figsize = (10,7))  
+plt.plot(days100_France, cases100_France,  
+    label='France', linewidth = 2, marker='o')  
+plt.plot(days100_Italy, cases100_Italy,  
+    label='Italy',  linewidth = 2, marker='o')  
+plt.plot(np.array([14, 15, 16, 17]),  
+    np.array([6604, 7730, 9134, 10995]),  
+    label='France (ESRI)', linewidth=2, marker='o')  
+plt.axvline(9, color='green', linestyle='dashed')  
+plt.annotate('Italy closes schools  \n and universities  -&gt; ',  
+    (3.5, 5000.0), color='green', fontsize='x-large')  
+plt.axvline(13, color='green', linestyle='dashed')  
+plt.annotate('Italy\n lockdown -&gt; ',  
+    (9.3, 8000.0), color='green', fontsize='x-large'  )  
+plt.axvline(14, color='blue', linestyle='dashed')  
+plt.annotate('&lt;-  France closes schools\n       and universities',  
+    (14.4, 3000), color='blue', fontsize='x-large')  
+plt.axvline(15, color='darkred', linestyle='dashed')  
+plt.annotate('&lt;-  France lockdown', (15.2, 700),  
+    color='darkred', fontsize='x-large')  
+ax. set_title('COVID-19: Number of known cases vs number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_xlabel('number of days since 100 cases',  
+    fontsize='x-large')  
+ax.set_ylabel('number of known cases', fontsize = 'x-large')  
+plt.legend(fontsize = 'x-large')  
+plt.yscale("log"); plt.show()  
+*ax.set_xticks(np.arange(len(cases100_Italy)))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/alonso2_auto_18_output-1.png" width="960" /&gt;
+
+```
+[&lt;matplotlib.axis.XTick object at 0x115a092b0&gt;, &lt;matplotlib.axis.XTick object at 0x11cff9da0&gt;, &lt;matplotlib.axis.XTick object at 0x11cfc94e0&gt;, &lt;matplotlib.axis.XTick object at 0x1180c2278&gt;, &lt;matplotlib.axis.XTick object at 0x1180ef6a0&gt;, &lt;matplotlib.axis.XTick object at 0x1180d08d0&gt;, &lt;matplotlib.axis.XTick object at 0x11cfe9fd0&gt;, &lt;matplotlib.axis.XTick object at 0x11cfd65f8&gt;, &lt;matplotlib.axis.XTick object at 0x118031e48&gt;, &lt;matplotlib.axis.XTick object at 0x118047d30&gt;, &lt;matplotlib.axis.XTick object at 0x1107c9b00&gt;, &lt;matplotlib.axis.XTick object at 0x1166f4e80&gt;, &lt;matplotlib.axis.XTick object at 0x1180cbc50&gt;, &lt;matplotlib.axis.XTick object at 0x10bd86b00&gt;, &lt;matplotlib.axis.XTick object at 0x115a09828&gt;, &lt;matplotlib.axis.XTick object at 0x1166f9908&gt;, &lt;matplotlib.axis.XTick object at 0x1166e1518&gt;, &lt;matplotlib.axis.XTick object at 0x1166e1160&gt;, &lt;matplotlib.axis.XTick object at 0x11803c160&gt;, &lt;matplotlib.axis.XTick object at 0x11804b390&gt;, &lt;matplotlib.axis.XTick object at 0x11cff93c8&gt;, &lt;matplotlib.axis.XTick object at 0x11cf0e710&gt;, &lt;matplotlib.axis.XTick object at 0x11a88c860&gt;]
+```
+]]
+
+
+
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+
+---
+
+
+
+---
+
+
+# Peter Higgins
+
+[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor.  He is also an fan the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan.  I learned about the {covid19us} package from Peter's visualization.  His handel is @ibddoctor on Twitter. 
+
+---
+
+
+
+
+
+
+
+---
+
+
+&lt;!-- #geom_segment(aes(xend = end_date, yend = positive), linetype = 2, colour = 'grey') + --&gt;
+&lt;!--   #geom_text(aes(x = end_date + 0.1, y = positive, --&gt;
+&lt;!--                # label = state), hjust = 0) + --&gt;
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*covid19us::get_states_current()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 56 x 22
+   state positive positive_score negative_score negative_regula…
+   &lt;chr&gt;    &lt;int&gt;          &lt;int&gt;          &lt;int&gt;            &lt;int&gt;
+ 1 AK         114              1              1                1
+ 2 AL         830              1              1                0
+ 3 AR         426              1              1                1
+ 4 AZ         919              1              1                0
+ 5 CA        5708              1              1                1
+ 6 CO        2307              1              1                1
+ 7 CT        1993              1              1                1
+ 8 DC         342              1              1                1
+ 9 DE         232              1              1                0
+10 FL        4950              1              1                1
+# … with 46 more rows, and 17 more variables: commercial_score &lt;int&gt;,
+#   grade &lt;chr&gt;, score &lt;int&gt;, negative &lt;int&gt;, pending &lt;int&gt;,
+#   hospitalized &lt;int&gt;, death &lt;int&gt;, total &lt;int&gt;, last_update &lt;dttm&gt;,
+#   check_time &lt;dttm&gt;, total_test_results &lt;int&gt;, fips &lt;chr&gt;,
+#   date_modified &lt;dttm&gt;, date_checked &lt;dttm&gt;, notes &lt;chr&gt;, hash &lt;chr&gt;,
+#   request_datetime &lt;dttm&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+* arrange(desc(positive))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 56 x 22
+   state positive positive_score negative_score negative_regula…
+   &lt;chr&gt;    &lt;int&gt;          &lt;int&gt;          &lt;int&gt;            &lt;int&gt;
+ 1 NY       59513              1              1                1
+ 2 NJ       13386              1              1                1
+ 3 CA        5708              1              1                1
+ 4 MI        5486              1              1                0
+ 5 MA        4955              1              1                0
+ 6 FL        4950              1              1                1
+ 7 WA        4896              1              1                1
+ 8 IL        4596              1              1                1
+ 9 LA        3540              1              1                1
+10 PA        3394              1              1                1
+# … with 46 more rows, and 17 more variables: commercial_score &lt;int&gt;,
+#   grade &lt;chr&gt;, score &lt;int&gt;, negative &lt;int&gt;, pending &lt;int&gt;,
+#   hospitalized &lt;int&gt;, death &lt;int&gt;, total &lt;int&gt;, last_update &lt;dttm&gt;,
+#   check_time &lt;dttm&gt;, total_test_results &lt;int&gt;, fips &lt;chr&gt;,
+#   date_modified &lt;dttm&gt;, date_checked &lt;dttm&gt;, notes &lt;chr&gt;, hash &lt;chr&gt;,
+#   request_datetime &lt;dttm&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+* slice(1:10)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 10 x 22
+   state positive positive_score negative_score negative_regula…
+   &lt;chr&gt;    &lt;int&gt;          &lt;int&gt;          &lt;int&gt;            &lt;int&gt;
+ 1 NY       59513              1              1                1
+ 2 NJ       13386              1              1                1
+ 3 CA        5708              1              1                1
+ 4 MI        5486              1              1                0
+ 5 MA        4955              1              1                0
+ 6 FL        4950              1              1                1
+ 7 WA        4896              1              1                1
+ 8 IL        4596              1              1                1
+ 9 LA        3540              1              1                1
+10 PA        3394              1              1                1
+# … with 17 more variables: commercial_score &lt;int&gt;, grade &lt;chr&gt;, score &lt;int&gt;,
+#   negative &lt;int&gt;, pending &lt;int&gt;, hospitalized &lt;int&gt;, death &lt;int&gt;,
+#   total &lt;int&gt;, last_update &lt;dttm&gt;, check_time &lt;dttm&gt;,
+#   total_test_results &lt;int&gt;, fips &lt;chr&gt;, date_modified &lt;dttm&gt;,
+#   date_checked &lt;dttm&gt;, notes &lt;chr&gt;, hash &lt;chr&gt;, request_datetime &lt;dttm&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+* pull(state)
+```
+]]
+.column[.content[
+
+```
+ [1] "NY" "NJ" "CA" "MI" "MA" "FL" "WA" "IL" "LA" "PA"
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+*top10states
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+*covid19us::get_states_daily()[1,1]
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1 x 1
+  date      
+  &lt;date&gt;    
+1 2020-03-29
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+* pull()
+```
+]]
+.column[.content[
+
+```
+[1] "2020-03-29"
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+*end_date
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+*options(scipen = 10)  # set when to turn on logrithmic scale
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+*covid19us::get_states_daily()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,317 x 18
+   date       state positive negative pending hospitalized death total hash 
+   &lt;date&gt;     &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;   &lt;int&gt;        &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
+ 1 2020-03-29 AK         102     3232      NA            6     2  3334 d4c0…
+ 2 2020-03-29 AL         806     4184      NA           NA     4  4990 9dbf…
+ 3 2020-03-29 AR         426     3027      NA           48     6  3453 2c8e…
+ 4 2020-03-29 AS          NA       NA      NA           NA     0     0 f205…
+ 5 2020-03-29 AZ         919    12953      NA           78    17 13872 14de…
+ 6 2020-03-29 CA        5708    20549   64400         1034   123 90657 c364…
+ 7 2020-03-29 CO        2061    11215      NA          274    44 13276 1076…
+ 8 2020-03-29 CT        1993     9907      NA          404    34 11900 a2fc…
+ 9 2020-03-29 DC         342     2469       1           NA     5  2812 951a…
+10 2020-03-29 DE         232       36      NA           33     6   268 ba8e…
+# … with 1,307 more rows, and 9 more variables: date_checked &lt;dttm&gt;,
+#   total_test_results &lt;int&gt;, fips &lt;chr&gt;, death_increase &lt;int&gt;,
+#   hospitalized_increase &lt;int&gt;, negative_increase &lt;int&gt;,
+#   positive_increase &lt;int&gt;, total_test_results_increase &lt;int&gt;,
+#   request_datetime &lt;dttm&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+* replace_na(list(positive = 0))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,317 x 18
+   date       state positive negative pending hospitalized death total hash 
+   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;    &lt;int&gt;   &lt;int&gt;        &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
+ 1 2020-03-29 AK         102     3232      NA            6     2  3334 d4c0…
+ 2 2020-03-29 AL         806     4184      NA           NA     4  4990 9dbf…
+ 3 2020-03-29 AR         426     3027      NA           48     6  3453 2c8e…
+ 4 2020-03-29 AS           0       NA      NA           NA     0     0 f205…
+ 5 2020-03-29 AZ         919    12953      NA           78    17 13872 14de…
+ 6 2020-03-29 CA        5708    20549   64400         1034   123 90657 c364…
+ 7 2020-03-29 CO        2061    11215      NA          274    44 13276 1076…
+ 8 2020-03-29 CT        1993     9907      NA          404    34 11900 a2fc…
+ 9 2020-03-29 DC         342     2469       1           NA     5  2812 951a…
+10 2020-03-29 DE         232       36      NA           33     6   268 ba8e…
+# … with 1,307 more rows, and 9 more variables: date_checked &lt;dttm&gt;,
+#   total_test_results &lt;int&gt;, fips &lt;chr&gt;, death_increase &lt;int&gt;,
+#   hospitalized_increase &lt;int&gt;, negative_increase &lt;int&gt;,
+#   positive_increase &lt;int&gt;, total_test_results_increase &lt;int&gt;,
+#   request_datetime &lt;dttm&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+* select(date, state, positive, death)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,317 x 4
+   date       state positive death
+   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt;
+ 1 2020-03-29 AK         102     2
+ 2 2020-03-29 AL         806     4
+ 3 2020-03-29 AR         426     6
+ 4 2020-03-29 AS           0     0
+ 5 2020-03-29 AZ         919    17
+ 6 2020-03-29 CA        5708   123
+ 7 2020-03-29 CO        2061    44
+ 8 2020-03-29 CT        1993    34
+ 9 2020-03-29 DC         342     5
+10 2020-03-29 DE         232     6
+# … with 1,307 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+* filter(state %in% c(top10states))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 253 x 4
+   date       state positive death
+   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt;
+ 1 2020-03-29 CA        5708   123
+ 2 2020-03-29 FL        4246    56
+ 3 2020-03-29 IL        4596    65
+ 4 2020-03-29 LA        3540   151
+ 5 2020-03-29 MA        4955    48
+ 6 2020-03-29 MI        5486   132
+ 7 2020-03-29 NJ       13386   161
+ 8 2020-03-29 NY       59513   965
+ 9 2020-03-29 PA        3394    38
+10 2020-03-29 WA        4310   189
+# … with 243 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+* mutate(state = factor(state, levels = top10states))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 253 x 4
+   date       state positive death
+   &lt;date&gt;     &lt;fct&gt;    &lt;dbl&gt; &lt;int&gt;
+ 1 2020-03-29 CA        5708   123
+ 2 2020-03-29 FL        4246    56
+ 3 2020-03-29 IL        4596    65
+ 4 2020-03-29 LA        3540   151
+ 5 2020-03-29 MA        4955    48
+ 6 2020-03-29 MI        5486   132
+ 7 2020-03-29 NJ       13386   161
+ 8 2020-03-29 NY       59513   965
+ 9 2020-03-29 PA        3394    38
+10 2020-03-29 WA        4310   189
+# … with 243 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_15_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+* aes(x = date)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_16_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+* aes(y = positive)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_17_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_18_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+* aes(color = state)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_19_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+* geom_line()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_20_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+* scale_color_viridis_d()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_21_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+* theme_linedraw(base_size = 14)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_22_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+* theme(legend.position = c(0.2, 0.8))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_23_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+* guides(col = guide_legend(ncol = 2))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_24_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+* labs(color = NULL)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_25_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+* labs(title = "Growth of COVID-19 Cases in\nTop 10 US States")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_26_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+* labs(x = "Date")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_27_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+  labs(x = "Date") +  
+* labs(y = "Cases")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_28_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+  labs(x = "Date") +  
+  labs(y = "Cases") +  
+* labs(caption = "Data from the COVID Tracking Project API\nVia the covid19us package by Amanda Dobbyn")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/peter_auto_29_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+  labs(x = "Date") +  
+  labs(y = "Cases") +  
+  labs(caption = "Data from the COVID Tracking Project API\nVia the covid19us package by Amanda Dobbyn") +  
+* gganimate::transition_reveal(date)
+```
+]]
+.column[.content[
+![](covid_19_files/figure-html/peter_auto_30_output-1.gif)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+  labs(x = "Date") +  
+  labs(y = "Cases") +  
+  labs(caption = "Data from the COVID Tracking Project API\nVia the covid19us package by Amanda Dobbyn") +  
+  gganimate::transition_reveal(date) +  
+* labs(title = "Logarithmic Growth of COVID-19 Cases in\nTop 10 US States")
+```
+]]
+.column[.content[
+![](covid_19_files/figure-html/peter_auto_31_output-1.gif)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+covid19us::get_states_current() %&gt;%  
+  arrange(desc(positive)) %&gt;%  
+  slice(1:10) %&gt;%  
+  pull(state) -&gt;  
+top10states  
+
+covid19us::get_states_daily()[1,1] %&gt;%  
+  pull() -&gt;  
+end_date  
+
+options(scipen = 10)  # set when to turn on logrithmic scale
+covid19us::get_states_daily() %&gt;%  
+  replace_na(list(positive = 0)) %&gt;%  
+  select(date, state, positive, death) %&gt;%  
+  filter(state %in% c(top10states)) %&gt;%  
+  mutate(state = factor(state, levels = top10states)) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = positive) +  
+  geom_point() +  
+  aes(color = state) +  
+  geom_line() +  
+  scale_color_viridis_d() +  
+  theme_linedraw(base_size = 14) +  
+  theme(legend.position = c(0.2, 0.8)) +  
+  guides(col = guide_legend(ncol = 2)) +  
+  labs(color = NULL) +  
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +  
+  labs(x = "Date") +  
+  labs(y = "Cases") +  
+  labs(caption = "Data from the COVID Tracking Project API\nVia the covid19us package by Amanda Dobbyn") +  
+  gganimate::transition_reveal(date) +  
+  labs(title = "Logarithmic Growth of COVID-19 Cases in\nTop 10 US States") +  
+* scale_y_log10()
+```
+]]
+.column[.content[
+![](covid_19_files/figure-html/peter_auto_32_output-1.gif)&lt;!-- --&gt;
+]]
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+
+
+---
+
+
+
+
+# Sebastián Garrido
+
+Sebastian Garrido is a political scientist at CIDE,with interests in Mexican politics, higher education, data science, and tranparency.  He is an expert of and teaches data visualization, and he uses R and ggplot2 in his work.
+
+His handle is @segasi on Twitter.
+
+
+---
+
+Placeholder
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="und" dir="ltr"&gt;&lt;a href="https://t.co/s982fmmIMw"&gt;pic.twitter.com/s982fmmIMw&lt;/a&gt;&lt;/p&gt;&amp;mdash; Sebastián Garrido (@segasi) &lt;a href="https://twitter.com/segasi/status/1243380826395402240?ref_src=twsrc%5Etfw"&gt;March 27, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+
+---
+
+# Emulating the Burns-Murdoch work
+
+This section is meant to give some insight into the decisions process that led to what will probably be the most recognized data visualization from this global tragedy.  Burns-Murdoch uses R and ggplot2 in his work.  
+
+Burns-Murdoch in his [own words on his visualizations] (https://www.ft.com/video/9a72a9d4-8db1-4615-8333-4b73ae3ddff8).
+
+---
+
+
+
+
+
+
+
+
+# getting data
+
+
+```r
+url &lt;- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+
+# if file hasn't already been downloaded, download
+if (!file.exists("time_series_19-covid-Confirmed-2020-03-19.csv")){
+download.file(url, 
+              destfile = 
+                "time_series_19-covid-Confirmed-2020-03-19.csv") 
+  } # 2020-03-19
+```
+
+
+
+---
+
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*library(tidyverse)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+*read_csv("time_series_19-covid-Confirmed-2020-03-19.csv")
+```
+]]
+.column[.content[
+
+```
+# A tibble: 483 x 62
+   `Province/State` `Country/Region`    Lat   Long `1/22/20` `1/23/20` `1/24/20`
+   &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand          15     101           2         3         5
+ 2 &lt;NA&gt;             Japan             36     138           2         1         2
+ 3 &lt;NA&gt;             Singapore          1.28  104.          0         1         3
+ 4 &lt;NA&gt;             Nepal             28.2    84.2         0         0         0
+ 5 &lt;NA&gt;             Malaysia           2.5   112.          0         0         0
+ 6 British Columbia Canada            49.3  -123.          0         0         0
+ 7 New South Wales  Australia        -33.9   151.          0         0         0
+ 8 Victoria         Australia        -37.8   145.          0         0         0
+ 9 Queensland       Australia        -28.0   153.          0         0         0
+10 &lt;NA&gt;             Cambodia          11.6   105.          0         0         0
+# … with 473 more rows, and 55 more variables: `1/25/20` &lt;dbl&gt;,
+#   `1/26/20` &lt;dbl&gt;, `1/27/20` &lt;dbl&gt;, `1/28/20` &lt;dbl&gt;, `1/29/20` &lt;dbl&gt;,
+#   `1/30/20` &lt;dbl&gt;, `1/31/20` &lt;dbl&gt;, `2/1/20` &lt;dbl&gt;, `2/2/20` &lt;dbl&gt;,
+#   `2/3/20` &lt;dbl&gt;, `2/4/20` &lt;dbl&gt;, `2/5/20` &lt;dbl&gt;, `2/6/20` &lt;dbl&gt;,
+#   `2/7/20` &lt;dbl&gt;, `2/8/20` &lt;dbl&gt;, `2/9/20` &lt;dbl&gt;, `2/10/20` &lt;dbl&gt;,
+#   `2/11/20` &lt;dbl&gt;, `2/12/20` &lt;dbl&gt;, `2/13/20` &lt;dbl&gt;, `2/14/20` &lt;dbl&gt;,
+#   `2/15/20` &lt;dbl&gt;, `2/16/20` &lt;dbl&gt;, `2/17/20` &lt;dbl&gt;, `2/18/20` &lt;dbl&gt;,
+#   `2/19/20` &lt;dbl&gt;, `2/20/20` &lt;dbl&gt;, `2/21/20` &lt;dbl&gt;, `2/22/20` &lt;dbl&gt;,
+#   `2/23/20` &lt;dbl&gt;, `2/24/20` &lt;dbl&gt;, `2/25/20` &lt;dbl&gt;, `2/26/20` &lt;dbl&gt;,
+#   `2/27/20` &lt;dbl&gt;, `2/28/20` &lt;dbl&gt;, `2/29/20` &lt;dbl&gt;, `3/1/20` &lt;dbl&gt;,
+#   `3/2/20` &lt;dbl&gt;, `3/3/20` &lt;dbl&gt;, `3/4/20` &lt;dbl&gt;, `3/5/20` &lt;dbl&gt;,
+#   `3/6/20` &lt;dbl&gt;, `3/7/20` &lt;dbl&gt;, `3/8/20` &lt;dbl&gt;, `3/9/20` &lt;dbl&gt;,
+#   `3/10/20` &lt;dbl&gt;, `3/11/20` &lt;dbl&gt;, `3/12/20` &lt;dbl&gt;, `3/13/20` &lt;dbl&gt;,
+#   `3/14/20` &lt;dbl&gt;, `3/15/20` &lt;dbl&gt;, `3/16/20` &lt;dbl&gt;, `3/17/20` &lt;dbl&gt;,
+#   `3/18/20` &lt;dbl&gt;, `3/19/20` &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+* gather(key = "date",
+*        value = "num_cases",
+*        5:ncol(.))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 28,014 x 6
+   `Province/State` `Country/Region`    Lat   Long date    num_cases
+   &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand          15     101   1/22/20         2
+ 2 &lt;NA&gt;             Japan             36     138   1/22/20         2
+ 3 &lt;NA&gt;             Singapore          1.28  104.  1/22/20         0
+ 4 &lt;NA&gt;             Nepal             28.2    84.2 1/22/20         0
+ 5 &lt;NA&gt;             Malaysia           2.5   112.  1/22/20         0
+ 6 British Columbia Canada            49.3  -123.  1/22/20         0
+ 7 New South Wales  Australia        -33.9   151.  1/22/20         0
+ 8 Victoria         Australia        -37.8   145.  1/22/20         0
+ 9 Queensland       Australia        -28.0   153.  1/22/20         0
+10 &lt;NA&gt;             Cambodia          11.6   105.  1/22/20         0
+# … with 28,004 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+* mutate(date = lubridate::mdy(date))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 28,014 x 6
+   `Province/State` `Country/Region`    Lat   Long date       num_cases
+   &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand          15     101   2020-01-22         2
+ 2 &lt;NA&gt;             Japan             36     138   2020-01-22         2
+ 3 &lt;NA&gt;             Singapore          1.28  104.  2020-01-22         0
+ 4 &lt;NA&gt;             Nepal             28.2    84.2 2020-01-22         0
+ 5 &lt;NA&gt;             Malaysia           2.5   112.  2020-01-22         0
+ 6 British Columbia Canada            49.3  -123.  2020-01-22         0
+ 7 New South Wales  Australia        -33.9   151.  2020-01-22         0
+ 8 Victoria         Australia        -37.8   145.  2020-01-22         0
+ 9 Queensland       Australia        -28.0   153.  2020-01-22         0
+10 &lt;NA&gt;             Cambodia          11.6   105.  2020-01-22         0
+# … with 28,004 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+* janitor::clean_names()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 28,014 x 6
+   province_state   country_region    lat   long date       num_cases
+   &lt;chr&gt;            &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand        15     101   2020-01-22         2
+ 2 &lt;NA&gt;             Japan           36     138   2020-01-22         2
+ 3 &lt;NA&gt;             Singapore        1.28  104.  2020-01-22         0
+ 4 &lt;NA&gt;             Nepal           28.2    84.2 2020-01-22         0
+ 5 &lt;NA&gt;             Malaysia         2.5   112.  2020-01-22         0
+ 6 British Columbia Canada          49.3  -123.  2020-01-22         0
+ 7 New South Wales  Australia      -33.9   151.  2020-01-22         0
+ 8 Victoria         Australia      -37.8   145.  2020-01-22         0
+ 9 Queensland       Australia      -28.0   153.  2020-01-22         0
+10 &lt;NA&gt;             Cambodia        11.6   105.  2020-01-22         0
+# … with 28,004 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+* filter(country_region != "Cruise Ship")
+```
+]]
+.column[.content[
+
+```
+# A tibble: 27,956 x 6
+   province_state   country_region    lat   long date       num_cases
+   &lt;chr&gt;            &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand        15     101   2020-01-22         2
+ 2 &lt;NA&gt;             Japan           36     138   2020-01-22         2
+ 3 &lt;NA&gt;             Singapore        1.28  104.  2020-01-22         0
+ 4 &lt;NA&gt;             Nepal           28.2    84.2 2020-01-22         0
+ 5 &lt;NA&gt;             Malaysia         2.5   112.  2020-01-22         0
+ 6 British Columbia Canada          49.3  -123.  2020-01-22         0
+ 7 New South Wales  Australia      -33.9   151.  2020-01-22         0
+ 8 Victoria         Australia      -37.8   145.  2020-01-22         0
+ 9 Queensland       Australia      -28.0   153.  2020-01-22         0
+10 &lt;NA&gt;             Cambodia        11.6   105.  2020-01-22         0
+# … with 27,946 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+* group_by(country_region, date)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 27,956 x 6
+# Groups:   country_region, date [9,686]
+   province_state   country_region    lat   long date       num_cases
+   &lt;chr&gt;            &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt;
+ 1 &lt;NA&gt;             Thailand        15     101   2020-01-22         2
+ 2 &lt;NA&gt;             Japan           36     138   2020-01-22         2
+ 3 &lt;NA&gt;             Singapore        1.28  104.  2020-01-22         0
+ 4 &lt;NA&gt;             Nepal           28.2    84.2 2020-01-22         0
+ 5 &lt;NA&gt;             Malaysia         2.5   112.  2020-01-22         0
+ 6 British Columbia Canada          49.3  -123.  2020-01-22         0
+ 7 New South Wales  Australia      -33.9   151.  2020-01-22         0
+ 8 Victoria         Australia      -37.8   145.  2020-01-22         0
+ 9 Queensland       Australia      -28.0   153.  2020-01-22         0
+10 &lt;NA&gt;             Cambodia        11.6   105.  2020-01-22         0
+# … with 27,946 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+* summarize(num_cases = sum(num_cases))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 9,686 x 3
+# Groups:   country_region [167]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Afghanistan    2020-01-22         0
+ 2 Afghanistan    2020-01-23         0
+ 3 Afghanistan    2020-01-24         0
+ 4 Afghanistan    2020-01-25         0
+ 5 Afghanistan    2020-01-26         0
+ 6 Afghanistan    2020-01-27         0
+ 7 Afghanistan    2020-01-28         0
+ 8 Afghanistan    2020-01-29         0
+ 9 Afghanistan    2020-01-30         0
+10 Afghanistan    2020-01-31         0
+# … with 9,676 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+*data_long
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+*data_long
+```
+]]
+.column[.content[
+
+```
+# A tibble: 9,686 x 3
+# Groups:   country_region [167]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Afghanistan    2020-01-22         0
+ 2 Afghanistan    2020-01-23         0
+ 3 Afghanistan    2020-01-24         0
+ 4 Afghanistan    2020-01-25         0
+ 5 Afghanistan    2020-01-26         0
+ 6 Afghanistan    2020-01-27         0
+ 7 Afghanistan    2020-01-28         0
+ 8 Afghanistan    2020-01-29         0
+ 9 Afghanistan    2020-01-30         0
+10 Afghanistan    2020-01-31         0
+# … with 9,676 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+data_long %&gt;%  
+* group_by(country_region)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 9,686 x 3
+# Groups:   country_region [167]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Afghanistan    2020-01-22         0
+ 2 Afghanistan    2020-01-23         0
+ 3 Afghanistan    2020-01-24         0
+ 4 Afghanistan    2020-01-25         0
+ 5 Afghanistan    2020-01-26         0
+ 6 Afghanistan    2020-01-27         0
+ 7 Afghanistan    2020-01-28         0
+ 8 Afghanistan    2020-01-29         0
+ 9 Afghanistan    2020-01-30         0
+10 Afghanistan    2020-01-31         0
+# … with 9,676 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+data_long %&gt;%  
+  group_by(country_region) %&gt;%  
+* summarize(max_cases = max(num_cases))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 167 x 2
+   country_region      max_cases
+   &lt;chr&gt;                   &lt;dbl&gt;
+ 1 Afghanistan                22
+ 2 Albania                    64
+ 3 Algeria                    87
+ 4 Andorra                    53
+ 5 Antigua and Barbuda         1
+ 6 Argentina                  97
+ 7 Armenia                   115
+ 8 Aruba                       4
+ 9 Australia                 681
+10 Austria                  2013
+# … with 157 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+data_long %&gt;%  
+  group_by(country_region) %&gt;%  
+  summarize(max_cases = max(num_cases)) %&gt;%  
+* arrange(-max_cases)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 167 x 2
+   country_region max_cases
+   &lt;chr&gt;              &lt;dbl&gt;
+ 1 China              81156
+ 2 Italy              41035
+ 3 Iran               18407
+ 4 Spain              17963
+ 5 Germany            15320
+ 6 France             10886
+ 7 Korea, South        8565
+ 8 Switzerland         4075
+ 9 United Kingdom      2716
+10 Netherlands         2465
+# … with 157 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+data_long %&gt;%  
+  group_by(country_region) %&gt;%  
+  summarize(max_cases = max(num_cases)) %&gt;%  
+  arrange(-max_cases) %&gt;%  
+* slice(1:20)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 20 x 2
+   country_region max_cases
+   &lt;chr&gt;              &lt;dbl&gt;
+ 1 China              81156
+ 2 Italy              41035
+ 3 Iran               18407
+ 4 Spain              17963
+ 5 Germany            15320
+ 6 France             10886
+ 7 Korea, South        8565
+ 8 Switzerland         4075
+ 9 United Kingdom      2716
+10 Netherlands         2465
+11 Austria             2013
+12 Belgium             1795
+13 Norway              1746
+14 Sweden              1439
+15 Denmark             1225
+16 Japan                924
+17 Malaysia             900
+18 Canada               800
+19 Portugal             785
+20 Czechia              694
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(tidyverse)  
+
+read_csv("time_series_19-covid-Confirmed-2020-03-19.csv") %&gt;%  
+  gather(key = "date",  
+         value = "num_cases",  
+         5:ncol(.))  %&gt;%  
+  mutate(date = lubridate::mdy(date)) %&gt;%  
+  janitor::clean_names() %&gt;%  
+  filter(country_region != "Cruise Ship") %&gt;%  
+  group_by(country_region, date) %&gt;%  
+  summarize(num_cases = sum(num_cases)) -&gt;  
+data_long  
+
+data_long %&gt;%  
+  group_by(country_region) %&gt;%  
+  summarize(max_cases = max(num_cases)) %&gt;%  
+  arrange(-max_cases) %&gt;%  
+  slice(1:20) -&gt;  
+*top_20
+```
+]]
+.column[.content[
+
+]]
+
+
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*options(scipen = 10)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+*top_20
+```
+]]
+.column[.content[
+
+```
+# A tibble: 20 x 2
+   country_region max_cases
+   &lt;chr&gt;              &lt;dbl&gt;
+ 1 China              81156
+ 2 Italy              41035
+ 3 Iran               18407
+ 4 Spain              17963
+ 5 Germany            15320
+ 6 France             10886
+ 7 Korea, South        8565
+ 8 Switzerland         4075
+ 9 United Kingdom      2716
+10 Netherlands         2465
+11 Austria             2013
+12 Belgium             1795
+13 Norway              1746
+14 Sweden              1439
+15 Denmark             1225
+16 Japan                924
+17 Malaysia             900
+18 Canada               800
+19 Portugal             785
+20 Czechia              694
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+* left_join(data_long)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,160 x 4
+   country_region max_cases date       num_cases
+   &lt;chr&gt;              &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt;
+ 1 China              81156 2020-01-22       548
+ 2 China              81156 2020-01-23       643
+ 3 China              81156 2020-01-24       920
+ 4 China              81156 2020-01-25      1406
+ 5 China              81156 2020-01-26      2075
+ 6 China              81156 2020-01-27      2877
+ 7 China              81156 2020-01-28      5509
+ 8 China              81156 2020-01-29      6087
+ 9 China              81156 2020-01-30      8141
+10 China              81156 2020-01-31      9802
+# … with 1,150 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+* aes(x = date)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+* aes(y = num_cases)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+* geom_line()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+* aes(group = country_region)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+* scale_y_log10()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+* scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+* scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),
+*               limits = c(100, 100000))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_11_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+*g 
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+*data_long
+```
+]]
+.column[.content[
+
+```
+# A tibble: 9,686 x 3
+# Groups:   country_region [167]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Afghanistan    2020-01-22         0
+ 2 Afghanistan    2020-01-23         0
+ 3 Afghanistan    2020-01-24         0
+ 4 Afghanistan    2020-01-25         0
+ 5 Afghanistan    2020-01-26         0
+ 6 Afghanistan    2020-01-27         0
+ 7 Afghanistan    2020-01-28         0
+ 8 Afghanistan    2020-01-29         0
+ 9 Afghanistan    2020-01-30         0
+10 Afghanistan    2020-01-31         0
+# … with 9,676 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+* filter(num_cases &gt; 100)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 585 x 3
+# Groups:   country_region [62]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Armenia        2020-03-19       115
+ 2 Australia      2020-03-10       107
+ 3 Australia      2020-03-11       128
+ 4 Australia      2020-03-12       128
+ 5 Australia      2020-03-13       200
+ 6 Australia      2020-03-14       250
+ 7 Australia      2020-03-15       297
+ 8 Australia      2020-03-16       377
+ 9 Australia      2020-03-17       452
+10 Australia      2020-03-18       568
+# … with 575 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+* group_by(country_region)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 585 x 3
+# Groups:   country_region [62]
+   country_region date       num_cases
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt;
+ 1 Armenia        2020-03-19       115
+ 2 Australia      2020-03-10       107
+ 3 Australia      2020-03-11       128
+ 4 Australia      2020-03-12       128
+ 5 Australia      2020-03-13       200
+ 6 Australia      2020-03-14       250
+ 7 Australia      2020-03-15       297
+ 8 Australia      2020-03-16       377
+ 9 Australia      2020-03-17       452
+10 Australia      2020-03-18       568
+# … with 575 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+* mutate(first_data_w_100 = min(date))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 585 x 4
+# Groups:   country_region [62]
+   country_region date       num_cases first_data_w_100
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;          
+ 1 Armenia        2020-03-19       115 2020-03-19      
+ 2 Australia      2020-03-10       107 2020-03-10      
+ 3 Australia      2020-03-11       128 2020-03-10      
+ 4 Australia      2020-03-12       128 2020-03-10      
+ 5 Australia      2020-03-13       200 2020-03-10      
+ 6 Australia      2020-03-14       250 2020-03-10      
+ 7 Australia      2020-03-15       297 2020-03-10      
+ 8 Australia      2020-03-16       377 2020-03-10      
+ 9 Australia      2020-03-17       452 2020-03-10      
+10 Australia      2020-03-18       568 2020-03-10      
+# … with 575 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+* mutate(days_since_100 = date - first_data_w_100)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 585 x 5
+# Groups:   country_region [62]
+   country_region date       num_cases first_data_w_100 days_since_100
+   &lt;chr&gt;          &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;           &lt;drtn&gt;        
+ 1 Armenia        2020-03-19       115 2020-03-19       0 days        
+ 2 Australia      2020-03-10       107 2020-03-10       0 days        
+ 3 Australia      2020-03-11       128 2020-03-10       1 days        
+ 4 Australia      2020-03-12       128 2020-03-10       2 days        
+ 5 Australia      2020-03-13       200 2020-03-10       3 days        
+ 6 Australia      2020-03-14       250 2020-03-10       4 days        
+ 7 Australia      2020-03-15       297 2020-03-10       5 days        
+ 8 Australia      2020-03-16       377 2020-03-10       6 days        
+ 9 Australia      2020-03-17       452 2020-03-10       7 days        
+10 Australia      2020-03-18       568 2020-03-10       8 days        
+# … with 575 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+*data_long_since_100
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+*g 
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_19_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+* (top_20 %&gt;%
+* left_join(data_long_since_100))
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_20_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+  (top_20 %&gt;%  
+  left_join(data_long_since_100)) +  
+* aes(x = days_since_100)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_21_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+  (top_20 %&gt;%  
+  left_join(data_long_since_100)) +  
+  aes(x = days_since_100) +  
+* theme_minimal()
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_22_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+  (top_20 %&gt;%  
+  left_join(data_long_since_100)) +  
+  aes(x = days_since_100) +  
+  theme_minimal() +  
+* facet_wrap(~ country_region)
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_23_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+  (top_20 %&gt;%  
+  left_join(data_long_since_100)) +  
+  aes(x = days_since_100) +  
+  theme_minimal() +  
+  facet_wrap(~ country_region) +  
+* geom_line(data = . %&gt;%
+*             mutate(country_region2 = country_region) %&gt;%
+*             select(-country_region),
+*           aes(group = country_region2),
+*           color = "grey")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_24_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+options(scipen = 10)  
+top_20 %&gt;%  
+  left_join(data_long) %&gt;%  
+  ggplot() +  
+  aes(x = date) +  
+  aes(y = num_cases) +  
+  geom_line() +  
+  aes(group = country_region) +  
+  scale_y_log10() +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000)) +  
+  scale_y_log10(breaks = c(1,10,100,1000, 10000, 100000),  
+                limits = c(100, 100000)) -&gt;  
+g  
+
+data_long %&gt;%  
+  filter(num_cases &gt; 100) %&gt;%  
+  group_by(country_region) %&gt;%  
+  mutate(first_data_w_100 = min(date)) %&gt;%  
+  mutate(days_since_100 = date - first_data_w_100) -&gt;  
+data_long_since_100  
+
+g %+%  
+  (top_20 %&gt;%  
+  left_join(data_long_since_100)) +  
+  aes(x = days_since_100) +  
+  theme_minimal() +  
+  facet_wrap(~ country_region) +  
+  geom_line(data = . %&gt;%  
+              mutate(country_region2 = country_region) %&gt;%  
+              select(-country_region),  
+            aes(group = country_region2),  
+            color = "grey") +  
+* geom_line(color = "magenta")
+```
+]]
+.column[.content[
+&lt;img src="covid_19_files/figure-html/data_plot_auto_25_output-1.png" width="432" /&gt;
+]]
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+
+
+
+---
+
+
+A lot of questions are being raised about Data Viz in the COVID-19 context.
+
+A great summary is in [the Policy Viz Podcast:  Data Viz in the Time of COVID](https://policyviz.com/podcast/episode-170-dataviz-in-the-time-of-covid/).  
+
+[Concerns about attribution]() have also arisen, as this Murdoch's chart has become wildly popular.  
+
+
+
+---
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

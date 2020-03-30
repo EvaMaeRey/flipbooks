@@ -1,0 +1,151 @@
+---
+title: "Data Vizualization of COVID-19"
+subtitle: ""
+author: "Edited, Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+This collection was inspired by John Burns-Murdoch.  He's making some of the most compelling visualizations of this crisis --- at this point, I'd consider his series of COVID-19 figures ast *the* reference point for data vis during this crisis.
+
+
+---
+
+Here is one of his visualizations.
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">NEW on coronavirus: many western countries may soon face Italy’s situation<br><br>Case numbers since outbreaks began in several countries have tracked a ~33% daily rise. This is as true for UK, France, Germany as Italy; the latter is simply further down the path <a href="https://t.co/VcSZISFxzF">https://t.co/VcSZISFxzF</a> <a href="https://t.co/xM6wXuMk4n">pic.twitter.com/xM6wXuMk4n</a></p>&mdash; John Burn-Murdoch (@jburnmurdoch) <a href="https://twitter.com/jburnmurdoch/status/1237737352879112194?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
+From David Keyes, I learned that he'd shared his code.  
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">See the little backgrounds that make the country names in this plot easier to read?<a href="https://twitter.com/jburnmurdoch?ref_src=twsrc%5Etfw">@jburnmurdoch</a> was kind enough to share his <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code so I could see how it was made (<a href="https://t.co/F7K171s4FR">https://t.co/F7K171s4FR</a>). <br><br>Learned about the shadowtext package by <a href="https://twitter.com/guangchuangyu?ref_src=twsrc%5Etfw">@guangchuangyu</a>: <a href="https://t.co/YKz3h4piKv">https://t.co/YKz3h4piKv</a> <a href="https://t.co/1wYTSUvZuS">https://t.co/1wYTSUvZuS</a></p>&mdash; David Keyes (@dgkeyes) <a href="https://twitter.com/dgkeyes/status/1237812892189093888?ref_src=twsrc%5Etfw">March 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+
+Right after David tweeted this out, I lightly edited John's code to make it apropriate for the flipbook format --- very little adjustment was required.  I'm teaching data viz this spring, so this figure --- and how it's built --- is of interest.  I shared that work with David and John, but John didn't respond, and I've since taken the work down.  
+
+Meanwhile there were a growning number of data visualizations produced by my peers, which much more local focuses --- how were their *homes* being affected.  I've approached them about sharing their work in the "flipbook" format, which communicates the decisions they've made as visualization designers.  
+
+---
+
+In the last couple days, I've created a few plots inspired by John's FT work (i.e. emulating his work --- using my own ggplot know-how instead of his code base) --- and actually going out of the way to try to capture some of the likely decision-making process.  But the work fall well short of the polished product John delivers, with its thematic choices and annotation layers --- and I think these are key to really "selling" the visualization.  Emulation is something that data visualization practicioners do often, but it is important tho think about to what extent is appropriate.  A good discussion is [here](http://www.storytellingwithdata.com/blog/2019/4/1/swdchallenge-emulate), in the context of StoryTellingWithData's "Emulate" Challenge, back in April 2019.  
+
+In what follows, I start with the contributed code (very lightly edited to allow for code walk through.  The emulation of John's work follows.  I think data viz should be understood as a series of insights and decisions.  Walking through many of the insights and decisions help explicitly deliver that message; communicating data viz as process is a message that other visualizers espouse (see the concluding comments of [Chalabi](https://www.lib.ncsu.edu/news/data-visualization-in-the-age-of-%E2%80%9Cfake-news%E2%80%9D)). That's what's being done here, but also with *code* along side the output.  
+
+---
+
+# Alonso Silva
+
+[Alonso Silva](https://scholar.google.com/citations?user=sjlsVQ0AAAAJ&hl=en)  @alonsosilva is a Chilean mathematician residing in France.  He is a senior researcher at at Safran Tech.  He uses the Python programming language and the Matplotlib plotting library to visualize data. He's a family friend. 
+
+
+He has [blogged](https://medium.com/@alonso.silva/crecimiento-del-n%C3%BAmero-de-casos-confirmados-de-coronavirus-en-chile-bcb1ca4ad9ac) about concern for spread in Chile (in Spanish) on Medium.
+
+---
+
+```{r, child = "alonso_italy_france.Rmd"}
+
+```
+
+---
+
+
+
+---
+
+
+# Peter Higgins
+
+[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor.  He is also an fan the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan.  I learned about the {covid19us} package from Peter's visualization.  His handel is @ibddoctor on Twitter. 
+
+---
+
+```{r, child="peter_animation.Rmd"}
+
+```
+
+
+---
+
+
+
+
+# Sebastián Garrido
+
+Sebastian Garrido is a political scientist at CIDE,with interests in Mexican politics, higher education, data science, and tranparency.  He is an expert of and teaches data visualization, and he uses R and ggplot2 in his work.
+
+His handle is @segasi on Twitter.
+
+
+---
+
+Placeholder
+
+<blockquote class="twitter-tweet"><p lang="und" dir="ltr"><a href="https://t.co/s982fmmIMw">pic.twitter.com/s982fmmIMw</a></p>&mdash; Sebastián Garrido (@segasi) <a href="https://twitter.com/segasi/status/1243380826395402240?ref_src=twsrc%5Etfw">March 27, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+---
+
+# Emulating the Burns-Murdoch work
+
+This section is meant to give some insight into the decisions process that led to what will probably be the most recognized data visualization from this global tragedy.  Burns-Murdoch uses R and ggplot2 in his work.  
+
+Burns-Murdoch in his [own words on his visualizations] (https://www.ft.com/video/9a72a9d4-8db1-4615-8333-4b73ae3ddff8).
+
+---
+
+```{r, child = "covid_19_2.Rmd"}
+
+```
+
+
+
+---
+
+
+A lot of questions are being raised about Data Viz in the COVID-19 context.
+
+A great summary is in [the Policy Viz Podcast:  Data Viz in the Time of COVID](https://policyviz.com/podcast/episode-170-dataviz-in-the-time-of-covid/).  
+
+[Concerns about attribution]() have also arisen, as this Murdoch's chart has become wildly popular.  
+
+
+
+---
+
+
+
+
+
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

@@ -1,0 +1,82 @@
+---
+title: "A collection of COVID-19 Data Visualization"
+subtitle: ""
+author: "Edited by Gina Reynolds, March 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup5, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+
+<!-- #geom_segment(aes(xend = end_date, yend = positive), linetype = 2, colour = 'grey') + -->
+<!--   #geom_text(aes(x = end_date + 0.1, y = positive, -->
+<!--                # label = state), hjust = 0) + -->
+
+---
+
+`r chunk_reveal(chunk_name = "peter")`
+
+
+```{r peter, include = F}
+covid19us::get_states_current() %>% 
+  arrange(desc(positive)) %>% 
+  slice(1:10) %>% 
+  pull(state) ->
+top10states
+
+covid19us::get_states_daily()[1,1] %>% 
+  pull() ->
+end_date
+
+options(scipen = 10) # set when to turn on logrithmic scale
+covid19us::get_states_daily() %>%
+  replace_na(list(positive = 0)) %>%
+  select(date, state, positive, death) %>%
+  filter(state %in% c(top10states)) %>%
+  mutate(state = factor(state, levels = top10states)) %>%
+  ggplot() +
+  aes(x = date) + 
+  aes(y = positive) +
+  geom_point() +
+  aes(color = state) +
+  geom_line() +
+  scale_color_viridis_d() +
+  theme_linedraw(base_size = 14) +
+  theme(legend.position = c(0.2, 0.8)) +
+  guides(col = guide_legend(ncol = 2)) +
+  labs(color = NULL) +
+  labs(title = "Growth of COVID-19 Cases in\nTop 10 US States") +
+  labs(x = "Date") + 
+  labs(y = "Cases") + 
+  labs(caption = "Data from the COVID Tracking Project API\nVia the covid19us package by Amanda Dobbyn") +
+  gganimate::transition_reveal(date) +
+  labs(title = "Logarithmic Growth of COVID-19 Cases in\nTop 10 US States") +
+  scale_y_log10()
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
