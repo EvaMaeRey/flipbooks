@@ -81,7 +81,7 @@ He has [blogged](https://medium.com/@alonso.silva/crecimiento-del-n%C3%BAmero-de
 
 # Peter Higgins
 
-[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor.  He is also an fan the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan.  I learned about the {covid19us} package from Peter's visualization.  His handel is @ibddoctor on Twitter. 
+[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor. He is also a fan of the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan. I learned about the {covid19us} package from Peter's visualization. His handle is @ibddoctor on Twitter.
 
 ---
 

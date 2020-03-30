@@ -37,14 +37,12 @@ Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* 
 
 # Case Studies
 
-
-
-*Let's start with the good stuff.  Let's get motivated. Where are we headed anyway? Is it worth it?  (If you haven't guessed already, I hope you'll find it totally is!)*
+*Let's start big picture.  Let's get motivated. Where are we headed anyway? Is it worth it?  (If you haven't guessed already, I hope you'll find it totally is!) There are some light-hearted examples here, but also treatment of tragic current events -- the COVID-19 pandemic.*
 
 
 - [Racing Bar Chart](https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html){target="_blank"}
-- [The Simpsons](){target="_blank"}
-- [](){target="_blank"}
+- [The Simpsons](https://evamaerey.github.io/tidytuesday_walk_through/simpsons.html#50){target="_blank"}
+- [covid-19](https://evamaerey.github.io/flipbooks/covid_19/covid_19#1){target="_blank"}
 
 > He who has a why to live can bear almost any how. – Friedrich Nietzsche
 
