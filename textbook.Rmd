@@ -31,7 +31,6 @@ Also, the material doesn't have a lot of context or discussion --- *flipbooks* w
 
 Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* organization or content. 
 
-
 *Content not appropriate for your course?  Learn more about building your own flipbooks with {flipbookr} [here](https://evamaerey.github.io/flipbooks/about){target="_blank"}*.
 
 

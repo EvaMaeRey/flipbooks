@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Data Vizualization of COVID-19</title>
+    <title>Data Visualization of COVID-19</title>
     <meta charset="utf-8" />
     <meta name="author" content="Edited, Gina Reynolds, March 2020" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Data Vizualization of COVID-19
+# Data Visualization of COVID-19
 ### Edited, Gina Reynolds, March 2020
 
 ---
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 
 ---
 
-This collection was inspired by John Burns-Murdoch.  He's making some of the most compelling visualizations of this crisis --- at this point, I'd consider his series of COVID-19 figures ast *the* reference point for data vis during this crisis.
+This collection was inspired by John Burns-Murdoch.  He's making some of the most compelling visualizations of this crisis --- at this point, I'd consider his series of COVID-19 figures as *the* reference point for data viz during this crisis.
 
 
 ---
@@ -43,21 +43,28 @@ From David Keyes, I learned that he'd shared his code.
 ---
 
 
-Right after David tweeted this out, I lightly edited John's code to make it apropriate for the flipbook format --- very little adjustment was required.  I'm teaching data viz this spring, so this figure --- and how it's built --- is of interest.  I shared that work with David and John, but John didn't respond, and I've since taken the work down.  
+Right after David tweeted this out, I lightly edited John's code to make it apropriate for the flipbook format --- very little adjustment was required.  
 
-Meanwhile there were a growning number of data visualizations produced by my peers, which much more local focuses --- how were their *homes* being affected.  I've approached them about sharing their work in the "flipbook" format, which communicates the decisions they've made as visualization designers.  
+I'm teaching data viz this spring, given the success of this figure, it is a natural point of dicussion.  Why has it captured the attention of so many people?  What are the technical decisions that were made in this figure?   I shared that work with David and John almost right away, but John didn't respond, and I've since taken walk-through of John's code off-line.   
+
+Meanwhile there were a growing number of data visualizations produced by my peers, which much more local focuses --- how were their *homes* being affected.  I've approached them about sharing their work in the "flipbook" format, which communicates the decisions they've made as designers of data visualization.  
 
 ---
 
-In the last couple days, I've created a few plots inspired by John's FT work (i.e. emulating his work --- using my own ggplot know-how instead of his code base) --- and actually going out of the way to try to capture some of the likely decision-making process.  But the work fall well short of the polished product John delivers, with its thematic choices and annotation layers --- and I think these are key to really "selling" the visualization.  Emulation is something that data visualization practicioners do often, but it is important tho think about to what extent is appropriate.  A good discussion is [here](http://www.storytellingwithdata.com/blog/2019/4/1/swdchallenge-emulate), in the context of StoryTellingWithData's "Emulate" Challenge, back in April 2019.  
+In the last couple days, I've created a few plots inspired by John's FT work (i.e. emulating his work --- using my own know-how instead of his code base).  I also go out of the way to try to capture some of the likely decision-making process.  My work falls well short of the polished product John delivers, with its thematic choices and annotation layers --- here intentionally so.  Emulation is something that data visualization practitioners often do, but it is important to think about how far to go, and what to make public from emulation work.  A good discussion about emulation is [here](http://www.storytellingwithdata.com/blog/2019/4/1/swdchallenge-emulate), in the context of StoryTellingWithData's "Emulate" Challenge, back in April 2019.  
 
-In what follows, I start with the contributed code (very lightly edited to allow for code walk through.  The emulation of John's work follows.  I think data viz should be understood as a series of insights and decisions.  Walking through many of the insights and decisions help explicitly deliver that message; communicating data viz as process is a message that other visualizers espouse (see the concluding comments of [Chalabi](https://www.lib.ncsu.edu/news/data-visualization-in-the-age-of-%E2%80%9Cfake-news%E2%80%9D)). That's what's being done here, but also with *code* along side the output.  
+In what follows, I start with the contributed code --- very lightly edited to allow for code walk through.  The emulation of the FT work follows.  
+
+So, what's the value of these walk throughs?  
+
+I believe data viz should be understood as a series of insights and decisions.  Walking through the build of plots helps deliver that message. It communicates data viz as process.  Other data viz experts also espouse this idea (see the concluding comments of [Chalabi](https://www.lib.ncsu.edu/news/data-visualization-in-the-age-of-%E2%80%9Cfake-news%E2%80%9D)).   
+
 
 ---
 
 # Alonso Silva
 
-[Alonso Silva](https://scholar.google.com/citations?user=sjlsVQ0AAAAJ&amp;hl=en)  @alonsosilva is a Chilean mathematician residing in France.  He is a senior researcher at at Safran Tech.  He uses the Python programming language and the Matplotlib plotting library to visualize data. He's a family friend. 
+[Alonso Silva](https://scholar.google.com/citations?user=sjlsVQ0AAAAJ&amp;hl=en)  @alonsosilva is a Chilean mathematician residing in France.  He is a senior researcher at Safran Tech.  He uses the Python programming language and the Matplotlib plotting library to visualize data. And he's a family friend. 
 
 
 He has [blogged](https://medium.com/@alonso.silva/crecimiento-del-n%C3%BAmero-de-casos-confirmados-de-coronavirus-en-chile-bcb1ca4ad9ac) about concern for spread in Chile (in Spanish) on Medium.
@@ -855,7 +862,7 @@ plt.yscale("log"); plt.show()
 
 # Peter Higgins
 
-[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor.  He is also an fan the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan.  I learned about the {covid19us} package from Peter's visualization.  His handel is @ibddoctor on Twitter. 
+[Dr. Peter Higgins](https://www.med.umich.edu/higginslab/pdrhBio.html) is the director of the IBD program at the University of Michigan, in Ann Arbor. He is also a fan of the R programming language and the ggplot plotting library, which are the tools that he's using for his visualizations about Michigan. I learned about the {covid19us} package from Peter's visualization. His handle is @ibddoctor on Twitter.
 
 ---
 
@@ -2080,7 +2087,7 @@ covid19us::get_states_daily() %&gt;%
 
 # Sebastián Garrido
 
-Sebastian Garrido is a political scientist at CIDE,with interests in Mexican politics, higher education, data science, and tranparency.  He is an expert of and teaches data visualization, and he uses R and ggplot2 in his work.
+Sebastián Garrido is a political scientist at CIDE,with interests in Mexican politics, higher education, data science, and transparency.  He is an expert of and teaches data visualization, and he uses R and ggplot2 in his work.
 
 His handle is @segasi on Twitter.
 
@@ -3590,11 +3597,11 @@ g %+%
 
 A lot of questions are being raised about Data Viz in the COVID-19 context.
 
-A great summary is in [the Policy Viz Podcast:  Data Viz in the Time of COVID](https://policyviz.com/podcast/episode-170-dataviz-in-the-time-of-covid/).  
+A great summary of concerns is in [the Policy Viz Podcast:  Data Viz in the Time of COVID](https://policyviz.com/podcast/episode-170-dataviz-in-the-time-of-covid/).  
 
-[Concerns about attribution]() have also arisen, as this Murdoch's chart has become wildly popular.  
+[Concerns about attribution](https://twitter.com/jburnmurdoch/status/1244252633298341889) have also arisen, as the FT chart has become popular.  
 
-
+&lt;!-- Several of the FT chart decision were also made by Matt Cowgill around the same time FT's chart came out (https://twitter.com/MattCowgill/status/1239465981048541184), raising questions about the spread of ideas in data viz.  --&gt;
 
 ---
 

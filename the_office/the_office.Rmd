@@ -167,9 +167,50 @@ schrute::theoffice %>%
   labs(subtitle = " Connection drawn for temporally adjacent speakers") +
   labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ") +
   labs(size = "Degree\nCentrality") +
-  theme(legend.position = c(.85,.2))
+  theme(legend.position = c(.85,.2)) ->
+office_chats_s1_e1
 ```
 
+---
+
+```{r}
+schrute::theoffice %>% 
+  filter(season == "01") %>% 
+  mutate(character = ifelse(character == "Michel", 
+                            "Michael", 
+                            character)) %>% 
+  filter(character != "Man") %>% 
+  mutate(character_lag = lag(character)) %>% 
+  select(character, character_lag) %>% 
+  slice(-1) %>% 
+  filter(character != character_lag) %>% 
+  igraph::graph_from_data_frame() %>% 
+  tidygraph::as_tbl_graph(graph) %>% 
+  tidygraph::activate(nodes) %>%
+  mutate(degree = tidygraph::centrality_degree())  %>% 
+  ggraph::ggraph(layout = "kk", ) +
+  theme_void(base_family = "Courier") +
+  theme(plot.background = element_rect(fill = "steelblue4", 
+                                       color = "grey90")) +
+  ggraph::geom_edge_fan(alpha = .15,
+                        color = "orange") +
+  ggraph::geom_node_point(shape = 21,
+                          fill = "grey80",
+                          color = "grey50",
+                          aes(size = degree, 
+                              color = degree)) +
+  ggraph::geom_node_text(nudge_y = .15,
+                         aes(label = name),
+                         color = "grey90",
+                         family = "Courier") +
+  labs(title = " Season 1, Episode 1 of 'The Office', Who (likely) speaks with whom ...") +
+  theme(text = element_text(color = "grey90")) +
+  labs(subtitle = " Connection drawn for temporally adjacent speakers") +
+  labs(caption = "Viz: @EvaMaeRey for #TidyTuesday | Data: Schute package in R ") +
+  labs(size = "Degree\nCentrality") +
+  theme(legend.position = c(.85,.2)) +
+  facet_wrap()
+```
 
 
 
@@ -194,12 +235,95 @@ library(patchwork)
 
 ```
 
+---
+
+
+```{r}
+library(ggraph)
+iris[, 1:4] %>% 
+  dist() %>% 
+  hclust() %>% 
+  ggraph() +
+  geom_edge_bend2()  +
+  geom_node_point(aes(filter = leaf)) +
+  coord_polar(theta = "x") +
+  scale_y_reverse()
+```
+
+
+---
+
+```{r}
+tidygraph::create_notable('zachary') %>% 
+  mutate(clique = tidygraph::group_infomap()) %>% 
+  mutate(clique = as.factor(clique)) %>% 
+  ggraph() +
+  geom_edge_link() +
+  geom_node_point(aes(color = clique),
+                  size = 4) +
+  ggforce::geom_mark_hull(aes(x = x, y = y, 
+                              fill = clique, 
+                              color = clique),
+                          linetype = "dashed")
+```
+
+---
+
+```{r}
+library(dendextend)
+library(circlize)
+par(mar = rep(0,4))
+
+par(mar = rep(0,4))
+
+# modify the dendrogram to have some colors in the branches and labels
+datasets::mtcars %>% 
+  dist() %>% 
+  hclust() %>% 
+  as.dendrogram() %>% 
+   dendextend::color_branches(k = 4) %>% 
+    color_labels %>% 
+  dendextend::circlize_dendrogram(dend_track_height = 0.8) 
+
+datasets::mtcars %>% 
+  dist() %>% 
+  hclust() %>% 
+  ggraph() +
+  geom_edge_bend() +
+  geom_node_point(aes(filter = leaf)) +
+  coord_polar(theta = "x") +
+  scale_y_reverse() + 
+  geom_node_text(aes(x = x*1.05, y=y*1.05, filter=leaf, 
+                 angle = node_angle(x, y), label = label), 
+             size=3, hjust='outward') +
+  geom_node_text(aes(x = x*1.005, y=y*1.005, filter=leaf, 
+                     angle = -((-node_angle(x, y)+90)%%180)+90, label = label), 
+                 size=3, hjust='outward')
+
+
+datasets::mtcars %>% 
+  dist() %>% 
+  hclust() %>%
+ggraph(layout = 'dendrogram', 
+       repel = TRUE, 
+       circular = TRUE, 
+       ratio = 0.5) + 
+  geom_edge_elbow() + 
+  geom_node_text(aes(x = x*1.005, y=y*1.005, filter=leaf, 
+                     angle = -((-node_angle(x, y)+90)%%180)+90, label = label), 
+                 size=3, hjust='outward') + 
+  geom_node_point(aes(filter=leaf)) + 
+  coord_fixed() + 
+  ggforce::theme_no_axes()
+```
+
+
 
 
 ---
 class: center, middle
 
-This presentation was created with the new {flipbookr} package and with {xaringan}.   Info: https://evamaerey.github.io/flipbooks/about. Install  `remotes::install_github("EvaMaeRey/flipbookr")`.
+This presentation was created with the new {flipbookr} package and with {xaringan}.   Info: https://evamaerey.github.io/flipbooks/about. Install  `remotes::install_github("EvaMaeRey/flipbookr")`. 
 
 
 ```{css, eval = TRUE, echo = FALSE}
