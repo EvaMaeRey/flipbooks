@@ -1,5 +1,5 @@
 ---
-title: "The art of flipbooking"
+title: "Exploring {ggpattern}"
 subtitle: "With flipbookr and xaringan"
 author: "Gina Reynolds, December 2019"
 output:
@@ -51,7 +51,7 @@ ggplot(data = continent_count) +
     pattern = "crosshatch", #BREAK3
     fill    = "gray95", #BREAK4
     colour  = "gray35", #BREAK5
-    pattern_color = "white" #BREAK6
+    pattern_color = "white", #BREAK6
   ) +
   theme_minimal(base_size = 12,
                 base_family = "Courier") +
@@ -149,7 +149,6 @@ ggplot() +
   scale_pattern_discrete(guide = guide_legend(nrow = 3)) +
   labs(pattern = NULL) +
   labs(pattern_angle = NULL) +
-  theme_bw(18) +
   labs(title = "ggpattern::geom_bar_pattern()") 
 ```
 
@@ -164,18 +163,67 @@ ggplot(diamonds) +
   xlim(4, 10) + 
   ylim(4, 10) +
   geom_point(alpha = .1) +
-  geom_bin2d() +
-  geom_bin2d_pattern(fill = 'white', 
+  geom_bin2d_pattern(pattern_fill = 'magenta', 
+                     pattern_color = 'magenta',
                      bins = 16, 
-                     colour = 'black', 
-                     size = 1,  aes(pattern_spacing = ..density..)) +
+                     fill = 'lightgrey', 
+                     color = "black",
+                     size = 1,  
+                     aes(pattern_spacing = ..density..)) +
   theme_bw(18) +
   scale_pattern_spacing_continuous(
-    range = c(.5, .01)) +
-  theme(legend.position = 'none') +
-  labs(title = "ggpattern::geom_bin2d_pattern()")
+    range = c(.03, .01),
+    trans = "sqrt"
+    ) +
+  labs(title = "ggpattern::geom_bin2d_pattern()") 
 ```
+
+
+
+
+
+
+
+
+
 
 ```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 80%}
 ```
+
+
+---
+
+
+
+`r chunk_reveal("the_maps")`
+
+```{r the_maps, include= F}
+library(maps)
+library(magick)
+
+states_map <- map_data("state")
+
+USArrests %>% 
+  data.frame(state = tolower(rownames(.)),
+             .) %>% 
+  ggplot() +
+  expand_limits(x = states_map$long, 
+                y = states_map$lat) +
+  aes(map_id = state) +
+    geom_map_pattern(
+      aes(
+        pattern = state,
+        pattern_spacing = fct_shuffle(state),
+        pattern_fill = fct_shuffle(state)
+      ),
+      map = states_map,
+      pattern_aspect_ratio = 1.75,
+      fill                 = 'white',
+      colour               = 'black',
+    ) + 
+  theme(legend.position = "none") +
+  coord_map() 
+```
+
+
