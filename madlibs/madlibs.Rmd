@@ -1,0 +1,77 @@
+---
+title: "{madlibs}"
+subtitle: "'I wandered lonely as a cloud'"
+author: "Gina Reynolds, April 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
+library(flipbookr)
+library(magrittr)
+library(madlibs)
+```
+
+---
+class: middle, center, inverse
+
+# Gentle
+
+---
+
+`r chunk_reveal("wordsworth", break_type = 7, display = "output")`
+
+```{r wordsworth, include = F}
+madlibs:::create_wandered_lonely() %>% 
+  madlibs::drop_words(frac = .1) 
+```
+
+
+---
+class: middle, center, inverse
+
+# Hard
+
+---
+
+
+`r chunk_reveal("wordsworth3", break_type = 7, display = "output")`
+
+```{r wordsworth3, include = F}
+madlibs:::create_wandered_lonely() %>% 
+  madlibs::drop_words(frac = .3) 
+```
+
+
+---
+class: middle, center, inverse
+
+# Expert
+
+
+---
+
+`r chunk_reveal("wordsworth5", break_type = 7, display = "output")`
+
+```{r wordsworth5, include = F}
+madlibs:::create_wandered_lonely() %>% 
+  madlibs::drop_words(frac = .5) 
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```

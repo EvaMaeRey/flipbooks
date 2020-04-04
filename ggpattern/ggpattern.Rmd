@@ -1,0 +1,181 @@
+---
+title: "The art of flipbooking"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+---
+
+`r chunk_reveal("pattern")`
+
+```{r pattern, include=F}
+gapminder::gapminder %>%
+  filter(year == 2002) %>% 
+  count(continent) ->
+continent_count
+```
+
+
+---
+
+`r chunk_reveal("pattern_plot", break_type = "non_seq")`
+
+```{r pattern_plot, include=F}
+library(ggpattern)
+ggplot(data = continent_count) +
+  aes(x = continent) +
+  aes(y = n) +
+  ggpattern::geom_col_pattern(
+    aes(pattern_fill = #BREAK2
+            continent), #BREAK2
+    pattern = "crosshatch", #BREAK3
+    fill    = "gray95", #BREAK4
+    colour  = "gray35", #BREAK5
+    pattern_color = "white" #BREAK6
+  ) +
+  theme_minimal(base_size = 12,
+                base_family = "Courier") +
+  labs(y = NULL) +
+  labs(x = NULL) +
+  labs(title = "Number of countries per continent") + 
+  labs(subtitle = "Data: {gapminder} package in R") +
+  theme(legend.position = "none") +
+  labs(caption = "Styling: {ggpattern}") +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(panel.grid.minor.y = element_blank()) +
+  coord_fixed(ratio = .05) #BREAK7
+```
+
+---
+
+`r chunk_reveal("multi_pattern", break_type = "auto")`
+
+```{r multi_pattern, include = F}
+data.frame(level = c("a", "b", "c", 'd'), 
+          outcome = c(2.3, 1.9, 3.2, 1)) %>% 
+  ggplot() +
+  aes(x = level) + 
+  aes(y = outcome) +
+  geom_col_pattern(
+    fill            = 'white',
+    colour          = 'black',
+    pattern_density = 0.35,
+    pattern_fill    = 'black',
+    pattern_colour  = 'black'
+  ) +
+  aes(pattern = level) + #BREAK2
+  aes(pattern_angle = level) +#BREAK3
+  aes(pattern_spacing = level) + #BREAK4
+  scale_pattern_spacing_discrete(range = c(0.01, 0.05)) +
+  coord_fixed(ratio = 1) +
+  theme_bw() +
+  labs(
+    title    = "ggpattern::geom_col_pattern()",
+    subtitle = 'geometry-based patterns'
+  ) +
+  theme(legend.position = 'none')
+```
+
+---
+
+`r chunk_reveal("pattern_color")`
+
+```{r pattern_color, include = F}
+data.frame(level = c("a", "b", "c", 'd'), 
+          outcome = c(2.3, 1.9, 3.2, 1)) %>% 
+  ggplot() +
+  aes(x = level, y = outcome) +
+  geom_col_pattern(
+    colour                   = "black",
+    pattern_density          = 0.35,
+    pattern_key_scale_factor = 1.3
+    ) +
+  aes(pattern = level) +
+  aes(fill = level) +
+  aes(pattern_fill = level) +
+  scale_pattern_fill_manual(
+    values = c(a="blue", b="red", 
+               c="yellow", d="darkgreen")) +
+  theme_bw() +
+  labs(
+    title    = "ggpattern::geom_col_pattern()",
+    subtitle = "geometry-based patterns"
+  ) +
+  # overriding x and y to prep for pie
+  aes(x = "", y = outcome) +
+  coord_polar(theta = "y") +
+  theme(legend.position = "none") 
+```
+
+
+
+---
+
+`r chunk_reveal("pattern_bar")`
+
+```{r pattern_bar, include = F}
+mpg %>% 
+ggplot() +
+  aes(class) +
+  geom_bar_pattern(
+    fill            = 'white',
+    colour          = 'black',
+    pattern_spacing = 0.025
+  ) +
+  aes(pattern = class) +
+  aes(pattern_angle = class) +
+  coord_fixed(ratio = 1/15) +
+  theme(legend.position = "bottom") +
+  scale_pattern_discrete(guide = guide_legend(nrow = 3)) +
+  labs(pattern = NULL) +
+  labs(pattern_angle = NULL) +
+  theme_bw(18) +
+  labs(title = "ggpattern::geom_bar_pattern()") 
+```
+
+
+---
+
+`r chunk_reveal("bin2d")`
+
+```{r bin2d, include = F}
+ggplot(diamonds) +
+  aes(x, y) +
+  xlim(4, 10) + 
+  ylim(4, 10) +
+  geom_point(alpha = .1) +
+  geom_bin2d() +
+  geom_bin2d_pattern(fill = 'white', 
+                     bins = 16, 
+                     colour = 'black', 
+                     size = 1,  aes(pattern_spacing = ..density..)) +
+  theme_bw(18) +
+  scale_pattern_spacing_continuous(
+    range = c(.5, .01)) +
+  theme(legend.position = 'none') +
+  labs(title = "ggpattern::geom_bin2d_pattern()")
+```
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```

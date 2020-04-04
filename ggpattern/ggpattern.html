@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>The art of flipbooking</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, December 2019" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# The art of flipbooking
+## With flipbookr and xaringan
+### Gina Reynolds, December 2019
+
+---
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*gapminder::gapminder
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+gapminder::gapminder %&gt;%  
+* filter(year == 2002)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 142 x 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2002    42.1  25268405      727.
+ 2 Albania     Europe     2002    75.7   3508512     4604.
+ 3 Algeria     Africa     2002    71.0  31287142     5288.
+ 4 Angola      Africa     2002    41.0  10866106     2773.
+ 5 Argentina   Americas   2002    74.3  38331121     8798.
+ 6 Australia   Oceania    2002    80.4  19546792    30688.
+ 7 Austria     Europe     2002    79.0   8148312    32418.
+ 8 Bahrain     Asia       2002    74.8    656397    23404.
+ 9 Bangladesh  Asia       2002    62.0 135656790     1136.
+10 Belgium     Europe     2002    78.3  10311970    30486.
+# … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+gapminder::gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+* count(continent)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5 x 2
+  continent     n
+  &lt;fct&gt;     &lt;int&gt;
+1 Africa       52
+2 Americas     25
+3 Asia         33
+4 Europe       30
+5 Oceania       2
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+gapminder::gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) -&gt;  
+*continent_count
+```
+]]
+.column[.content[
+
+]]
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_1_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+*   aes(pattern_fill =
+*           continent),
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+    aes(pattern_fill =  
+            continent),  
+*   pattern = "crosshatch",
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+    aes(pattern_fill =  
+            continent),  
+    pattern = "crosshatch",  
+*   fill    = "gray95",
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+    aes(pattern_fill =  
+            continent),  
+    pattern = "crosshatch",  
+    fill    = "gray95",  
+*   colour  = "gray35",
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+    aes(pattern_fill =  
+            continent),  
+    pattern = "crosshatch",  
+    fill    = "gray95",  
+    colour  = "gray35",  
+*   pattern_color = "white"
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank())   
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(ggpattern)  
+ggplot(data = continent_count) +  
+  aes(x = continent) +  
+  aes(y = n) +  
+  ggpattern::geom_col_pattern(  
+    aes(pattern_fill =  
+            continent),  
+    pattern = "crosshatch",  
+    fill    = "gray95",  
+    colour  = "gray35",  
+    pattern_color = "white"  
+  ) +  
+  theme_minimal(base_size = 12,  
+                base_family = "Courier") +  
+  labs(y = NULL) +  
+  labs(x = NULL) +  
+  labs(title = "Number of countries per continent") +  
+  labs(subtitle = "Data: {gapminder} package in R") +  
+  theme(legend.position = "none") +  
+  labs(caption = "Styling: {ggpattern}") +  
+  theme(panel.grid.major.x = element_blank()) +  
+  theme(panel.grid.minor.y = element_blank()) +  
+* coord_fixed(ratio = .05)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_plot_non_seq_7_output-1.png" width="432" /&gt;
+]]
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*data.frame(level = c("a", "b", "c", 'd'),
+*         outcome = c(2.3, 1.9, 3.2, 1))
+```
+]]
+.column[.content[
+
+```
+  level outcome
+1     a     2.3
+2     b     1.9
+3     c     3.2
+4     d     1.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+* aes(x = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+* aes(y = outcome)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+* geom_col_pattern(
+*   fill            = 'white',
+*   colour          = 'black',
+*   pattern_density = 0.35,
+*   pattern_fill    = 'black',
+*   pattern_colour  = 'black'
+* )
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+* aes(pattern = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+* aes(pattern_angle = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+* aes(pattern_spacing = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+  aes(pattern_spacing = level) +  
+* scale_pattern_spacing_discrete(range = c(0.01, 0.05))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+  aes(pattern_spacing = level) +  
+  scale_pattern_spacing_discrete(range = c(0.01, 0.05)) +  
+* coord_fixed(ratio = 1)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+  aes(pattern_spacing = level) +  
+  scale_pattern_spacing_discrete(range = c(0.01, 0.05)) +  
+  coord_fixed(ratio = 1) +  
+* theme_bw()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_11_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+  aes(pattern_spacing = level) +  
+  scale_pattern_spacing_discrete(range = c(0.01, 0.05)) +  
+  coord_fixed(ratio = 1) +  
+  theme_bw() +  
+* labs(
+*   title    = "ggpattern::geom_col_pattern()",
+*   subtitle = 'geometry-based patterns'
+* )
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_12_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level) +  
+  aes(y = outcome) +  
+  geom_col_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_density = 0.35,  
+    pattern_fill    = 'black',  
+    pattern_colour  = 'black'  
+  ) +  
+  aes(pattern = level) +  
+  aes(pattern_angle = level) +  
+  aes(pattern_spacing = level) +  
+  scale_pattern_spacing_discrete(range = c(0.01, 0.05)) +  
+  coord_fixed(ratio = 1) +  
+  theme_bw() +  
+  labs(  
+    title    = "ggpattern::geom_col_pattern()",  
+    subtitle = 'geometry-based patterns'  
+  ) +  
+* theme(legend.position = 'none')
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/multi_pattern_auto_13_output-1.png" width="432" /&gt;
+]]
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*data.frame(level = c("a", "b", "c", 'd'),
+*         outcome = c(2.3, 1.9, 3.2, 1))
+```
+]]
+.column[.content[
+
+```
+  level outcome
+1     a     2.3
+2     b     1.9
+3     c     3.2
+4     d     1.0
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+* aes(x = level, y = outcome)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+* geom_col_pattern(
+*   colour                   = "black",
+*   pattern_density          = 0.35,
+*   pattern_key_scale_factor = 1.3
+*   )
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+* aes(pattern = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+* aes(fill = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+* aes(pattern_fill = level)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+* scale_pattern_fill_manual(
+*   values = c(a="blue", b="red",
+*              c="yellow", d="darkgreen"))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+  scale_pattern_fill_manual(  
+    values = c(a="blue", b="red",  
+               c="yellow", d="darkgreen")) +  
+* theme_bw()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+  scale_pattern_fill_manual(  
+    values = c(a="blue", b="red",  
+               c="yellow", d="darkgreen")) +  
+  theme_bw() +  
+* labs(
+*   title    = "ggpattern::geom_col_pattern()",
+*   subtitle = "geometry-based patterns"
+* )
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+  scale_pattern_fill_manual(  
+    values = c(a="blue", b="red",  
+               c="yellow", d="darkgreen")) +  
+  theme_bw() +  
+  labs(  
+    title    = "ggpattern::geom_col_pattern()",  
+    subtitle = "geometry-based patterns"  
+  ) +  
+# overriding x and y to prep for pie
+* aes(x = "", y = outcome)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_11_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+  scale_pattern_fill_manual(  
+    values = c(a="blue", b="red",  
+               c="yellow", d="darkgreen")) +  
+  theme_bw() +  
+  labs(  
+    title    = "ggpattern::geom_col_pattern()",  
+    subtitle = "geometry-based patterns"  
+  ) +  
+# overriding x and y to prep for pie
+  aes(x = "", y = outcome) +  
+* coord_polar(theta = "y")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_12_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+data.frame(level = c("a", "b", "c", 'd'),  
+          outcome = c(2.3, 1.9, 3.2, 1)) %&gt;%  
+  ggplot() +  
+  aes(x = level, y = outcome) +  
+  geom_col_pattern(  
+    colour                   = "black",  
+    pattern_density          = 0.35,  
+    pattern_key_scale_factor = 1.3  
+    ) +  
+  aes(pattern = level) +  
+  aes(fill = level) +  
+  aes(pattern_fill = level) +  
+  scale_pattern_fill_manual(  
+    values = c(a="blue", b="red",  
+               c="yellow", d="darkgreen")) +  
+  theme_bw() +  
+  labs(  
+    title    = "ggpattern::geom_col_pattern()",  
+    subtitle = "geometry-based patterns"  
+  ) +  
+# overriding x and y to prep for pie
+  aes(x = "", y = outcome) +  
+  coord_polar(theta = "y") +  
+* theme(legend.position = "none")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_color_auto_13_output-1.png" width="432" /&gt;
+]]
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*mpg
+```
+]]
+.column[.content[
+
+```
+# A tibble: 234 x 11
+   manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
+   &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 audi         a4         1.8  1999     4 auto(l… f        18    29 p     comp…
+ 2 audi         a4         1.8  1999     4 manual… f        21    29 p     comp…
+ 3 audi         a4         2    2008     4 manual… f        20    31 p     comp…
+ 4 audi         a4         2    2008     4 auto(a… f        21    30 p     comp…
+ 5 audi         a4         2.8  1999     6 auto(l… f        16    26 p     comp…
+ 6 audi         a4         2.8  1999     6 manual… f        18    26 p     comp…
+ 7 audi         a4         3.1  2008     6 auto(a… f        18    27 p     comp…
+ 8 audi         a4 quat…   1.8  1999     4 manual… 4        18    26 p     comp…
+ 9 audi         a4 quat…   1.8  1999     4 auto(l… 4        16    25 p     comp…
+10 audi         a4 quat…   2    2008     4 manual… 4        20    28 p     comp…
+# … with 224 more rows
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+*ggplot()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+* aes(class)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+* geom_bar_pattern(
+*   fill            = 'white',
+*   colour          = 'black',
+*   pattern_spacing = 0.025
+* )
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+* aes(pattern = class)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+* aes(pattern_angle = class)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+* coord_fixed(ratio = 1/15)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+* theme(legend.position = "bottom")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+  theme(legend.position = "bottom") +  
+* scale_pattern_discrete(guide = guide_legend(nrow = 3))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+  theme(legend.position = "bottom") +  
+  scale_pattern_discrete(guide = guide_legend(nrow = 3)) +  
+* labs(pattern = NULL)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+  theme(legend.position = "bottom") +  
+  scale_pattern_discrete(guide = guide_legend(nrow = 3)) +  
+  labs(pattern = NULL) +  
+* labs(pattern_angle = NULL)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_11_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+  theme(legend.position = "bottom") +  
+  scale_pattern_discrete(guide = guide_legend(nrow = 3)) +  
+  labs(pattern = NULL) +  
+  labs(pattern_angle = NULL) +  
+* theme_bw(18)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_12_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+mpg %&gt;%  
+ggplot() +  
+  aes(class) +  
+  geom_bar_pattern(  
+    fill            = 'white',  
+    colour          = 'black',  
+    pattern_spacing = 0.025  
+  ) +  
+  aes(pattern = class) +  
+  aes(pattern_angle = class) +  
+  coord_fixed(ratio = 1/15) +  
+  theme(legend.position = "bottom") +  
+  scale_pattern_discrete(guide = guide_legend(nrow = 3)) +  
+  labs(pattern = NULL) +  
+  labs(pattern_angle = NULL) +  
+  theme_bw(18) +  
+* labs(title = "ggpattern::geom_bar_pattern()")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/pattern_bar_auto_13_output-1.png" width="432" /&gt;
+]]
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+*ggplot(diamonds)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_1_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+* aes(x, y)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_2_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+* xlim(4, 10)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_3_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+* ylim(4, 10)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_4_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+* geom_point(alpha = .1)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_5_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+* geom_bin2d()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_6_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+  geom_bin2d() +  
+* geom_bin2d_pattern(fill = 'white',
+*                    bins = 16,
+*                    colour = 'black',
+*                    size = 1,  aes(pattern_spacing = ..density..))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_7_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+  geom_bin2d() +  
+  geom_bin2d_pattern(fill = 'white',  
+                     bins = 16,  
+                     colour = 'black',  
+                     size = 1,  aes(pattern_spacing = ..density..)) +  
+* theme_bw(18)
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_8_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+  geom_bin2d() +  
+  geom_bin2d_pattern(fill = 'white',  
+                     bins = 16,  
+                     colour = 'black',  
+                     size = 1,  aes(pattern_spacing = ..density..)) +  
+  theme_bw(18) +  
+* scale_pattern_spacing_continuous(
+*   range = c(.5, .01))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_9_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+  geom_bin2d() +  
+  geom_bin2d_pattern(fill = 'white',  
+                     bins = 16,  
+                     colour = 'black',  
+                     size = 1,  aes(pattern_spacing = ..density..)) +  
+  theme_bw(18) +  
+  scale_pattern_spacing_continuous(  
+    range = c(.5, .01)) +  
+* theme(legend.position = 'none')
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_10_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+ggplot(diamonds) +  
+  aes(x, y) +  
+  xlim(4, 10) +  
+  ylim(4, 10) +  
+  geom_point(alpha = .1) +  
+  geom_bin2d() +  
+  geom_bin2d_pattern(fill = 'white',  
+                     bins = 16,  
+                     colour = 'black',  
+                     size = 1,  aes(pattern_spacing = ..density..)) +  
+  theme_bw(18) +  
+  scale_pattern_spacing_continuous(  
+    range = c(.5, .01)) +  
+  theme(legend.position = 'none') +  
+* labs(title = "ggpattern::geom_bin2d_pattern()")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/bin2d_auto_11_output-1.png" width="432" /&gt;
+]]
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
