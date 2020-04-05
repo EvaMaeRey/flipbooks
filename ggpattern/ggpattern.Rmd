@@ -4,6 +4,7 @@ subtitle: "With flipbookr and xaringan"
 author: "Gina Reynolds, December 2019"
 output:
   xaringan::moon_reader:
+    seal: false
     lib_dir: libs
     css: [default, hygge, ninjutsu]
     nature:
@@ -11,8 +12,35 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
 ---
 
+
+
+
+class: left, top, inverse
+background-image: url(images/zbysiu-rodak-eod-PZAicYY-unsplash.jpg)
+background-size: cover
+
+# .Large[{ggpattern}]
+### An exploration <br>with {flipbookr}<br>and {xaringan}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+#### .right[[github.com/coolbutuseless/ggpattern](github.com/coolbutuseless/ggpattern)<br>Edited: Gina Reynolds<br>Photo Credit: Zbysiu Rodak in Manta Rota, Portugal]
+
+???
+
+Title slide
 
 
 ```{r setup, include = F}
@@ -23,6 +51,28 @@ library(flipbookr)
 library(tidyverse)
 ```
 
+
+---
+class: center, middle, inverse
+
+# {ggpattern} has just been released.
+
+
+---
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Introducing {ggpattern} - pattern &amp; image fills for <a href="https://twitter.com/hashtag/ggplot?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot</a><br><br>Heaps of fun! Bedazzle those plots!<br><br>My fav: placeholder kittens!<br><br>code: <a href="https://t.co/z5R7GgNLtl">https://t.co/z5R7GgNLtl</a><br><br>Plenty of examples/vignettes are on display on the pkg site: <a href="https://t.co/3ZZ0J0c2qQ">https://t.co/3ZZ0J0c2qQ</a><a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/ggpattern?src=hash&amp;ref_src=twsrc%5Etfw">#ggpattern</a> <a href="https://t.co/Y7xq0E4uzE">pic.twitter.com/Y7xq0E4uzE</a></p>&mdash; mikefc (@coolbutuseless) <a href="https://twitter.com/coolbutuseless/status/1245098100722630661?ref_src=twsrc%5Etfw">March 31, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+class: middle, center, inverse
+
+
+# Lots to explore.
+--
+
+# Let's see how it works!
+--
+
+# Contents based on official examples at the package [website](https://coolbutuseless.github.io/package/ggpattern/index.html).
 
 ---
 
@@ -204,24 +254,22 @@ library(magick)
 
 states_map <- map_data("state")
 
-USArrests %>% 
-  data.frame(state = tolower(rownames(.)),
-             .) %>% 
+state.name %>% 
+  tolower() %>% 
+  data.frame(state = .) %>% 
   ggplot() +
   expand_limits(x = states_map$long, 
                 y = states_map$lat) +
   aes(map_id = state) +
     geom_map_pattern(
-      aes(
-        pattern = state,
-        pattern_spacing = fct_shuffle(state),
-        pattern_fill = fct_shuffle(state)
-      ),
       map = states_map,
       pattern_aspect_ratio = 1.75,
       fill                 = 'white',
       colour               = 'black',
     ) + 
+  aes(pattern = state) +
+  aes(pattern_spacing = fct_shuffle(state)) +
+  aes(pattern_fill = fct_shuffle(state)) +
   theme(legend.position = "none") +
   coord_map() 
 ```

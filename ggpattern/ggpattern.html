@@ -10,19 +10,60 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
 
-# Exploring {ggpattern}
-## With flipbookr and xaringan
-### Gina Reynolds, December 2019
+
+
+
+
+class: left, top, inverse
+background-image: url(images/zbysiu-rodak-eod-PZAicYY-unsplash.jpg)
+background-size: cover
+
+# .Large[{ggpattern}]
+### An exploration &lt;br&gt;with {flipbookr}&lt;br&gt;and {xaringan}
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+#### .right[[github.com/coolbutuseless/ggpattern](github.com/coolbutuseless/ggpattern)&lt;br&gt;Edited: Gina Reynolds&lt;br&gt;Photo Credit: Zbysiu Rodak in Manta Rota, Portugal]
+
+???
+
+Title slide
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# {ggpattern} has just been released.
+
 
 ---
 
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Introducing {ggpattern} - pattern &amp;amp; image fills for &lt;a href="https://twitter.com/hashtag/ggplot?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggplot&lt;/a&gt;&lt;br&gt;&lt;br&gt;Heaps of fun! Bedazzle those plots!&lt;br&gt;&lt;br&gt;My fav: placeholder kittens!&lt;br&gt;&lt;br&gt;code: &lt;a href="https://t.co/z5R7GgNLtl"&gt;https://t.co/z5R7GgNLtl&lt;/a&gt;&lt;br&gt;&lt;br&gt;Plenty of examples/vignettes are on display on the pkg site: &lt;a href="https://t.co/3ZZ0J0c2qQ"&gt;https://t.co/3ZZ0J0c2qQ&lt;/a&gt;&lt;a href="https://twitter.com/hashtag/RStats?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#RStats&lt;/a&gt; &lt;a href="https://twitter.com/hashtag/ggpattern?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ggpattern&lt;/a&gt; &lt;a href="https://t.co/Y7xq0E4uzE"&gt;pic.twitter.com/Y7xq0E4uzE&lt;/a&gt;&lt;/p&gt;&amp;mdash; mikefc (@coolbutuseless) &lt;a href="https://twitter.com/coolbutuseless/status/1245098100722630661?ref_src=twsrc%5Etfw"&gt;March 31, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+class: middle, center, inverse
 
 
+# Lots to explore.
+--
 
+# Let's see how it works!
+--
 
-
+# Contents based on official examples at the package [website](https://coolbutuseless.github.io/package/ggpattern/index.html).
 
 ---
 
@@ -1689,63 +1730,25 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-*USArrests
+*state.name
 ```
 ]]
 .column[.content[
 
 ```
-               Murder Assault UrbanPop Rape
-Alabama          13.2     236       58 21.2
-Alaska           10.0     263       48 44.5
-Arizona           8.1     294       80 31.0
-Arkansas          8.8     190       50 19.5
-California        9.0     276       91 40.6
-Colorado          7.9     204       78 38.7
-Connecticut       3.3     110       77 11.1
-Delaware          5.9     238       72 15.8
-Florida          15.4     335       80 31.9
-Georgia          17.4     211       60 25.8
-Hawaii            5.3      46       83 20.2
-Idaho             2.6     120       54 14.2
-Illinois         10.4     249       83 24.0
-Indiana           7.2     113       65 21.0
-Iowa              2.2      56       57 11.3
-Kansas            6.0     115       66 18.0
-Kentucky          9.7     109       52 16.3
-Louisiana        15.4     249       66 22.2
-Maine             2.1      83       51  7.8
-Maryland         11.3     300       67 27.8
-Massachusetts     4.4     149       85 16.3
-Michigan         12.1     255       74 35.1
-Minnesota         2.7      72       66 14.9
-Mississippi      16.1     259       44 17.1
-Missouri          9.0     178       70 28.2
-Montana           6.0     109       53 16.4
-Nebraska          4.3     102       62 16.5
-Nevada           12.2     252       81 46.0
-New Hampshire     2.1      57       56  9.5
-New Jersey        7.4     159       89 18.8
-New Mexico       11.4     285       70 32.1
-New York         11.1     254       86 26.1
-North Carolina   13.0     337       45 16.1
-North Dakota      0.8      45       44  7.3
-Ohio              7.3     120       75 21.4
-Oklahoma          6.6     151       68 20.0
-Oregon            4.9     159       67 29.3
-Pennsylvania      6.3     106       72 14.9
-Rhode Island      3.4     174       87  8.3
-South Carolina   14.4     279       48 22.5
-South Dakota      3.8      86       45 12.8
-Tennessee        13.2     188       59 26.9
-Texas            12.7     201       80 25.5
-Utah              3.2     120       80 22.9
-Vermont           2.2      48       32 11.2
-Virginia          8.5     156       63 20.7
-Washington        4.0     145       73 26.2
-West Virginia     5.7      81       39  9.3
-Wisconsin         2.6      53       66 10.8
-Wyoming           6.8     161       60 15.6
+ [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"      
+ [5] "California"     "Colorado"       "Connecticut"    "Delaware"      
+ [9] "Florida"        "Georgia"        "Hawaii"         "Idaho"         
+[13] "Illinois"       "Indiana"        "Iowa"           "Kansas"        
+[17] "Kentucky"       "Louisiana"      "Maine"          "Maryland"      
+[21] "Massachusetts"  "Michigan"       "Minnesota"      "Mississippi"   
+[25] "Missouri"       "Montana"        "Nebraska"       "Nevada"        
+[29] "New Hampshire"  "New Jersey"     "New Mexico"     "New York"      
+[33] "North Carolina" "North Dakota"   "Ohio"           "Oklahoma"      
+[37] "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina"
+[41] "South Dakota"   "Tennessee"      "Texas"          "Utah"          
+[45] "Vermont"        "Virginia"       "Washington"     "West Virginia" 
+[49] "Wisconsin"      "Wyoming"       
 ```
 ]]
 ---
@@ -1762,65 +1765,26 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-* data.frame(state = tolower(rownames(.)),
-*            .)
+state.name %&gt;%  
+* tolower()
 ```
 ]]
 .column[.content[
 
 ```
-                        state Murder Assault UrbanPop Rape
-Alabama               alabama   13.2     236       58 21.2
-Alaska                 alaska   10.0     263       48 44.5
-Arizona               arizona    8.1     294       80 31.0
-Arkansas             arkansas    8.8     190       50 19.5
-California         california    9.0     276       91 40.6
-Colorado             colorado    7.9     204       78 38.7
-Connecticut       connecticut    3.3     110       77 11.1
-Delaware             delaware    5.9     238       72 15.8
-Florida               florida   15.4     335       80 31.9
-Georgia               georgia   17.4     211       60 25.8
-Hawaii                 hawaii    5.3      46       83 20.2
-Idaho                   idaho    2.6     120       54 14.2
-Illinois             illinois   10.4     249       83 24.0
-Indiana               indiana    7.2     113       65 21.0
-Iowa                     iowa    2.2      56       57 11.3
-Kansas                 kansas    6.0     115       66 18.0
-Kentucky             kentucky    9.7     109       52 16.3
-Louisiana           louisiana   15.4     249       66 22.2
-Maine                   maine    2.1      83       51  7.8
-Maryland             maryland   11.3     300       67 27.8
-Massachusetts   massachusetts    4.4     149       85 16.3
-Michigan             michigan   12.1     255       74 35.1
-Minnesota           minnesota    2.7      72       66 14.9
-Mississippi       mississippi   16.1     259       44 17.1
-Missouri             missouri    9.0     178       70 28.2
-Montana               montana    6.0     109       53 16.4
-Nebraska             nebraska    4.3     102       62 16.5
-Nevada                 nevada   12.2     252       81 46.0
-New Hampshire   new hampshire    2.1      57       56  9.5
-New Jersey         new jersey    7.4     159       89 18.8
-New Mexico         new mexico   11.4     285       70 32.1
-New York             new york   11.1     254       86 26.1
-North Carolina north carolina   13.0     337       45 16.1
-North Dakota     north dakota    0.8      45       44  7.3
-Ohio                     ohio    7.3     120       75 21.4
-Oklahoma             oklahoma    6.6     151       68 20.0
-Oregon                 oregon    4.9     159       67 29.3
-Pennsylvania     pennsylvania    6.3     106       72 14.9
-Rhode Island     rhode island    3.4     174       87  8.3
-South Carolina south carolina   14.4     279       48 22.5
-South Dakota     south dakota    3.8      86       45 12.8
-Tennessee           tennessee   13.2     188       59 26.9
-Texas                   texas   12.7     201       80 25.5
-Utah                     utah    3.2     120       80 22.9
-Vermont               vermont    2.2      48       32 11.2
-Virginia             virginia    8.5     156       63 20.7
-Washington         washington    4.0     145       73 26.2
-West Virginia   west virginia    5.7      81       39  9.3
-Wisconsin           wisconsin    2.6      53       66 10.8
-Wyoming               wyoming    6.8     161       60 15.6
+ [1] "alabama"        "alaska"         "arizona"        "arkansas"      
+ [5] "california"     "colorado"       "connecticut"    "delaware"      
+ [9] "florida"        "georgia"        "hawaii"         "idaho"         
+[13] "illinois"       "indiana"        "iowa"           "kansas"        
+[17] "kentucky"       "louisiana"      "maine"          "maryland"      
+[21] "massachusetts"  "michigan"       "minnesota"      "mississippi"   
+[25] "missouri"       "montana"        "nebraska"       "nevada"        
+[29] "new hampshire"  "new jersey"     "new mexico"     "new york"      
+[33] "north carolina" "north dakota"   "ohio"           "oklahoma"      
+[37] "oregon"         "pennsylvania"   "rhode island"   "south carolina"
+[41] "south dakota"   "tennessee"      "texas"          "utah"          
+[45] "vermont"        "virginia"       "washington"     "west virginia" 
+[49] "wisconsin"      "wyoming"       
 ```
 ]]
 ---
@@ -1837,35 +1801,85 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
+state.name %&gt;%  
+  tolower() %&gt;%  
+* data.frame(state = .)
+```
+]]
+.column[.content[
+
+```
+            state
+1         alabama
+2          alaska
+3         arizona
+4        arkansas
+5      california
+6        colorado
+7     connecticut
+8        delaware
+9         florida
+10        georgia
+11         hawaii
+12          idaho
+13       illinois
+14        indiana
+15           iowa
+16         kansas
+17       kentucky
+18      louisiana
+19          maine
+20       maryland
+21  massachusetts
+22       michigan
+23      minnesota
+24    mississippi
+25       missouri
+26        montana
+27       nebraska
+28         nevada
+29  new hampshire
+30     new jersey
+31     new mexico
+32       new york
+33 north carolina
+34   north dakota
+35           ohio
+36       oklahoma
+37         oregon
+38   pennsylvania
+39   rhode island
+40 south carolina
+41   south dakota
+42      tennessee
+43          texas
+44           utah
+45        vermont
+46       virginia
+47     washington
+48  west virginia
+49      wisconsin
+50        wyoming
+```
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(maps)  
+library(magick)  
+
+states_map &lt;- map_data("state")  
+
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
 * ggplot()
-```
-]]
-.column[.content[
-&lt;img src="ggpattern_files/figure-html/the_maps_auto_6_output-1.png" width="432" /&gt;
-]]
----
-class: split-40
-count: false
- 
-
- 
-.column[.content[
-
-```r
-library(maps)  
-library(magick)  
-
-states_map &lt;- map_data("state")  
-
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
-  ggplot() +  
-* expand_limits(x = states_map$long,
-*               y = states_map$lat)
 ```
 ]]
 .column[.content[
@@ -1885,13 +1899,12 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
   ggplot() +  
-  expand_limits(x = states_map$long,  
-                y = states_map$lat) +  
-* aes(map_id = state)
+* expand_limits(x = states_map$long,
+*               y = states_map$lat)
 ```
 ]]
 .column[.content[
@@ -1911,24 +1924,13 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
   ggplot() +  
   expand_limits(x = states_map$long,  
                 y = states_map$lat) +  
-  aes(map_id = state) +  
-*   geom_map_pattern(
-*     aes(
-*       pattern = state,
-*       pattern_spacing = fct_shuffle(state),
-*       pattern_fill = fct_shuffle(state)
-*     ),
-*     map = states_map,
-*     pattern_aspect_ratio = 1.75,
-*     fill                 = 'white',
-*     colour               = 'black',
-*   )
+* aes(map_id = state)
 ```
 ]]
 .column[.content[
@@ -1948,25 +1950,19 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
   ggplot() +  
   expand_limits(x = states_map$long,  
                 y = states_map$lat) +  
   aes(map_id = state) +  
-    geom_map_pattern(  
-      aes(  
-        pattern = state,  
-        pattern_spacing = fct_shuffle(state),  
-        pattern_fill = fct_shuffle(state)  
-      ),  
-      map = states_map,  
-      pattern_aspect_ratio = 1.75,  
-      fill                 = 'white',  
-      colour               = 'black',  
-    ) +  
-* theme(legend.position = "none")
+*   geom_map_pattern(
+*     map = states_map,
+*     pattern_aspect_ratio = 1.75,
+*     fill                 = 'white',
+*     colour               = 'black',
+*   )
 ```
 ]]
 .column[.content[
@@ -1986,34 +1982,171 @@ library(magick)
 
 states_map &lt;- map_data("state")  
 
-USArrests %&gt;%  
-  data.frame(state = tolower(rownames(.)),  
-             .) %&gt;%  
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
   ggplot() +  
   expand_limits(x = states_map$long,  
                 y = states_map$lat) +  
   aes(map_id = state) +  
     geom_map_pattern(  
-      aes(  
-        pattern = state,  
-        pattern_spacing = fct_shuffle(state),  
-        pattern_fill = fct_shuffle(state)  
-      ),  
       map = states_map,  
       pattern_aspect_ratio = 1.75,  
       fill                 = 'white',  
       colour               = 'black',  
     ) +  
-  theme(legend.position = "none") +  
-* coord_map()
+* aes(pattern = state)
 ```
 ]]
 .column[.content[
 &lt;img src="ggpattern_files/figure-html/the_maps_auto_11_output-1.png" width="432" /&gt;
 ]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(maps)  
+library(magick)  
+
+states_map &lt;- map_data("state")  
+
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
+  ggplot() +  
+  expand_limits(x = states_map$long,  
+                y = states_map$lat) +  
+  aes(map_id = state) +  
+    geom_map_pattern(  
+      map = states_map,  
+      pattern_aspect_ratio = 1.75,  
+      fill                 = 'white',  
+      colour               = 'black',  
+    ) +  
+  aes(pattern = state) +  
+* aes(pattern_spacing = fct_shuffle(state))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/the_maps_auto_12_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(maps)  
+library(magick)  
+
+states_map &lt;- map_data("state")  
+
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
+  ggplot() +  
+  expand_limits(x = states_map$long,  
+                y = states_map$lat) +  
+  aes(map_id = state) +  
+    geom_map_pattern(  
+      map = states_map,  
+      pattern_aspect_ratio = 1.75,  
+      fill                 = 'white',  
+      colour               = 'black',  
+    ) +  
+  aes(pattern = state) +  
+  aes(pattern_spacing = fct_shuffle(state)) +  
+* aes(pattern_fill = fct_shuffle(state))
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/the_maps_auto_13_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(maps)  
+library(magick)  
+
+states_map &lt;- map_data("state")  
+
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
+  ggplot() +  
+  expand_limits(x = states_map$long,  
+                y = states_map$lat) +  
+  aes(map_id = state) +  
+    geom_map_pattern(  
+      map = states_map,  
+      pattern_aspect_ratio = 1.75,  
+      fill                 = 'white',  
+      colour               = 'black',  
+    ) +  
+  aes(pattern = state) +  
+  aes(pattern_spacing = fct_shuffle(state)) +  
+  aes(pattern_fill = fct_shuffle(state)) +  
+* theme(legend.position = "none")
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/the_maps_auto_14_output-1.png" width="432" /&gt;
+]]
+---
+class: split-40
+count: false
+ 
+
+ 
+.column[.content[
+
+```r
+library(maps)  
+library(magick)  
+
+states_map &lt;- map_data("state")  
+
+state.name %&gt;%  
+  tolower() %&gt;%  
+  data.frame(state = .) %&gt;%  
+  ggplot() +  
+  expand_limits(x = states_map$long,  
+                y = states_map$lat) +  
+  aes(map_id = state) +  
+    geom_map_pattern(  
+      map = states_map,  
+      pattern_aspect_ratio = 1.75,  
+      fill                 = 'white',  
+      colour               = 'black',  
+    ) +  
+  aes(pattern = state) +  
+  aes(pattern_spacing = fct_shuffle(state)) +  
+  aes(pattern_fill = fct_shuffle(state)) +  
+  theme(legend.position = "none") +  
+* coord_map()
+```
+]]
+.column[.content[
+&lt;img src="ggpattern_files/figure-html/the_maps_auto_15_output-1.png" width="432" /&gt;
+]]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:10",
 "highlightStyle": "github",
