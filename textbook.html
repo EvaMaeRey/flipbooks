@@ -366,7 +366,7 @@ summary {
 
 
 <h1 class="title toc-ignore">The R Flipbook Textbook</h1>
-<h3 class="subtitle">A introduction to data manipulation, visualization, and statistical analysis</h3>
+<h3 class="subtitle">A introduction to data manipulation, visualization, and statistical analysis with dynamic examples</h3>
 <h4 class="author"><a href="https://evangelinereynolds.netlify.com/">Evangeline ‘Gina’ Reynolds | Korbel School of International Studies</a></h4>
 <h4 class="date">March 2020</h4>
 
@@ -379,6 +379,7 @@ summary {
 <ol style="list-style-type: decimal">
 <li><p><em>Students usually do great following any single step in an analysis. Little bites are easily digestible.</em></p></li>
 <li><p><em>Students are less likely to get excited about scripted, reproducible workflow if they strain to get the dang analysis “going” just the once.</em></p></li>
+<li><p><em>Teaching in a quarter system doesn’t give you time to mess about. It’s helpful to have step-by-step examples at the ready.</em></p></li>
 </ol>
 <p>The new code display tools, <a href="https://evamaerey.github.io/flipbooks/about" target="_blank">flipbooks</a>, deliver bite-sized pieces because they show code step-by-step and side-by-side with output. Moving incrementally through material is more comprehensible and less overwhelming. With compelling — but also digestible examples — student may be better positioned to solve analytic problems independently. <em>To my current students, if you are reading this: don’t struggle alone for too long, of course. I’m here to help!</em></p>
 <p>At the moment calling this work a “textbook” is a bit of an overstatement. The source material for the book project was a motley crew of flipbooks that I developed <em>ad-hoc</em> for teaching or for fun. Organizing these one-off projects to logically hang together is a work in progress.</p>
@@ -388,14 +389,14 @@ summary {
 </div>
 <div id="case-studies" class="section level1">
 <h1>Case Studies</h1>
-<p><em>Let’s start big picture. Let’s get motivated. Where are we headed anyway? Is it worth it? (If you haven’t guessed already, I hope you’ll find it totally is!) There are some light-hearted examples here, but also treatment of tragic current events – the COVID-19 pandemic.</em></p>
+<p><em>Let’s start big picture. Let’s get motivated. Where are we headed anyway? Is it worth it? (If you haven’t guessed already, I hope you’ll find it totally is!) There are some light-hearted examples here, but also treatment of tragic current events — the COVID-19 pandemic.</em></p>
 <ul>
 <li><a href="https://evamaerey.github.io/flipbooks/racing_bars/racing_barcharts.html" target="_blank">Racing Bar Chart</a></li>
 <li><a href="https://evamaerey.github.io/tidytuesday_walk_through/simpsons.html#50" target="_blank">The Simpsons</a></li>
 <li><a href="https://evamaerey.github.io/flipbooks/covid_19/covid_19#1" target="_blank">covid-19</a></li>
 </ul>
 <blockquote>
-<p>He who has a why to live can bear almost any how. – Friedrich Nietzsche</p>
+<p>He who has a why to live can bear almost any how. — Friedrich Nietzsche</p>
 </blockquote>
 </div>
 <div id="data-manipulation-and-management" class="section level1">
@@ -426,9 +427,9 @@ summary {
 <h3>Data Cleaning Examples</h3>
 <ul>
 <li><a href="https://evamaerey.github.io/data_manipulation/data_cleaning/data_cleaning" target="_blank">Reading data into R</a></li>
-<li>Examples of data cleaning pipelines including using {janitor}</li>
-<li>String Manipulation with {stringr}</li>
-<li>Using Country IDs like ISO3C, WB with {country coder}</li>
+<li><a href="https://evamaerey.github.io/data_manipulation/data_cleaning/data_cleaning" target="_blank">Examples of data cleaning pipelines including using {janitor}</a></li>
+<li>String Manipulation with {stringr} and regular expressions</li>
+<li>Using Country IDs like ISO3C, WB with {countrycode}</li>
 <li>Date manipulation with {lubridate}</li>
 </ul>
 </div>
@@ -439,12 +440,19 @@ summary {
 <li><a href="https://evamaerey.github.io/data_manipulation/data.table.html" target="_blank">Manipulation with data.table (under construction)</a></li>
 </ul>
 </div>
+<div id="table-layout-and-styling" class="section level3">
+<h3>Table layout and styling</h3>
+<ul>
+<li><a href>{gt} grammar of tables</a></li>
+<li><a href>kable tables</a></li>
+</ul>
+</div>
 </div>
 <div id="visualization" class="section level1">
 <h1><a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" target="_blank">Visualization</a></h1>
 <p>Data visualization is a powerful tool for analysis. Let’s dive in.</p>
 <blockquote>
-<p>The greatest value of a picture is when it forces us to notice what we never expected to see. – John Tukey</p>
+<p>The greatest value of a picture is when it forces us to notice what we never expected to see. — John Tukey</p>
 </blockquote>
 <div id="the-grammar-of-graphics-framework" class="section level3">
 <h3>The “Grammar of Graphics” framework</h3>
@@ -458,18 +466,23 @@ summary {
 <p><em>ggplot2 is a popular implementation of the grammar of graphics. “A {ggplot2} grammar guide” is designed to orient you to organization (grammar if you will) of this particular implementation. Then check out the “geom pile on” which returns to the topic of geoms — there are tons! Also themes are treated separately — there’s kind of a whole additional grammar to learn there. Finally look at the ggplot flipbook to see the grammar in action.</em></p>
 <ul>
 <li><a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" target="_blank">A {ggplot2} grammar guide</a></li>
+</ul>
+<p>Supliments ‘A {ggplot2} grammar guide’</p>
+<ul>
 <li><a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" target="_blank">geom_* pile on</a></li>
 <li><a href="https://evamaerey.github.io/ggplot2_grammar_guide/about" target="_blank">a {ggplot2} <em>theme</em> grammar guide</a></li>
 <li><a href="https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html" target="_blank">the ggplot flipbook - example gallery</a></li>
+<li><a href target="_blank">all about annotation</a></li>
 </ul>
 <blockquote>
 <p>The transferrable skills from ggplot2 are not the idiosyncracies of plotting syntax, but a powerful way of thinking about visualisation, as a way of mapping between variables and the visual properties of geometric objects that you can perceive. — Hadley Wickham</p>
 </blockquote>
 </div>
-<div id="base-r-graphics" class="section level3">
-<h3>Base R Graphics</h3>
+<div id="beyond-ggplot2-ggplot2-extensions-base-r-graphics-and-other-graphic-packages" class="section level3">
+<h3>Beyond ggplot2, ggplot2 extensions, base R Graphics, and other graphic packages</h3>
 <ul>
 <li>[nothing here yet]</li>
+<li><a href>ggpattern</a></li>
 </ul>
 </div>
 </div>
@@ -498,7 +511,10 @@ summary {
 </ul></li>
 </ul>
 <blockquote>
-<p>‘For my part I know nothing with any certainty, but the sight of the stars makes me dream.’ – Vincent Van Gogh | ‘When one admits that nothing is certain one must, I think, also add that some things are more nearly certain than others.’ Bertrand Russell.</p>
+<p>For my part I know nothing with any certainty, but the sight of the stars makes me dream. — Vincent Van Gogh</p>
+</blockquote>
+<blockquote>
+<p>When one admits that nothing is certain one must, I think, also add that some things are more nearly certain than others. — Bertrand Russell.</p>
 </blockquote>
 </div>
 <div id="modeling" class="section level3">
@@ -536,7 +552,7 @@ summary {
 <div id="spatial" class="section level3">
 <h3>Spatial</h3>
 <blockquote>
-<p>“I am told there are people who do not care for maps, and I find it hard to believe.” Robert Louis Stevenson</p>
+<p>I am told there are people who do not care for maps, and I find it hard to believe. Robert Louis Stevenson</p>
 </blockquote>
 <p>You are likely to enjoy consuming and making spatial visualizations.</p>
 <ul>
@@ -556,7 +572,8 @@ summary {
 <div id="text" class="section level3">
 <h3>Text</h3>
 <ul>
-<li><a href></a></li>
+<li><a href>Sentiment analysis</a></li>
+<li><a href>Linguistic Forensics: The Federalist Papers</a></li>
 </ul>
 </div>
 </div>
