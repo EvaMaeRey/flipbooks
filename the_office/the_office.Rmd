@@ -309,10 +309,11 @@ ggraph(layout = 'dendrogram',
        circular = TRUE, 
        ratio = 0.5) + 
   geom_edge_elbow() + 
-  geom_node_text(aes(x = x*1.005, y=y*1.005, filter=leaf, 
-                     angle = -((-node_angle(x, y)+90)%%180)+90, label = label), 
-                 size=3, hjust='outward') + 
-  geom_node_point(aes(filter=leaf)) + 
+  geom_node_text(aes(x = x * 1.005, y = y * 1.005, filter = leaf, 
+                     angle = -((-node_angle(x, y) + 90) %% 180) + 90, 
+                     label = label), 
+                 size = 3, hjust = 'outward') + 
+  geom_node_point(aes(filter = leaf)) + 
   coord_fixed() + 
   ggforce::theme_no_axes()
 ```

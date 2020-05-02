@@ -2,7 +2,7 @@
 title: "Cheers for Flipbooks"
 output:
   html_document:
-    df_print: paged
+    # df_print: paged
   html_notebook:
     nature:
       beforeInit: https://platform.twitter.com/widgets.js
@@ -12,7 +12,7 @@ output:
 
 
 ```{r, include=F}
-knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, error = F)
+knitr::opts_chunk$set(cache = F, echo = F, warning = F, message = F, error = F)
 ```
 
 
@@ -26,12 +26,7 @@ for (i in 1:nrow(df)) {
 }
 ```
 
-On github:
 
-Dr. Reynolds,
-
-"First, thank you very much for flipbookr. It looks to be a wonderful tool!!" - Professor at Northland College, Author of Introductory Fisheries Analyses with R, Maintainer of fishR
-https://github.com/EvaMaeRey/flipbookr/issues/17
 
 
 Additionally, it has been linked to from other resources including blogs:
@@ -60,9 +55,12 @@ http://www.rpubs.com/dgolicher/ggplots
 https://www.quora.com/What-data-visualization-software-can-handle-large-amounts-of-data-in-the-order-of-hundreds-of-millions-I-have-had-trouble-with-Tableau
 
 
-Flipbookr is being used by:
+{flipbookr}, the package that I've built for easily creating flipbooks is being used/explored by:
 
 - [The Hirschey Lab](https://github.com/matthewhirschey/tidybiology-meetup/blob/7d0a51fb65e25615ad65dae49a92980a5b382096/2020_02/code/prism_plot_flipbook.Rmd) - The Hirschey Lab studies different aspects of metabolic control, mitochondrial signaling, and cellular processes regulating human health and disease
-- [Jessica Minnier](https://jminnier-berd-r-courses.netlify.com/04-ggplot/04_ggplot_slides.html#1) - Assistant Professor of Biostatistics, OHSU
+- [OCTRI Biostatistics, Epidemiology, Research & Design - Jessica Minnier](https://jminnier-berd-r-courses.netlify.com/04-ggplot/04_ggplot_slides.html#1) - Assistant Professor of Biostatistics, OHSU
 - [Data Wrangling and Visualisation in R Oxford IT Services - Justin Miller](https://justinmillar.github.io/ox-stats-r-workshop/#1) - Post-doc researcher with the Malaria Atlas Project
+- [R Course for INDEC (Instituto Nacional de Estadistica y Census Republica Argentina)](https://github.com/pablotis/Curso_R_INDEC/blob/a6dd8eadff200ceaac13e8f8d548aed8c257f243/Clase%204/Clase_4_Presentacion.Rmd)
+- [Derek Ogle, Author of fishR: R for fisheries analysis](https://github.com/EvaMaeRey/flipbookr/issues/17)
 
+<!-- "First, thank you very much for flipbookr. It looks to be a wonderful tool!!" - Professor at Northland College, Author of Introductory Fisheries Analyses with R, Maintainer of fishR -->

@@ -26,8 +26,8 @@ for (i in 1:nrow(df)) try( {
 home <- readLines(paste0("https://twitter.com/", df$handle[i]), n = 80)
 
 df$id[i] <- home[grep("meta name", home)][2] %>% 
-  str_extract("Die neuesten Tweets von .+") %>% 
-  str_remove("Die neuesten Tweets von ") %>% 
+  str_extract("The latest Tweets from .+") %>% 
+  str_remove("The latest Tweets from ") %>% 
   str_remove("..$")
 
 Sys.sleep(.25)

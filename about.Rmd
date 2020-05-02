@@ -1,6 +1,9 @@
 ---
 title: " "
-output: html_document
+output: 
+  html_document:
+    theme: yeti
+    highlight: monochrome
 ---
 
 ```{r setup, include = F}
@@ -62,7 +65,7 @@ For easier reference, I've sorted instructive flipooks into three main categorie
 <a href="https://evamaerey.github.io/statistics/about" class="button">Statistical Analysis</a>
 
 
-Mostly, I've created these resources while preparing for my classes at the Korbel School of International Studies at the University of Denver.  So many thanks due to my students for being such an amazing and motivating bunch. These repositories are under construction; the data wrangling topic and data visualization topics are taking shape and fairly well developed, while the statistical flipbooks are new and more experimental. 
+Mostly, I've created these resources while preparing for my classes at the Korbel School of International Studies at the University of Denver.  So many thanks due to my students for being such an amazing and motivating bunch. These repositories are my teaching materials, and are constantly being updated and revised.
 
 
 ## Create *your own* flipbook
@@ -71,7 +74,7 @@ Would you like to make a flipbook? We try to make that easy for you with {flipbo
 
 1. Install the slide show platform Xaringan - `install.packages("xaringan")` 
 2. Install flipbookr - `remotes::install_github("EvaMaeRey/flipbookr")` 
-3. restart R
+3. Restart R
 4. Get the template in RStudio via: File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook
 5. Use this template to get started or replace with your own pipelines
 6. Compile your document - "Knit" in RStudio
@@ -154,11 +157,9 @@ You can link to some flipbooks here:
 The feedback on the flipbook format has been very encouraging (thank you if you were a part of this!) and a big motivation to keep working on this project.  The ggplot flipbook was a top story on [Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter. 
 
 
-Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/flipbooks/about/cheers_for_flipbooks).
+Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/flipbooks/about/cheers_for_flipbooks). Feedback comes from individuals around the world including the following locations:
 
-Feedback comes from individuals around the world including the following locations!
-
-```{r, results='asis', eval = T}
+```{r, results='asis', eval = T, warning=F}
 library(tidyverse)
 load("about/data_products/tweets.Rdata")
 df %>% 
