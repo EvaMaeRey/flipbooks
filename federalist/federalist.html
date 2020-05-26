@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A Federalist Papers Whodunnit</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, 2019" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <script src="libs/threejs-85/three.min.js"></script>
+    <script src="libs/threejs-85/Detector.js"></script>
+    <script src="libs/threejs-85/Projector.js"></script>
+    <script src="libs/threejs-85/CanvasRenderer.js"></script>
+    <script src="libs/threejs-85/TrackballControls.js"></script>
+    <script src="libs/threejs-85/StateOrbitControls.js"></script>
+    <script src="libs/scatterplotThree-binding-0.3.1/scatterplotThree.js"></script>
+    <link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+class: left, top, inverse
+background-image: url(https://images.unsplash.com/photo-1478641300939-0ec5188d3802?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1504&amp;q=80)
+background-size: cover
+
+# .Large[{tidytext} {ggraph} {tidygraph} {threejs}]
+### A *Federalist Papers* Whodunnit
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+#### Gina Reynolds&lt;br&gt;Photo Credit: Clark Young
+
+
+
+
+
+
+
+---
+
+
+```r
+library(tidyverse)
+library(corpus)
+corpus::federalist %&gt;%
+  mutate(author = replace_na(author, 
+                             "Disputed")) %&gt;% 
+  mutate(name = paste(author, 
+                      str_remove(name, "eralist"), 
+                      sep = "-")) -&gt; 
+federalist
+
+federalist %&gt;% 
+  glimpse()
+```
+
+```
+Rows: 85
+Columns: 6
+$ name   &lt;chr&gt; "Hamilton-Fed No. 1", "Jay-Fed No. 2", "Jay-Fed No. 3", "Jay-F…
+$ title  &lt;chr&gt; "General Introduction", "Concerning Dangers from Foreign Force…
+$ venue  &lt;chr&gt; "For the Independent Journal", "For the Independent Journal", …
+$ date   &lt;date&gt; NA, NA, NA, NA, NA, NA, NA, 1787-11-20, NA, 1787-11-23, NA, 1…
+$ author &lt;chr&gt; "Hamilton", "Jay", "Jay", "Jay", "Jay", "Hamilton", "Hamilton"…
+$ text   &lt;chr&gt; "To the People of the State of New York:\n\nAFTER an unequivoc…
+```
+
+
+---
+
+
+```r
+federalist %&gt;% 
+  group_by(author) %&gt;% 
+  tally() -&gt;
+the_tally
+
+the_tally 
+```
+
+```
+# A tibble: 4 x 2
+  author       n
+  &lt;chr&gt;    &lt;int&gt;
+1 Disputed    15
+2 Hamilton    51
+3 Jay          5
+4 Madison     14
+```
+
+---
+
+
+```r
+federalist %&gt;%
+  select(name, text, title) %&gt;% 
+  tidytext::unnest_tokens(output = word, input = text) %&gt;% 
+  # stop word are good for stylometry - keep them only
+  right_join(tidytext::stop_words) %&gt;%
+  group_by(name, word) %&gt;% 
+  count() %&gt;% 
+  arrange(-n) %&gt;% 
+  ungroup() %&gt;% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %&gt;% 
+  filter(!is.na(item1)) %&gt;% 
+  filter(!is.na(item2)) -&gt;
+document_correlation
+```
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+*document_correlation
+```
+]
+ 
+.right-output-heat_map-auto[
+
+```
+# A tibble: 7,140 x 3
+   item1               item2               correlation
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+* ggplot()
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_2_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+* aes(x = item1)
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_3_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+* theme(axis.text.x =
+*         element_text(angle = 90))
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+* theme(text = element_text(size = 4))
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_5_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+* aes(y = item2)
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_6_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+* theme(aspect.ratio = 1)
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_7_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+  theme(aspect.ratio = 1) +  
+* geom_tile()
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_8_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+  theme(aspect.ratio = 1) +  
+  geom_tile() +  
+* aes(fill = correlation)
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_9_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-heat_map-auto[
+
+```r
+document_correlation %&gt;%  
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+  theme(aspect.ratio = 1) +  
+  geom_tile() +  
+  aes(fill = correlation) +  
+* scale_fill_viridis_c(direction = -1)
+```
+]
+ 
+.right-output-heat_map-auto[
+&lt;img src="federalist_files/figure-html/heat_map_auto_10_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.left-code-heat_map-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-output-heat_map-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+*document_correlation
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 3
+   item1               item2               correlation
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+* group_by(item1)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 3
+# Groups:   item1 [85]
+   item1               item2               correlation
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+* mutate(rank1 = 1:n())
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 4
+# Groups:   item1 [85]
+   item1               item2               correlation rank1
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993     1
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993     1
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991     1
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991     2
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990     2
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990     2
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990     1
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990     1
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990     1
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990     3
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+* ungroup()
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 4
+   item1               item2               correlation rank1
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993     1
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993     1
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991     1
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991     2
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990     2
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990     2
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990     1
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990     1
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990     1
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990     3
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+* group_by(item2)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 4
+# Groups:   item2 [85]
+   item1               item2               correlation rank1
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993     1
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993     1
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991     1
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991     2
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990     2
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990     2
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990     1
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990     1
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990     1
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990     3
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+* mutate(rank2 = 1:n())
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 7,140 x 5
+# Groups:   item2 [85]
+   item1               item2               correlation rank1 rank2
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993     1     1
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993     1     1
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991     1     2
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991     2     1
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990     2     2
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990     2     2
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990     1     1
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990     1     1
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990     1     3
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990     3     1
+# … with 7,130 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+* filter(rank1 %in% 1:3 |
+*        rank2 %in% 1:3)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tibble: 404 x 5
+# Groups:   item2 [85]
+   item1               item2               correlation rank1 rank2
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993     1     1
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993     1     1
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991     1     2
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991     2     1
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990     2     2
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990     2     2
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990     1     1
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990     1     1
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990     1     3
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990     3     1
+# … with 394 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+  filter(rank1 %in% 1:3 |  
+         rank2 %in% 1:3) %&gt;%  
+# working with data as network data
+* igraph::graph_from_data_frame()
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+IGRAPH 550125f DN-- 85 404 -- 
++ attr: name (v/c), correlation (e/n), rank1 (e/n), rank2 (e/n)
++ edges from 550125f (vertex names):
+ [1] Madison-Fed No. 41 -&gt;Madison-Fed No. 43 
+ [2] Madison-Fed No. 43 -&gt;Madison-Fed No. 41 
+ [3] Disputed-Fed No. 63-&gt;Madison-Fed No. 41 
+ [4] Madison-Fed No. 41 -&gt;Disputed-Fed No. 63
+ [5] Disputed-Fed No. 63-&gt;Madison-Fed No. 43 
+ [6] Madison-Fed No. 43 -&gt;Disputed-Fed No. 63
+ [7] Hamilton-Fed No. 76-&gt;Hamilton-Fed No. 65
+ [8] Hamilton-Fed No. 65-&gt;Hamilton-Fed No. 76
++ ... omitted several edges
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+  filter(rank1 %in% 1:3 |  
+         rank2 %in% 1:3) %&gt;%  
+# working with data as network data
+  igraph::graph_from_data_frame() %&gt;%  
+* tidygraph::as_tbl_graph(graph)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tbl_graph: 85 nodes and 404 edges
+#
+# A directed simple graph with 1 component
+#
+# Node Data: 85 x 1 (active)
+  name               
+  &lt;chr&gt;              
+1 Madison-Fed No. 41 
+2 Madison-Fed No. 43 
+3 Disputed-Fed No. 63
+4 Hamilton-Fed No. 76
+5 Hamilton-Fed No. 65
+6 Madison-Fed No. 48 
+# … with 79 more rows
+#
+# Edge Data: 404 x 5
+   from    to correlation rank1 rank2
+  &lt;int&gt; &lt;int&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     2       0.993     1     1
+2     2     1       0.993     1     1
+3     3     1       0.991     1     2
+# … with 401 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+  filter(rank1 %in% 1:3 |  
+         rank2 %in% 1:3) %&gt;%  
+# working with data as network data
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+* tidygraph::activate(nodes)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tbl_graph: 85 nodes and 404 edges
+#
+# A directed simple graph with 1 component
+#
+# Node Data: 85 x 1 (active)
+  name               
+  &lt;chr&gt;              
+1 Madison-Fed No. 41 
+2 Madison-Fed No. 43 
+3 Disputed-Fed No. 63
+4 Hamilton-Fed No. 76
+5 Hamilton-Fed No. 65
+6 Madison-Fed No. 48 
+# … with 79 more rows
+#
+# Edge Data: 404 x 5
+   from    to correlation rank1 rank2
+  &lt;int&gt; &lt;int&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     2       0.993     1     1
+2     2     1       0.993     1     1
+3     3     1       0.991     1     2
+# … with 401 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+  filter(rank1 %in% 1:3 |  
+         rank2 %in% 1:3) %&gt;%  
+# working with data as network data
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+* full_join(federalist)
+```
+]
+ 
+.right-output-pruning-auto[
+
+```
+# A tbl_graph: 85 nodes and 404 edges
+#
+# A directed simple graph with 1 component
+#
+# Node Data: 85 x 6 (active)
+  name     title                venue      date       author text               
+  &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;      &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;              
+1 Madison… General View of the… For the I… NA         Madis… "To the People of …
+2 Madison… The Same Subject Co… For the I… NA         Madis… "To the People of …
+3 Dispute… The Senate Continued For the I… NA         Dispu… "To the People of …
+4 Hamilto… The Appointing Powe… From the … 1788-04-01 Hamil… "To the People of …
+5 Hamilto… The Powers of the S… From the … 1788-03-07 Hamil… "To the People of …
+6 Madison… These Departments S… From the … 1788-02-01 Madis… "To the People of …
+# … with 79 more rows
+#
+# Edge Data: 404 x 5
+   from    to correlation rank1 rank2
+  &lt;int&gt; &lt;int&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     2       0.993     1     1
+2     2     1       0.993     1     1
+3     3     1       0.991     1     2
+# … with 401 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-pruning-auto[
+
+```r
+document_correlation %&gt;%  
+# pruning all but strongest three links
+  group_by(item1) %&gt;%  
+  mutate(rank1 = 1:n()) %&gt;%  
+  ungroup() %&gt;%  
+  group_by(item2) %&gt;%  
+  mutate(rank2 = 1:n()) %&gt;%  
+  filter(rank1 %in% 1:3 |  
+         rank2 %in% 1:3) %&gt;%  
+# working with data as network data
+  igraph::graph_from_data_frame() %&gt;%  
+  tidygraph::as_tbl_graph(graph) %&gt;%  
+  tidygraph::activate(nodes) %&gt;%  
+  full_join(federalist) -&gt;  
+*federalist_network_with_node_features
+```
+]
+ 
+.right-output-pruning-auto[
+
+]
+
+&lt;style&gt;
+.left-code-pruning-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-output-pruning-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+*set.seed(124567)
+```
+]
+ 
+.right-output-ggraph-auto[
+
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+*federalist_network_with_node_features
+```
+]
+ 
+.right-output-ggraph-auto[
+
+```
+# A tbl_graph: 85 nodes and 404 edges
+#
+# A directed simple graph with 1 component
+#
+# Node Data: 85 x 6 (active)
+  name     title                venue      date       author text               
+  &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;      &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;              
+1 Madison… General View of the… For the I… NA         Madis… "To the People of …
+2 Madison… The Same Subject Co… For the I… NA         Madis… "To the People of …
+3 Dispute… The Senate Continued For the I… NA         Dispu… "To the People of …
+4 Hamilto… The Appointing Powe… From the … 1788-04-01 Hamil… "To the People of …
+5 Hamilto… The Powers of the S… From the … 1788-03-07 Hamil… "To the People of …
+6 Madison… These Departments S… From the … 1788-02-01 Madis… "To the People of …
+# … with 79 more rows
+#
+# Edge Data: 404 x 5
+   from    to correlation rank1 rank2
+  &lt;int&gt; &lt;int&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     2       0.993     1     1
+2     2     1       0.993     1     1
+3     3     1       0.991     1     2
+# … with 401 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+federalist_network_with_node_features %&gt;%  
+* ggraph::ggraph(layout = "fr")
+```
+]
+ 
+.right-output-ggraph-auto[
+&lt;img src="federalist_files/figure-html/ggraph_auto_3_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+federalist_network_with_node_features %&gt;%  
+  ggraph::ggraph(layout = "fr") +  
+* ggraph::geom_edge_link(
+*   aes(alpha = correlation)
+*   )
+```
+]
+ 
+.right-output-ggraph-auto[
+&lt;img src="federalist_files/figure-html/ggraph_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+federalist_network_with_node_features %&gt;%  
+  ggraph::ggraph(layout = "fr") +  
+  ggraph::geom_edge_link(  
+    aes(alpha = correlation)  
+    ) +  
+* ggraph::geom_node_point(
+*   aes(color = author),
+*   size = 6
+*   )
+```
+]
+ 
+.right-output-ggraph-auto[
+&lt;img src="federalist_files/figure-html/ggraph_auto_5_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+federalist_network_with_node_features %&gt;%  
+  ggraph::ggraph(layout = "fr") +  
+  ggraph::geom_edge_link(  
+    aes(alpha = correlation)  
+    ) +  
+  ggraph::geom_node_point(  
+    aes(color = author),  
+    size = 6  
+    ) +  
+* theme_void()
+```
+]
+ 
+.right-output-ggraph-auto[
+&lt;img src="federalist_files/figure-html/ggraph_auto_6_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-ggraph-auto[
+
+```r
+set.seed(124567)  
+federalist_network_with_node_features %&gt;%  
+  ggraph::ggraph(layout = "fr") +  
+  ggraph::geom_edge_link(  
+    aes(alpha = correlation)  
+    ) +  
+  ggraph::geom_node_point(  
+    aes(color = author),  
+    size = 6  
+    ) +  
+  theme_void() +  
+* ggforce::geom_mark_hull(
+*   aes(x = x,
+*       y = y,
+*       fill = author)
+*   )
+```
+]
+ 
+.right-output-ggraph-auto[
+&lt;img src="federalist_files/figure-html/ggraph_auto_7_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.left-code-ggraph-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-output-ggraph-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+*federalist_network_with_node_features
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+```
+# A tbl_graph: 85 nodes and 404 edges
+#
+# A directed simple graph with 1 component
+#
+# Node Data: 85 x 6 (active)
+  name     title                venue      date       author text               
+  &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;      &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;              
+1 Madison… General View of the… For the I… NA         Madis… "To the People of …
+2 Madison… The Same Subject Co… For the I… NA         Madis… "To the People of …
+3 Dispute… The Senate Continued For the I… NA         Dispu… "To the People of …
+4 Hamilto… The Appointing Powe… From the … 1788-04-01 Hamil… "To the People of …
+5 Hamilto… The Powers of the S… From the … 1788-03-07 Hamil… "To the People of …
+6 Madison… These Departments S… From the … 1788-02-01 Madis… "To the People of …
+# … with 79 more rows
+#
+# Edge Data: 404 x 5
+   from    to correlation rank1 rank2
+  &lt;int&gt; &lt;int&gt;       &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     2       0.993     1     1
+2     2     1       0.993     1     1
+3     3     1       0.991     1     2
+# … with 401 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+federalist_network_with_node_features %&gt;%  
+* as_tibble()
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+```
+# A tibble: 85 x 6
+   name     title                venue     date       author text               
+   &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;              
+ 1 Madison… General View of the… For the … NA         Madis… "To the People of …
+ 2 Madison… The Same Subject Co… For the … NA         Madis… "To the People of …
+ 3 Dispute… The Senate Continued For the … NA         Dispu… "To the People of …
+ 4 Hamilto… The Appointing Powe… From the… 1788-04-01 Hamil… "To the People of …
+ 5 Hamilto… The Powers of the S… From the… 1788-03-07 Hamil… "To the People of …
+ 6 Madison… These Departments S… From the… 1788-02-01 Madis… "To the People of …
+ 7 Hamilto… The Consequences of… From the… 1787-11-20 Hamil… "To the People of …
+ 8 Hamilto… The Utility of the … From the… 1787-11-27 Hamil… "To the People of …
+ 9 Hamilto… The Same Subject Co… From the… 1788-01-01 Hamil… "To the People of …
+10 Hamilto… The Same Subject Co… From the… 1788-01-08 Hamil… "To the People of …
+# … with 75 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+federalist_network_with_node_features %&gt;%  
+  as_tibble() %&gt;%  
+* mutate(name = fct_inorder(name))
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+```
+# A tibble: 85 x 6
+   name     title                venue     date       author text               
+   &lt;fct&gt;    &lt;chr&gt;                &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;              
+ 1 Madison… General View of the… For the … NA         Madis… "To the People of …
+ 2 Madison… The Same Subject Co… For the … NA         Madis… "To the People of …
+ 3 Dispute… The Senate Continued For the … NA         Dispu… "To the People of …
+ 4 Hamilto… The Appointing Powe… From the… 1788-04-01 Hamil… "To the People of …
+ 5 Hamilto… The Powers of the S… From the… 1788-03-07 Hamil… "To the People of …
+ 6 Madison… These Departments S… From the… 1788-02-01 Madis… "To the People of …
+ 7 Hamilto… The Consequences of… From the… 1787-11-20 Hamil… "To the People of …
+ 8 Hamilto… The Utility of the … From the… 1787-11-27 Hamil… "To the People of …
+ 9 Hamilto… The Same Subject Co… From the… 1788-01-01 Hamil… "To the People of …
+10 Hamilto… The Same Subject Co… From the… 1788-01-08 Hamil… "To the People of …
+# … with 75 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+federalist_network_with_node_features %&gt;%  
+  as_tibble() %&gt;%  
+  mutate(name = fct_inorder(name)) %&gt;%  
+* mutate(id = as.numeric(forcats::fct_inorder(name)))
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+```
+# A tibble: 85 x 7
+   name     title             venue     date       author text                id
+   &lt;fct&gt;    &lt;chr&gt;             &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;            &lt;dbl&gt;
+ 1 Madison… General View of … For the … NA         Madis… "To the People …     1
+ 2 Madison… The Same Subject… For the … NA         Madis… "To the People …     2
+ 3 Dispute… The Senate Conti… For the … NA         Dispu… "To the People …     3
+ 4 Hamilto… The Appointing P… From the… 1788-04-01 Hamil… "To the People …     4
+ 5 Hamilto… The Powers of th… From the… 1788-03-07 Hamil… "To the People …     5
+ 6 Madison… These Department… From the… 1788-02-01 Madis… "To the People …     6
+ 7 Hamilto… The Consequences… From the… 1787-11-20 Hamil… "To the People …     7
+ 8 Hamilto… The Utility of t… From the… 1787-11-27 Hamil… "To the People …     8
+ 9 Hamilto… The Same Subject… From the… 1788-01-01 Hamil… "To the People …     9
+10 Hamilto… The Same Subject… From the… 1788-01-08 Hamil… "To the People …    10
+# … with 75 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+federalist_network_with_node_features %&gt;%  
+  as_tibble() %&gt;%  
+  mutate(name = fct_inorder(name)) %&gt;%  
+  mutate(id = as.numeric(forcats::fct_inorder(name))) %&gt;%  
+* mutate(author_color =
+*          case_when(
+*            author == "Disputed" ~ "goldenrod4",
+*            author == "Hamilton" ~ "steelblue2",
+*            author == "Madison" ~ "navy",
+*            author == "Jay" ~ "coral3")
+*        )
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+```
+# A tibble: 85 x 8
+   name    title        venue   date       author text           id author_color
+   &lt;fct&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;       
+ 1 Madiso… General Vie… For th… NA         Madis… "To the Pe…     1 navy        
+ 2 Madiso… The Same Su… For th… NA         Madis… "To the Pe…     2 navy        
+ 3 Disput… The Senate … For th… NA         Dispu… "To the Pe…     3 goldenrod4  
+ 4 Hamilt… The Appoint… From t… 1788-04-01 Hamil… "To the Pe…     4 steelblue2  
+ 5 Hamilt… The Powers … From t… 1788-03-07 Hamil… "To the Pe…     5 steelblue2  
+ 6 Madiso… These Depar… From t… 1788-02-01 Madis… "To the Pe…     6 navy        
+ 7 Hamilt… The Consequ… From t… 1787-11-20 Hamil… "To the Pe…     7 steelblue2  
+ 8 Hamilt… The Utility… From t… 1787-11-27 Hamil… "To the Pe…     8 steelblue2  
+ 9 Hamilt… The Same Su… From t… 1788-01-01 Hamil… "To the Pe…     9 steelblue2  
+10 Hamilt… The Same Su… From t… 1788-01-08 Hamil… "To the Pe…    10 steelblue2  
+# … with 75 more rows
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-fed_nodes-auto[
+
+```r
+federalist_network_with_node_features %&gt;%  
+  as_tibble() %&gt;%  
+  mutate(name = fct_inorder(name)) %&gt;%  
+  mutate(id = as.numeric(forcats::fct_inorder(name))) %&gt;%  
+  mutate(author_color =  
+           case_when(  
+             author == "Disputed" ~ "goldenrod4",  
+             author == "Hamilton" ~ "steelblue2",  
+             author == "Madison" ~ "navy",  
+             author == "Jay" ~ "coral3")  
+         ) -&gt;  
+*fed_nodes
+```
+]
+ 
+.right-output-fed_nodes-auto[
+
+]
+
+&lt;style&gt;
+.left-code-fed_nodes-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-output-fed_nodes-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-code-net_js-non_seq[
+
+```r
+library(threejs)  
+fed &lt;-  
+  tidygraph::as.igraph(federalist_network_with_node_features)  
+
+graph_attr(fed, "layout") &lt;- NULL  
+
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")  
+```
+]
+ 
+.right-output-net_js-non_seq[
+<div id="htmlwidget-ea3f0edd6b043f569e04" style="width:432px;height:504px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ea3f0edd6b043f569e04">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":["#FFA500"],"size":2,"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"gray10","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"options":true,"alpha":[1],"vertices":[[-0.071813194,-0.49809692,0.25773024,-0.22134134,-0.51048627,0.54653869,0.018356421,-0.58631224,0.40312141,-0.83325456,0.4312711,-0.42733183,-0.74359241,0.13311445,-0.092845348,0.24456011,-0.58932777,0.37661649,-0.2833217,0.71861825,-0.68641696,-0.23006239,0.54740104,-0.68569062,-0.4884126,-0.30182709,-0.6446245,-0.56054241,-0.25927511,-0.42565652,-0.079243263,0.17814749,-0.58134904,-0.8211835,-0.20488316,-0.54150106,-0.51710627,-0.40934611,-0.43634369,0.069374249,-0.78673027,0.30040083,-0.15866974,-0.4397903,0.65150415,-0.55649903,-0.24454704,-0.27799753,0.18282501,-0.13394901,0.024850238,0.27010796,-0.041572507,-0.44873936,-1,-0.017769366,-0.31392467,-0.83020352,0.016362766,-0.46269875,-0.58359312,0.5341153,-0.67931176,-0.64287301,0.22231593,-0.40283209,-0.094459267,-0.73794452,0.046800514,-0.38623707,-0.51487128,-0.29436267,-0.26892988,-0.44004742,-0.55292228,-0.52816118,-0.075412142,-0.72186533,-0.28611353,-0.68561831,0.06360936,-0.16327537,-0.83167231,0.32422379,-0.10203664,-0.72998739,0.55018951,-0.14581957,-0.35129314,-0.56585998,-0.14137912,-0.69987115,-0.25323798,-0.49884494,-0.16362528,0.45189203,-0.32168718,-0.26450593,0.85126451,0.27059979,-0.33588314,0.070474207,-0.078434575,0.13994243,-0.76265251,-0.88513285,-0.37555986,-0.50982969,0.18903409,0.15691183,-0.23499898,-0.040972896,-0.315603,1,-0.66679994,0.3528848,-0.6772027,-0.90290721,0.46042238,-0.62301262,0.31022049,-0.01589624,-0.2230988,-0.3119879,0.041275815,-0.36889358,0.50303008,-0.22740592,0.25073839,0.19639316,-0.40390102,-0.42496355,-0.43870659,-0.44673519,-0.01990427,-0.47041251,-0.19508597,0.074079691,-0.12054457,-0.66806268,0.73381939,-0.39045485,-0.60735048,-0.66031139,-0.23193137,0.31212636,-0.81417068,0.28619044,0.12209757,-0.5958648,-0.023559552,0.65806882,-0.59876801,0.59180983,-0.15721589,0.04724783,-0.61662771,-0.41846255,-0.78036552,-0.17865569,0.067191988,-0.84461488,-0.58250227,0.13825177,-0.88206335,0.10825794,0.17254208,-0.7773691,0.43949776,-0.42116952,0.4299261,-0.64684952,-0.57551162,-0.31565456,-0.057500326,-0.8141419,-0.5689885,-0.071723528,-0.7068544,-0.72233659,-0.86138312,0.18352036,-0.22966714,0.14142636,-0.67949109,0.1367794,-0.69125281,0.60377598,-0.41283757,0.066119695,-0.23505779,0.66136554,-0.9552031,0.45232909,-0.31161,0.23744964,-0.9508052,0.80529005,0.16422963,-1,0.82309643,-0.32668281,-0.69649348,-0.86304699,0.13948682,-0.61590257,0.94717253,-0.52962435,0.9070367,-0.66195478,-0.4796385,0.43968296,-0.85006186,0.11185938,-0.93026092,0.38893781,0.049157898,0.42509031,-0.3549161,-0.30863174,-0.17425064,-0.49096656,-0.70396921,-0.45370162,-0.76307508,-0.62175069,-0.30469063,0.14356194,-0.33334327,1,-0.78077127,0.44607553,-0.094402863,-0.28575226,-0.2477049,-0.16013708,0.72808302,-0.45144012,0.35696882,-1,0.91377929,-0.094991566,0.1912123,0.74333868,-0.13411741,0.33193137,0.66825415,0.094383534,0.11202662,1,0.14925587,0.18706541,0.92953337,0.11501867,0.30419859]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-net_js-non_seq[
+
+```r
+library(threejs)  
+fed &lt;-  
+  tidygraph::as.igraph(federalist_network_with_node_features)  
+
+graph_attr(fed, "layout") &lt;- NULL  
+
+*V(fed)$size &lt;- 1
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")  
+```
+]
+ 
+.right-output-net_js-non_seq[
+<div id="htmlwidget-7ded2ed2081085b12409" style="width:432px;height:504px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7ded2ed2081085b12409">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":["#FFA500"],"size":[0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143],"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"gray10","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"options":true,"alpha":[1],"vertices":[[0.32375887,0.005359644,0.46942781,0.51292057,-0.015410385,0.89763163,0.41220717,0.14201185,0.56295789,-0.45597977,-0.77148728,0.74385234,-0.10249304,-0.65240858,0.82399685,0.46522057,0.21661272,0.066855384,-0.79816598,-0.34272529,0.10486104,-0.71070788,-0.3410402,-0.068190457,-0.12470777,-0.70837395,-0.22393169,-0.056782738,-0.59428417,0.082794877,-0.46764832,-0.23323953,-0.25224916,-0.26479998,-0.9168642,0.25958029,-0.10144939,-0.6519504,0.011569715,0.48562226,0.15695541,0.35733623,0.63595807,0.0034275848,0.77196255,0.015859689,-0.60235365,0.26829739,0.12227823,0.083100812,-0.18794995,-0.20203709,0.014525315,-0.67889663,-0.20872869,-0.96891617,0.7584747,-0.31543036,-0.85956202,0.49394845,-0.65729631,-0.62724095,0.29583834,-0.30523643,-0.60893835,0.46053077,0.29597739,-0.045139852,0.23214848,0.080396987,-0.42203427,-0.0071646765,-0.14264511,-0.51054769,-0.4160148,-0.41199756,-0.70525388,-0.11956383,0.19736875,-0.23058196,0.46852852,0.32314488,-0.011587925,0.7991354,0.47744163,0.16674332,0.90660746,-0.22854848,-0.43490909,-0.57246527,0.1238637,-0.41117761,-0.54354208,0.43887353,-0.37417879,0.86346516,0.80638126,-0.20660361,0.76973078,0.080825531,0.25794743,0.14459108,-0.58014959,-0.33519409,-0.54727903,-0.16403509,-1,0.26454087,-0.18929358,0.11981247,-0.17060343,0.97365181,-0.088647594,0.26536625,-0.60574498,-0.75475906,0.30112354,-0.61733339,-0.88074749,0.65806881,-0.23257658,0.22524746,-0.092725611,-0.17127981,-0.3708439,0.079734815,0.23898694,0.47170416,-0.091073788,0.055730936,-0.11736216,-0.80872981,0.19000598,-0.43755382,0.39055993,0.12579576,-0.39151097,0.70379008,0.6459712,0.15401931,0.99240688,0.084285096,-0.71131085,-0.46709055,-0.6534987,-0.45369708,-0.28403497,-0.43935021,0.063713965,-0.56173887,-0.72058669,-0.10704427,-0.13285576,-0.010197881,0.5441617,-0.03626201,-0.22179104,-0.87245549,-0.27451908,-0.54021519,-0.46162409,-0.50986616,-0.53034259,-0.79361123,-0.14156059,-0.5331093,-0.17882386,-0.66628029,0.40864099,0.4847195,0.18153608,0.1734334,-0.67517853,0.081470795,-0.018049167,-0.47438349,-1,0.11185474,-0.51883591,-0.95094927,-0.1879389,-0.76934562,0.83434785,0.25171232,0.21448138,0.40556455,-0.52836067,-0.5989199,0.70608794,0.68415504,-0.020308858,0.047600546,-0.36641099,-0.78952235,1,0.96378126,-0.091307824,-0.58570885,0.95152184,-0.0051286932,-0.59538281,0.059194483,-0.77439696,-0.78371096,1,-0.032912146,-0.20546305,-0.8543965,-0.49978142,0.47929279,-0.75679857,-0.62693576,-0.026706811,0.6045757,-0.09570602,-0.48364767,-0.42316966,-0.034576001,-0.14991709,-0.18770088,-0.38651847,-0.15576576,-0.28797822,-0.93681116,-0.21002307,0.3042201,-0.58363987,0.66001179,-1,-0.37190504,0.20515348,-0.24679024,0.31960491,-0.26925253,0.70549167,-0.17805927,0.61118635,-0.73635296,-0.7078319,-0.25006635,0.070333929,0.88343833,-0.095054411,0.25768327,0.7526218,-0.080307197,0.060603231,0.65509709,-0.23768363,0.077764685,1,-0.30769888,0.20071606,0.94920882,-0.27236767]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-net_js-non_seq[
+
+```r
+library(threejs)  
+fed &lt;-  
+  tidygraph::as.igraph(federalist_network_with_node_features)  
+
+graph_attr(fed, "layout") &lt;- NULL  
+
+V(fed)$size &lt;- 1  
+*V(fed)$color &lt;- fed_nodes$author_color
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")  
+```
+]
+ 
+.right-output-net_js-non_seq[
+<div id="htmlwidget-58ee3e7150c12a9a9075" style="width:432px;height:504px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-58ee3e7150c12a9a9075">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":[["#000080","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#8B6914","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#8B6914","#5CACEE","#CD5B45","#CD5B45","#CD5B45","#CD5B45","#CD5B45"]],"size":[0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143],"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"gray10","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@","@"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"options":true,"alpha":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"vertices":[[-0.37553638,-0.50839081,-0.1214468,-0.69868565,-0.62014889,-0.092043193,-0.4924315,-0.53332887,-0.27846676,0.25026278,-0.25828691,0.88896023,-0.1260655,-0.30469375,0.68531531,-0.37139101,-0.29406141,-0.44338543,0.81137029,-0.24198207,0.4778519,0.74456665,-0.047552943,0.39980482,0.12270565,0.25611049,0.50543822,0.10634216,-0.28956381,0.48593785,0.54417034,-0.028225456,0.17116363,0.035128314,0.34980513,0.77460567,-0.0015010574,0.24581013,0.44878587,-0.40060111,-0.74522685,-0.2971552,-0.77564474,-0.43332961,-0.172562,-0.060899337,-0.20730376,0.49130965,-0.037052327,-0.016791665,-0.27706685,0.34438202,0.37520549,-0.24216015,-0.12030442,0.05040399,0.94149531,0.079467454,0.11452155,0.82399346,0.58039087,-0.12317031,0.72642737,0.24775705,-0.40928958,0.66947773,-0.22276725,-0.81578404,-0.041504035,0.027732617,-0.47656749,0.28838452,0.17057579,0.20680986,0.24456267,0.33811541,0.36212925,0.56480424,-0.36256026,-0.15488375,0.067970611,-0.56348596,-0.41734364,-0.11346416,-0.65126338,-0.83763544,-0.23202854,0.299126,0.51032653,0.19006636,-0.049733678,0.57034492,0.05866385,-0.64338104,-0.29860902,0.24921035,-0.96737491,-0.10269928,-0.042333296,-0.040203741,-0.51470277,-0.34300302,0.69583825,0.33513593,0.21050682,-0.10467401,0.43511878,0.79350765,0.37515116,-0.47251499,-0.15356532,-1,0.31629097,-0.30702237,0.44217934,0.1349932,0.7590234,0.379273,-0.048336482,1,0.33381736,-0.42474539,-0.26877895,0.22353124,-0.3021428,0.320171,-0.054764726,-0.47188547,-0.6170366,0.077845585,0.63358303,-0.19606846,-0.28625613,-0.20422385,0.2835478,-0.28985476,-0.50803484,0.34442326,-0.83913827,-0.71313864,-0.28136716,-0.0707156,0.55047054,0.40097366,0.66221041,0.29705249,0.36766987,0.57198307,0.11922288,-0.1868628,0.8143864,-0.22179151,0.18286455,0.15891511,-0.69499803,-0.58729894,0.12426991,0.5828474,0.61847307,0.59503182,0.37544671,0.28131223,0.49468983,0.35597002,0.69029366,0.64159207,0.41267856,0.00400284,-0.29239639,-0.60068475,-0.6365247,-0.02952229,-0.67001868,0.51107486,0.13833198,1,0.079902726,-0.017102543,0.95215194,0.14048521,0.0016963972,-0.45162234,0.84875208,-0.22808121,-0.89789516,-0.25167848,0.38662605,-0.4454933,0.79822112,-0.65380885,0.24447195,-0.3206325,0.18644,-0.60541884,0.97626528,-0.72659062,0.81716431,-0.58367266,-0.74066955,0.92573626,-0.51959811,-0.021964827,0.88262545,0.40081394,-0.89244414,0.63637314,-0.47710012,0.78865479,-0.40521938,0.74485244,0.70927087,0.17132691,0.66059292,-0.44638348,0.5566505,-0.36900195,0.50813837,-0.10776277,0.014632062,0.33998527,-0.47948412,0.31023092,0.1551463,0.73981686,0.6436636,-0.46360697,-0.28880345,0.45014323,1,-0.29991491,0.5997309,0.36253552,-0.26651528,-0.39631809,-0.82505778,-0.074143183,-0.06375417,0.73851793,0.37199935,0.61342142,0.17229913,-0.99052386,-0.89108495,0.0043508025,-0.75647144,-0.8411286,0.24337347,-0.72490511,-0.6974949,0.31630854,-1,-0.99006253,0.20246036,-0.85135646,-1]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-net_js-non_seq[
+
+```r
+library(threejs)  
+fed &lt;-  
+  tidygraph::as.igraph(federalist_network_with_node_features)  
+
+graph_attr(fed, "layout") &lt;- NULL  
+
+V(fed)$size &lt;- 1  
+V(fed)$color &lt;- fed_nodes$author_color  
+*V(fed)$shape &lt;- fed_nodes$author
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")  
+```
+]
+ 
+.right-output-net_js-non_seq[
+<div id="htmlwidget-ea4309a8ef6013a87871" style="width:432px;height:504px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ea4309a8ef6013a87871">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":[["#000080","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#8B6914","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#8B6914","#5CACEE","#CD5B45","#CD5B45","#CD5B45","#CD5B45","#CD5B45"]],"size":[0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143],"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"gray10","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["Madison","Madison","Disputed","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Madison","Madison","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Disputed","Disputed","Hamilton","Madison","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Disputed","Hamilton","Jay","Jay","Jay","Jay","Jay"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"options":true,"alpha":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"vertices":[[0.35526895,-0.43523463,-0.32603944,0.52692621,-0.83572178,-0.46903929,0.50070988,-0.5738232,-0.20407914,-0.75397021,-0.76266779,-0.68241068,-0.36914127,-0.77748941,-0.76423254,0.57748018,-0.16443215,-0.06549104,-0.80642342,-0.31589544,0.039616189,-0.73698535,-0.11509007,0.023724246,-0.47983484,0.22383606,-0.70691163,-0.36430499,-0.08503748,-0.7512813,-0.46514261,0.073088371,-0.0087447593,-0.67725308,-0.14625097,-0.83367132,-0.38965318,0.059983123,-0.63281206,0.55799006,-0.29525164,-0.29586336,0.65034081,-0.70044123,-0.49261608,-0.27798008,-0.25579448,-0.75878478,0.23755319,0.11137638,-0.035599839,-0.058793597,0.59011141,0.1010521,-0.63671613,-0.61838554,-1,-0.67239725,-0.41785951,-0.79837849,-0.86180689,-0.38580485,-0.3472,-0.57728788,-0.52975804,-0.61352674,0.29959325,-0.12349707,-0.46570922,-0.12549226,0.047084396,-0.6714593,-0.31844795,0.44295964,-0.47080799,-0.70069089,0.12220556,-0.48409786,0.10039394,-0.41408009,-0.42321835,0.33802928,-0.76717604,-0.32157391,0.58400714,-0.87361272,-0.2792686,-0.36113649,0.51071832,-0.27010013,-0.034078039,0.56575361,-0.43897711,0.27997182,-0.76194139,-0.78006936,0.7204231,-0.64187192,-0.7852142,0.29272824,-0.21108397,0.10117316,-0.6166393,0.36531707,0.03675205,-0.63894491,-0.080594454,-0.9742359,-0.13185801,-0.29567024,0.18657317,0.9496208,-0.14776994,-0.67519393,-0.84408087,-0.32440954,-0.50773072,-0.95659159,-0.64989865,-0.67067736,-0.014831037,-0.099511806,0.28575202,-0.35123163,-0.26729677,-0.38047729,0.46816894,-0.23779824,0.33369596,0.064817856,0.7698798,-0.18072118,-0.011941093,-0.31458255,-0.67281995,-0.025265965,-0.65195955,-0.6424511,0.73491028,-0.94715145,-0.35899678,-0.29359038,0.51963433,-0.81952506,-0.70432294,0.1868275,-0.12186382,-0.24173701,0.415914,0.26308742,-0.60329787,-0.12541872,0.25118292,0.3207205,-0.20846102,0.50540293,-0.6458472,0.38480581,-0.72601176,-0.62356018,0.44098053,-0.15977332,-0.86476562,0.10933397,-0.52751842,-0.44157388,0.55812037,0.10129701,0.6249439,-0.44921221,0.2249933,-0.2157089,-0.047058767,-0.98749803,-0.19434311,1,-0.39677751,-0.15008179,0.97218578,-0.59210581,-0.53347093,-0.82989897,-0.87152523,0.41768099,-0.18220246,-0.17790744,-0.73254224,-0.78958171,-0.45906318,0.71311542,0.0063243875,-0.43974626,-0.72832628,-1,-0.83470792,0.91854716,0.70840574,-0.49172056,0.94583371,0.66949064,-0.39787599,-0.35506147,0.8436316,-0.82827816,1,0.3199917,-0.53997195,-0.95322974,-0.65412565,-0.1273183,-0.95085167,-0.079485611,-0.21336836,0.57253246,0.52611243,-0.34802491,-0.30351807,-0.022886127,0.15227161,-0.33773503,0.060784578,-0.42568836,-0.7357057,0.33568726,-0.74261584,0.026833067,-0.5702427,-0.91254916,-1,-0.44823892,0.12914312,0.061935963,0.15376614,0.3668788,0.63815733,-0.50074436,-0.69650339,-0.95324198,0.19530076,-0.29011256,0.50513906,-0.33625379,0.851346,0.55765758,-0.46589584,0.62709894,0.30257503,-0.46273261,0.62945521,0.44280481,-0.54074837,1,0.51250018,-0.63674233,0.88712263]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-code-net_js-non_seq[
+
+```r
+library(threejs)  
+fed &lt;-  
+  tidygraph::as.igraph(federalist_network_with_node_features)  
+
+graph_attr(fed, "layout") &lt;- NULL  
+
+V(fed)$size &lt;- 1  
+V(fed)$color &lt;- fed_nodes$author_color  
+V(fed)$shape &lt;- fed_nodes$author  
+*E(fed)$color &lt;- "darkgrey"
+
+graphjs(g = fed, bg = "gray10",  
+        showLabels = T,  
+        layout = list(  
+          layout_with_fr(fed, dim = 3)),  
+                  main = "")  
+```
+]
+ 
+.right-output-net_js-non_seq[
+<div id="htmlwidget-07cc76f4490b2705a51b" style="width:432px;height:504px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-07cc76f4490b2705a51b">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":[["#000080","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#8B6914","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#8B6914","#5CACEE","#CD5B45","#CD5B45","#CD5B45","#CD5B45","#CD5B45"]],"size":[0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143],"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"gray10","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["Madison","Madison","Disputed","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Madison","Madison","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Disputed","Disputed","Hamilton","Madison","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Disputed","Hamilton","Jay","Jay","Jay","Jay","Jay"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"lcol":[["#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9"]],"options":true,"alpha":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"vertices":[[-0.060905712,-0.18104002,0.45385199,-0.24226966,-0.13400696,0.87903713,-0.20477296,-0.30664044,0.55579603,0.71004744,0.83064404,0.25263214,0.42176374,0.59301517,0.53848519,-0.29666231,-0.39205114,0.21625644,0.58234051,0.77001866,-0.8020884,0.53717608,0.66631976,-0.78756729,0.90759271,0.17803869,-0.10035286,0.82131412,0.15841824,0.15198704,0.42408105,0.33526712,-0.68161746,0.69452266,0.64070781,0.33570532,0.59442995,0.32053641,0.16907293,-0.087743481,-0.44235267,0.51952647,-0.39243964,-0.1153427,0.81892732,0.67103996,0.17718332,0.31170248,-0.17041266,-0.038207229,-0.28510897,-0.038446993,0.13292158,-0.82964694,0.5742909,0.83124936,0.67789306,0.5899004,0.76147645,0.34579031,0.77465646,0.78435819,-0.33555579,0.80917621,0.47357824,0.073596892,0.22022271,-0.31376651,0.41573218,0.61461332,-0.020926812,0.1832942,0.47869503,0.25091412,-0.17490122,0.7821605,0.51512494,-0.20142531,0.1867102,-0.059366504,0.57738176,-0.0070441019,-0.27132625,0.81602304,-0.23407327,-0.34020446,0.88136399,0.44012646,0.25900164,-0.44450794,0.17161019,0.12756629,-0.15043896,-0.097782515,0.25058586,0.84012381,-0.56078057,0.1396281,0.92889736,-0.11882207,-0.2694878,-0.12550256,0.52344836,0.429813,-0.94348185,0.65400274,0.61272366,0.57855039,0.317847,-0.18350196,-0.58417368,-0.88546933,0.10795179,0.62510211,0.49000623,0.91944567,-0.077776298,0.78606452,1,0.11241247,0.072527866,-0.13770458,-0.59517863,0.6848193,0.078719145,-0.14546173,-0.25002108,-0.518076,-0.28161558,0.16539093,-0.094285791,-0.72572633,0.36915021,0.065844164,0.50914363,0.29049692,0.19247508,0.56324285,-0.41212616,-0.29912843,1,0.88557441,-0.061630445,-0.18039304,0.35214812,0.68185279,-0.62554526,0.084569709,0.20118536,-0.97652236,0.33030859,0.60009564,-1,-0.17158991,-0.49218098,-0.56359783,0.96947492,0.36179874,0.023725519,0.51383601,0.5123418,-0.69124955,1,0.54685332,-0.38889646,0.18261474,0.44224875,-0.94060084,-0.31663135,-0.61531799,0.08366425,0.88286281,-0.0099218754,0.41413887,0.42718341,0.0032709694,-0.53039826,0.64896772,-0.15754846,-0.60271793,0.75829884,0.57296059,0.5468591,-0.0012206752,-0.41640156,0.27275196,0.68021426,0.79934845,-0.012465906,-0.65242231,0.059479363,0.26517564,0.94412198,0.72876812,0.43340624,-0.90800846,-0.113321,0.071599911,-0.91718081,-0.032765954,-0.0066727809,0.98688291,-0.11662963,-0.43543089,-1,0.024724995,0.29020662,0.71520841,0.98421006,-0.56026107,0.82161591,0.77702739,-0.60649321,-0.47885371,-0.07361268,-0.011298723,0.11440166,0.40182362,-0.72231671,0.69848564,0.13699155,-0.28042809,0.97116662,0.46267423,0.13572149,0.32476826,0.19240568,0.79546301,0.64869527,0.9785852,-0.95573987,-0.11008891,-0.10345774,-0.72464586,-0.49049945,0.13282681,0.743237,0.89158179,0.68051377,-0.70001279,-0.29370865,-0.84106788,-0.75226951,-0.2645942,-0.80901207,-0.41446685,-0.045408708,-0.69011839,-0.63729044,-0.17652993,-0.99001055,-0.88905416,-0.17958902,-1,-0.67468509]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+]
+
+&lt;style&gt;
+.left-code-net_js-non_seq {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-output-net_js-non_seq {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+---
+
+
+
+
+
+
+<div id="htmlwidget-af67c69ab9625868913a" style="width:864px;height:648px;" class="scatterplotThree html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af67c69ab9625868913a">{"x":{"NROW":85,"height":null,"width":null,"axis":false,"numticks":[6,6,6],"xticklabs":null,"yticklabs":null,"zticklabs":null,"color":[["#000080","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#8B6914","#000080","#8B6914","#5CACEE","#5CACEE","#000080","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#000080","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#5CACEE","#000080","#5CACEE","#8B6914","#8B6914","#5CACEE","#000080","#5CACEE","#5CACEE","#8B6914","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#5CACEE","#8B6914","#8B6914","#5CACEE","#CD5B45","#CD5B45","#CD5B45","#CD5B45","#CD5B45"]],"size":[0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143,0.142857142857143],"stroke":"black","flipy":true,"grid":false,"renderer":"auto","signif":8,"bg":"grey20","cexsymbols":1,"xlim":[-1,1],"ylim":[-1,1],"zlim":[-1,1],"pch":["Madison","Madison","Disputed","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Disputed","Madison","Disputed","Hamilton","Hamilton","Madison","Madison","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Madison","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Hamilton","Madison","Hamilton","Disputed","Disputed","Hamilton","Madison","Hamilton","Hamilton","Disputed","Hamilton","Hamilton","Hamilton","Hamilton","Hamilton","Disputed","Disputed","Hamilton","Jay","Jay","Jay","Jay","Jay"],"from":[[0,1,2,0,2,1,3,4,5,2,6,7,8,9,7,10,11,12,13,0,14,2,8,15,16,17,18,19,20,21,22,23,15,23,14,0,24,12,19,12,25,10,26,27,15,12,8,12,28,0,29,30,31,32,11,19,9,15,9,12,21,15,2,27,16,0,33,0,34,10,12,35,25,12,30,12,36,10,37,32,11,25,38,3,5,0,28,2,13,2,39,20,40,36,20,7,8,41,24,30,42,16,6,10,43,17,13,22,22,0,9,23,44,15,21,9,4,19,45,0,33,2,14,1,46,14,8,47,41,15,33,16,31,4,45,4,41,21,5,13,28,1,27,0,20,3,48,38,41,36,24,23,26,2,29,12,49,10,46,1,50,10,18,11,42,51,31,1,52,12,26,12,48,53,54,25,39,3,45,15,20,54,53,10,55,49,40,33,18,4,48,10,5,56,57,9,58,59,60,4,61,22,29,10,20,62,52,25,57,15,53,24,5,42,39,19,6,20,52,8,47,59,8,54,38,19,42,56,43,59,62,21,44,0,2,56,55,53,61,33,14,32,46,2,61,0,43,16,55,48,60,15,55,17,6,50,60,3,49,17,16,63,47,15,64,60,65,66,40,10,62,4,47,67,63,68,37,63,8,67,19,35,11,35,37,68,58,30,44,12,33,51,62,69,58,29,7,34,29,34,70,20,71,65,40,51,67,59,72,50,65,68,73,9,57,23,6,69,74,52,70,7,75,31,6,76,20,69,73,23,74,25,75,15,74,12,75,44,70,25,77,40,64,3,76,69,7,76,73,10,77,33,77,49,66,68,64,21,78,63,78,14,78,31,72,16,72,7,71,5,71,30,71,66,79,20,79,54,80,81,81,42,81,56,79,53,82,81,82,42,83,80,80,51,82,36,83,82,84,83,84,82,84,81]],"to":[[1,0,0,2,1,2,4,3,2,5,7,6,9,8,10,7,12,11,0,13,2,14,15,8,17,16,19,18,21,20,23,22,23,15,0,14,12,24,12,19,10,25,27,26,12,15,12,8,0,28,30,29,32,31,19,11,15,9,12,9,15,21,27,2,0,16,0,33,10,34,35,12,12,25,12,30,10,36,32,37,25,11,3,38,0,5,2,28,2,13,20,39,36,40,7,20,41,8,30,24,16,42,10,6,17,43,22,13,0,22,23,9,15,44,9,21,19,4,0,45,2,33,1,14,14,46,47,8,15,41,16,33,4,31,4,45,21,41,13,5,1,28,0,27,3,20,38,48,36,41,23,24,2,26,12,29,10,49,1,46,10,50,11,18,51,42,1,31,12,52,12,26,53,48,25,54,3,39,15,45,54,20,10,53,49,55,33,40,4,18,10,48,56,5,9,57,59,58,4,60,22,61,10,29,62,20,25,52,15,57,24,53,42,5,19,39,20,6,8,52,59,47,54,8,19,38,56,42,59,43,21,62,0,44,56,2,53,55,33,61,32,14,2,46,0,61,16,43,48,55,15,60,17,55,50,6,3,60,17,49,63,16,15,47,60,64,66,65,10,40,4,62,67,47,68,63,63,37,67,8,35,19,35,11,68,37,30,58,12,44,51,33,69,62,29,58,34,7,34,29,20,70,65,71,51,40,59,67,50,72,68,65,9,73,23,57,69,6,52,74,7,70,31,75,76,6,69,20,23,73,25,74,15,75,12,74,44,75,25,70,40,77,3,64,69,76,76,7,10,73,33,77,49,77,68,66,21,64,63,78,14,78,31,78,16,72,7,72,5,71,30,71,66,71,20,79,54,79,81,80,42,81,56,81,53,79,81,82,42,82,80,83,51,80,36,82,82,83,83,84,82,84,81,84]],"lwd":1,"linealpha":1,"center":true,"main":[""],"showLabels":true,"lcol":[["#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9","#A9A9A9"]],"labels":["General View of the Powers Conferred by The Constitution","The Same Subject Continued (The Powers Conferred by the Constitution Further Considered)","The Senate Continued","The Appointing Power of the Executive","The Powers of the Senate Continued","These Departments Should Not Be So Far Separated as to Have No Constitutional Control Over Each Other","The Consequences of Hostilities Between the States","The Utility of the Union In Respect to Revenue","The Same Subject Continued (Concerning the General Power of Taxation)","The Same Subject Continued (Concerning the General Power of Taxation)","The Same Subject Continued (Other Defects of the Present Confederation)","Concerning the Power of Congress to Regulate the Election of Members","The Judiciary Continued, and the Distribution of the Judicial Authority","Objections to the Proposed Constitution From Extent of Territory Answered","Objection That The Number of Members Will Not Be Augmented as the Progress of Population Demands Considered","The Judiciary Department","The Powers Conferred by the Constitution Further Considered","The Real Character of the Executive","The Same Subject Continued (Concerning the Power of Congress to Regulate the Election of Members)","The Same Subject Continued (Concerning the Power of Congress to Regulate the Election of Members)","The Same Subject Continued (The Powers Necessary to the Common Defense Further Considered)","Concerning the Militia","The Alleged Tendency of the New Plan to Elevate the Few at the Expense of the Many Considered in Connection with Representation","Certain General and Miscellaneous Objections to the Constitution Considered and Answered","Objections to the Power of the Senate To Set as a Court for Impeachments Further Considered","The Idea of Restraining the Legislative Authority in Regard to the Common Defense Considered","The Apportionment of Members Among the States","The Conformity of the Plan to Republican Principles","The House of Representatives","Concluding Remarks","The Executive Department Further Considered","Method of Guarding Against the Encroachments of Any One Department of Government by Appealing to the People Through a Convention","The Influence of the State and Federal Governments Compared","The Same Subject Continued (The House of Representatives)","The Insufficiency of the Present Confederation to Preserve the Union","The Judiciary Continued in Relation to Trial by Jury","The Same Subject Continued, and the Incoherence of the Objections to the New Plan Exposed","The Alleged Danger From the Powers of the Union to the State Governments Considered","The Provision For The Support of the Executive, and the Veto Power","Concerning the General Power of Taxation","The Senate","The Same Subject Continued (Concerning the General Power of Taxation)","Concerning the Difficulties of the Convention in Devising a Proper Form of Government","The Same Subject Continued (The Insufficiency of the Present Confederation to Preserve the Union)","The Same Subject Continued (Concerning the General Power of Taxation)","The Same Subject Continued (The Idea of Restraining the Legislative Authority in Regard to the Common Defense Considered)","The Structure of the Government Must Furnish the Proper Checks and Balances Between the Different Departments","The Judiciary Continued","The Appointing Power Continued and Other Powers of the Executive Considered","Other Defects of the Present Confederation","The Union as a Safeguard Against Domestic Faction and Insurrection","The Same Subject Continued (The Union as a Safeguard Against Domestic Faction and Insurrection)","The Mode of Electing the President","The Treaty-Making Power of the Executive","The Same Subject Continued (Concerning the General Power of Taxation)","The Command of the Military and Naval Forces, and the Pardoning Power of the Executive","The Powers of the Convention to Form a Mixed Government Examined and Sustained","The Same Subject Continued (The Idea of Restraining the Legislative Authority in Regard to the Common Defense Considered)","The Executive Department","The Powers of the Judiciary","The Duration in Office of the Executive","The Total Number of the House of Representatives","The Same Subject Continued (The Insufficiency of the Present Confederation to Preserve the Union)","Restrictions on the Authority of the Several States","The Same Subject Continued, and Re-Eligibility of the Executive Considered","The Same Subject Continued (The Insufficiency of the Present Confederation to Preserve the Union)","The Same Subject Continued (The Insufficiency of the Present Confederation to Preserve the Union)","The Necessity of a Government as Energetic as the One Proposed to the Preservation of the Union","The Particular Structure of the New Government and the Distribution of Power Among Its Different Parts","The Same Subject Continued (Concerning Dangers from Dissensions Between the States)","The Powers Necessary to the Common Defense Further Considered","The Same Subject Continued (The Insufficiency of the Present Confederation to Preserve the Union)","Concerning Dangers from Dissensions Between the States","General Introduction","The Judiciary Continued","The Same Subject Continued (Concerning the General Power of Taxation)","The Utility of the Union in Respect to Commercial Relations and a Navy","The Same Subject Continued (The Total Number of the House of Representatives)","Periodical Appeals to the People Considered","Advantage of the Union in Respect to Economy in Government","The Same Subject Continued (Concerning Dangers From Foreign Force and Influence)","The Powers of the Senate","Concerning Dangers from Foreign Force and Influence","The Same Subject Continued (Concerning Dangers From Foreign Force and Influence)","The Same Subject Continued (Concerning Dangers From Foreign Force and Influence)"],"options":true,"alpha":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"vertices":[[0.38246228,-0.10950995,0.19820522,0.65517136,-0.2588064,0.18460463,0.50182923,-0.02767692,0.36722929,-0.402363,-0.77106551,-0.74141059,-0.028881076,-0.69016787,-0.56956115,0.46707825,0.2778672,0.35185545,-0.82731821,-0.082337121,-0.50239703,-0.73783804,-0.0035117058,-0.44071303,-0.20902981,-0.19165825,-0.70105382,-0.11090571,-0.42738874,-0.46796672,-0.53210521,0.028648039,-0.11747933,-0.3404898,-0.71441598,-0.43482156,-0.16515151,-0.34833419,-0.37165517,0.46282416,-0.051728526,0.4696953,0.74515731,-0.14207387,0.15976706,0.01235368,-0.37374186,-0.55510345,0.087166089,0.31163061,0.11992483,-0.3391068,0.34923412,0.13879775,-0.20834947,-1,-0.57277572,-0.33587258,-0.80248831,-0.52834725,-0.66743162,-0.42888265,-0.68514527,-0.28464617,-0.4546467,-0.73660461,0.2657411,-0.29130891,0.28085492,0.0024390811,-0.39190535,-0.17594646,-0.23098504,-0.13874188,-0.18533848,-0.51802067,-0.34121128,-0.4455364,0.22609207,-0.28470241,0.092416766,0.45079118,-0.305241,0.36282075,0.65069273,-0.21064498,0.4161358,-0.28924733,0.14008324,-0.36833249,0.045735222,0.16767729,-0.30887751,0.54199797,-0.42024288,-0.27202076,0.903581,-0.19706697,-0.13502211,0.11627618,0.14664944,0.46323403,-0.61891576,0.2292622,-0.36372716,-0.24736266,-0.81713168,-0.35218326,-0.22807835,0.31141272,0.12563179,1,0.19034259,-0.12562608,-0.62373546,-0.7457504,-0.38848596,-0.60298697,-0.83568826,-0.76307037,-0.22330828,0.24578816,0.37528918,-0.1835144,-0.08275672,-0.42261717,0.21657433,0.53341373,0.54545589,-0.12578618,0.49804037,-0.20120469,0.21381865,-0.3119332,-0.27418783,0.23028354,-0.46645502,-0.25727167,0.817218,-0.17396313,0.3916514,-0.050004339,0.010505463,-0.85073923,-0.72302583,-0.31759402,-0.058447581,-0.52315933,0.19852868,0.30597782,-0.77681468,0.19514054,-0.23821194,0.0078291048,0.46406001,0.70585651,-0.36591371,-0.35112365,-0.62364342,-0.65187294,-0.16380372,-0.10888166,-0.600974,-0.28015922,-0.70521426,-0.65555041,0.03771895,0.16247514,0.42140306,0.42073672,0.6235862,0.088637096,-0.59323966,-0.43900522,-0.10405908,0.40822919,-0.52888071,-0.095528012,0.38925779,-0.72047052,-0.11503902,-0.7390437,-0.83217056,0.28095889,-0.13471121,0.52474762,-0.47612162,-0.55605253,-0.81948804,0.67768147,0.283017,-0.045480286,-0.28235873,-0.78768059,-1,0.88019033,0.72396429,-0.11280157,0.88700961,0.69753126,-0.22069873,-0.13092275,0.15599242,-0.97142144,0.97782438,0.49994149,-0.13193958,-0.84229504,-0.3206424,-0.80774929,-0.83120895,-0.27115102,-0.60114818,0.55153359,0.49748205,-0.10837421,-0.45770022,0.284212,-0.13597977,-0.28250589,-0.31462445,-0.15247551,-0.42622126,-0.50318552,-0.4995769,0.36538055,-0.45748219,-0.50278465,-1,-0.075618347,-0.68646115,-0.25855522,0.21730592,0.58068952,0.78001206,-0.1077814,-0.1278494,-0.82283822,-0.34432326,-0.45645104,0.055561485,0.77526351,1,0.21186192,0.74596744,0.80459798,-0.0089503376,0.73694988,0.63529213,-0.017464452,0.99135589,0.97542531,0.096397268,1,0.89512698]],"xticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"yticklab":["-1.00","-0.60","-0.20","0.20","0.60","1.00"],"zticklab":["1.00","0.60","0.20","-0.20","-0.60","-1.00"],"xtick":[0,0.2,0.4,0.6,0.8,1],"ytick":[0,0.2,0.4,0.6,0.8,1],"ztick":[0,0.2,0.4,0.6,0.8,1]},"evals":[],"jsHooks":[]}</script>
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

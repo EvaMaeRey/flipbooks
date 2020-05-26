@@ -1,0 +1,248 @@
+---
+title: "A *Federalist Papers* Whodunnit"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, 2019"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+
+
+
+class: left, top, inverse
+background-image: url(https://images.unsplash.com/photo-1478641300939-0ec5188d3802?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1504&q=80)
+background-size: cover
+
+# .Large[{tidytext} {ggraph} {tidygraph} {threejs}]
+### A *Federalist Papers* Whodunnit
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+#### Gina Reynolds<br>Photo Credit: Clark Young
+
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+---
+
+```{r start, include = T}
+library(tidyverse)
+library(corpus)
+corpus::federalist %>%
+  mutate(author = replace_na(author, 
+                             "Disputed")) %>% 
+  mutate(name = paste(author, 
+                      str_remove(name, "eralist"), 
+                      sep = "-")) -> 
+federalist
+
+federalist %>% 
+  glimpse()
+```
+
+
+---
+
+```{r}
+federalist %>% 
+  group_by(author) %>% 
+  tally() ->
+the_tally
+
+the_tally 
+```
+
+---
+
+```{r doc_term, include = T}
+federalist %>%
+  select(name, text, title) %>% 
+  tidytext::unnest_tokens(output = word, input = text) %>% 
+  # stop word are good for stylometry - keep them only
+  right_join(tidytext::stop_words) %>%
+  group_by(name, word) %>% 
+  count() %>% 
+  arrange(-n) %>% 
+  ungroup() %>% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %>% 
+  filter(!is.na(item1)) %>% 
+  filter(!is.na(item2)) ->
+document_correlation
+```
+
+---
+
+`r chunk_reveal("heat_map")`
+
+
+```{r heat_map, include = F}
+document_correlation %>%
+  ggplot() +
+  aes(x = item1) +
+  theme(axis.text.x = 
+          element_text(angle = 90)) +
+  theme(text = element_text(size = 4)) +
+  aes(y = item2) +
+  theme(aspect.ratio = 1) +
+  geom_tile() +
+  aes(fill = correlation) +
+  scale_fill_viridis_c(direction = -1)
+```
+
+---
+
+`r chunk_reveal("pruning")`
+
+
+
+```{r pruning, include = F}
+document_correlation %>%
+  # pruning all but strongest three links
+  group_by(item1) %>% 
+  mutate(rank1 = 1:n()) %>% 
+  ungroup() %>% 
+  group_by(item2) %>% 
+  mutate(rank2 = 1:n()) %>% 
+  filter(rank1 %in% 1:3 |
+         rank2 %in% 1:3) %>%
+  # working with data as network data
+  igraph::graph_from_data_frame() %>% 
+  tidygraph::as_tbl_graph(graph) %>% 
+  tidygraph::activate(nodes) %>% 
+  full_join(federalist) ->
+federalist_network_with_node_features
+```
+
+
+---
+
+`r chunk_reveal("ggraph")`
+
+```{r ggraph, include = F}
+set.seed(124567)
+federalist_network_with_node_features %>%
+  ggraph::ggraph(layout = "fr") +
+  ggraph::geom_edge_link( 
+    aes(alpha = correlation)
+    ) +
+  ggraph::geom_node_point(
+    aes(color = author),
+    size = 6
+    ) +
+  theme_void() +
+  ggforce::geom_mark_hull(
+    aes(x = x,
+        y = y,
+        fill = author)
+    )
+```
+
+
+
+
+---
+
+`r flipbookr::chunk_reveal("fed_nodes")`
+
+```{r fed_nodes, include = F}
+federalist_network_with_node_features %>%
+  as_tibble() %>% 
+  mutate(name = fct_inorder(name)) %>% 
+  mutate(id = as.numeric(forcats::fct_inorder(name))) %>% 
+  mutate(author_color = 
+           case_when(
+             author == "Disputed" ~ "goldenrod4",
+             author == "Hamilton" ~ "steelblue2",
+             author == "Madison" ~ "navy",
+             author == "Jay" ~ "coral3")
+         ) ->
+fed_nodes
+```
+
+---
+
+`r flipbookr::chunk_reveal("net_js", break_type = "non_seq")`
+
+
+---
+
+```{r net_js, include = F}
+library(threejs)
+fed <-
+  tidygraph::as.igraph(federalist_network_with_node_features)
+
+graph_attr(fed, "layout") <- NULL
+
+V(fed)$size <- 1 #BREAK2
+V(fed)$color <- fed_nodes$author_color #BREAK3
+V(fed)$shape <- fed_nodes$author #BREAK4
+E(fed)$color <- "darkgrey" #BREAK5
+
+graphjs(g = fed, bg = "gray10", 
+        showLabels = T, 
+        layout = list(
+          layout_with_fr(fed, dim = 3)),
+                  main = "")
+```
+
+
+
+
+```{r, fig.align='center', fig.height=9, fig.width=12, echo=F}
+library(threejs)
+fed <-
+  tidygraph::as.igraph(federalist_network_with_node_features)
+
+graph_attr(fed, "layout") <- NULL
+
+V(fed)$size <- 1 #BREAK2
+V(fed)$color <- fed_nodes$author_color #BREAK3
+V(fed)$shape <- fed_nodes$author #BREAK4
+V(fed)$label <- fed_nodes$title #BREAK5
+
+E(fed)$color <- "darkgrey" #BREAK6
+
+graphjs(g = fed, 
+        bg = "grey20", 
+        showLabels = T, 
+        layout = list(layout_with_fr(fed,  
+                                     dim = 3)),
+                  main = "")
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```

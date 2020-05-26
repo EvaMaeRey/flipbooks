@@ -1,0 +1,96 @@
+---
+title: "Three waves of '+ aes()'"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+
+---
+
+Wave 1: Endorsement
+
+
+---
+
+`r chunk_reveal("plus_aes_love")`
+
+```{r plus_aes_love, include = F}
+c(2009, 2016) %>% 
+  as_factor() %>% 
+  tibble(year = .) %>% 
+  mutate(plus_aes_usages = c(15, 0)) ->
+ggplot2_elegant
+
+
+ggplot2_elegant %>% 
+  filter(year == 2009) %>% 
+  ggplot() +
+  theme_minimal(base_size = 18) +
+  aes(x = year, y = plus_aes_usages) + 
+  geom_col(size = 1.5) +
+  aes(color = year) +
+  aes(fill = year) +
+  aes(alpha = year) +
+  labs(x = NULL) +
+  labs(y = NULL) +
+  labs(color = NULL, fill = NULL, alpha = NULL) +
+  labs(title = "Number of times + aes() used in \"ggplot2: Elegant Graphics...\"") +
+  theme(legend.position = "none") +
+  theme(plot.title.position = "plot") ->
+plot
+```
+
+
+---
+
+Wave 2: deemphasis
+
+---
+
+`r chunk_reveal("no_more_love")`
+
+
+```{r no_more_love, include = F}
+plot %+%
+  ggplot2_elegant +
+  aes(alpha = NULL) +
+  aes(fill = NULL)
+```
+
+
+
+---
+
+Wave 3: Discovery & Incrementalism
+
+
+
+
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```
