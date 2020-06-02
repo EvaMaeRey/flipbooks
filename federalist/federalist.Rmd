@@ -39,12 +39,10 @@ background-size: cover
 #### Gina Reynolds<br>Photo Credit: Clark Young
 
 
-
-
 ```{r setup, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3)
 library(flipbookr)
 library(tidyverse)
 ```
@@ -86,7 +84,7 @@ federalist %>%
   select(name, text, title) %>% 
   tidytext::unnest_tokens(output = word, input = text) %>% 
   # stop word are good for stylometry - keep them only
-  right_join(tidytext::stop_words) %>%
+  inner_join(tidytext::stop_words) %>%
   group_by(name, word) %>% 
   count() %>% 
   arrange(-n) %>% 
@@ -149,7 +147,7 @@ federalist_network_with_node_features
 `r chunk_reveal("ggraph")`
 
 ```{r ggraph, include = F}
-set.seed(124567)
+set.seed(1245)
 federalist_network_with_node_features %>%
   ggraph::ggraph(layout = "fr") +
   ggraph::geom_edge_link( 
@@ -240,6 +238,49 @@ graphjs(g = fed,
                   main = "")
 ```
 
+---
+
+
+`r chunk_reveal("stop_words")`
+
+```{r stop_words, include = F}
+library(tidytext)
+stop_words %>% 
+  distinct() %>% 
+  count(lexicon) %>% 
+  ggplot() +
+  aes(x = lexicon) +
+  aes(y = n) +
+  geom_col() ->
+stop_summary
+
+stop_words %>% 
+  distinct() %>% 
+  group_by(word) %>% 
+  mutate(num_dictionaries = n()) %>% 
+  arrange(-num_dictionaries, word) %>% 
+  ungroup() %>% 
+  mutate(word = fct_rev(fct_inorder(word))) %>% 
+  ggplot() +
+  aes(x = lexicon) +
+  aes(y = word) +
+  geom_tile(alpha = .2) +
+  aes(color = num_dictionaries) +
+  scale_fill_viridis_c() ->
+p
+```
+
+
+---
+
+`r chunk_reveal("non_distinct")`
+
+```{r non_distinct, include = F}
+stop_words %>% 
+  group_by(word, lexicon) %>% 
+  count() %>% 
+  filter(n > 1)
+```
 
 
 
