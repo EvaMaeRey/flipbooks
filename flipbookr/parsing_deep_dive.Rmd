@@ -7,7 +7,7 @@ output:
     lib_dir: libs
     css: ["xaringan-themer.css", ninjutsu]
     nature:
-      ratio: 16:10
+      ratio: 30:10
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
@@ -47,38 +47,71 @@ Now lets walk through this pipeline inside `code_parse`
 
 ---
 
-`r chunk_reveal("the_code_parsing")`
+`r chunk_reveal("the_code_parsing", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
 
 ```{r the_code_parsing, include=FALSE}
+create_code() %>%
+  code_as_table() %>%
+  code_as_table_process_break_messages() ->
+hide_away
+
+create_code() %>%
+  r_code_base_parse() %>% 
+  r_base_parsed_count_parentheses() ->
+hide_again
+
+
 create_code() %>% 
-  code_as_table() ->
-raw_code_table
+  r_code_full_parse() ->
+hide_more
+
 create_code() %>% 
-  code_base_parse() %>% 
-  base_parsed_count_parentheses() %>% 
-dplyr::left_join(raw_code_table) %>%
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %>%
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%>%$|\\+$|->$|%\\+%")) %>%
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %>%
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %>%
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %>%
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %>%
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %>%
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %>%
-    dplyr::mutate(user = stringr::str_detect(comment, "#BREAK")) %>%
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK")) %>%
-    dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), "%>%$|\\+$|->$|%\\+%")) %>%
-    dplyr::mutate(auto = balanced_paren & balanced_curly & balanced_square &
-                    code != "") %>%
-    dplyr::select(line, raw_code, code, connector, comment, auto, user, non_seq)  
+  code_parse() %>% 
+  parsed_calc_show() %>% 
+  shown_lines_calc_highlight() ->
+hiding
+```
+
+---
+
+`r chunk_reveal("return_partial_and_sequence", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
+
+```{r return_partial_and_sequence, eval = F, echo = F} 
+create_code() %>% 
+  code_parse() %>% 
+  parsed_return_partial_code() #ROTATE
+  parsed_left_assign_return_partial_code() #ROTATE
+  parsed_return_partial_code_sequence() #ROTATE
+  parsed_return_recent_function() #ROTATE
+  parsed_return_recent_function_sequence() #ROTATE
+```
+
+
+---
+
+`r chunk_reveal("returns", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
+
+```{r returns, eval = F, echo = F} 
+return_partial_chunks_template_code() #ROTATE
+return_partial_chunks_template_output() #ROTATE
+return_partial_chunks_template_function() #ROTATE
+return_markdown(text = "my. short. text.", sep = "\\.") #ROTATE
+
 ```
 
 
 
+---
 
+`r chunk_reveal("last", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
 
+```{r last, eval = F, echo = F} 
+define_css() #ROTATE
+chunk_expand() #ROTATE
+chunk_reveal #ROTATE
+```
 
 
 ```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 60%}
+.remark-code{line-height: 1.5; font-size: 70%}
 ```

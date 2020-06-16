@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>parsing deep dive</title>
     <meta charset="utf-8" />
@@ -25,18 +25,22 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✓ ggplot2 3.3.0.9000     ✓ purrr   0.3.3     
-## ✓ tibble  2.1.3          ✓ dplyr   0.8.4     
-## ✓ tidyr   1.0.2          ✓ stringr 1.4.0     
-## ✓ readr   1.3.1          ✓ forcats 0.4.0
+## ✓ ggplot2 3.3.0     ✓ purrr   0.3.3
+## ✓ tibble  3.0.0     ✓ dplyr   0.8.5
+## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## ── Conflicts ─────── tidyverse_conflicts() ──
+## Warning: package 'tibble' was built under R version 3.6.2
+```
+
+```
+## ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -69,27 +73,21 @@ flipbookr:::code_parse
 ```
 
 ```
-function (code) 
+function (code = create_code(), lang = "r") 
 {
-    raw_code_table &lt;- code %&gt;% code_as_table()
-    code %&gt;% code_base_parse() %&gt;% base_parsed_count_parentheses() %&gt;% 
-        dplyr::left_join(raw_code_table) %&gt;% dplyr::mutate(code = ifelse(comment != 
-        "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;% 
-        dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), 
-            "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;% dplyr::mutate(connector = tidyr::replace_na(connector, 
-        "")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(comment, 
-        "#BREAK-?\\d+")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(non_seq, 
-        "-?\\d+")) %&gt;% dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;% 
-        dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;% 
-        dplyr::mutate(comment = stringr::str_remove(comment, 
-            "#BREAK\\d+")) %&gt;% dplyr::mutate(user = stringr::str_detect(comment, 
-        "#BREAK")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
-        "#BREAK")) %&gt;% dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), 
-        "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;% dplyr::mutate(auto = balanced_paren &amp; 
-        balanced_curly &amp; balanced_square &amp; code != "") %&gt;% dplyr::select(line, 
-        raw_code, code, connector, comment, auto, user, non_seq)
+    if (lang == "r") {
+        r_code_full_parse(code = code) %&gt;% dplyr::mutate(func = stringr::str_extract(code, 
+            "\\w+\\(")) %&gt;% dplyr::mutate(func = stringr::str_remove(func, 
+            "\\("))
+    }
+    else if (lang == "python") {
+        python_code_full_parse(code = code)
+    }
+    else if (lang == "stata") {
+        NULL
+    }
 }
-&lt;bytecode: 0x7fa9181885b8&gt;
+&lt;bytecode: 0x7ff7d85b4bd8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 
@@ -106,32 +104,64 @@ Now lets walk through this pipeline inside `code_parse`
 
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 *create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
 * code_as_table()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 2
+function (code) 
+{
+    code %&gt;% stringr::str_split(pattern = "\n") %&gt;% .[[1]] %&gt;% 
+        tibble::tibble(raw_code = .) %&gt;% dplyr::mutate(line = 1:dplyr::n())
+}
+&lt;bytecode: 0x7ff7d87335f8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 2
    raw_code                                      line
    &lt;chr&gt;                                        &lt;int&gt;
  1 "cars %&gt;%             # the data  #BREAK"        1
@@ -148,54 +178,163 @@ create_code() %&gt;%
 12 "  ) %+%"                                       12
 13 "  cars -&gt;"                                     13
 14 "  my_plot  #BREAK"                             14
+15 ""                                              15
+16 ""                                              16
+17 "  1 + 1 #BREAK"                                17
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-*raw_code_table
+  code_as_table() %&gt;%  
+* code_as_table_process_break_messages()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
-]]
+```
+function (code_as_table) 
+{
+    code_as_table %&gt;% dplyr::mutate(raw_code = stringr::str_remove(raw_code, 
+        "\\s+$")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(raw_code, 
+        "#BREAK-?\\d+")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(non_seq, 
+        "-?\\d+")) %&gt;% dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;% 
+        dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;% 
+        dplyr::mutate(user = stringr::str_detect(raw_code, "#BREAK$")) %&gt;% 
+        dplyr::mutate(rotate = stringr::str_detect(raw_code, 
+            "#ROTATE$"))
+}
+&lt;bytecode: 0x7ff7d87a0548&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 5
+   raw_code                                      line non_seq user  rotate
+   &lt;chr&gt;                                        &lt;int&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; 
+ 1 "cars %&gt;%             # the data  #BREAK"        1       1 TRUE  FALSE 
+ 2 "  filter(speed &gt; 4) %&gt;%  # subset"              2       1 FALSE FALSE 
+ 3 "  ggplot() +              # pipe to ggplot"     3       1 FALSE FALSE 
+ 4 "  aes(x = speed) +"                             4       1 FALSE FALSE 
+ 5 "  aes(y = dist) +"                              5       1 FALSE FALSE 
+ 6 "  # Describing what follows"                    6       1 FALSE FALSE 
+ 7 "  geom_point(alpha = .3) + #BREAK"              7       1 TRUE  FALSE 
+ 8 "  geom_point(alpha = 1) + #BREAK2"              8       2 FALSE FALSE 
+ 9 "  geom_jitter(alpha = .5) + #BREAK3"            9       3 FALSE FALSE 
+10 "  aes(color ="                                 10       1 FALSE FALSE 
+11 "  speed &gt; 14"                                  11       1 FALSE FALSE 
+12 "  ) %+%"                                       12       1 FALSE FALSE 
+13 "  cars -&gt;"                                     13       1 FALSE FALSE 
+14 "  my_plot  #BREAK"                             14       1 TRUE  FALSE 
+15 ""                                              15       1 FALSE FALSE 
+16 ""                                              16       1 FALSE FALSE 
+17 "  1 + 1 #BREAK"                                17       1 TRUE  FALSE 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+*hide_away
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 *create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-* code_base_parse()
+* r_code_base_parse()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code) 
+{
+    sf &lt;- srcfile(code)
+    try(parse(text = code, srcfile = sf))
+    utils::getParseData(sf)
+}
+&lt;bytecode: 0x7ff7dc0b3cb0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
 
 ```
     line1 col1 line2 col2  id parent                token terminal
@@ -307,6 +446,13 @@ create_code() %&gt;%
 133    14    3    14    9 133    136               SYMBOL     TRUE
 136    14    3    14    9 136    137                 expr    FALSE
 134    14   12    14   17 134   -137              COMMENT     TRUE
+151    17    3    17    7 151      0                 expr    FALSE
+144    17    3    17    3 144    145            NUM_CONST     TRUE
+145    17    3    17    3 145    151                 expr    FALSE
+146    17    5    17    5 146    151                  '+'     TRUE
+147    17    7    17    7 147    148            NUM_CONST     TRUE
+148    17    7    17    7 148    151                 expr    FALSE
+149    17    9    17   14 149   -151              COMMENT     TRUE
                          text
 137                          
 131                          
@@ -416,709 +562,1392 @@ create_code() %&gt;%
 133                   my_plot
 136                          
 134                    #BREAK
+151                          
+144                         1
+145                          
+146                         +
+147                         1
+148                          
+149                    #BREAK
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-* base_parsed_count_parentheses()
+  r_code_base_parse() %&gt;%  
+* r_base_parsed_count_parentheses()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 12
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 6 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;
+function (base_parsed) 
+{
+    num_lines &lt;- max(base_parsed$line1)
+    all_lines &lt;- tibble::tibble(line = 1:num_lines)
+    base_parsed %&gt;% dplyr::rename(line = line1) %&gt;% dplyr::mutate(open_par = text == 
+        "(") %&gt;% dplyr::mutate(closed_par = text == ")") %&gt;% 
+        dplyr::mutate(open_curly = text == "{") %&gt;% dplyr::mutate(closed_curly = text == 
+        "}") %&gt;% dplyr::mutate(open_square = text == "[") %&gt;% 
+        dplyr::mutate(open_square = ifelse(text == "[[", 2, open_square)) %&gt;% 
+        dplyr::mutate(closed_square = text == "]") %&gt;% dplyr::group_by(line) %&gt;% 
+        dplyr::summarise(full_line = paste0(text, collapse = ""), 
+            comment = stringr::str_trim(paste0(ifelse(token == 
+                "COMMENT", text, ""), collapse = " ")), num_open_par = sum(open_par), 
+            num_closed_par = sum(closed_par), num_open_curly = sum(open_curly), 
+            num_closed_curly = sum(closed_curly), num_open_square = sum(open_square), 
+            num_closed_square = sum(closed_square)) %&gt;% dplyr::full_join(all_lines) %&gt;% 
+        dplyr::arrange(line) %&gt;% dplyr::mutate(full_line = tidyr::replace_na(full_line, 
+        ""), comment = tidyr::replace_na(comment, ""), num_open_par = tidyr::replace_na(num_open_par, 
+        0), num_closed_par = tidyr::replace_na(num_closed_par, 
+        0), num_open_curly = tidyr::replace_na(num_open_curly, 
+        0), num_closed_curly = tidyr::replace_na(num_closed_curly, 
+        0), num_open_square = tidyr::replace_na(num_open_square, 
+        0), num_closed_square = tidyr::replace_na(num_closed_square, 
+        0)) %&gt;% dplyr::mutate(balanced_paren = (cumsum(num_open_par) - 
+        cumsum(num_closed_par)) == 0) %&gt;% dplyr::mutate(balanced_curly = (cumsum(num_open_curly) - 
+        cumsum(num_closed_curly)) == 0) %&gt;% dplyr::mutate(balanced_square = (cumsum(num_open_square) - 
+        cumsum(num_closed_square)) == 0) %&gt;% dplyr::mutate(all_parentheses_balanced = balanced_paren &amp; 
+        balanced_curly &amp; balanced_square) %&gt;% dplyr::select(line, 
+        full_line, comment, all_parentheses_balanced)
+}
+&lt;bytecode: 0x7ff7dc103690&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 4
+    line full_line                  comment                all_parentheses_bala…
+   &lt;int&gt; &lt;chr&gt;                      &lt;chr&gt;                  &lt;lgl&gt;                
+ 1     1 "cars%&gt;%# the data  #BREA… "# the data  #BREAK"   TRUE                 
+ 2     2 "filter(speed&gt;4)%&gt;%# subs… "# subset"             TRUE                 
+ 3     3 "ggplot()+# pipe to ggplo… "# pipe to ggplot"     TRUE                 
+ 4     4 "aes(x=speed)+"            ""                     TRUE                 
+ 5     5 "aes(y=dist)+"             ""                     TRUE                 
+ 6     6 "# Describing what follow… "# Describing what fo… TRUE                 
+ 7     7 "geom_point(alpha=.3)+#BR… "#BREAK"               TRUE                 
+ 8     8 "geom_point(alpha=1)+#BRE… "#BREAK2"              TRUE                 
+ 9     9 "geom_jitter(alpha=.5)+#B… "#BREAK3"              TRUE                 
+10    10 "aes(color="               ""                     FALSE                
+11    11 "speed&gt;14"                 ""                     FALSE                
+12    12 ")%+%"                     ""                     TRUE                 
+13    13 "cars-&gt;"                   ""                     TRUE                 
+14    14 "my_plot#BREAK"            "#BREAK"               TRUE                 
+15    15 ""                         ""                     TRUE                 
+16    16 ""                         ""                     TRUE                 
+17    17 "1+1#BREAK"                "#BREAK"               TRUE                 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-*dplyr::left_join(raw_code_table)
-```
-]]
-.column[.content[
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
 
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+*hide_again
 ```
-# A tibble: 14 x 13
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 7 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;
-```
-]]
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-*   dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+*create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 14
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 8 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-*   dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%"))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+* r_code_full_parse()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 15
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 9 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;
+function (code = code) 
+{
+    arithmetic &lt;- "\\+$|-$|\\/$|\\*$|\\^$|%%$|%\\/%$"
+    matrix &lt;- "%\\*%$|%o%$"
+    ggplot_change_data &lt;- "%\\+%$"
+    the_magrittr &lt;- "%&gt;%$|%\\$%$"
+    right_assign &lt;- "-&gt;$"
+    combine_booleans &lt;- "\\|$|\\&amp;$"
+    connectors &lt;- paste(arithmetic, matrix, ggplot_change_data, 
+        the_magrittr, right_assign, combine_booleans, sep = "|")
+    raw_code_table &lt;- code_simple_parse(code = code)
+    parsed_code_table &lt;- code %&gt;% r_code_base_parse() %&gt;% r_base_parsed_count_parentheses()
+    raw_code_table %&gt;% dplyr::full_join(parsed_code_table) %&gt;% 
+        dplyr::mutate(comment = tidyr::replace_na(comment, "XXXXXXXXX")) %&gt;% 
+        dplyr::mutate(comment = stringr::str_replace(comment, 
+            "^$", "XXXXXXXXX")) %&gt;% dplyr::mutate(code = stringr::str_remove(raw_code, 
+        comment)) %&gt;% dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), 
+        connectors)) %&gt;% dplyr::mutate(connector = tidyr::replace_na(connector, 
+        "")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "#BREAK\\d?")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "#ROTATE")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "XXXXXXXXX")) %&gt;% dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), 
+        connectors)) %&gt;% dplyr::mutate(auto = all_parentheses_balanced &amp; 
+        code != "") %&gt;% dplyr::select(line, raw_code, code, connector, 
+        comment, auto, user, non_seq, rotate)
+}
+&lt;bytecode: 0x7ff7d871eb68&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 9
+    line raw_code       code     connector comment    auto  user  non_seq rotate
+   &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt; 
+ 1     1 "cars %&gt;%    … "cars "  "%&gt;%"     "# the da… TRUE  TRUE        1 FALSE 
+ 2     2 "  filter(spe… "  filt… "%&gt;%"     "# subset" TRUE  FALSE       1 FALSE 
+ 3     3 "  ggplot() +… "  ggpl… "+"       "# pipe t… TRUE  FALSE       1 FALSE 
+ 4     4 "  aes(x = sp… "  aes(… "+"       ""         TRUE  FALSE       1 FALSE 
+ 5     5 "  aes(y = di… "  aes(… "+"       ""         TRUE  FALSE       1 FALSE 
+ 6     6 "  # Describi… ""       ""        "# Descri… FALSE FALSE       1 FALSE 
+ 7     7 "  geom_point… "  geom… "+"       ""         TRUE  TRUE        1 FALSE 
+ 8     8 "  geom_point… "  geom… "+"       ""         TRUE  FALSE       2 FALSE 
+ 9     9 "  geom_jitte… "  geom… "+"       ""         TRUE  FALSE       3 FALSE 
+10    10 "  aes(color … "  aes(… ""        ""         FALSE FALSE       1 FALSE 
+11    11 "  speed &gt; 14" "  spee… ""        ""         FALSE FALSE       1 FALSE 
+12    12 "  ) %+%"      "  ) "   "%+%"     ""         TRUE  FALSE       1 FALSE 
+13    13 "  cars -&gt;"    "  cars… "-&gt;"      ""         TRUE  FALSE       1 FALSE 
+14    14 "  my_plot  #… "  my_p… ""        ""         TRUE  TRUE        1 FALSE 
+15    15 ""             ""       ""        ""         FALSE FALSE       1 FALSE 
+16    16 ""             ""       ""        ""         FALSE FALSE       1 FALSE 
+17    17 "  1 + 1 #BRE… "  1 + … ""        ""         TRUE  TRUE        1 FALSE 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-*   dplyr::mutate(connector = tidyr::replace_na(connector, ""))
-```
-]]
-.column[.content[
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
 
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+*hide_more
 ```
-# A tibble: 14 x 15
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 9 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;
-```
-]]
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-*   dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+"))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+*create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 16
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 10 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;chr&gt;
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-*   dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+"))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+* code_parse()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 16
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 10 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;chr&gt;
+function (code = create_code(), lang = "r") 
+{
+    if (lang == "r") {
+        r_code_full_parse(code = code) %&gt;% dplyr::mutate(func = stringr::str_extract(code, 
+            "\\w+\\(")) %&gt;% dplyr::mutate(func = stringr::str_remove(func, 
+            "\\("))
+    }
+    else if (lang == "python") {
+        python_code_full_parse(code = code)
+    }
+    else if (lang == "stata") {
+        NULL
+    }
+}
+&lt;bytecode: 0x7ff7d85b4bd8&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 10
+    line raw_code    code    connector comment  auto  user  non_seq rotate func 
+   &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;    &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt;  &lt;chr&gt;
+ 1     1 "cars %&gt;% … "cars " "%&gt;%"     "# the … TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+ 2     2 "  filter(… "  fil… "%&gt;%"     "# subs… TRUE  FALSE       1 FALSE  filt…
+ 3     3 "  ggplot(… "  ggp… "+"       "# pipe… TRUE  FALSE       1 FALSE  ggpl…
+ 4     4 "  aes(x =… "  aes… "+"       ""       TRUE  FALSE       1 FALSE  aes  
+ 5     5 "  aes(y =… "  aes… "+"       ""       TRUE  FALSE       1 FALSE  aes  
+ 6     6 "  # Descr… ""      ""        "# Desc… FALSE FALSE       1 FALSE  &lt;NA&gt; 
+ 7     7 "  geom_po… "  geo… "+"       ""       TRUE  TRUE        1 FALSE  geom…
+ 8     8 "  geom_po… "  geo… "+"       ""       TRUE  FALSE       2 FALSE  geom…
+ 9     9 "  geom_ji… "  geo… "+"       ""       TRUE  FALSE       3 FALSE  geom…
+10    10 "  aes(col… "  aes… ""        ""       FALSE FALSE       1 FALSE  aes  
+11    11 "  speed &gt;… "  spe… ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+12    12 "  ) %+%"   "  ) "  "%+%"     ""       TRUE  FALSE       1 FALSE  &lt;NA&gt; 
+13    13 "  cars -&gt;" "  car… "-&gt;"      ""       TRUE  FALSE       1 FALSE  &lt;NA&gt; 
+14    14 "  my_plot… "  my_… ""        ""       TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+15    15 ""          ""      ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+16    16 ""          ""      ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+17    17 "  1 + 1 #… "  1 +… ""        ""       TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-*   dplyr::mutate(non_seq = as.numeric(non_seq))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_calc_show()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 16
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 10 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;
+function (parsed, break_type = "auto") 
+{
+    if (break_type == "auto") {
+        code_order &lt;- cumsum(parsed$auto) + 1 - parsed$auto
+        num_panes &lt;- max(code_order)
+    }
+    else if (break_type == "user") {
+        code_order &lt;- cumsum(parsed$user) + 1 - parsed$user
+        num_panes &lt;- max(code_order)
+    }
+    else if (break_type == "non_seq") {
+        code_order &lt;- parsed$non_seq
+        num_panes &lt;- max(abs(code_order))
+    }
+    else if (is.numeric(break_type)) {
+        code_order &lt;- rep(1, nrow(parsed))
+        num_panes &lt;- break_type
+    }
+    else if (break_type == "rotate") {
+        num_panes &lt;- sum(parsed$rotate)
+    }
+    which_show &lt;- list()
+    if (break_type == "rotate") {
+        for (i in 1:num_panes) {
+            which_show[[i]] &lt;- sort(c(which(!parsed$rotate), 
+                which(parsed$rotate)[i]))
+        }
+    }
+    else {
+        for (i in 1:num_panes) {
+            which_show[[i]] &lt;- which(code_order &lt;= i)
+        }
+    }
+    which_show
+}
+&lt;bytecode: 0x7ff7dad4e620&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[[1]]
+[1] 1
+
+[[2]]
+[1] 1 2
+
+[[3]]
+[1] 1 2 3
+
+[[4]]
+[1] 1 2 3 4
+
+[[5]]
+[1] 1 2 3 4 5
+
+[[6]]
+[1] 1 2 3 4 5 6 7
+
+[[7]]
+[1] 1 2 3 4 5 6 7 8
+
+[[8]]
+[1] 1 2 3 4 5 6 7 8 9
+
+[[9]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12
+
+[[10]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13
+
+[[11]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+
+[[12]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-*   dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_calc_show() %&gt;%  
+* shown_lines_calc_highlight()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 16
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 10 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;
+function (which_show = list(c(1, 2), c(1, 2, 3, 4)), break_type = "auto") 
+{
+    which_highlight &lt;- list()
+    if (break_type == "user" | break_type == "auto") {
+        which_highlight[[1]] &lt;- which_show[[1]]
+    }
+    if (break_type == "non_seq" | break_type == "rotate") {
+        which_highlight[[1]] &lt;- as.integer(c())
+    }
+    if (break_type %in% c("user", "auto", "non_seq", "rotate")) {
+        for (i in 2:length(which_show)) {
+            which_highlight[[i]] &lt;- which_show[[i]][!(which_show[[i]] %in% 
+                which_show[[i - 1]])]
+        }
+    }
+    if (is.numeric(break_type)) {
+        for (i in 1:length(which_show)) {
+            which_highlight[[i]] &lt;- as.integer(c())
+        }
+    }
+    which_highlight
+}
+&lt;bytecode: 0x7ff7da49a3d0&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5
+
+[[6]]
+[1] 6 7
+
+[[7]]
+[1] 8
+
+[[8]]
+[1] 9
+
+[[9]]
+[1] 10 11 12
+
+[[10]]
+[1] 13
+
+[[11]]
+[1] 14
+
+[[12]]
+[1] 15 16 17
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
 create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-*   dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+"))
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_calc_show() %&gt;%  
+  shown_lines_calc_highlight() -&gt;  
+*hiding
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+&lt;style&gt;
+.left-panel-the_code_parsing-auto {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-the_code_parsing-auto {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-the_code_parsing-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
+
+```r
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_return_partial_code()  
+```
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
+
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 16
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… ""                 1              1              0
- 9     9 geom_jit… ""                 1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 10 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;" 
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %&gt;%  
-*   dplyr::mutate(user = stringr::str_detect(comment, "#BREAK"))
+  code_parse() %&gt;%  
+* parsed_left_assign_return_partial_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 17
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… ""                 1              1              0
- 9     9 geom_jit… ""                 1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 11 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;, user &lt;lgl&gt;
+function (parsed, which_show_frame = 1:3, which_highlight_frame = 3) 
+{
+    the_reveal &lt;- parsed_return_partial_code(parsed, which_show_frame, 
+        which_highlight_frame)
+    object_to_track &lt;- the_reveal[1] %&gt;% stringr::str_extract(".+\\&lt;-|.+\\=") %&gt;% 
+        stringr::str_remove("&lt;-|=") %&gt;% stringr::str_trim()
+    c(the_reveal, " ", object_to_track)
+}
+&lt;bytecode: 0x7ff7da58db48&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;"  " "                                
+[5] NA                                 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %&gt;%  
-    dplyr::mutate(user = stringr::str_detect(comment, "#BREAK")) %&gt;%  
-*   dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK"))
+  code_parse() %&gt;%  
+* parsed_return_partial_code_sequence()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 17
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… ""                 1              1              0
- 8     8 geom_poi… ""                 1              1              0
- 9     9 geom_jit… ""                 1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… ""                 0              0              0
-# … with 11 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;, user &lt;lgl&gt;
+function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = parsed, 
+    break_type = break_type), which_highlight = shown_lines_calc_highlight(which_show = which_show, 
+    break_type = break_type), left_assign = F) 
+{
+    partial_code_frames &lt;- list()
+    for (i in 1:length(which_show)) {
+        if (left_assign == F) {
+            partial_code_frames[[i]] &lt;- parsed_return_partial_code(parsed, 
+                which_show_frame = which_show[[i]], which_highlight_frame = which_highlight[[i]])
+        }
+        else {
+            partial_code_frames[[i]] &lt;- parsed_left_assign_return_partial_code(parsed, 
+                which_show_frame = which_show[[i]], which_highlight_frame = which_highlight[[i]])
+        }
+    }
+    partial_code_frames
+}
+&lt;bytecode: 0x7ff7dad4c850&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[[1]]
+[1] "cars   # the data  #&lt;&lt;"
+
+[[2]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4)   # subset#&lt;&lt;"
+
+[[3]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;" 
+
+[[4]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed)   #&lt;&lt;"           
+
+[[5]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+[5] "  aes(y = dist)   #&lt;&lt;"            
+
+[[6]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
+[7] "  geom_point(alpha = .3)   #&lt;&lt;"   
+
+[[7]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
+[7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1)   #&lt;&lt;"    
+
+[[8]]
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
+[7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+[9] "  geom_jitter(alpha = .5)   #&lt;&lt;"  
+
+[[9]]
+ [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+ [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+ [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  #&lt;&lt;"               
+[11] "  speed &gt; 14  #&lt;&lt;"                 "  )   #&lt;&lt;"                        
+
+[[10]]
+ [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+ [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+ [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
+[11] "  speed &gt; 14  "                    "  ) %+%  "                        
+[13] "  cars   #&lt;&lt;"                     
+
+[[11]]
+ [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+ [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+ [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
+[11] "  speed &gt; 14  "                    "  ) %+%  "                        
+[13] "  cars -&gt;  "                       "  my_plot  #&lt;&lt;"                   
+
+[[12]]
+ [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+ [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+ [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
+[11] "  speed &gt; 14  "                    "  ) %+%  "                        
+[13] "  cars -&gt;  "                       "  my_plot  "                      
+[15] ""                                  ""                                 
+[17] "  1 + 1  #&lt;&lt;"                     
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %&gt;%  
-    dplyr::mutate(user = stringr::str_detect(comment, "#BREAK")) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK")) %&gt;%  
-*   dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), "%&gt;%$|\\+$|-&gt;$|%\\+%"))
+  code_parse() %&gt;%  
+* parsed_return_recent_function()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 17
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… ""                 1              1              0
- 8     8 geom_poi… ""                 1              1              0
- 9     9 geom_jit… ""                 1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… ""                 0              0              0
-# … with 11 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;, user &lt;lgl&gt;
+function (parsed, which_highlight_frame = 3) 
+{
+    parsed %&gt;% dplyr::filter(line %in% which_highlight_frame) %&gt;% 
+        dplyr::pull(func)
+}
+&lt;bytecode: 0x7ff7d8abdf90&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[1] "ggplot"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
 create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %&gt;%  
-    dplyr::mutate(user = stringr::str_detect(comment, "#BREAK")) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK")) %&gt;%  
-    dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-*   dplyr::mutate(auto = balanced_paren &amp; balanced_curly &amp; balanced_square &amp;
-*                   code != "")
+  code_parse() %&gt;%  
+* parsed_return_recent_function_sequence()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 18
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… ""                 1              1              0
- 8     8 geom_poi… ""                 1              1              0
- 9     9 geom_jit… ""                 1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… ""                 0              0              0
-# … with 12 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;, raw_code &lt;chr&gt;, code &lt;chr&gt;, connector &lt;chr&gt;,
-#   non_seq &lt;dbl&gt;, user &lt;lgl&gt;, auto &lt;lgl&gt;
+function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = parsed, 
+    break_type = break_type), which_highlight = shown_lines_calc_highlight(which_show = which_show, 
+    break_type = break_type), left_assign = F) 
+{
+    partial_recent_functions &lt;- list()
+    for (i in 1:length(which_show)) {
+        if (left_assign == F) {
+            partial_recent_functions[[i]] &lt;- parsed_return_recent_function(parsed, 
+                which_highlight_frame = which_highlight[[i]]) %&gt;% 
+                .[!is.na(.)]
+        }
+        else {
+            partial_recent_functions[[i]] &lt;- parsed_return_recent_function(parsed, 
+                which_highlight_frame = which_highlight[[i]]) %&gt;% 
+                .[!is.na(.)]
+        }
+    }
+    partial_recent_functions
+}
+&lt;bytecode: 0x7ff7da1c2d60&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[[1]]
+character(0)
+
+[[2]]
+[1] "filter"
+
+[[3]]
+[1] "ggplot"
+
+[[4]]
+[1] "aes"
+
+[[5]]
+[1] "aes"
+
+[[6]]
+[1] "geom_point"
+
+[[7]]
+[1] "geom_point"
+
+[[8]]
+[1] "geom_jitter"
+
+[[9]]
+[1] "aes"
+
+[[10]]
+character(0)
+
+[[11]]
+character(0)
+
+[[12]]
+character(0)
+```
+]
+
+&lt;style&gt;
+.left-panel-return_partial_and_sequence-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-return_partial_and_sequence-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-return_partial_and_sequence-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
+
+```r
+return_partial_chunks_template_code()  
+```
+]
+ 
+.middle-panel-returns-rotate[
+
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_code, eval = FALSE, echo = TRUE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-returns-rotate[
 
 ```r
-create_code() %&gt;%  
-  code_as_table() -&gt;  
-raw_code_table  
-create_code() %&gt;%  
-  code_base_parse() %&gt;%  
-  base_parsed_count_parentheses() %&gt;%  
-dplyr::left_join(raw_code_table) %&gt;%  
-    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %&gt;%  
-    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(comment, "#BREAK-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %&gt;%  
-    dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;%  
-    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK\\d+")) %&gt;%  
-    dplyr::mutate(user = stringr::str_detect(comment, "#BREAK")) %&gt;%  
-    dplyr::mutate(comment = stringr::str_remove(comment, "#BREAK")) %&gt;%  
-    dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), "%&gt;%$|\\+$|-&gt;$|%\\+%")) %&gt;%  
-    dplyr::mutate(auto = balanced_paren &amp; balanced_curly &amp; balanced_square &amp;  
-                    code != "") %&gt;%  
-*   dplyr::select(line, raw_code, code, connector, comment, auto, user, non_seq)
+*return_partial_chunks_template_output()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-returns-rotate[
 
 ```
-# A tibble: 14 x 8
-    line raw_code          code        connector comment     auto  user  non_seq
-   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
- 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  TRUE        1
- 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
- 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
- 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
- 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
- 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
- 7     7 "  geom_point(al… "  geom_po… "+"       ""          TRUE  TRUE        1
- 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
- 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
-10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
-11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
-12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
-13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
-14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
+function () 
+{
+    "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+}
+&lt;bytecode: 0x7ff7daca1a40&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
+
+```r
+*return_partial_chunks_template_function()
+```
+]
+ 
+.middle-panel-returns-rotate[
+
+```
+function () 
+{
+    "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+}
+&lt;bytecode: 0x7ff7daca1490&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
+
+```r
+*return_markdown(text = "my. short. text.", sep = "\\.")
+```
+]
+ 
+.middle-panel-returns-rotate[
+
+```
+function (text, sep = "|") 
+{
+    text %&gt;% stringr::str_split(pattern = sep)
+}
+&lt;bytecode: 0x7ff7dc0d5380&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[[1]]
+[1] "my"     " short" " text"  ""      
+```
+]
+
+&lt;style&gt;
+.left-panel-returns-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-returns-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-returns-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 
+
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-last-rotate[
+
+```r
+define_css()  
+```
+]
+ 
+.middle-panel-last-rotate[
+
+]
+ 
+.right-panel-last-rotate[
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-last-rotate[
+
+```r
+*chunk_expand()
+```
+]
+ 
+.middle-panel-last-rotate[
+
+```
+function (chunk_name = "example", break_type = "auto", display_type = "both", 
+    num_breaks = 2, split = 40, title = "", md = NULL, func = NULL, 
+    lang = "r", custom = F, width_left = "38%", width_right = "60%", 
+    width_middle = "32%", font_size_code = "80%") 
+{
+    breaks &lt;- 1:num_breaks
+    code &lt;- return_partial_chunks_template_code()
+    output &lt;- return_partial_chunks_template_output()
+    md &lt;- "`r md[&lt;&lt;&lt;breaks&gt;&gt;&gt;]`"
+    func &lt;- return_partial_chunks_template_function()
+    if (display_type[1] == "both") {
+        left &lt;- code
+        right &lt;- output
+    }
+    else if (length(display_type) == 1) {
+        left &lt;- get(display_type)
+    }
+    else if (length(display_type) == 2) {
+        left &lt;- get(display_type[1])
+        right &lt;- get(display_type[2])
+    }
+    else if (length(display_type) == 3) {
+        left &lt;- get(display_type[1])
+        middle &lt;- get(display_type[2])
+        right &lt;- get(display_type[3])
+    }
+    if (length(display_type) == 3) {
+        partial_knit_steps &lt;- glue::glue("class: split-&lt;&lt;&lt;split&gt;&gt;&gt;", 
+            "count: false", " ", title, ".left-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            left, "]", " ", ".middle-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            middle, "]", " ", ".right-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            right, "]", " ", .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    else if (length(display_type) == 2 | display_type[1] == "both") {
+        partial_knit_steps &lt;- glue::glue("class: split-&lt;&lt;&lt;split&gt;&gt;&gt;", 
+            "count: false", " ", title, ".left-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            left, "]", " ", ".right-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            right, "]", " ", .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    else if (length(display_type) == 1) {
+        partial_knit_steps &lt;- glue::glue("count: false", title, 
+            left, .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    the_defined_css &lt;- define_css(chunk_name = chunk_name, break_type = break_type, 
+        width_left = width_left, width_middle = width_middle, 
+        width_right = width_right, font_size_code = font_size_code)
+    slide_code &lt;- glue::glue_collapse(partial_knit_steps, sep = "\n\n---\n")
+    glue::glue("{slide_code}\n\n{the_defined_css}\n\n", .trim = FALSE)
+}
+&lt;bytecode: 0x7ff7dac89488&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-last-rotate[
+
+````
+class: split-40
+count: false
+ 
+
+.left-panel-example-auto[
+```{r example_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
+```
+]
+ 
+.right-panel-example-auto[
+```{r example_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-example-auto[
+```{r example_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
+```
+]
+ 
+.right-panel-example-auto[
+```{r example_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
+```
+]
+
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+````
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-last-rotate[
+
+```r
+*chunk_reveal
+```
+]
+ 
+.middle-panel-last-rotate[
+
+]
+ 
+.right-panel-last-rotate[
+
+```
+function (chunk_name = NULL, break_type = "auto", left_assign = F, 
+    lang = "r", code_seq = NULL, func_seq = NULL, num_breaks = NULL, 
+    display_type = "both", split = 40, title = "", md = NULL, 
+    width_left = "38%", width_middle = "32%", width_right = "60%", 
+    font_size_code = "80%") 
+{
+    if (!is.null(chunk_name)) {
+        code_seq &lt;- chunk_name_return_code_sequence(chunk_name, 
+            break_type, left_assign, lang)
+        func_seq &lt;- chunk_name_return_function_sequence(chunk_name, 
+            break_type, left_assign, lang)
+        num_breaks &lt;- length(code_seq)
+    }
+    text &lt;- chunk_expand(chunk_name = chunk_name, break_type = break_type, 
+        num_breaks = num_breaks, display_type = display_type, 
+        split = split, title = title, lang = lang, md = md, func = func, 
+        width_left = width_left, width_middle = width_middle, 
+        width_right = width_right, font_size_code = font_size_code)
+    paste(knitr::knit(text = text), collapse = "\n")
+}
+&lt;bytecode: 0x7ff7d86f0b68&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+
+&lt;style&gt;
+.left-panel-last-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-last-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-last-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 
@@ -1126,13 +1955,13 @@ dplyr::left_join(raw_code_table) %&gt;%
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 60%}
+.remark-code{line-height: 1.5; font-size: 70%}
 &lt;/style&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"ratio": "16:10",
+"ratio": "30:10",
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false
@@ -1175,9 +2004,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -1186,7 +2031,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
