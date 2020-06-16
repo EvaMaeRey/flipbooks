@@ -13,13 +13,13 @@ output:
       countIncrementalSlides: false
 ---
 
-```{r setup}
+```{r setup, include=F}
 library(flipbookr)
 library(tidyverse)
 knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cache = F)
 ```
 
-```{r xaringan_look}
+```{r xaringan_look, include=F}
 xaringanthemer::mono_accent(
   code_highlight_color = "rgba(255, 211, 0, .35)",
   base_color = "#03418A")
@@ -30,17 +30,10 @@ xaringanthemer::mono_accent(
 
 ---
 
-A lot of "moves" are made in the code_parse function... 
-
-```{r}
-flipbookr:::code_parse
-```
-
 You can also look at this function in the source file:
 
 https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
 
----
 
 Now lets walk through this pipeline inside `code_parse`
 
@@ -50,6 +43,8 @@ Now lets walk through this pipeline inside `code_parse`
 `r chunk_reveal("the_code_parsing", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
 
 ```{r the_code_parsing, include=FALSE}
+library(flipbookr)
+
 create_code() %>%
   code_as_table() %>%
   code_as_table_process_break_messages() ->

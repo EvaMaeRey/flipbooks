@@ -19,83 +19,18 @@ class: center, middle, inverse, title-slide
 
 
 
-```r
-library(flipbookr)
-library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
-```
-
-```
-## ✓ ggplot2 3.3.0     ✓ purrr   0.3.3
-## ✓ tibble  3.0.0     ✓ dplyr   0.8.5
-## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.5.0
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.6.2
-```
-
-```
-## ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-```
-
-```r
-knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cache = F)
-```
 
 
-```r
-xaringanthemer::mono_accent(
-  code_highlight_color = "rgba(255, 211, 0, .35)",
-  base_color = "#03418A")
-```
-
-```
-[1] "xaringan-themer.css"
-```
 
 
 
 
 ---
-
-A lot of "moves" are made in the code_parse function... 
-
-
-```r
-flipbookr:::code_parse
-```
-
-```
-function (code = create_code(), lang = "r") 
-{
-    if (lang == "r") {
-        r_code_full_parse(code = code) %&gt;% dplyr::mutate(func = stringr::str_extract(code, 
-            "\\w+\\(")) %&gt;% dplyr::mutate(func = stringr::str_remove(func, 
-            "\\("))
-    }
-    else if (lang == "python") {
-        python_code_full_parse(code = code)
-    }
-    else if (lang == "stata") {
-        NULL
-    }
-}
-&lt;bytecode: 0x7ff7d85b4bd8&gt;
-&lt;environment: namespace:flipbookr&gt;
-```
 
 You can also look at this function in the source file:
 
 https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
 
----
 
 Now lets walk through this pipeline inside `code_parse`
 
@@ -109,6 +44,418 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+*library(flipbookr)
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (package, help, pos = 2, lib.loc = NULL, character.only = FALSE, 
+    logical.return = FALSE, warn.conflicts, quietly = FALSE, 
+    verbose = getOption("verbose"), mask.ok, exclude, include.only, 
+    attach.required = missing(include.only)) 
+{
+    conf.ctrl &lt;- getOption("conflicts.policy")
+    if (is.character(conf.ctrl)) 
+        conf.ctrl &lt;- switch(conf.ctrl, strict = list(error = TRUE, 
+            warn = FALSE), depends.ok = list(error = TRUE, generics.ok = TRUE, 
+            can.mask = c("base", "methods", "utils", "grDevices", 
+                "graphics", "stats"), depends.ok = TRUE), warning(gettextf("unknown conflict policy: %s", 
+            sQuote(conf.ctrl)), call. = FALSE, domain = NA))
+    if (!is.list(conf.ctrl)) 
+        conf.ctrl &lt;- NULL
+    stopOnConflict &lt;- isTRUE(conf.ctrl$error)
+    if (missing(warn.conflicts)) 
+        warn.conflicts &lt;- if (isFALSE(conf.ctrl$warn)) 
+            FALSE
+        else TRUE
+    if ((!missing(include.only)) &amp;&amp; (!missing(exclude))) 
+        stop(gettext("only one of 'include.only' and 'exclude' can be used"), 
+            call. = FALSE, domain = NA)
+    testRversion &lt;- function(pkgInfo, pkgname, pkgpath) {
+        if (is.null(built &lt;- pkgInfo$Built)) 
+            stop(gettextf("package %s has not been installed properly\n", 
+                sQuote(pkgname)), call. = FALSE, domain = NA)
+        R_version_built_under &lt;- as.numeric_version(built$R)
+        if (R_version_built_under &lt; "3.0.0") 
+            stop(gettextf("package %s was built before R 3.0.0: please re-install it", 
+                sQuote(pkgname)), call. = FALSE, domain = NA)
+        current &lt;- getRversion()
+        if (length(Rdeps &lt;- pkgInfo$Rdepends2)) {
+            for (dep in Rdeps) if (length(dep) &gt; 1L) {
+                target &lt;- dep$version
+                res &lt;- if (is.character(target)) {
+                  do.call(dep$op, list(as.numeric(R.version[["svn rev"]]), 
+                    as.numeric(sub("^r", "", dep$version))))
+                }
+                else {
+                  do.call(dep$op, list(current, as.numeric_version(target)))
+                }
+                if (!res) 
+                  stop(gettextf("This is R %s, package %s needs %s %s", 
+                    current, sQuote(pkgname), dep$op, target), 
+                    call. = FALSE, domain = NA)
+            }
+        }
+        if (R_version_built_under &gt; current) 
+            warning(gettextf("package %s was built under R version %s", 
+                sQuote(pkgname), as.character(built$R)), call. = FALSE, 
+                domain = NA)
+        platform &lt;- built$Platform
+        r_arch &lt;- .Platform$r_arch
+        if (.Platform$OS.type == "unix") {
+        }
+        else {
+            if (nzchar(platform) &amp;&amp; !grepl("mingw", platform)) 
+                stop(gettextf("package %s was built for %s", 
+                  sQuote(pkgname), platform), call. = FALSE, 
+                  domain = NA)
+        }
+        if (nzchar(r_arch) &amp;&amp; file.exists(file.path(pkgpath, 
+            "libs")) &amp;&amp; !file.exists(file.path(pkgpath, "libs", 
+            r_arch))) 
+            stop(gettextf("package %s is not installed for 'arch = %s'", 
+                sQuote(pkgname), r_arch), call. = FALSE, domain = NA)
+    }
+    checkNoGenerics &lt;- function(env, pkg) {
+        nenv &lt;- env
+        ns &lt;- .getNamespace(as.name(pkg))
+        if (!is.null(ns)) 
+            nenv &lt;- asNamespace(ns)
+        if (exists(".noGenerics", envir = nenv, inherits = FALSE)) 
+            TRUE
+        else {
+            !any(startsWith(names(env), ".__T"))
+        }
+    }
+    checkConflicts &lt;- function(package, pkgname, pkgpath, nogenerics, 
+        env) {
+        dont.mind &lt;- c("last.dump", "last.warning", ".Last.value", 
+            ".Random.seed", ".Last.lib", ".onDetach", ".packageName", 
+            ".noGenerics", ".required", ".no_S3_generics", ".Depends", 
+            ".requireCachedGenerics")
+        sp &lt;- search()
+        lib.pos &lt;- which(sp == pkgname)
+        ob &lt;- names(as.environment(lib.pos))
+        if (!nogenerics) {
+            these &lt;- ob[startsWith(ob, ".__T__")]
+            gen &lt;- gsub(".__T__(.*):([^:]+)", "\\1", these)
+            from &lt;- gsub(".__T__(.*):([^:]+)", "\\2", these)
+            gen &lt;- gen[from != package]
+            ob &lt;- ob[!(ob %in% gen)]
+        }
+        ipos &lt;- seq_along(sp)[-c(lib.pos, match(c("Autoloads", 
+            "CheckExEnv"), sp, 0L))]
+        cpos &lt;- NULL
+        conflicts &lt;- vector("list", 0)
+        for (i in ipos) {
+            obj.same &lt;- match(names(as.environment(i)), ob, nomatch = 0L)
+            if (any(obj.same &gt; 0)) {
+                same &lt;- ob[obj.same]
+                same &lt;- same[!(same %in% dont.mind)]
+                Classobjs &lt;- which(startsWith(same, ".__"))
+                if (length(Classobjs)) 
+                  same &lt;- same[-Classobjs]
+                same.isFn &lt;- function(where) vapply(same, exists, 
+                  NA, where = where, mode = "function", inherits = FALSE)
+                same &lt;- same[same.isFn(i) == same.isFn(lib.pos)]
+                not.Ident &lt;- function(ch, TRAFO = identity, ...) vapply(ch, 
+                  function(.) !identical(TRAFO(get(., i)), TRAFO(get(., 
+                    lib.pos)), ...), NA)
+                if (length(same)) 
+                  same &lt;- same[not.Ident(same)]
+                if (length(same) &amp;&amp; identical(sp[i], "package:base")) 
+                  same &lt;- same[not.Ident(same, ignore.environment = TRUE)]
+                if (length(same)) {
+                  conflicts[[sp[i]]] &lt;- same
+                  cpos[sp[i]] &lt;- i
+                }
+            }
+        }
+        if (length(conflicts)) {
+            if (stopOnConflict) {
+                emsg &lt;- ""
+                pkg &lt;- names(conflicts)
+                notOK &lt;- vector("list", 0)
+                for (i in seq_along(conflicts)) {
+                  pkgname &lt;- sub("^package:", "", pkg[i])
+                  if (pkgname %in% canMaskEnv$canMask) 
+                    next
+                  same &lt;- conflicts[[i]]
+                  if (is.list(mask.ok)) 
+                    myMaskOK &lt;- mask.ok[[pkgname]]
+                  else myMaskOK &lt;- mask.ok
+                  if (isTRUE(myMaskOK)) 
+                    same &lt;- NULL
+                  else if (is.character(myMaskOK)) 
+                    same &lt;- setdiff(same, myMaskOK)
+                  if (length(same)) {
+                    notOK[[pkg[i]]] &lt;- same
+                    msg &lt;- .maskedMsg(sort(same), pkg = sQuote(pkg[i]), 
+                      by = cpos[i] &lt; lib.pos)
+                    emsg &lt;- paste(emsg, msg, sep = "\n")
+                  }
+                }
+                if (length(notOK)) {
+                  msg &lt;- gettextf("Conflicts attaching package %s:\n%s", 
+                    sQuote(package), emsg)
+                  stop(errorCondition(msg, package = package, 
+                    conflicts = conflicts, class = "packageConflictError"))
+                }
+            }
+            if (warn.conflicts) {
+                packageStartupMessage(gettextf("\nAttaching package: %s\n", 
+                  sQuote(package)), domain = NA)
+                pkg &lt;- names(conflicts)
+                for (i in seq_along(conflicts)) {
+                  msg &lt;- .maskedMsg(sort(conflicts[[i]]), pkg = sQuote(pkg[i]), 
+                    by = cpos[i] &lt; lib.pos)
+                  packageStartupMessage(msg, domain = NA)
+                }
+            }
+        }
+    }
+    if (verbose &amp;&amp; quietly) 
+        message("'verbose' and 'quietly' are both true; being verbose then ..")
+    if (!missing(package)) {
+        if (is.null(lib.loc)) 
+            lib.loc &lt;- .libPaths()
+        lib.loc &lt;- lib.loc[dir.exists(lib.loc)]
+        if (!character.only) 
+            package &lt;- as.character(substitute(package))
+        if (length(package) != 1L) 
+            stop("'package' must be of length 1")
+        if (is.na(package) || (package == "")) 
+            stop("invalid package name")
+        pkgname &lt;- paste0("package:", package)
+        newpackage &lt;- is.na(match(pkgname, search()))
+        if (newpackage) {
+            pkgpath &lt;- find.package(package, lib.loc, quiet = TRUE, 
+                verbose = verbose)
+            if (length(pkgpath) == 0L) {
+                if (length(lib.loc) &amp;&amp; !logical.return) 
+                  stop(packageNotFoundError(package, lib.loc, 
+                    sys.call()))
+                txt &lt;- if (length(lib.loc)) 
+                  gettextf("there is no package called %s", sQuote(package))
+                else gettext("no library trees found in 'lib.loc'")
+                if (logical.return) {
+                  warning(txt, domain = NA)
+                  return(FALSE)
+                }
+                else stop(txt, domain = NA)
+            }
+            which.lib.loc &lt;- normalizePath(dirname(pkgpath), 
+                "/", TRUE)
+            pfile &lt;- system.file("Meta", "package.rds", package = package, 
+                lib.loc = which.lib.loc)
+            if (!nzchar(pfile)) 
+                stop(gettextf("%s is not a valid installed package", 
+                  sQuote(package)), domain = NA)
+            pkgInfo &lt;- readRDS(pfile)
+            testRversion(pkgInfo, package, pkgpath)
+            if (is.character(pos)) {
+                npos &lt;- match(pos, search())
+                if (is.na(npos)) {
+                  warning(gettextf("%s not found on search path, using pos = 2", 
+                    sQuote(pos)), domain = NA)
+                  pos &lt;- 2
+                }
+                else pos &lt;- npos
+            }
+            deps &lt;- unique(names(pkgInfo$Depends))
+            depsOK &lt;- isTRUE(conf.ctrl$depends.ok)
+            if (depsOK) {
+                canMaskEnv &lt;- dynGet("__library_can_mask__", 
+                  NULL)
+                if (is.null(canMaskEnv)) {
+                  canMaskEnv &lt;- new.env()
+                  canMaskEnv$canMask &lt;- union("base", conf.ctrl$can.mask)
+                  "__library_can_mask__" &lt;- canMaskEnv
+                }
+                canMaskEnv$canMask &lt;- unique(c(package, deps, 
+                  canMaskEnv$canMask))
+            }
+            else canMaskEnv &lt;- NULL
+            if (attach.required) 
+                .getRequiredPackages2(pkgInfo, quietly = quietly)
+            cr &lt;- conflictRules(package)
+            if (missing(mask.ok)) 
+                mask.ok &lt;- cr$mask.ok
+            if (missing(exclude)) 
+                exclude &lt;- cr$exclude
+            if (packageHasNamespace(package, which.lib.loc)) {
+                if (isNamespaceLoaded(package)) {
+                  newversion &lt;- as.numeric_version(pkgInfo$DESCRIPTION["Version"])
+                  oldversion &lt;- as.numeric_version(getNamespaceVersion(package))
+                  if (newversion != oldversion) {
+                    tryCatch(unloadNamespace(package), error = function(e) {
+                      P &lt;- if (!is.null(cc &lt;- conditionCall(e))) 
+                        paste("Error in", deparse(cc)[1L], ": ")
+                      else "Error : "
+                      stop(gettextf("Package %s version %s cannot be unloaded:\n %s", 
+                        sQuote(package), oldversion, paste0(P, 
+                          conditionMessage(e), "\n")), domain = NA)
+                    })
+                  }
+                }
+                tt &lt;- tryCatch({
+                  attr(package, "LibPath") &lt;- which.lib.loc
+                  ns &lt;- loadNamespace(package, lib.loc)
+                  env &lt;- attachNamespace(ns, pos = pos, deps, 
+                    exclude, include.only)
+                }, error = function(e) {
+                  P &lt;- if (!is.null(cc &lt;- conditionCall(e))) 
+                    paste(" in", deparse(cc)[1L])
+                  else ""
+                  msg &lt;- gettextf("package or namespace load failed for %s%s:\n %s", 
+                    sQuote(package), P, conditionMessage(e))
+                  if (logical.return) 
+                    message(paste("Error:", msg), domain = NA)
+                  else stop(msg, call. = FALSE, domain = NA)
+                })
+                if (logical.return &amp;&amp; is.null(tt)) 
+                  return(FALSE)
+                attr(package, "LibPath") &lt;- NULL
+                {
+                  on.exit(detach(pos = pos))
+                  nogenerics &lt;- !.isMethodsDispatchOn() || checkNoGenerics(env, 
+                    package)
+                  if (isFALSE(conf.ctrl$generics.ok) || (stopOnConflict &amp;&amp; 
+                    !isTRUE(conf.ctrl$generics.ok))) 
+                    nogenerics &lt;- TRUE
+                  if (stopOnConflict || (warn.conflicts &amp;&amp; !exists(".conflicts.OK", 
+                    envir = env, inherits = FALSE))) 
+                    checkConflicts(package, pkgname, pkgpath, 
+                      nogenerics, ns)
+                  on.exit()
+                  if (logical.return) 
+                    return(TRUE)
+                  else return(invisible(.packages()))
+                }
+            }
+            else stop(gettextf("package %s does not have a namespace and should be re-installed", 
+                sQuote(package)), domain = NA)
+        }
+        if (verbose &amp;&amp; !newpackage) 
+            warning(gettextf("package %s already present in search()", 
+                sQuote(package)), domain = NA)
+    }
+    else if (!missing(help)) {
+        if (!character.only) 
+            help &lt;- as.character(substitute(help))
+        pkgName &lt;- help[1L]
+        pkgPath &lt;- find.package(pkgName, lib.loc, verbose = verbose)
+        docFiles &lt;- c(file.path(pkgPath, "Meta", "package.rds"), 
+            file.path(pkgPath, "INDEX"))
+        if (file.exists(vignetteIndexRDS &lt;- file.path(pkgPath, 
+            "Meta", "vignette.rds"))) 
+            docFiles &lt;- c(docFiles, vignetteIndexRDS)
+        pkgInfo &lt;- vector("list", 3L)
+        readDocFile &lt;- function(f) {
+            if (basename(f) %in% "package.rds") {
+                txt &lt;- readRDS(f)$DESCRIPTION
+                if ("Encoding" %in% names(txt)) {
+                  to &lt;- if (Sys.getlocale("LC_CTYPE") == "C") 
+                    "ASCII//TRANSLIT"
+                  else ""
+                  tmp &lt;- try(iconv(txt, from = txt["Encoding"], 
+                    to = to))
+                  if (!inherits(tmp, "try-error")) 
+                    txt &lt;- tmp
+                  else warning("'DESCRIPTION' has an 'Encoding' field and re-encoding is not possible", 
+                    call. = FALSE)
+                }
+                nm &lt;- paste0(names(txt), ":")
+                formatDL(nm, txt, indent = max(nchar(nm, "w")) + 
+                  3L)
+            }
+            else if (basename(f) %in% "vignette.rds") {
+                txt &lt;- readRDS(f)
+                if (is.data.frame(txt) &amp;&amp; nrow(txt)) 
+                  cbind(basename(gsub("\\.[[:alpha:]]+$", "", 
+                    txt$File)), paste(txt$Title, paste0(rep.int("(source", 
+                    NROW(txt)), ifelse(nzchar(txt$PDF), ", pdf", 
+                    ""), ")")))
+                else NULL
+            }
+            else readLines(f)
+        }
+        for (i in which(file.exists(docFiles))) pkgInfo[[i]] &lt;- readDocFile(docFiles[i])
+        y &lt;- list(name = pkgName, path = pkgPath, info = pkgInfo)
+        class(y) &lt;- "packageInfo"
+        return(y)
+    }
+    else {
+        if (is.null(lib.loc)) 
+            lib.loc &lt;- .libPaths()
+        db &lt;- matrix(character(), nrow = 0L, ncol = 3L)
+        nopkgs &lt;- character()
+        for (lib in lib.loc) {
+            a &lt;- .packages(all.available = TRUE, lib.loc = lib)
+            for (i in sort(a)) {
+                file &lt;- system.file("Meta", "package.rds", package = i, 
+                  lib.loc = lib)
+                title &lt;- if (nzchar(file)) {
+                  txt &lt;- readRDS(file)
+                  if (is.list(txt)) 
+                    txt &lt;- txt$DESCRIPTION
+                  if ("Encoding" %in% names(txt)) {
+                    to &lt;- if (Sys.getlocale("LC_CTYPE") == "C") 
+                      "ASCII//TRANSLIT"
+                    else ""
+                    tmp &lt;- try(iconv(txt, txt["Encoding"], to, 
+                      "?"))
+                    if (!inherits(tmp, "try-error")) 
+                      txt &lt;- tmp
+                    else warning("'DESCRIPTION' has an 'Encoding' field and re-encoding is not possible", 
+                      call. = FALSE)
+                  }
+                  txt["Title"]
+                }
+                else NA
+                if (is.na(title)) 
+                  title &lt;- " ** No title available ** "
+                db &lt;- rbind(db, cbind(i, lib, title))
+            }
+            if (length(a) == 0L) 
+                nopkgs &lt;- c(nopkgs, lib)
+        }
+        dimnames(db) &lt;- list(NULL, c("Package", "LibPath", "Title"))
+        if (length(nopkgs) &amp;&amp; !missing(lib.loc)) {
+            pkglist &lt;- paste(sQuote(nopkgs), collapse = ", ")
+            msg &lt;- sprintf(ngettext(length(nopkgs), "library %s contains no packages", 
+                "libraries %s contain no packages"), pkglist)
+            warning(msg, domain = NA)
+        }
+        y &lt;- list(header = NULL, results = db, footer = NULL)
+        class(y) &lt;- "libraryIQR"
+        return(y)
+    }
+    if (logical.return) 
+        TRUE
+    else invisible(.packages())
+}
+&lt;bytecode: 0x7fe1b62367d0&gt;
+&lt;environment: namespace:base&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
 *create_code()
 ```
 ]
@@ -120,7 +467,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;bytecode: 0x7fe1b9f30118&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -140,6 +487,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
 * code_as_table()
 ```
@@ -153,7 +502,7 @@ function (code)
     code %&gt;% stringr::str_split(pattern = "\n") %&gt;% .[[1]] %&gt;% 
         tibble::tibble(raw_code = .) %&gt;% dplyr::mutate(line = 1:dplyr::n())
 }
-&lt;bytecode: 0x7ff7d87335f8&gt;
+&lt;bytecode: 0x7fe1b98dcc80&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -192,6 +541,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
 * code_as_table_process_break_messages()
@@ -212,7 +563,7 @@ function (code_as_table)
         dplyr::mutate(rotate = stringr::str_detect(raw_code, 
             "#ROTATE$"))
 }
-&lt;bytecode: 0x7ff7d87a0548&gt;
+&lt;bytecode: 0x7fe1b96180d8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -251,6 +602,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -274,6 +627,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -290,7 +645,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;bytecode: 0x7fe1b9f30118&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -310,6 +665,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -329,7 +686,7 @@ function (code)
     try(parse(text = code, srcfile = sf))
     utils::getParseData(sf)
 }
-&lt;bytecode: 0x7ff7dc0b3cb0&gt;
+&lt;bytecode: 0x7fe1b908e9d8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -580,6 +937,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -624,7 +983,7 @@ function (base_parsed)
         balanced_curly &amp; balanced_square) %&gt;% dplyr::select(line, 
         full_line, comment, all_parentheses_balanced)
 }
-&lt;bytecode: 0x7ff7dc103690&gt;
+&lt;bytecode: 0x7fe1b6fc9178&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -663,6 +1022,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -691,6 +1052,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -713,7 +1076,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;bytecode: 0x7fe1b9f30118&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -733,6 +1096,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -778,7 +1143,7 @@ function (code = code)
         code != "") %&gt;% dplyr::select(line, raw_code, code, connector, 
         comment, auto, user, non_seq, rotate)
 }
-&lt;bytecode: 0x7ff7d871eb68&gt;
+&lt;bytecode: 0x7fe1b85b55f0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -817,6 +1182,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -850,6 +1217,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -876,7 +1245,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7ff7dbc0b900&gt;
+&lt;bytecode: 0x7fe1b9f30118&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -896,6 +1265,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -933,7 +1304,7 @@ function (code = create_code(), lang = "r")
         NULL
     }
 }
-&lt;bytecode: 0x7ff7d85b4bd8&gt;
+&lt;bytecode: 0x7fe1ba07b9a0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -972,6 +1343,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -1031,7 +1404,7 @@ function (parsed, break_type = "auto")
     }
     which_show
 }
-&lt;bytecode: 0x7ff7dad4e620&gt;
+&lt;bytecode: 0x7fe1b7f903b8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1085,6 +1458,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -1132,7 +1507,7 @@ function (which_show = list(c(1, 2), c(1, 2, 3, 4)), break_type = "auto")
     }
     which_highlight
 }
-&lt;bytecode: 0x7ff7da49a3d0&gt;
+&lt;bytecode: 0x7fe1b852d4a0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1186,6 +1561,8 @@ count: false
 .left-panel-the_code_parsing-auto[
 
 ```r
+library(flipbookr)  
+
 create_code() %&gt;%  
   code_as_table() %&gt;%  
   code_as_table_process_break_messages() -&gt;  
@@ -1295,7 +1672,7 @@ function (parsed, which_show_frame = 1:3, which_highlight_frame = 3)
         stringr::str_remove("&lt;-|=") %&gt;% stringr::str_trim()
     c(the_reveal, " ", object_to_track)
 }
-&lt;bytecode: 0x7ff7da58db48&gt;
+&lt;bytecode: 0x7fe1bde59de8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1343,7 +1720,7 @@ function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = pa
     }
     partial_code_frames
 }
-&lt;bytecode: 0x7ff7dad4c850&gt;
+&lt;bytecode: 0x7fe1b7f8c498&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1450,7 +1827,7 @@ function (parsed, which_highlight_frame = 3)
     parsed %&gt;% dplyr::filter(line %in% which_highlight_frame) %&gt;% 
         dplyr::pull(func)
 }
-&lt;bytecode: 0x7ff7d8abdf90&gt;
+&lt;bytecode: 0x7fe1ba0d4468&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1498,7 +1875,7 @@ function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = pa
     }
     partial_recent_functions
 }
-&lt;bytecode: 0x7ff7da1c2d60&gt;
+&lt;bytecode: 0x7fe1ba0a3578&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1614,7 +1991,7 @@ function ()
 {
     "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
 }
-&lt;bytecode: 0x7ff7daca1a40&gt;
+&lt;bytecode: 0x7fe1b9836d28&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1645,7 +2022,7 @@ function ()
 {
     "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
 }
-&lt;bytecode: 0x7ff7daca1490&gt;
+&lt;bytecode: 0x7fe1b9834040&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1676,7 +2053,7 @@ function (text, sep = "|")
 {
     text %&gt;% stringr::str_split(pattern = sep)
 }
-&lt;bytecode: 0x7ff7dc0d5380&gt;
+&lt;bytecode: 0x7fe1b6ebb288&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1822,7 +2199,7 @@ function (chunk_name = "example", break_type = "auto", display_type = "both",
     slide_code &lt;- glue::glue_collapse(partial_knit_steps, sep = "\n\n---\n")
     glue::glue("{slide_code}\n\n{the_defined_css}\n\n", .trim = FALSE)
 }
-&lt;bytecode: 0x7ff7dac89488&gt;
+&lt;bytecode: 0x7fe1b9846d60&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1922,7 +2299,7 @@ function (chunk_name = NULL, break_type = "auto", left_assign = F,
         width_right = width_right, font_size_code = font_size_code)
     paste(knitr::knit(text = text), collapse = "\n")
 }
-&lt;bytecode: 0x7ff7d86f0b68&gt;
+&lt;bytecode: 0x7fe1ba019348&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
