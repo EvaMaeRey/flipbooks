@@ -110,6 +110,7 @@ Within the list numbers of the lines of code for each frame is returned.
 --
 
 This is dependent on what the user has set for the break_type. 
+
 --
 
 Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 

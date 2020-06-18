@@ -25,7 +25,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ───────────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -40,7 +40,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ──────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -311,6 +311,7 @@ Within the list numbers of the lines of code for each frame is returned.
 --
 
 This is dependent on what the user has set for the break_type. 
+
 --
 
 Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
@@ -719,7 +720,7 @@ function (package, help, pos = 2, lib.loc = NULL, character.only = FALSE,
         TRUE
     else invisible(.packages())
 }
-&lt;bytecode: 0x7fd5189403d0&gt;
+&lt;bytecode: 0x7fa787ac2dd0&gt;
 &lt;environment: namespace:base&gt;
 ```
 ]
@@ -749,7 +750,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;bytecode: 0x7fa78c114a50&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -784,7 +785,7 @@ function (code)
     code %&gt;% stringr::str_split(pattern = "\n") %&gt;% .[[1]] %&gt;% 
         tibble::tibble(raw_code = .) %&gt;% dplyr::mutate(line = 1:dplyr::n())
 }
-&lt;bytecode: 0x7fd51aca6ba8&gt;
+&lt;bytecode: 0x7fa78b77c1a8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -845,7 +846,7 @@ function (code_as_table)
         dplyr::mutate(rotate = stringr::str_detect(raw_code, 
             "#ROTATE$"))
 }
-&lt;bytecode: 0x7fd51bdc0cf8&gt;
+&lt;bytecode: 0x7fa78badd8f8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -927,7 +928,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;bytecode: 0x7fa78c114a50&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -968,7 +969,7 @@ function (code)
     try(parse(text = code, srcfile = sf))
     utils::getParseData(sf)
 }
-&lt;bytecode: 0x7fd51ad36dd8&gt;
+&lt;bytecode: 0x7fa78bb2ebd8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1265,7 +1266,7 @@ function (base_parsed)
         balanced_curly &amp; balanced_square) %&gt;% dplyr::select(line, 
         full_line, comment, all_parentheses_balanced)
 }
-&lt;bytecode: 0x7fd51ad9db30&gt;
+&lt;bytecode: 0x7fa78c827930&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1358,7 +1359,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;bytecode: 0x7fa78c114a50&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1425,7 +1426,7 @@ function (code = code)
         code != "") %&gt;% dplyr::select(line, raw_code, code, connector, 
         comment, auto, user, non_seq, rotate)
 }
-&lt;bytecode: 0x7fd51ac90f28&gt;
+&lt;bytecode: 0x7fa78b766528&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1527,7 +1528,7 @@ function ()
 {
     "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
 }
-&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;bytecode: 0x7fa78c114a50&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1586,7 +1587,7 @@ function (code = create_code(), lang = "r")
         NULL
     }
 }
-&lt;bytecode: 0x7fd51ac7ec88&gt;
+&lt;bytecode: 0x7fa78b754288&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1686,7 +1687,7 @@ function (parsed, break_type = "auto")
     }
     which_show
 }
-&lt;bytecode: 0x7fd51b3614e0&gt;
+&lt;bytecode: 0x7fa7887b64e0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1789,7 +1790,7 @@ function (which_show = list(c(1, 2), c(1, 2, 3, 4)), break_type = "auto")
     }
     which_highlight
 }
-&lt;bytecode: 0x7fd51a7e9f10&gt;
+&lt;bytecode: 0x7fa789ee2f10&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -1963,7 +1964,7 @@ function (parsed, which_show_frame = 1:3, which_highlight_frame = 3)
         stringr::str_remove("&lt;-|=") %&gt;% stringr::str_trim()
     c(the_reveal, " ", object_to_track)
 }
-&lt;bytecode: 0x7fd51e3d6b58&gt;
+&lt;bytecode: 0x7fa78e0d78d8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2011,7 +2012,7 @@ function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = pa
     }
     partial_code_frames
 }
-&lt;bytecode: 0x7fd51b35f550&gt;
+&lt;bytecode: 0x7fa7887b4550&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2118,7 +2119,7 @@ function (parsed, which_highlight_frame = 3)
     parsed %&gt;% dplyr::filter(line %in% which_highlight_frame) %&gt;% 
         dplyr::pull(func)
 }
-&lt;bytecode: 0x7fd51b878de0&gt;
+&lt;bytecode: 0x7fa78a611a18&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2166,7 +2167,7 @@ function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = pa
     }
     partial_recent_functions
 }
-&lt;bytecode: 0x7fd51b8918a0&gt;
+&lt;bytecode: 0x7fa78a6022d8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2294,7 +2295,7 @@ function ()
 {
     "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
 }
-&lt;bytecode: 0x7fd51bac6bc8&gt;
+&lt;bytecode: 0x7fa789f21000&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2325,7 +2326,7 @@ function ()
 {
     "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
 }
-&lt;bytecode: 0x7fd51c099f28&gt;
+&lt;bytecode: 0x7fa789f1a960&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2356,7 +2357,7 @@ function (text, sep = "|")
 {
     text %&gt;% stringr::str_split(pattern = sep)
 }
-&lt;bytecode: 0x7fd51f9193d0&gt;
+&lt;bytecode: 0x7fa78e638b58&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2660,7 +2661,7 @@ function (chunk_name = "example", break_type = "auto", display_type = "both",
     slide_code &lt;- glue::glue_collapse(partial_knit_steps, sep = "\n\n---\n")
     glue::glue("{slide_code}\n\n{the_defined_css}\n\n", .trim = FALSE)
 }
-&lt;bytecode: 0x7fd51baaefb0&gt;
+&lt;bytecode: 0x7fa789f093e8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
@@ -2760,7 +2761,7 @@ function (chunk_name = NULL, break_type = "auto", left_assign = F,
         width_right = width_right, font_size_code = font_size_code)
     paste(knitr::knit(text = text), collapse = "\n")
 }
-&lt;bytecode: 0x7fd51ac637b0&gt;
+&lt;bytecode: 0x7fa78b738db0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 ]
