@@ -95,7 +95,7 @@ Here are a few known issues to watch for:
 
 1. You will need an internet connection to build Xaringan output, unless you use this set up:
     - within a project execute xaringan::xaringan::summon_remark() in your console 
-    - then in the YAML right after your css declaration, add, chakra: libs/remark-latest.min.js
+    - then in the YAML right after your css declaration, add, `chakra: libs/remark-latest.min.js`
 2. *Comments* in flipbooked pipelines should *not* contain parentheses
 3. Quoted text may not span lines (quoted text must be on a single line)
 4. Xaringan produces an html file and associated files.  This means:
@@ -110,7 +110,7 @@ We'd love to hear from you!  How is your flipbook building experience?  You can 
 
 ## Implementation
 
-If you are interested in contributing to {flipbookr}, you might consider getting some of the intuition of the internal functions by browsing through the resource below, or link to it  [here](https://evamaerey.github.io/little_flipbooks_library/flipbookr/flipbookr_building_blocks#1){target="_blank"}:
+If you are interested in contributing to {flipbookr}, you might consider getting some of the intuition of the internal functions by browsing through the resource below, or link to it  [here](https://evamaerey.github.io/flipbooks/flipbookr/flipbookr_building_blocks#1){target="_blank"}:
 
 ```{r}
 knitr::include_url("https://evamaerey.github.io/flipbooks/flipbookr/flipbookr_building_blocks#1")

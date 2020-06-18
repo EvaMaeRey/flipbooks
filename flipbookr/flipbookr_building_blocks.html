@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>flipbookr building blocks</title>
     <meta charset="utf-8" />
@@ -25,18 +25,22 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ───────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✓ ggplot2 3.3.0.9000     ✓ purrr   0.3.3     
-## ✓ tibble  2.1.3          ✓ dplyr   0.8.4     
-## ✓ tidyr   1.0.2          ✓ stringr 1.4.0     
-## ✓ readr   1.3.1          ✓ forcats 0.4.0
+## ✓ ggplot2 3.3.0     ✓ purrr   0.3.3
+## ✓ tibble  3.0.0     ✓ dplyr   0.8.5
+## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## ── Conflicts ───────────────────────── tidyverse_conflicts() ──
+## Warning: package 'tibble' was built under R version 3.6.2
+```
+
+```
+## ── Conflicts ──────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -87,13 +91,16 @@ Let's first look at the result of using flipbookr to bring this code.
 
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 
 ```r
 *cars
 ```
-]]
-.column[.content[
+]
+ 
+.right-panel-cars_plot-auto[
 
 ```
    speed dist
@@ -148,38 +155,49 @@ count: false
 49    24  120
 50    25   85
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 
 ```r
 cars %&gt;%  
 * ggplot()
 ```
-]]
-.column[.content[
+]
+ 
+.right-panel-cars_plot-auto[
 ![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_2_output-1.png)&lt;!-- --&gt;
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 
 ```r
 cars %&gt;%  
   ggplot() +  
 * aes(x = speed)
 ```
-]]
-.column[.content[
+]
+ 
+.right-panel-cars_plot-auto[
 ![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_3_output-1.png)&lt;!-- --&gt;
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 
 ```r
 cars %&gt;%  
@@ -187,14 +205,18 @@ cars %&gt;%
   aes(x = speed) +  
 * aes(color = speed)
 ```
-]]
-.column[.content[
+]
+ 
+.right-panel-cars_plot-auto[
 ![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_4_output-1.png)&lt;!-- --&gt;
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 
 ```r
 cars %&gt;%  
@@ -203,10 +225,35 @@ cars %&gt;%
   aes(color = speed) +  
 * geom_rug()
 ```
-]]
-.column[.content[
+]
+ 
+.right-panel-cars_plot-auto[
 ![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_5_output-1.png)&lt;!-- --&gt;
-]]
+]
+
+&lt;style&gt;
+.left-panel-cars_plot-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-cars_plot-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-cars_plot-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
 
 ---
 
@@ -240,34 +287,512 @@ class: middle center inverse
 
 ---
 
+
+
+
+---
+class: middle center inverse
+
+# Step 2
+## Reconstruct code into partial builds
+
+---
+
+## First calculate which lines need to be shown and highlighted in each frame of the mini flipbook.
+
+--
+
+A list is returned where each frame corresponds to the element in the list. 
+
+--
+
+Within the list numbers of the lines of code for each frame is returned.
+
+--
+
+This is dependent on what the user has set for the break_type. 
+--
+
+Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
+
+
+---
+
+
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-*flipbookr:::create_code()
+*library(flipbookr)
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+function (package, help, pos = 2, lib.loc = NULL, character.only = FALSE, 
+    logical.return = FALSE, warn.conflicts, quietly = FALSE, 
+    verbose = getOption("verbose"), mask.ok, exclude, include.only, 
+    attach.required = missing(include.only)) 
+{
+    conf.ctrl &lt;- getOption("conflicts.policy")
+    if (is.character(conf.ctrl)) 
+        conf.ctrl &lt;- switch(conf.ctrl, strict = list(error = TRUE, 
+            warn = FALSE), depends.ok = list(error = TRUE, generics.ok = TRUE, 
+            can.mask = c("base", "methods", "utils", "grDevices", 
+                "graphics", "stats"), depends.ok = TRUE), warning(gettextf("unknown conflict policy: %s", 
+            sQuote(conf.ctrl)), call. = FALSE, domain = NA))
+    if (!is.list(conf.ctrl)) 
+        conf.ctrl &lt;- NULL
+    stopOnConflict &lt;- isTRUE(conf.ctrl$error)
+    if (missing(warn.conflicts)) 
+        warn.conflicts &lt;- if (isFALSE(conf.ctrl$warn)) 
+            FALSE
+        else TRUE
+    if ((!missing(include.only)) &amp;&amp; (!missing(exclude))) 
+        stop(gettext("only one of 'include.only' and 'exclude' can be used"), 
+            call. = FALSE, domain = NA)
+    testRversion &lt;- function(pkgInfo, pkgname, pkgpath) {
+        if (is.null(built &lt;- pkgInfo$Built)) 
+            stop(gettextf("package %s has not been installed properly\n", 
+                sQuote(pkgname)), call. = FALSE, domain = NA)
+        R_version_built_under &lt;- as.numeric_version(built$R)
+        if (R_version_built_under &lt; "3.0.0") 
+            stop(gettextf("package %s was built before R 3.0.0: please re-install it", 
+                sQuote(pkgname)), call. = FALSE, domain = NA)
+        current &lt;- getRversion()
+        if (length(Rdeps &lt;- pkgInfo$Rdepends2)) {
+            for (dep in Rdeps) if (length(dep) &gt; 1L) {
+                target &lt;- dep$version
+                res &lt;- if (is.character(target)) {
+                  do.call(dep$op, list(as.numeric(R.version[["svn rev"]]), 
+                    as.numeric(sub("^r", "", dep$version))))
+                }
+                else {
+                  do.call(dep$op, list(current, as.numeric_version(target)))
+                }
+                if (!res) 
+                  stop(gettextf("This is R %s, package %s needs %s %s", 
+                    current, sQuote(pkgname), dep$op, target), 
+                    call. = FALSE, domain = NA)
+            }
+        }
+        if (R_version_built_under &gt; current) 
+            warning(gettextf("package %s was built under R version %s", 
+                sQuote(pkgname), as.character(built$R)), call. = FALSE, 
+                domain = NA)
+        platform &lt;- built$Platform
+        r_arch &lt;- .Platform$r_arch
+        if (.Platform$OS.type == "unix") {
+        }
+        else {
+            if (nzchar(platform) &amp;&amp; !grepl("mingw", platform)) 
+                stop(gettextf("package %s was built for %s", 
+                  sQuote(pkgname), platform), call. = FALSE, 
+                  domain = NA)
+        }
+        if (nzchar(r_arch) &amp;&amp; file.exists(file.path(pkgpath, 
+            "libs")) &amp;&amp; !file.exists(file.path(pkgpath, "libs", 
+            r_arch))) 
+            stop(gettextf("package %s is not installed for 'arch = %s'", 
+                sQuote(pkgname), r_arch), call. = FALSE, domain = NA)
+    }
+    checkNoGenerics &lt;- function(env, pkg) {
+        nenv &lt;- env
+        ns &lt;- .getNamespace(as.name(pkg))
+        if (!is.null(ns)) 
+            nenv &lt;- asNamespace(ns)
+        if (exists(".noGenerics", envir = nenv, inherits = FALSE)) 
+            TRUE
+        else {
+            !any(startsWith(names(env), ".__T"))
+        }
+    }
+    checkConflicts &lt;- function(package, pkgname, pkgpath, nogenerics, 
+        env) {
+        dont.mind &lt;- c("last.dump", "last.warning", ".Last.value", 
+            ".Random.seed", ".Last.lib", ".onDetach", ".packageName", 
+            ".noGenerics", ".required", ".no_S3_generics", ".Depends", 
+            ".requireCachedGenerics")
+        sp &lt;- search()
+        lib.pos &lt;- which(sp == pkgname)
+        ob &lt;- names(as.environment(lib.pos))
+        if (!nogenerics) {
+            these &lt;- ob[startsWith(ob, ".__T__")]
+            gen &lt;- gsub(".__T__(.*):([^:]+)", "\\1", these)
+            from &lt;- gsub(".__T__(.*):([^:]+)", "\\2", these)
+            gen &lt;- gen[from != package]
+            ob &lt;- ob[!(ob %in% gen)]
+        }
+        ipos &lt;- seq_along(sp)[-c(lib.pos, match(c("Autoloads", 
+            "CheckExEnv"), sp, 0L))]
+        cpos &lt;- NULL
+        conflicts &lt;- vector("list", 0)
+        for (i in ipos) {
+            obj.same &lt;- match(names(as.environment(i)), ob, nomatch = 0L)
+            if (any(obj.same &gt; 0)) {
+                same &lt;- ob[obj.same]
+                same &lt;- same[!(same %in% dont.mind)]
+                Classobjs &lt;- which(startsWith(same, ".__"))
+                if (length(Classobjs)) 
+                  same &lt;- same[-Classobjs]
+                same.isFn &lt;- function(where) vapply(same, exists, 
+                  NA, where = where, mode = "function", inherits = FALSE)
+                same &lt;- same[same.isFn(i) == same.isFn(lib.pos)]
+                not.Ident &lt;- function(ch, TRAFO = identity, ...) vapply(ch, 
+                  function(.) !identical(TRAFO(get(., i)), TRAFO(get(., 
+                    lib.pos)), ...), NA)
+                if (length(same)) 
+                  same &lt;- same[not.Ident(same)]
+                if (length(same) &amp;&amp; identical(sp[i], "package:base")) 
+                  same &lt;- same[not.Ident(same, ignore.environment = TRUE)]
+                if (length(same)) {
+                  conflicts[[sp[i]]] &lt;- same
+                  cpos[sp[i]] &lt;- i
+                }
+            }
+        }
+        if (length(conflicts)) {
+            if (stopOnConflict) {
+                emsg &lt;- ""
+                pkg &lt;- names(conflicts)
+                notOK &lt;- vector("list", 0)
+                for (i in seq_along(conflicts)) {
+                  pkgname &lt;- sub("^package:", "", pkg[i])
+                  if (pkgname %in% canMaskEnv$canMask) 
+                    next
+                  same &lt;- conflicts[[i]]
+                  if (is.list(mask.ok)) 
+                    myMaskOK &lt;- mask.ok[[pkgname]]
+                  else myMaskOK &lt;- mask.ok
+                  if (isTRUE(myMaskOK)) 
+                    same &lt;- NULL
+                  else if (is.character(myMaskOK)) 
+                    same &lt;- setdiff(same, myMaskOK)
+                  if (length(same)) {
+                    notOK[[pkg[i]]] &lt;- same
+                    msg &lt;- .maskedMsg(sort(same), pkg = sQuote(pkg[i]), 
+                      by = cpos[i] &lt; lib.pos)
+                    emsg &lt;- paste(emsg, msg, sep = "\n")
+                  }
+                }
+                if (length(notOK)) {
+                  msg &lt;- gettextf("Conflicts attaching package %s:\n%s", 
+                    sQuote(package), emsg)
+                  stop(errorCondition(msg, package = package, 
+                    conflicts = conflicts, class = "packageConflictError"))
+                }
+            }
+            if (warn.conflicts) {
+                packageStartupMessage(gettextf("\nAttaching package: %s\n", 
+                  sQuote(package)), domain = NA)
+                pkg &lt;- names(conflicts)
+                for (i in seq_along(conflicts)) {
+                  msg &lt;- .maskedMsg(sort(conflicts[[i]]), pkg = sQuote(pkg[i]), 
+                    by = cpos[i] &lt; lib.pos)
+                  packageStartupMessage(msg, domain = NA)
+                }
+            }
+        }
+    }
+    if (verbose &amp;&amp; quietly) 
+        message("'verbose' and 'quietly' are both true; being verbose then ..")
+    if (!missing(package)) {
+        if (is.null(lib.loc)) 
+            lib.loc &lt;- .libPaths()
+        lib.loc &lt;- lib.loc[dir.exists(lib.loc)]
+        if (!character.only) 
+            package &lt;- as.character(substitute(package))
+        if (length(package) != 1L) 
+            stop("'package' must be of length 1")
+        if (is.na(package) || (package == "")) 
+            stop("invalid package name")
+        pkgname &lt;- paste0("package:", package)
+        newpackage &lt;- is.na(match(pkgname, search()))
+        if (newpackage) {
+            pkgpath &lt;- find.package(package, lib.loc, quiet = TRUE, 
+                verbose = verbose)
+            if (length(pkgpath) == 0L) {
+                if (length(lib.loc) &amp;&amp; !logical.return) 
+                  stop(packageNotFoundError(package, lib.loc, 
+                    sys.call()))
+                txt &lt;- if (length(lib.loc)) 
+                  gettextf("there is no package called %s", sQuote(package))
+                else gettext("no library trees found in 'lib.loc'")
+                if (logical.return) {
+                  warning(txt, domain = NA)
+                  return(FALSE)
+                }
+                else stop(txt, domain = NA)
+            }
+            which.lib.loc &lt;- normalizePath(dirname(pkgpath), 
+                "/", TRUE)
+            pfile &lt;- system.file("Meta", "package.rds", package = package, 
+                lib.loc = which.lib.loc)
+            if (!nzchar(pfile)) 
+                stop(gettextf("%s is not a valid installed package", 
+                  sQuote(package)), domain = NA)
+            pkgInfo &lt;- readRDS(pfile)
+            testRversion(pkgInfo, package, pkgpath)
+            if (is.character(pos)) {
+                npos &lt;- match(pos, search())
+                if (is.na(npos)) {
+                  warning(gettextf("%s not found on search path, using pos = 2", 
+                    sQuote(pos)), domain = NA)
+                  pos &lt;- 2
+                }
+                else pos &lt;- npos
+            }
+            deps &lt;- unique(names(pkgInfo$Depends))
+            depsOK &lt;- isTRUE(conf.ctrl$depends.ok)
+            if (depsOK) {
+                canMaskEnv &lt;- dynGet("__library_can_mask__", 
+                  NULL)
+                if (is.null(canMaskEnv)) {
+                  canMaskEnv &lt;- new.env()
+                  canMaskEnv$canMask &lt;- union("base", conf.ctrl$can.mask)
+                  "__library_can_mask__" &lt;- canMaskEnv
+                }
+                canMaskEnv$canMask &lt;- unique(c(package, deps, 
+                  canMaskEnv$canMask))
+            }
+            else canMaskEnv &lt;- NULL
+            if (attach.required) 
+                .getRequiredPackages2(pkgInfo, quietly = quietly)
+            cr &lt;- conflictRules(package)
+            if (missing(mask.ok)) 
+                mask.ok &lt;- cr$mask.ok
+            if (missing(exclude)) 
+                exclude &lt;- cr$exclude
+            if (packageHasNamespace(package, which.lib.loc)) {
+                if (isNamespaceLoaded(package)) {
+                  newversion &lt;- as.numeric_version(pkgInfo$DESCRIPTION["Version"])
+                  oldversion &lt;- as.numeric_version(getNamespaceVersion(package))
+                  if (newversion != oldversion) {
+                    tryCatch(unloadNamespace(package), error = function(e) {
+                      P &lt;- if (!is.null(cc &lt;- conditionCall(e))) 
+                        paste("Error in", deparse(cc)[1L], ": ")
+                      else "Error : "
+                      stop(gettextf("Package %s version %s cannot be unloaded:\n %s", 
+                        sQuote(package), oldversion, paste0(P, 
+                          conditionMessage(e), "\n")), domain = NA)
+                    })
+                  }
+                }
+                tt &lt;- tryCatch({
+                  attr(package, "LibPath") &lt;- which.lib.loc
+                  ns &lt;- loadNamespace(package, lib.loc)
+                  env &lt;- attachNamespace(ns, pos = pos, deps, 
+                    exclude, include.only)
+                }, error = function(e) {
+                  P &lt;- if (!is.null(cc &lt;- conditionCall(e))) 
+                    paste(" in", deparse(cc)[1L])
+                  else ""
+                  msg &lt;- gettextf("package or namespace load failed for %s%s:\n %s", 
+                    sQuote(package), P, conditionMessage(e))
+                  if (logical.return) 
+                    message(paste("Error:", msg), domain = NA)
+                  else stop(msg, call. = FALSE, domain = NA)
+                })
+                if (logical.return &amp;&amp; is.null(tt)) 
+                  return(FALSE)
+                attr(package, "LibPath") &lt;- NULL
+                {
+                  on.exit(detach(pos = pos))
+                  nogenerics &lt;- !.isMethodsDispatchOn() || checkNoGenerics(env, 
+                    package)
+                  if (isFALSE(conf.ctrl$generics.ok) || (stopOnConflict &amp;&amp; 
+                    !isTRUE(conf.ctrl$generics.ok))) 
+                    nogenerics &lt;- TRUE
+                  if (stopOnConflict || (warn.conflicts &amp;&amp; !exists(".conflicts.OK", 
+                    envir = env, inherits = FALSE))) 
+                    checkConflicts(package, pkgname, pkgpath, 
+                      nogenerics, ns)
+                  on.exit()
+                  if (logical.return) 
+                    return(TRUE)
+                  else return(invisible(.packages()))
+                }
+            }
+            else stop(gettextf("package %s does not have a namespace and should be re-installed", 
+                sQuote(package)), domain = NA)
+        }
+        if (verbose &amp;&amp; !newpackage) 
+            warning(gettextf("package %s already present in search()", 
+                sQuote(package)), domain = NA)
+    }
+    else if (!missing(help)) {
+        if (!character.only) 
+            help &lt;- as.character(substitute(help))
+        pkgName &lt;- help[1L]
+        pkgPath &lt;- find.package(pkgName, lib.loc, verbose = verbose)
+        docFiles &lt;- c(file.path(pkgPath, "Meta", "package.rds"), 
+            file.path(pkgPath, "INDEX"))
+        if (file.exists(vignetteIndexRDS &lt;- file.path(pkgPath, 
+            "Meta", "vignette.rds"))) 
+            docFiles &lt;- c(docFiles, vignetteIndexRDS)
+        pkgInfo &lt;- vector("list", 3L)
+        readDocFile &lt;- function(f) {
+            if (basename(f) %in% "package.rds") {
+                txt &lt;- readRDS(f)$DESCRIPTION
+                if ("Encoding" %in% names(txt)) {
+                  to &lt;- if (Sys.getlocale("LC_CTYPE") == "C") 
+                    "ASCII//TRANSLIT"
+                  else ""
+                  tmp &lt;- try(iconv(txt, from = txt["Encoding"], 
+                    to = to))
+                  if (!inherits(tmp, "try-error")) 
+                    txt &lt;- tmp
+                  else warning("'DESCRIPTION' has an 'Encoding' field and re-encoding is not possible", 
+                    call. = FALSE)
+                }
+                nm &lt;- paste0(names(txt), ":")
+                formatDL(nm, txt, indent = max(nchar(nm, "w")) + 
+                  3L)
+            }
+            else if (basename(f) %in% "vignette.rds") {
+                txt &lt;- readRDS(f)
+                if (is.data.frame(txt) &amp;&amp; nrow(txt)) 
+                  cbind(basename(gsub("\\.[[:alpha:]]+$", "", 
+                    txt$File)), paste(txt$Title, paste0(rep.int("(source", 
+                    NROW(txt)), ifelse(nzchar(txt$PDF), ", pdf", 
+                    ""), ")")))
+                else NULL
+            }
+            else readLines(f)
+        }
+        for (i in which(file.exists(docFiles))) pkgInfo[[i]] &lt;- readDocFile(docFiles[i])
+        y &lt;- list(name = pkgName, path = pkgPath, info = pkgInfo)
+        class(y) &lt;- "packageInfo"
+        return(y)
+    }
+    else {
+        if (is.null(lib.loc)) 
+            lib.loc &lt;- .libPaths()
+        db &lt;- matrix(character(), nrow = 0L, ncol = 3L)
+        nopkgs &lt;- character()
+        for (lib in lib.loc) {
+            a &lt;- .packages(all.available = TRUE, lib.loc = lib)
+            for (i in sort(a)) {
+                file &lt;- system.file("Meta", "package.rds", package = i, 
+                  lib.loc = lib)
+                title &lt;- if (nzchar(file)) {
+                  txt &lt;- readRDS(file)
+                  if (is.list(txt)) 
+                    txt &lt;- txt$DESCRIPTION
+                  if ("Encoding" %in% names(txt)) {
+                    to &lt;- if (Sys.getlocale("LC_CTYPE") == "C") 
+                      "ASCII//TRANSLIT"
+                    else ""
+                    tmp &lt;- try(iconv(txt, txt["Encoding"], to, 
+                      "?"))
+                    if (!inherits(tmp, "try-error")) 
+                      txt &lt;- tmp
+                    else warning("'DESCRIPTION' has an 'Encoding' field and re-encoding is not possible", 
+                      call. = FALSE)
+                  }
+                  txt["Title"]
+                }
+                else NA
+                if (is.na(title)) 
+                  title &lt;- " ** No title available ** "
+                db &lt;- rbind(db, cbind(i, lib, title))
+            }
+            if (length(a) == 0L) 
+                nopkgs &lt;- c(nopkgs, lib)
+        }
+        dimnames(db) &lt;- list(NULL, c("Package", "LibPath", "Title"))
+        if (length(nopkgs) &amp;&amp; !missing(lib.loc)) {
+            pkglist &lt;- paste(sQuote(nopkgs), collapse = ", ")
+            msg &lt;- sprintf(ngettext(length(nopkgs), "library %s contains no packages", 
+                "libraries %s contain no packages"), pkglist)
+            warning(msg, domain = NA)
+        }
+        y &lt;- list(header = NULL, results = db, footer = NULL)
+        class(y) &lt;- "libraryIQR"
+        return(y)
+    }
+    if (logical.return) 
+        TRUE
+    else invisible(.packages())
+}
+&lt;bytecode: 0x7fd5189403d0&gt;
+&lt;environment: namespace:base&gt;
 ```
-]]
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-flipbookr:::create_code() %&gt;%  
-* flipbookr:::code_as_table()
+library(flipbookr)  
+
+*create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-# A tibble: 14 x 2
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+* code_as_table()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code) 
+{
+    code %&gt;% stringr::str_split(pattern = "\n") %&gt;% .[[1]] %&gt;% 
+        tibble::tibble(raw_code = .) %&gt;% dplyr::mutate(line = 1:dplyr::n())
+}
+&lt;bytecode: 0x7fd51aca6ba8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 2
    raw_code                                      line
    &lt;chr&gt;                                        &lt;int&gt;
  1 "cars %&gt;%             # the data  #BREAK"        1
@@ -284,43 +809,171 @@ flipbookr:::create_code() %&gt;%
 12 "  ) %+%"                                       12
 13 "  cars -&gt;"                                     13
 14 "  my_plot  #BREAK"                             14
+15 ""                                              15
+16 ""                                              16
+17 "  1 + 1 #BREAK"                                17
 ```
-]]
+]
 
-
-
-
-
----
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-* # The name of the code chunk containing code to be flipped
-*flipbookr:::create_code()
-```
-]]
-.column[.content[
-
-```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
-```
-]]
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-  # The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %&gt;%  
-* # parse that code into code, pipes, comments, etc
-* flipbookr:::code_base_parse()
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+* code_as_table_process_break_messages()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code_as_table) 
+{
+    code_as_table %&gt;% dplyr::mutate(raw_code = stringr::str_remove(raw_code, 
+        "\\s+$")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(raw_code, 
+        "#BREAK-?\\d+")) %&gt;% dplyr::mutate(non_seq = stringr::str_extract(non_seq, 
+        "-?\\d+")) %&gt;% dplyr::mutate(non_seq = as.numeric(non_seq)) %&gt;% 
+        dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %&gt;% 
+        dplyr::mutate(user = stringr::str_detect(raw_code, "#BREAK$")) %&gt;% 
+        dplyr::mutate(rotate = stringr::str_detect(raw_code, 
+            "#ROTATE$"))
+}
+&lt;bytecode: 0x7fd51bdc0cf8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 5
+   raw_code                                      line non_seq user  rotate
+   &lt;chr&gt;                                        &lt;int&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; 
+ 1 "cars %&gt;%             # the data  #BREAK"        1       1 TRUE  FALSE 
+ 2 "  filter(speed &gt; 4) %&gt;%  # subset"              2       1 FALSE FALSE 
+ 3 "  ggplot() +              # pipe to ggplot"     3       1 FALSE FALSE 
+ 4 "  aes(x = speed) +"                             4       1 FALSE FALSE 
+ 5 "  aes(y = dist) +"                              5       1 FALSE FALSE 
+ 6 "  # Describing what follows"                    6       1 FALSE FALSE 
+ 7 "  geom_point(alpha = .3) + #BREAK"              7       1 TRUE  FALSE 
+ 8 "  geom_point(alpha = 1) + #BREAK2"              8       2 FALSE FALSE 
+ 9 "  geom_jitter(alpha = .5) + #BREAK3"            9       3 FALSE FALSE 
+10 "  aes(color ="                                 10       1 FALSE FALSE 
+11 "  speed &gt; 14"                                  11       1 FALSE FALSE 
+12 "  ) %+%"                                       12       1 FALSE FALSE 
+13 "  cars -&gt;"                                     13       1 FALSE FALSE 
+14 "  my_plot  #BREAK"                             14       1 TRUE  FALSE 
+15 ""                                              15       1 FALSE FALSE 
+16 ""                                              16       1 FALSE FALSE 
+17 "  1 + 1 #BREAK"                                17       1 TRUE  FALSE 
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+*hide_away
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+*create_code()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+* r_code_base_parse()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code) 
+{
+    sf &lt;- srcfile(code)
+    try(parse(text = code, srcfile = sf))
+    utils::getParseData(sf)
+}
+&lt;bytecode: 0x7fd51ad36dd8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
 
 ```
     line1 col1 line2 col2  id parent                token terminal
@@ -432,6 +1085,13 @@ flipbookr:::create_code() %&gt;%
 133    14    3    14    9 133    136               SYMBOL     TRUE
 136    14    3    14    9 136    137                 expr    FALSE
 134    14   12    14   17 134   -137              COMMENT     TRUE
+151    17    3    17    7 151      0                 expr    FALSE
+144    17    3    17    3 144    145            NUM_CONST     TRUE
+145    17    3    17    3 145    151                 expr    FALSE
+146    17    5    17    5 146    151                  '+'     TRUE
+147    17    7    17    7 147    148            NUM_CONST     TRUE
+148    17    7    17    7 148    151                 expr    FALSE
+149    17    9    17   14 149   -151              COMMENT     TRUE
                          text
 137                          
 131                          
@@ -541,236 +1201,703 @@ flipbookr:::create_code() %&gt;%
 133                   my_plot
 136                          
 134                    #BREAK
+151                          
+144                         1
+145                          
+146                         +
+147                         1
+148                          
+149                    #BREAK
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-  # The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %&gt;%  
-  # parse that code into code, pipes, comments, etc
-  flipbookr:::code_base_parse() %&gt;%  
-* flipbookr:::base_parsed_count_parentheses()
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+* r_base_parsed_count_parentheses()
 ```
-]]
-.column[.content[
-
-```
-# A tibble: 14 x 12
-    line full_line comment num_open_par num_closed_par num_open_curly
-   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
- 1     1 cars%&gt;%#… "# the…            0              0              0
- 2     2 filter(s… "# sub…            1              1              0
- 3     3 ggplot()… "# pip…            1              1              0
- 4     4 aes(x=sp… ""                 1              1              0
- 5     5 aes(y=di… ""                 1              1              0
- 6     6 # Descri… "# Des…            0              0              0
- 7     7 geom_poi… "#BREA…            1              1              0
- 8     8 geom_poi… "#BREA…            1              1              0
- 9     9 geom_jit… "#BREA…            1              1              0
-10    10 aes(colo… ""                 1              0              0
-11    11 speed&gt;14  ""                 0              0              0
-12    12 )%+%      ""                 0              1              0
-13    13 cars-&gt;    ""                 0              0              0
-14    14 my_plot#… "#BREA…            0              0              0
-# … with 6 more variables: num_closed_curly &lt;int&gt;, num_open_square &lt;int&gt;,
-#   num_closed_square &lt;int&gt;, balanced_paren &lt;lgl&gt;, balanced_curly &lt;lgl&gt;,
-#   balanced_square &lt;lgl&gt;
-```
-]]
-
-
-
-
-
----
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-*flipbookr:::create_code()
-```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+function (base_parsed) 
+{
+    num_lines &lt;- max(base_parsed$line1)
+    all_lines &lt;- tibble::tibble(line = 1:num_lines)
+    base_parsed %&gt;% dplyr::rename(line = line1) %&gt;% dplyr::mutate(open_par = text == 
+        "(") %&gt;% dplyr::mutate(closed_par = text == ")") %&gt;% 
+        dplyr::mutate(open_curly = text == "{") %&gt;% dplyr::mutate(closed_curly = text == 
+        "}") %&gt;% dplyr::mutate(open_square = text == "[") %&gt;% 
+        dplyr::mutate(open_square = ifelse(text == "[[", 2, open_square)) %&gt;% 
+        dplyr::mutate(closed_square = text == "]") %&gt;% dplyr::group_by(line) %&gt;% 
+        dplyr::summarise(full_line = paste0(text, collapse = ""), 
+            comment = stringr::str_trim(paste0(ifelse(token == 
+                "COMMENT", text, ""), collapse = " ")), num_open_par = sum(open_par), 
+            num_closed_par = sum(closed_par), num_open_curly = sum(open_curly), 
+            num_closed_curly = sum(closed_curly), num_open_square = sum(open_square), 
+            num_closed_square = sum(closed_square)) %&gt;% dplyr::full_join(all_lines) %&gt;% 
+        dplyr::arrange(line) %&gt;% dplyr::mutate(full_line = tidyr::replace_na(full_line, 
+        ""), comment = tidyr::replace_na(comment, ""), num_open_par = tidyr::replace_na(num_open_par, 
+        0), num_closed_par = tidyr::replace_na(num_closed_par, 
+        0), num_open_curly = tidyr::replace_na(num_open_curly, 
+        0), num_closed_curly = tidyr::replace_na(num_closed_curly, 
+        0), num_open_square = tidyr::replace_na(num_open_square, 
+        0), num_closed_square = tidyr::replace_na(num_closed_square, 
+        0)) %&gt;% dplyr::mutate(balanced_paren = (cumsum(num_open_par) - 
+        cumsum(num_closed_par)) == 0) %&gt;% dplyr::mutate(balanced_curly = (cumsum(num_open_curly) - 
+        cumsum(num_closed_curly)) == 0) %&gt;% dplyr::mutate(balanced_square = (cumsum(num_open_square) - 
+        cumsum(num_closed_square)) == 0) %&gt;% dplyr::mutate(all_parentheses_balanced = balanced_paren &amp; 
+        balanced_curly &amp; balanced_square) %&gt;% dplyr::select(line, 
+        full_line, comment, all_parentheses_balanced)
+}
+&lt;bytecode: 0x7fd51ad9db30&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-flipbookr:::create_code() %&gt;%  
-* flipbookr:::code_parse()
-```
-]]
-.column[.content[
-
-```
-# A tibble: 14 x 8
-    line raw_code          code        connector comment     auto  user  non_seq
-   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
- 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  TRUE        1
- 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
- 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
- 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
- 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
- 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
- 7     7 "  geom_point(al… "  geom_po… "+"       ""          TRUE  TRUE        1
- 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
- 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
-10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
-11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
-12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
-13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
-14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
-```
-]]
-
-
-
-
----
-class: middle center inverse
-
-# Step 2
-## Reconstruct code into partial builds
-
----
-
-## First calculate which lines need to be shown and highlighted in each frame of the mini flipbook.
-
---
-
-A list is returned where each frame corresponds to the element in the list.  
-
---
-
-Within the list numbers of the lines of code for each frame is returned.
-
---
-
-This is dependent on what the user has set for the break_type. 
---
-
-Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
-
-
----
-
-class: split-40
-count: false
-.column[.content[
-
-```r
-* # The name of the code chunk containing code to be flipped
-*flipbookr:::create_code()
-```
-]]
-.column[.content[
+]
+ 
+.right-panel-the_code_parsing-auto[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+# A tibble: 17 x 4
+    line full_line                  comment                all_parentheses_bala…
+   &lt;int&gt; &lt;chr&gt;                      &lt;chr&gt;                  &lt;lgl&gt;                
+ 1     1 "cars%&gt;%# the data  #BREA… "# the data  #BREAK"   TRUE                 
+ 2     2 "filter(speed&gt;4)%&gt;%# subs… "# subset"             TRUE                 
+ 3     3 "ggplot()+# pipe to ggplo… "# pipe to ggplot"     TRUE                 
+ 4     4 "aes(x=speed)+"            ""                     TRUE                 
+ 5     5 "aes(y=dist)+"             ""                     TRUE                 
+ 6     6 "# Describing what follow… "# Describing what fo… TRUE                 
+ 7     7 "geom_point(alpha=.3)+#BR… "#BREAK"               TRUE                 
+ 8     8 "geom_point(alpha=1)+#BRE… "#BREAK2"              TRUE                 
+ 9     9 "geom_jitter(alpha=.5)+#B… "#BREAK3"              TRUE                 
+10    10 "aes(color="               ""                     FALSE                
+11    11 "speed&gt;14"                 ""                     FALSE                
+12    12 ")%+%"                     ""                     TRUE                 
+13    13 "cars-&gt;"                   ""                     TRUE                 
+14    14 "my_plot#BREAK"            "#BREAK"               TRUE                 
+15    15 ""                         ""                     TRUE                 
+16    16 ""                         ""                     TRUE                 
+17    17 "1+1#BREAK"                "#BREAK"               TRUE                 
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-  # The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %&gt;%  
-* # parse that code into code, pipes, comments, etc
-* flipbookr:::code_parse()
-```
-]]
-.column[.content[
+library(flipbookr)  
 
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+*hide_again
 ```
-# A tibble: 14 x 8
-    line raw_code          code        connector comment     auto  user  non_seq
-   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
- 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  TRUE        1
- 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
- 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
- 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
- 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
- 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
- 7     7 "  geom_point(al… "  geom_po… "+"       ""          TRUE  TRUE        1
- 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
- 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
-10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
-11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
-12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
-13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
-14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
-```
-]]
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-  # The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %&gt;%  
-  # parse that code into code, pipes, comments, etc
-  flipbookr:::code_parse() %&gt;%  
-* # calculate which lines to show for each frame
-* flipbookr:::parsed_calc_show(break_type = "non_seq")
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+*create_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+* r_code_full_parse()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code = code) 
+{
+    arithmetic &lt;- "\\+$|-$|\\/$|\\*$|\\^$|%%$|%\\/%$"
+    matrix &lt;- "%\\*%$|%o%$"
+    ggplot_change_data &lt;- "%\\+%$"
+    the_magrittr &lt;- "%&gt;%$|%\\$%$"
+    right_assign &lt;- "-&gt;$"
+    combine_booleans &lt;- "\\|$|\\&amp;$"
+    connectors &lt;- paste(arithmetic, matrix, ggplot_change_data, 
+        the_magrittr, right_assign, combine_booleans, sep = "|")
+    raw_code_table &lt;- code_simple_parse(code = code)
+    parsed_code_table &lt;- code %&gt;% r_code_base_parse() %&gt;% r_base_parsed_count_parentheses()
+    raw_code_table %&gt;% dplyr::full_join(parsed_code_table) %&gt;% 
+        dplyr::mutate(comment = tidyr::replace_na(comment, "XXXXXXXXX")) %&gt;% 
+        dplyr::mutate(comment = stringr::str_replace(comment, 
+            "^$", "XXXXXXXXX")) %&gt;% dplyr::mutate(code = stringr::str_remove(raw_code, 
+        comment)) %&gt;% dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), 
+        connectors)) %&gt;% dplyr::mutate(connector = tidyr::replace_na(connector, 
+        "")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "#BREAK\\d?")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "#ROTATE")) %&gt;% dplyr::mutate(comment = stringr::str_remove(comment, 
+        "XXXXXXXXX")) %&gt;% dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), 
+        connectors)) %&gt;% dplyr::mutate(auto = all_parentheses_balanced &amp; 
+        code != "") %&gt;% dplyr::select(line, raw_code, code, connector, 
+        comment, auto, user, non_seq, rotate)
+}
+&lt;bytecode: 0x7fd51ac90f28&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 9
+    line raw_code       code     connector comment    auto  user  non_seq rotate
+   &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt; 
+ 1     1 "cars %&gt;%    … "cars "  "%&gt;%"     "# the da… TRUE  TRUE        1 FALSE 
+ 2     2 "  filter(spe… "  filt… "%&gt;%"     "# subset" TRUE  FALSE       1 FALSE 
+ 3     3 "  ggplot() +… "  ggpl… "+"       "# pipe t… TRUE  FALSE       1 FALSE 
+ 4     4 "  aes(x = sp… "  aes(… "+"       ""         TRUE  FALSE       1 FALSE 
+ 5     5 "  aes(y = di… "  aes(… "+"       ""         TRUE  FALSE       1 FALSE 
+ 6     6 "  # Describi… ""       ""        "# Descri… FALSE FALSE       1 FALSE 
+ 7     7 "  geom_point… "  geom… "+"       ""         TRUE  TRUE        1 FALSE 
+ 8     8 "  geom_point… "  geom… "+"       ""         TRUE  FALSE       2 FALSE 
+ 9     9 "  geom_jitte… "  geom… "+"       ""         TRUE  FALSE       3 FALSE 
+10    10 "  aes(color … "  aes(… ""        ""         FALSE FALSE       1 FALSE 
+11    11 "  speed &gt; 14" "  spee… ""        ""         FALSE FALSE       1 FALSE 
+12    12 "  ) %+%"      "  ) "   "%+%"     ""         TRUE  FALSE       1 FALSE 
+13    13 "  cars -&gt;"    "  cars… "-&gt;"      ""         TRUE  FALSE       1 FALSE 
+14    14 "  my_plot  #… "  my_p… ""        ""         TRUE  TRUE        1 FALSE 
+15    15 ""             ""       ""        ""         FALSE FALSE       1 FALSE 
+16    16 ""             ""       ""        ""         FALSE FALSE       1 FALSE 
+17    17 "  1 + 1 #BRE… "  1 + … ""        ""         TRUE  TRUE        1 FALSE 
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+*hide_more
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+*create_code()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function () 
+{
+    "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+}
+&lt;bytecode: 0x7fd51aec6ac8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK\n\n\n  1 + 1 #BREAK"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+* code_parse()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (code = create_code(), lang = "r") 
+{
+    if (lang == "r") {
+        r_code_full_parse(code = code) %&gt;% dplyr::mutate(func = stringr::str_extract(code, 
+            "\\w+\\(")) %&gt;% dplyr::mutate(func = stringr::str_remove(func, 
+            "\\("))
+    }
+    else if (lang == "python") {
+        python_code_full_parse(code = code)
+    }
+    else if (lang == "stata") {
+        NULL
+    }
+}
+&lt;bytecode: 0x7fd51ac7ec88&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+```
+# A tibble: 17 x 10
+    line raw_code    code    connector comment  auto  user  non_seq rotate func 
+   &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;    &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt; &lt;lgl&gt;  &lt;chr&gt;
+ 1     1 "cars %&gt;% … "cars " "%&gt;%"     "# the … TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+ 2     2 "  filter(… "  fil… "%&gt;%"     "# subs… TRUE  FALSE       1 FALSE  filt…
+ 3     3 "  ggplot(… "  ggp… "+"       "# pipe… TRUE  FALSE       1 FALSE  ggpl…
+ 4     4 "  aes(x =… "  aes… "+"       ""       TRUE  FALSE       1 FALSE  aes  
+ 5     5 "  aes(y =… "  aes… "+"       ""       TRUE  FALSE       1 FALSE  aes  
+ 6     6 "  # Descr… ""      ""        "# Desc… FALSE FALSE       1 FALSE  &lt;NA&gt; 
+ 7     7 "  geom_po… "  geo… "+"       ""       TRUE  TRUE        1 FALSE  geom…
+ 8     8 "  geom_po… "  geo… "+"       ""       TRUE  FALSE       2 FALSE  geom…
+ 9     9 "  geom_ji… "  geo… "+"       ""       TRUE  FALSE       3 FALSE  geom…
+10    10 "  aes(col… "  aes… ""        ""       FALSE FALSE       1 FALSE  aes  
+11    11 "  speed &gt;… "  spe… ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+12    12 "  ) %+%"   "  ) "  "%+%"     ""       TRUE  FALSE       1 FALSE  &lt;NA&gt; 
+13    13 "  cars -&gt;" "  car… "-&gt;"      ""       TRUE  FALSE       1 FALSE  &lt;NA&gt; 
+14    14 "  my_plot… "  my_… ""        ""       TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+15    15 ""          ""      ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+16    16 ""          ""      ""        ""       FALSE FALSE       1 FALSE  &lt;NA&gt; 
+17    17 "  1 + 1 #… "  1 +… ""        ""       TRUE  TRUE        1 FALSE  &lt;NA&gt; 
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_calc_show()
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (parsed, break_type = "auto") 
+{
+    if (break_type == "auto") {
+        code_order &lt;- cumsum(parsed$auto) + 1 - parsed$auto
+        num_panes &lt;- max(code_order)
+    }
+    else if (break_type == "user") {
+        code_order &lt;- cumsum(parsed$user) + 1 - parsed$user
+        num_panes &lt;- max(code_order)
+    }
+    else if (break_type == "non_seq") {
+        code_order &lt;- parsed$non_seq
+        num_panes &lt;- max(abs(code_order))
+    }
+    else if (is.numeric(break_type)) {
+        code_order &lt;- rep(1, nrow(parsed))
+        num_panes &lt;- break_type
+    }
+    else if (break_type == "rotate") {
+        num_panes &lt;- sum(parsed$rotate)
+    }
+    which_show &lt;- list()
+    if (break_type == "rotate") {
+        for (i in 1:num_panes) {
+            which_show[[i]] &lt;- sort(c(which(!parsed$rotate), 
+                which(parsed$rotate)[i]))
+        }
+    }
+    else {
+        for (i in 1:num_panes) {
+            which_show[[i]] &lt;- which(code_order &lt;= i)
+        }
+    }
+    which_show
+}
+&lt;bytecode: 0x7fd51b3614e0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
 
 ```
 [[1]]
- [1]  1  2  3  4  5  6  7 10 11 12 13 14
+[1] 1
 
 [[2]]
- [1]  1  2  3  4  5  6  7  8 10 11 12 13 14
+[1] 1 2
 
 [[3]]
+[1] 1 2 3
+
+[[4]]
+[1] 1 2 3 4
+
+[[5]]
+[1] 1 2 3 4 5
+
+[[6]]
+[1] 1 2 3 4 5 6 7
+
+[[7]]
+[1] 1 2 3 4 5 6 7 8
+
+[[8]]
+[1] 1 2 3 4 5 6 7 8 9
+
+[[9]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12
+
+[[10]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13
+
+[[11]]
  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+
+[[12]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-the_code_parsing-auto[
 
 ```r
-  # The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %&gt;%  
-  # parse that code into code, pipes, comments, etc
-  flipbookr:::code_parse() %&gt;%  
-  # calculate which lines to show for each frame
-  flipbookr:::parsed_calc_show(break_type = "non_seq") %&gt;%  
-* # calculate highlighting that is needed for each frame
-* flipbookr:::shown_lines_calc_highlight(break_type = "non_seq")
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_calc_show() %&gt;%  
+* shown_lines_calc_highlight()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+```
+function (which_show = list(c(1, 2), c(1, 2, 3, 4)), break_type = "auto") 
+{
+    which_highlight &lt;- list()
+    if (break_type == "user" | break_type == "auto") {
+        which_highlight[[1]] &lt;- which_show[[1]]
+    }
+    if (break_type == "non_seq" | break_type == "rotate") {
+        which_highlight[[1]] &lt;- as.integer(c())
+    }
+    if (break_type %in% c("user", "auto", "non_seq", "rotate")) {
+        for (i in 2:length(which_show)) {
+            which_highlight[[i]] &lt;- which_show[[i]][!(which_show[[i]] %in% 
+                which_show[[i - 1]])]
+        }
+    }
+    if (is.numeric(break_type)) {
+        for (i in 1:length(which_show)) {
+            which_highlight[[i]] &lt;- as.integer(c())
+        }
+    }
+    which_highlight
+}
+&lt;bytecode: 0x7fd51a7e9f10&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-the_code_parsing-auto[
 
 ```
 [[1]]
-integer(0)
+[1] 1
 
 [[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5
+
+[[6]]
+[1] 6 7
+
+[[7]]
 [1] 8
 
-[[3]]
+[[8]]
 [1] 9
+
+[[9]]
+[1] 10 11 12
+
+[[10]]
+[1] 13
+
+[[11]]
+[1] 14
+
+[[12]]
+[1] 15 16 17
 ```
-]]
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-the_code_parsing-auto[
+
+```r
+library(flipbookr)  
+
+create_code() %&gt;%  
+  code_as_table() %&gt;%  
+  code_as_table_process_break_messages() -&gt;  
+hide_away  
+
+create_code() %&gt;%  
+  r_code_base_parse() %&gt;%  
+  r_base_parsed_count_parentheses() -&gt;  
+hide_again  
+
+
+create_code() %&gt;%  
+  r_code_full_parse() -&gt;  
+hide_more  
+
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_calc_show() %&gt;%  
+  shown_lines_calc_highlight() -&gt;  
+*hiding
+```
+]
+ 
+.middle-panel-the_code_parsing-auto[
+
+]
+ 
+.right-panel-the_code_parsing-auto[
+
+]
+
+&lt;style&gt;
+.left-panel-the_code_parsing-auto {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-the_code_parsing-auto {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-the_code_parsing-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
 
 
 
@@ -785,71 +1912,111 @@ We create a list of strings of the partial builds, which can be saved as an obje
 
 ---
 
+
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
-* # from the parsed code
-* # and using calc for which lines to display ...
-*flipbookr:::create_code()
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+  parsed_return_partial_code()  
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
+
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
 
 ```
-[1] "cars %&gt;%             # the data  #BREAK\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #BREAK\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;" 
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
-  # from the parsed code
-  # and using calc for which lines to display ...
-flipbookr:::create_code() %&gt;%  
-* flipbookr:::code_parse()
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_left_assign_return_partial_code()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
 ```
-# A tibble: 14 x 8
-    line raw_code          code        connector comment     auto  user  non_seq
-   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
- 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  TRUE        1
- 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
- 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
- 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
- 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
- 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
- 7     7 "  geom_point(al… "  geom_po… "+"       ""          TRUE  TRUE        1
- 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
- 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
-10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
-11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
-12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
-13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
-14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
+function (parsed, which_show_frame = 1:3, which_highlight_frame = 3) 
+{
+    the_reveal &lt;- parsed_return_partial_code(parsed, which_show_frame, 
+        which_highlight_frame)
+    object_to_track &lt;- the_reveal[1] %&gt;% stringr::str_extract(".+\\&lt;-|.+\\=") %&gt;% 
+        stringr::str_remove("&lt;-|=") %&gt;% stringr::str_trim()
+    c(the_reveal, " ", object_to_track)
+}
+&lt;bytecode: 0x7fd51e3d6b58&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
-]]
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;"  " "                                
+[5] NA                                 
+```
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
-  # from the parsed code
-  # and using calc for which lines to display ...
-flipbookr:::create_code() %&gt;%  
-  flipbookr:::code_parse() %&gt;%  
-* # ... return the code needed for each slide ...
-* flipbookr:::parsed_return_partial_code_sequence()
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_return_partial_code_sequence()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
+
+```
+function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = parsed, 
+    break_type = break_type), which_highlight = shown_lines_calc_highlight(which_show = which_show, 
+    break_type = break_type), left_assign = F) 
+{
+    partial_code_frames &lt;- list()
+    for (i in 1:length(which_show)) {
+        if (left_assign == F) {
+            partial_code_frames[[i]] &lt;- parsed_return_partial_code(parsed, 
+                which_show_frame = which_show[[i]], which_highlight_frame = which_highlight[[i]])
+        }
+        else {
+            partial_code_frames[[i]] &lt;- parsed_left_assign_return_partial_code(parsed, 
+                which_show_frame = which_show[[i]], which_highlight_frame = which_highlight[[i]])
+        }
+    }
+    partial_code_frames
+}
+&lt;bytecode: 0x7fd51b35f550&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
 
 ```
 [[1]]
@@ -874,26 +2041,26 @@ flipbookr:::create_code() %&gt;%
 [[6]]
 [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
 [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
-[5] "  aes(y = dist) +  "               "  # Describing what follows#&lt;&lt;"   
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
 [7] "  geom_point(alpha = .3)   #&lt;&lt;"   
 
 [[7]]
 [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
 [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
-[5] "  aes(y = dist) +  "               "  # Describing what follows"      
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
 [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1)   #&lt;&lt;"    
 
 [[8]]
 [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
 [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
-[5] "  aes(y = dist) +  "               "  # Describing what follows"      
+[5] "  aes(y = dist) +  "               "# Describing what follows"        
 [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
 [9] "  geom_jitter(alpha = .5)   #&lt;&lt;"  
 
 [[9]]
  [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
  [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
- [5] "  aes(y = dist) +  "               "  # Describing what follows"      
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
  [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
  [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  #&lt;&lt;"               
 [11] "  speed &gt; 14  #&lt;&lt;"                 "  )   #&lt;&lt;"                        
@@ -901,7 +2068,7 @@ flipbookr:::create_code() %&gt;%
 [[10]]
  [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
  [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
- [5] "  aes(y = dist) +  "               "  # Describing what follows"      
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
  [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
  [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
 [11] "  speed &gt; 14  "                    "  ) %+%  "                        
@@ -910,32 +2077,162 @@ flipbookr:::create_code() %&gt;%
 [[11]]
  [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
  [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
- [5] "  aes(y = dist) +  "               "  # Describing what follows"      
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
  [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
  [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
 [11] "  speed &gt; 14  "                    "  ) %+%  "                        
 [13] "  cars -&gt;  "                       "  my_plot  #&lt;&lt;"                   
+
+[[12]]
+ [1] "cars %&gt;%  # the data  "            "  filter(speed &gt; 4) %&gt;%  # subset"
+ [3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+ [5] "  aes(y = dist) +  "               "# Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  "      "  geom_point(alpha = 1) +  "      
+ [9] "  geom_jitter(alpha = .5) +  "     "  aes(color =  "                  
+[11] "  speed &gt; 14  "                    "  ) %+%  "                        
+[13] "  cars -&gt;  "                       "  my_plot  "                      
+[15] ""                                  ""                                 
+[17] "  1 + 1  #&lt;&lt;"                     
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
 
 ```r
-  # from the parsed code
-  # and using calc for which lines to display ...
-flipbookr:::create_code() %&gt;%  
-  flipbookr:::code_parse() %&gt;%  
-  # ... return the code needed for each slide ...
-  flipbookr:::parsed_return_partial_code_sequence() -&gt;  
-* # ... save this list
-*code_seq
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_return_recent_function()
 ```
-]]
-.column[.content[
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
 
-]]
+```
+function (parsed, which_highlight_frame = 3) 
+{
+    parsed %&gt;% dplyr::filter(line %in% which_highlight_frame) %&gt;% 
+        dplyr::pull(func)
+}
+&lt;bytecode: 0x7fd51b878de0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[1] "ggplot"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-return_partial_and_sequence-rotate[
+
+```r
+create_code() %&gt;%  
+  code_parse() %&gt;%  
+* parsed_return_recent_function_sequence()
+```
+]
+ 
+.middle-panel-return_partial_and_sequence-rotate[
+
+```
+function (parsed, break_type = "auto", which_show = parsed_calc_show(parsed = parsed, 
+    break_type = break_type), which_highlight = shown_lines_calc_highlight(which_show = which_show, 
+    break_type = break_type), left_assign = F) 
+{
+    partial_recent_functions &lt;- list()
+    for (i in 1:length(which_show)) {
+        if (left_assign == F) {
+            partial_recent_functions[[i]] &lt;- parsed_return_recent_function(parsed, 
+                which_highlight_frame = which_highlight[[i]]) %&gt;% 
+                .[!is.na(.)]
+        }
+        else {
+            partial_recent_functions[[i]] &lt;- parsed_return_recent_function(parsed, 
+                which_highlight_frame = which_highlight[[i]]) %&gt;% 
+                .[!is.na(.)]
+        }
+    }
+    partial_recent_functions
+}
+&lt;bytecode: 0x7fd51b8918a0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-return_partial_and_sequence-rotate[
+
+```
+[[1]]
+character(0)
+
+[[2]]
+[1] "filter"
+
+[[3]]
+[1] "ggplot"
+
+[[4]]
+[1] "aes"
+
+[[5]]
+[1] "aes"
+
+[[6]]
+[1] "geom_point"
+
+[[7]]
+[1] "geom_point"
+
+[[8]]
+[1] "geom_jitter"
+
+[[9]]
+[1] "aes"
+
+[[10]]
+character(0)
+
+[[11]]
+character(0)
+
+[[12]]
+character(0)
+```
+]
+
+&lt;style&gt;
+.left-panel-return_partial_and_sequence-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-return_partial_and_sequence-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-return_partial_and_sequence-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 
@@ -954,22 +2251,147 @@ class: middle center inverse
 
 ## We have generic code chunk templates ...
 
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
 
 ```r
-return_partial_chunks_template_code()
+return_partial_chunks_template_code()  
 ```
+]
+ 
+.middle-panel-returns-rotate[
+
+]
+ 
+.right-panel-returns-rotate[
 
 ```
-[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_code, eval = FALSE, echo = TRUE, code = code_seq[[{{{breaks}}}]]}\n  ```"
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_code, eval = FALSE, echo = TRUE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
 ```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
 
 ```r
-return_partial_chunks_template_output()
+*return_partial_chunks_template_output()
 ```
+]
+ 
+.middle-panel-returns-rotate[
 
 ```
-[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_output, eval = TRUE, echo = FALSE, code = code_seq[[{{{breaks}}}]]}\n```"
+function () 
+{
+    "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+}
+&lt;bytecode: 0x7fd51bac6bc8&gt;
+&lt;environment: namespace:flipbookr&gt;
 ```
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_output, eval = TRUE, echo = FALSE, code = code_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
+
+```r
+*return_partial_chunks_template_function()
+```
+]
+ 
+.middle-panel-returns-rotate[
+
+```
+function () 
+{
+    "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+}
+&lt;bytecode: 0x7fd51c099f28&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[1] "```{&lt;&lt;&lt;lang&gt;&gt;&gt; &lt;&lt;&lt;chunk_name&gt;&gt;&gt;_&lt;&lt;&lt;break_type&gt;&gt;&gt;_&lt;&lt;&lt;breaks&gt;&gt;&gt;_function, eval = TRUE, echo = FALSE, code = func_seq[[&lt;&lt;&lt;breaks&gt;&gt;&gt;]]}\n```"
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-returns-rotate[
+
+```r
+*return_markdown(text = "my. short. text.", sep = "\\.")
+```
+]
+ 
+.middle-panel-returns-rotate[
+
+```
+function (text, sep = "|") 
+{
+    text %&gt;% stringr::str_split(pattern = sep)
+}
+&lt;bytecode: 0x7fd51f9193d0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-returns-rotate[
+
+```
+[[1]]
+[1] "my"     " short" " text"  ""      
+```
+]
+
+&lt;style&gt;
+.left-panel-returns-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-returns-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-returns-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
 
 
 
@@ -987,25 +2409,54 @@ chunk_expand(chunk_name = "cars_plot")
 ````
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 ```{r cars_plot_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
-  ```
-]]
-.column[.content[
+```
+]
+ 
+.right-panel-cars_plot-auto[
 ```{r cars_plot_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
 ```
-]]
+]
+
 ---
 class: split-40
 count: false
-.column[.content[
+ 
+
+.left-panel-cars_plot-auto[
 ```{r cars_plot_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
-  ```
-]]
-.column[.content[
+```
+]
+ 
+.right-panel-cars_plot-auto[
 ```{r cars_plot_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
 ```
-]]
+]
+
+&lt;style&gt;
+.left-panel-cars_plot-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-cars_plot-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-cars_plot-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 ````
 
 
@@ -1021,12 +2472,37 @@ chunk_expand(num_breaks = 2, display_type = "code")
 
 ````
 count: false
+
 ```{r example_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
-  ```
+```
+
 ---
 count: false
+
 ```{r example_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
-  ```
+```
+
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 ````
 
 ```r
@@ -1035,12 +2511,37 @@ chunk_expand(num_breaks = 2, display_type = "output")
 
 ````
 count: false
+
 ```{r example_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
 ```
+
 ---
 count: false
+
 ```{r example_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
 ```
+
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 ````
 
 
@@ -1053,38 +2554,243 @@ count: false
 We've applied it above.  Let's just look at the function itself.  
 
 
-```r
-chunk_reveal
-```
-
-```
-function (chunk_name = "example_name", break_type = "auto", left_assign = F, 
-    code_seq = chunk_name_return_code_sequence(chunk_name, break_type, 
-        left_assign), num_breaks = length(code_seq), display_type = "both", 
-    split = 40) 
-{
-    text &lt;- chunk_expand(chunk_name = chunk_name, break_type = break_type, 
-        num_breaks = num_breaks, display_type = display_type, 
-        split = split)
-    paste(knitr::knit(text = text), collapse = "\n")
-}
-&lt;bytecode: 0x7f93470c98f8&gt;
-&lt;environment: namespace:flipbookr&gt;
-```
 
 ---
 
-# Notes (points of vacillation)
+class: split-40
+count: false
+ 
 
-I'm vacillating on the public function name still.  I thought about chunk_reveal, reveal, flipbookify, flipify.
-Most recently, I was most excited about chunk_reveal, but the function will also work with the parsed and expanded code as an input, which I think is really cool, and makes the code nice and flexible a la Yihui here:  https://yihui.org/en/2018/11/two-roads/
+.left-panel-last-rotate[
 
-Related, I'm a little nervous about code_seq argument.  What if code_seq is defined in the global environment? 
-There is this interesting warning about this formulation: https://adv-r.hadley.nz/functions.html#default-arguments  
+```r
+define_css()  
+```
+]
+ 
+.middle-panel-last-rotate[
 
-Probably the right (worry free) way is to set the default to NULL, and then do an if.null() inside the function where code_seq is defined. The one downside is that this is a little verbose, right?  num_breaks would also need to be adjusted in this way. 
+]
+ 
+.right-panel-last-rotate[
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+]
 
-Another point of waffling was the argument order.  What's really the main input, is it the expanded code, or is it the chunk name?  Which ever (I'm not sure) should be the first thing. It probably must be the chunk name, as this is the way people will most likely use the code, else there would be a lot of confusion for the user.  Still, I found it unsatisfying that you, can't then somehow pipe code into this final function. 
+---
+class: split-40
+count: false
+ 
+
+.left-panel-last-rotate[
+
+```r
+*chunk_expand()
+```
+]
+ 
+.middle-panel-last-rotate[
+
+```
+function (chunk_name = "example", break_type = "auto", display_type = "both", 
+    num_breaks = 2, split = 40, title = "", md = NULL, func = NULL, 
+    lang = "r", custom = F, width_left = "38%", width_right = "60%", 
+    width_middle = "32%", font_size_code = "80%") 
+{
+    breaks &lt;- 1:num_breaks
+    code &lt;- return_partial_chunks_template_code()
+    output &lt;- return_partial_chunks_template_output()
+    md &lt;- "`r md[&lt;&lt;&lt;breaks&gt;&gt;&gt;]`"
+    func &lt;- return_partial_chunks_template_function()
+    if (display_type[1] == "both") {
+        left &lt;- code
+        right &lt;- output
+    }
+    else if (length(display_type) == 1) {
+        left &lt;- get(display_type)
+    }
+    else if (length(display_type) == 2) {
+        left &lt;- get(display_type[1])
+        right &lt;- get(display_type[2])
+    }
+    else if (length(display_type) == 3) {
+        left &lt;- get(display_type[1])
+        middle &lt;- get(display_type[2])
+        right &lt;- get(display_type[3])
+    }
+    if (length(display_type) == 3) {
+        partial_knit_steps &lt;- glue::glue("class: split-&lt;&lt;&lt;split&gt;&gt;&gt;", 
+            "count: false", " ", title, ".left-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            left, "]", " ", ".middle-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            middle, "]", " ", ".right-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            right, "]", " ", .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    else if (length(display_type) == 2 | display_type[1] == "both") {
+        partial_knit_steps &lt;- glue::glue("class: split-&lt;&lt;&lt;split&gt;&gt;&gt;", 
+            "count: false", " ", title, ".left-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            left, "]", " ", ".right-panel-&lt;&lt;&lt;chunk_name&gt;&gt;&gt;-&lt;&lt;&lt;break_type&gt;&gt;&gt;[", 
+            right, "]", " ", .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    else if (length(display_type) == 1) {
+        partial_knit_steps &lt;- glue::glue("count: false", title, 
+            left, .open = "&lt;&lt;&lt;", .close = "&gt;&gt;&gt;", .sep = "\n")
+    }
+    the_defined_css &lt;- define_css(chunk_name = chunk_name, break_type = break_type, 
+        width_left = width_left, width_middle = width_middle, 
+        width_right = width_right, font_size_code = font_size_code)
+    slide_code &lt;- glue::glue_collapse(partial_knit_steps, sep = "\n\n---\n")
+    glue::glue("{slide_code}\n\n{the_defined_css}\n\n", .trim = FALSE)
+}
+&lt;bytecode: 0x7fd51baaefb0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+ 
+.right-panel-last-rotate[
+
+````
+class: split-40
+count: false
+ 
+
+.left-panel-example-auto[
+```{r example_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
+```
+]
+ 
+.right-panel-example-auto[
+```{r example_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-example-auto[
+```{r example_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
+```
+]
+ 
+.right-panel-example-auto[
+```{r example_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
+```
+]
+
+&lt;style&gt;
+.left-panel-example-auto {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-example-auto {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-example-auto {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+````
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-last-rotate[
+
+```r
+*chunk_reveal
+```
+]
+ 
+.middle-panel-last-rotate[
+
+]
+ 
+.right-panel-last-rotate[
+
+```
+function (chunk_name = NULL, break_type = "auto", left_assign = F, 
+    lang = "r", code_seq = NULL, func_seq = NULL, num_breaks = NULL, 
+    display_type = "both", split = 40, title = "", md = NULL, 
+    width_left = "38%", width_middle = "32%", width_right = "60%", 
+    font_size_code = "80%") 
+{
+    if (!is.null(chunk_name)) {
+        code_seq &lt;- chunk_name_return_code_sequence(chunk_name, 
+            break_type, left_assign, lang)
+        func_seq &lt;- chunk_name_return_function_sequence(chunk_name, 
+            break_type, left_assign, lang)
+        num_breaks &lt;- length(code_seq)
+    }
+    text &lt;- chunk_expand(chunk_name = chunk_name, break_type = break_type, 
+        num_breaks = num_breaks, display_type = display_type, 
+        split = split, title = title, lang = lang, md = md, func = func, 
+        width_left = width_left, width_middle = width_middle, 
+        width_right = width_right, font_size_code = font_size_code)
+    paste(knitr::knit(text = text), collapse = "\n")
+}
+&lt;bytecode: 0x7fd51ac637b0&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+]
+
+&lt;style&gt;
+.left-panel-last-rotate {
+  color: #777;
+  width: 32%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-last-rotate {
+  width: 32%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-last-rotate {
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
 
 
 ---
@@ -1105,7 +2811,7 @@ https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"ratio": "16:10",
+"ratio": "30:10",
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false
@@ -1148,9 +2854,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -1159,7 +2881,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

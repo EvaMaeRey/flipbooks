@@ -7,7 +7,7 @@ output:
     lib_dir: libs
     css: ["xaringan-themer.css", ninjutsu]
     nature:
-      ratio: 16:10
+      ratio: 30:10
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
@@ -86,37 +86,7 @@ class: middle center inverse
 
 ---
 
-`r flipbookr::chunk_reveal("the_code_as_table")`
 
-```{r the_code_as_table, include = F}
-flipbookr:::create_code() %>% 
-  flipbookr:::code_as_table()
-```
-
-
-
----
-
-`r chunk_reveal("code_parsing")`
-
-
-```{r, code_parsing, echo = F, eval = F}
-# The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %>% 
-  # parse that code into code, pipes, comments, etc
-  flipbookr:::code_base_parse() %>% 
-  flipbookr:::base_parsed_count_parentheses()
-```
-
-
----
-
-`r flipbookr::chunk_reveal("the_parse")`
-
-```{r the_parse, include = F}
-flipbookr:::create_code() %>% 
-  flipbookr:::code_parse()
-```
 
 
 ---
@@ -131,7 +101,7 @@ class: middle center inverse
 
 --
 
-A list is returned where each frame corresponds to the element in the list.  
+A list is returned where each frame corresponds to the element in the list. 
 
 --
 
@@ -147,18 +117,32 @@ Appropriate highlighting is calculated based on what appears in previous frame a
 
 ---
 
-`r chunk_reveal("calc_lines_for_show_and_highlight")`
+
+`r chunk_reveal("the_code_parsing", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
+
+```{r the_code_parsing, include=FALSE}
+library(flipbookr)
+
+create_code() %>%
+  code_as_table() %>%
+  code_as_table_process_break_messages() ->
+hide_away
+
+create_code() %>%
+  r_code_base_parse() %>% 
+  r_base_parsed_count_parentheses() ->
+hide_again
 
 
-```{r calc_lines_for_show_and_highlight, echo = F, eval = F}
-# The name of the code chunk containing code to be flipped
-flipbookr:::create_code() %>% 
-  # parse that code into code, pipes, comments, etc
-  flipbookr:::code_parse() %>% 
-  # calculate which lines to show for each frame
-  flipbookr:::parsed_calc_show(break_type = "non_seq") %>% 
-  # calculate highlighting that is needed for each frame
-  flipbookr:::shown_lines_calc_highlight(break_type = "non_seq")
+create_code() %>% 
+  r_code_full_parse() ->
+hide_more
+
+create_code() %>% 
+  code_parse() %>% 
+  parsed_calc_show() %>% 
+  shown_lines_calc_highlight() ->
+hiding
 ```
 
 ---
@@ -171,20 +155,18 @@ We create a list of strings of the partial builds, which can be saved as an obje
 
 ---
 
-`r chunk_reveal("partial_code")`
 
+`r chunk_reveal("return_partial_and_sequence", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
 
-```{r partial_code, echo = F, eval = F}
-# from the parsed code 
-# and using calc for which lines to display ...
-flipbookr:::create_code() %>% 
-  flipbookr:::code_parse() %>% #BREAK
-  # ... return the code needed for each slide ...
-  flipbookr:::parsed_return_partial_code_sequence() -> #BREAK
-# ... save this list
-code_seq #BREAK
+```{r return_partial_and_sequence, eval = F, echo = F} 
+create_code() %>% 
+  code_parse() %>% 
+  parsed_return_partial_code() #ROTATE
+  parsed_left_assign_return_partial_code() #ROTATE
+  parsed_return_partial_code_sequence() #ROTATE
+  parsed_return_recent_function() #ROTATE
+  parsed_return_recent_function_sequence() #ROTATE
 ```
-
 
 
 
@@ -199,12 +181,17 @@ class: middle center inverse
 
 ## We have generic code chunk templates ...
 
-```{r xaringan_slides}
-return_partial_chunks_template_code()
-return_partial_chunks_template_output()
+---
+
+`r chunk_reveal("returns", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
+
+```{r returns, eval = F, echo = F} 
+return_partial_chunks_template_code() #ROTATE
+return_partial_chunks_template_output() #ROTATE
+return_partial_chunks_template_function() #ROTATE
+return_markdown(text = "my. short. text.", sep = "\\.") #ROTATE
+
 ```
-
-
 
 
 
@@ -236,23 +223,18 @@ chunk_expand(num_breaks = 2, display_type = "output")
 
 We've applied it above.  Let's just look at the function itself.  
 
-```{r}
-chunk_reveal
-```
+
 
 ---
 
-# Notes (points of vacillation)
+`r chunk_reveal("last", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"), break_type = "rotate")`
 
-I'm vacillating on the public function name still.  I thought about chunk_reveal, reveal, flipbookify, flipify.
-Most recently, I was most excited about chunk_reveal, but the function will also work with the parsed and expanded code as an input, which I think is really cool, and makes the code nice and flexible a la Yihui here:  https://yihui.org/en/2018/11/two-roads/
+```{r last, eval = F, echo = F} 
+define_css() #ROTATE
+chunk_expand() #ROTATE
+chunk_reveal #ROTATE
+```
 
-Related, I'm a little nervous about code_seq argument.  What if code_seq is defined in the global environment? 
-There is this interesting warning about this formulation: https://adv-r.hadley.nz/functions.html#default-arguments  
-
-Probably the right (worry free) way is to set the default to NULL, and then do an if.null() inside the function where code_seq is defined. The one downside is that this is a little verbose, right?  num_breaks would also need to be adjusted in this way. 
-
-Another point of waffling was the argument order.  What's really the main input, is it the expanded code, or is it the chunk name?  Which ever (I'm not sure) should be the first thing. It probably must be the chunk name, as this is the way people will most likely use the code, else there would be a lot of confusion for the user.  Still, I found it unsatisfying that you, can't then somehow pipe code into this final function. 
 
 
 ---
