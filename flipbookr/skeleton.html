@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>The art of flipbooking (building code movies)</title>
+    <title>The art of flipbooking</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, December 2019" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# The art of flipbooking (building code movies)
+# The art of flipbooking
 ## With flipbookr and xaringan
 ### Gina Reynolds, December 2019
 
@@ -430,19 +430,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -545,19 +545,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars-user {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-user {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-user {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -669,24 +669,123 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars-non_seq {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-non_seq {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-non_seq {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
+
+---
+
+# break_type = "rotate", with #ROTATE, #ROTATE, #ROTATE
+
+you can use break_type = "rotate" to cycle through distinct lines of code.  Sometimes, you will need to set the chunk option to eval = F, echo = F instead of include = F.  This will be true when the input code itself cannot be executed. 
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-my_rotate-rotate[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point() +  
+  aes(color = speed) +  
+  scale_color_viridis_c(option = "magma")   
+```
+]
+ 
+.right-panel-my_rotate-rotate[
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_1_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-my_rotate-rotate[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point() +  
+  aes(color = speed) +  
+* scale_color_viridis_c(option = "cividis")
+```
+]
+ 
+.right-panel-my_rotate-rotate[
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_2_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-my_rotate-rotate[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point() +  
+  aes(color = speed) +  
+* scale_color_viridis_c(option = "plasma")
+```
+]
+ 
+.right-panel-my_rotate-rotate[
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_3_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-my_rotate-rotate {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-my_rotate-rotate {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-my_rotate-rotate {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
 
 
 
@@ -788,19 +887,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars_multi-3 {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars_multi-3 {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars_multi-3 {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -967,19 +1066,19 @@ count: false
 &lt;style&gt;
 .left-panel-cars-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1082,19 +1181,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1357,24 +1456,530 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-cars-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
+---
+
+## `display_type = c("md", "code"), md = c("hi", "by")`
+
+Include a panel for markdown.  Double backslashes required to escape.
+
+
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-custom_example-auto[
+### hello
+]
+ 
+.right-panel-custom_example-auto[
+
+```r
+*library(magrittr)
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-custom_example-auto[
+# goodbye
+]
+ 
+.right-panel-custom_example-auto[
+
+```r
+library(magrittr)  
+
+*cars
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-custom_example-auto[
+## `$$\frac{\sum(x)}{2}$$`
+]
+ 
+.right-panel-custom_example-auto[
+
+```r
+library(magrittr)  
+
+cars %$%  
+* cor(x = speed,
+*     y = dist)
+```
+]
+
+&lt;style&gt;
+.left-panel-custom_example-auto {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-custom_example-auto {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-custom_example-auto {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## `display_type = "func"`
+
+to display underlying functions that the code pipeline is using...
+
+---
+
+class: split-40
+count: false
+ 
+
+.left-panel-rnorm-auto[
+
+```r
+*rnorm(50)
+```
+]
+ 
+.middle-panel-rnorm-auto[
+
+```
+function (n, mean = 0, sd = 1) 
+.Call(C_rnorm, n, mean, sd)
+&lt;bytecode: 0x7f9c7e557108&gt;
+&lt;environment: namespace:stats&gt;
+```
+]
+ 
+.right-panel-rnorm-auto[
+
+```
+ [1]  0.648116713  0.884244000  0.585123655  0.214940847  0.260582977
+ [6] -0.277218778 -1.323624339 -0.003351231  0.606291280  0.527673953
+[11]  0.269551789  1.217976608  0.200647205 -0.123657208 -0.050803661
+[16] -1.615108704 -0.207903842  0.052732383  0.467913186 -1.056109037
+[21] -0.697347999  2.083213626  0.050001119  0.207857303 -0.447916811
+[26] -1.423217002 -0.005006253  0.060340445  1.011655166  0.969748302
+[31]  0.181118861 -0.246419865  0.275384636 -0.683670615  0.738232383
+[36]  0.767946335 -0.947528660  0.119708140  1.042891434  0.468495162
+[41] -1.156521143  3.140953452  0.966693059 -1.125116731  1.409722528
+[46]  0.835218198 -1.861690287  1.479198402 -1.274547091  0.874731241
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-rnorm-auto[
+
+```r
+rnorm(50) %&gt;%  
+* sd()
+```
+]
+ 
+.middle-panel-rnorm-auto[
+
+```
+function (x, na.rm = FALSE) 
+sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
+    na.rm = na.rm))
+&lt;bytecode: 0x7f9c75c334e8&gt;
+&lt;environment: namespace:stats&gt;
+```
+]
+ 
+.right-panel-rnorm-auto[
+
+```
+[1] 1.004758
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-rnorm-auto[
+
+```r
+rnorm(50) %&gt;%  
+  sd() %&gt;%  
+* length()
+```
+]
+ 
+.middle-panel-rnorm-auto[
+
+```
+function (x)  .Primitive("length")
+```
+]
+ 
+.right-panel-rnorm-auto[
+
+```
+[1] 1
+```
+]
+
+&lt;style&gt;
+.left-panel-rnorm-auto {
+  color: #777;
+  width: 32.3232323232323%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-rnorm-auto {
+  width: 32.3232323232323%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-rnorm-auto {
+  width: 33.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+class: middle, inverse, center
+
+# `title = "## My title"`
+
+Give your little flipbook a title if you like...
+
+---
+
+# `widths = c(32, 32, 33)`
+
+depending on how many display panels you have, you can adjust relative widths with a vector
+
+---
+
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+*cars
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+]
+ 
+.right-panel-cars3-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+cars %&gt;%  
+* ggplot()
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+```
+function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 
+{
+    UseMethod("ggplot")
+}
+&lt;bytecode: 0x7f9c750afa50&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+ 
+.right-panel-cars3-auto[
+&lt;img src="skeleton_files/figure-html/cars3_auto_2_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+* aes(x = speed)
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+```
+function (x, y, ...) 
+{
+    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
+    aes &lt;- new_aes(exprs, env = parent.frame())
+    rename_aes(aes)
+}
+&lt;bytecode: 0x7f9c74bdd020&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+ 
+.right-panel-cars3-auto[
+&lt;img src="skeleton_files/figure-html/cars3_auto_3_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+```
+function (x, y, ...) 
+{
+    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
+    aes &lt;- new_aes(exprs, env = parent.frame())
+    rename_aes(aes)
+}
+&lt;bytecode: 0x7f9c74bdd020&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+ 
+.right-panel-cars3-auto[
+&lt;img src="skeleton_files/figure-html/cars3_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point()
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+```
+function (mapping = NULL, data = NULL, stat = "identity", position = "identity", 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list(na.rm = na.rm, ...))
+}
+&lt;bytecode: 0x7f9c73936ff8&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+ 
+.right-panel-cars3-auto[
+&lt;img src="skeleton_files/figure-html/cars3_auto_5_output-1.png" width="432" /&gt;
+]
+
+---
+class: split-40
+count: false
+ 
+## A title several widths
+.left-panel-cars3-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point() +  
+* aes(size = speed)
+```
+]
+ 
+.middle-panel-cars3-auto[
+
+```
+function (x, y, ...) 
+{
+    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
+    aes &lt;- new_aes(exprs, env = parent.frame())
+    rename_aes(aes)
+}
+&lt;bytecode: 0x7f9c74bdd020&gt;
+&lt;environment: namespace:ggplot2&gt;
+```
+]
+ 
+.right-panel-cars3-auto[
+&lt;img src="skeleton_files/figure-html/cars3_auto_6_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-cars3-auto {
+  color: #777;
+  width: 23.4042553191489%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-cars3-auto {
+  width: 31.9148936170213%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-cars3-auto {
+  width: 42.5531914893617%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
 
 
 
@@ -1556,19 +2161,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-plot_object-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-plot_object-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-plot_object-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1636,19 +2241,19 @@ cars_plot +
 &lt;style&gt;
 .left-panel-further_building-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-further_building-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-further_building-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1907,19 +2512,19 @@ my_plot
 &lt;style&gt;
 .left-panel-left_assign-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-left_assign-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-left_assign-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2315,19 +2920,19 @@ cars_mod
 &lt;style&gt;
 .left-panel-left_assign2-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-left_assign2-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-left_assign2-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2551,19 +3156,19 @@ cars %&gt;%
 &lt;style&gt;
 .left-panel-dot_notation-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-dot_notation-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-dot_notation-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2669,19 +3274,19 @@ title(main = "the `cars` data")
 &lt;style&gt;
 .left-panel-base_r_plotting-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-base_r_plotting-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-base_r_plotting-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2933,19 +3538,19 @@ prediction_y
 &lt;style&gt;
 .left-panel-cars_anova-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-cars_anova-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-cars_anova-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2958,7 +3563,7 @@ prediction_y
 
 ---
 
-# And arithmetic operation
+# And arithmetic operations
 
 ---
 
@@ -2969,7 +3574,7 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-*(4 + 5)
+*(4 + 5)   # just be careful
 ```
 ]
  
@@ -2988,8 +3593,8 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-* 6
+(4 + 5) /  # just be careful
+* 6   # because order of operations
 ```
 ]
  
@@ -3008,9 +3613,9 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-* 7
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+* 7   # hold
 ```
 ]
  
@@ -3029,10 +3634,10 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-* 3
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+* 3   # contrasting to pipe logic
 ```
 ]
  
@@ -3051,10 +3656,34 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+* 12  # PEMDAS
+```
+]
+ 
+.right-panel-arith-auto[
+
+```
+[1] -25.5
+```
+]
+
+---
+class: split-40
+count: false
+ 
+
+.left-panel-arith-auto[
+
+```r
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 *1:10
 ```
@@ -3063,7 +3692,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3079,10 +3708,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
 * 3
@@ -3092,7 +3722,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3108,10 +3738,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3123,7 +3754,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3143,10 +3774,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3159,7 +3791,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3179,10 +3811,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3197,7 +3830,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3221,10 +3854,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3240,7 +3874,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3264,10 +3898,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3285,7 +3920,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3313,10 +3948,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3335,7 +3971,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3363,10 +3999,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3387,7 +4024,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3419,10 +4056,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3444,7 +4082,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3476,10 +4114,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3503,7 +4142,7 @@ count: false
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3543,10 +4182,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3571,7 +4211,7 @@ matrix(1:4, ncol = 1) %*%
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3611,10 +4251,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3641,7 +4282,7 @@ matrix(1:4, ncol = 1) %*%
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3686,10 +4327,11 @@ count: false
 .left-panel-arith-auto[
 
 ```r
-(4 + 5) /  
-  6 *  
-  7 -  
-  3  
+(4 + 5) /  # just be careful
+  6 *  # because order of operations
+  7 -  # hold
+  3 *  # contrasting to pipe logic
+  12  # PEMDAS
 
 1:10 %%  
   3  
@@ -3717,7 +4359,7 @@ matrix(1:4, ncol = 4) %*%
 .right-panel-arith-auto[
 
 ```
-[1] 7.5
+[1] -25.5
 ```
 
 ```
@@ -3757,19 +4399,19 @@ matrix(1:4, ncol = 4) %*%
 &lt;style&gt;
 .left-panel-arith-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-arith-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-arith-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -3777,92 +4419,6 @@ matrix(1:4, ncol = 4) %*%
 &lt;/style&gt;
 
 
-
-
-
-
----
-
-class: split-40
-count: false
- 
-
-.left-panel-my_rotate-rotate[
-
-```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() +  
-  scale_x_log10()   
-```
-]
- 
-.right-panel-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_1_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-my_rotate-rotate[
-
-```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() +  
-* scale_x_sqrt()
-```
-]
- 
-.right-panel-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_2_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-my_rotate-rotate[
-
-```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() +  
-* scale_x_reverse()
-```
-]
- 
-.right-panel-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_3_output-1.png" width="432" /&gt;
-]
-
-&lt;style&gt;
-.left-panel-my_rotate-rotate {
-  color: #777;
-  width: 38%;
-  height: 92%;
-  float: left;
-  font-size: 80%
-}
-.right-panel-my_rotate-rotate {
-  width: 60%;
-  float: right;
-  padding-left: 1%;
-  font-size: 80%
-}
-.middle-panel-my_rotate-rotate {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
 
 
 
@@ -3988,24 +4544,27 @@ cars %$%
 &lt;style&gt;
 .left-panel-new_pipe-auto {
   color: #777;
-  width: 38%;
+  width: 38.6138613861386%;
   height: 92%;
   float: left;
   font-size: 80%
 }
 .right-panel-new_pipe-auto {
-  width: 60%;
+  width: 59.4059405940594%;
   float: right;
   padding-left: 1%;
   font-size: 80%
 }
 .middle-panel-new_pipe-auto {
-  width: 32%;
+  width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
 
 
 
@@ -4015,665 +4574,11 @@ cars %$%
 ---
 class: middle, inverse, center
 
-# Custom Styling
+# `text_reveal`
 
----
+--
 
-
-class: split-40
-count: false
- 
-# Pipe to correlation coefficient
-.left-panel-custom_example-auto[
-
-```r
-*library(magrittr)
-```
-]
- 
-.right-panel-custom_example-auto[
-
-]
-
----
-class: split-40
-count: false
- 
-# Pipe to correlation coefficient
-.left-panel-custom_example-auto[
-
-```r
-library(magrittr)  
-
-*cars
-```
-]
- 
-.right-panel-custom_example-auto[
-
-```
-   speed dist
-1      4    2
-2      4   10
-3      7    4
-4      7   22
-5      8   16
-6      9   10
-7     10   18
-8     10   26
-9     10   34
-10    11   17
-11    11   28
-12    12   14
-13    12   20
-14    12   24
-15    12   28
-16    13   26
-17    13   34
-18    13   34
-19    13   46
-20    14   26
-21    14   36
-22    14   60
-23    14   80
-24    15   20
-25    15   26
-26    15   54
-27    16   32
-28    16   40
-29    17   32
-30    17   40
-31    17   50
-32    18   42
-33    18   56
-34    18   76
-35    18   84
-36    19   36
-37    19   46
-38    19   68
-39    20   32
-40    20   48
-41    20   52
-42    20   56
-43    20   64
-44    22   66
-45    23   54
-46    24   70
-47    24   92
-48    24   93
-49    24  120
-50    25   85
-```
-]
-
----
-class: split-40
-count: false
- 
-# Pipe to correlation coefficient
-.left-panel-custom_example-auto[
-
-```r
-library(magrittr)  
-
-cars %$%  
-* cor(x = speed,
-*     y = dist)
-```
-]
- 
-.right-panel-custom_example-auto[
-
-```
-[1] 0.8068949
-```
-]
-
-&lt;style&gt;
-.left-panel-custom_example-auto {
-  color: #777;
-  width: 29%;
-  height: 92%;
-  float: left;
-  font-size: 130%
-}
-.right-panel-custom_example-auto {
-  width: 70%;
-  float: right;
-  padding-left: 1%;
-  font-size: 130%
-}
-.middle-panel-custom_example-auto {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 130%
-}
-&lt;/style&gt;
-
-
-
-
-
-
-
-
----
-
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-### hello
-]
- 
-.right-panel-custom_example-auto[
-
-```r
-*library(magrittr)
-```
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-# goodbye
-]
- 
-.right-panel-custom_example-auto[
-
-```r
-library(magrittr)  
-
-*cars
-```
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-## `$$\frac{\sum(1)}{2}$$`
-]
- 
-.right-panel-custom_example-auto[
-
-```r
-library(magrittr)  
-
-cars %$%  
-* cor(x = speed,
-*     y = dist)
-```
-]
-
-&lt;style&gt;
-.left-panel-custom_example-auto {
-  color: #777;
-  width: 38%;
-  height: 92%;
-  float: left;
-  font-size: 80%
-}
-.right-panel-custom_example-auto {
-  width: 60%;
-  float: right;
-  padding-left: 1%;
-  font-size: 80%
-}
-.middle-panel-custom_example-auto {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
----
-
-
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-### hello
-]
- 
-.right-panel-custom_example-auto[
-
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-# goodbye
-]
- 
-.right-panel-custom_example-auto[
-
-```
-   speed dist
-1      4    2
-2      4   10
-3      7    4
-4      7   22
-5      8   16
-6      9   10
-7     10   18
-8     10   26
-9     10   34
-10    11   17
-11    11   28
-12    12   14
-13    12   20
-14    12   24
-15    12   28
-16    13   26
-17    13   34
-18    13   34
-19    13   46
-20    14   26
-21    14   36
-22    14   60
-23    14   80
-24    15   20
-25    15   26
-26    15   54
-27    16   32
-28    16   40
-29    17   32
-30    17   40
-31    17   50
-32    18   42
-33    18   56
-34    18   76
-35    18   84
-36    19   36
-37    19   46
-38    19   68
-39    20   32
-40    20   48
-41    20   52
-42    20   56
-43    20   64
-44    22   66
-45    23   54
-46    24   70
-47    24   92
-48    24   93
-49    24  120
-50    25   85
-```
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-custom_example-auto[
-## `$$\frac{\sum(1)}{2}$$`
-]
- 
-.right-panel-custom_example-auto[
-
-```
-[1] 0.8068949
-```
-]
-
-&lt;style&gt;
-.left-panel-custom_example-auto {
-  color: #777;
-  width: 38%;
-  height: 92%;
-  float: left;
-  font-size: 80%
-}
-.right-panel-custom_example-auto {
-  width: 60%;
-  float: right;
-  padding-left: 1%;
-  font-size: 80%
-}
-.middle-panel-custom_example-auto {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
----
-
-
-count: false
-
-### hello
-
----
-count: false
-
-# goodbye
-
----
-count: false
-
-## `$$\frac{\sum(1)}{2}$$`
-
-&lt;style&gt;
-.left-panel--auto {
-  color: #777;
-  width: 38%;
-  height: 92%;
-  float: left;
-  font-size: 80%
-}
-.right-panel--auto {
-  width: 60%;
-  float: right;
-  padding-left: 1%;
-  font-size: 80%
-}
-.middle-panel--auto {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
----
-
-
-
-
-
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-*cars
-```
-]
- 
-.middle-panel-cars3-auto[
-
-]
- 
-.right-panel-cars3-auto[
-
-```
-   speed dist
-1      4    2
-2      4   10
-3      7    4
-4      7   22
-5      8   16
-6      9   10
-7     10   18
-8     10   26
-9     10   34
-10    11   17
-11    11   28
-12    12   14
-13    12   20
-14    12   24
-15    12   28
-16    13   26
-17    13   34
-18    13   34
-19    13   46
-20    14   26
-21    14   36
-22    14   60
-23    14   80
-24    15   20
-25    15   26
-26    15   54
-27    16   32
-28    16   40
-29    17   32
-30    17   40
-31    17   50
-32    18   42
-33    18   56
-34    18   76
-35    18   84
-36    19   36
-37    19   46
-38    19   68
-39    20   32
-40    20   48
-41    20   52
-42    20   56
-43    20   64
-44    22   66
-45    23   54
-46    24   70
-47    24   92
-48    24   93
-49    24  120
-50    25   85
-```
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-cars %&gt;%  
-* ggplot()
-```
-]
- 
-.middle-panel-cars3-auto[
-
-```
-function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 
-{
-    UseMethod("ggplot")
-}
-&lt;bytecode: 0x7fd9975d58a0&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_2_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-* aes(x = speed)
-```
-]
- 
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7fd997c97a48&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_3_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-* aes(y = dist)
-```
-]
- 
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7fd997c97a48&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_4_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-* geom_point()
-```
-]
- 
-.middle-panel-cars3-auto[
-
-```
-function (mapping = NULL, data = NULL, stat = "identity", position = "identity", 
-    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list(na.rm = na.rm, ...))
-}
-&lt;bytecode: 0x7fd9975db0e0&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_5_output-1.png" width="432" /&gt;
-]
-
----
-class: split-40
-count: false
- 
-
-.left-panel-cars3-auto[
-
-```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() +  
-* aes(size = speed)
-```
-]
- 
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7fd997c97a48&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_6_output-1.png" width="432" /&gt;
-]
-
-&lt;style&gt;
-.left-panel-cars3-auto {
-  color: #777;
-  width: 32%;
-  height: 92%;
-  float: left;
-  font-size: 80%
-}
-.right-panel-cars3-auto {
-  width: 32%;
-  float: right;
-  padding-left: 1%;
-  font-size: 80%
-}
-.middle-panel-cars3-auto {
-  width: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-
----
-class: middle, inverse, center
-
-# Slow Message
+use text_reveal, and define a delimiter.
 
 ---
 
@@ -4690,12 +4595,33 @@ class: inverse, middle, center
 class: inverse, middle, center
 # text.
 
+---
+
+
+
+
+---
+class: inverse, middle, center
+# Sometimes, it's helpful to slow down and look at exactly one decision.
+---
+class: inverse, middle, center
+#  Flipbooks present code step-by-step and side-by-side with output.
+---
+class: inverse, middle, center
+#  They parse code pipelines.
+---
+class: inverse, middle, center
+#  Reconstruct code into partial builds.
+---
+class: inverse, middle, center
+#  And present those builds with their output.
+---
+class: inverse, middle, center
+#  Both code and output are superimposed on the previous state.
 
 ---
 
-'One driver of equality we should invest in is upskilling everyone - not just the select few.'
-
-digital inclusion.
+&lt;!-- 'One driver of equality we should invest in is upskilling everyone - not just the select few.' --&gt;
 
 
 ---
@@ -4714,24 +4640,63 @@ Another extremely useful resource for xaringan styling is Alison Hill's ["Meet x
 Flipbooks created with Xaringan are multi-file creations.  The figures produced are stored separately from the main html document.  This presents a little bit of a challenge for sharing your work.  You can zip up all the associated files and share that way.  Alternatively, you can share as a website.  I've shared my work on github with github pages.  
 
 - flip, zip, and ship
-- get it on github, with github pages.  A good walk through is the one that I learned with (to get [the ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) online) by Brian Caffo https://www.youtube.com/watch?v=BBCesiebEuQ  Larger flipbooks will take longer to load online - something to keep in mind as you are building. 
+- get it on github, with github pages.  A good walk through is the one that I learned with (to get [the ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) online) is by Brian Caffo https://www.youtube.com/watch?v=BBCesiebEuQ  Larger flipbooks will take longer to load in the browser - something to keep in mind as you are building. 
+- print to pdf using pagedown::chrome_print()
+
+
+---
+
+## Convert to pdf
+
+to create a pdf from you may use the pagedown package as follows to use chrome print to pdf (here, eval is set to FALSE):
+
+
+```r
+pagedown::chrome_print(input = "my_flipbook.Rmd")
+
+# or (recommended):
+
+pagedown::chrome_print(input = "my_flipbook.html")
+```
+
+Note:  This works for flipbooks when css is set as it is in the last css code chunk (the media print part) else only the last frame from the flipbooked chunks will display in the pdf.  Thanks to Bryan Shalloway for thinking about conversion to pdf, [the exposition of this last frame problem, and proposing a solution](https://github.com/EvaMaeRey/flipbookr/issues/21) and also to Antoine Bichat! Be sure to preview your work before you present --- translation might not be 100% visual match!
+
+---
+
+## flipbook preview -- as gif
+
+If you want to create a preview of your flipbook, you can pass the pdf to functions from magick (here, eval is set to FALSE):  
+
+
+```r
+# then create gif as follows
+magick::image_read_pdf(path = "my_flipbook.pdf", density = 100) %&gt;% # create images
+  magick::image_write_gif(path = "my_flipbook.gif", delay = .4) # images to gif
+```
+
+Bryan Shalloway proposed this workflow.  Thanks Bryan!
+
+Coming soon, build a previews, using [viztoc](https://github.com/EvaMaeRey/viztoc). Development package!  Breaking changes are the norm! 
 
 
 
 
 
 ---
-class: inverse, middle, center
+class: middle, center
 
 The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it with remotes::install_github("EvaMaeRey/flipbookr")
 
 
 
-
-
-
 &lt;style type="text/css"&gt;
 .remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
 &lt;/style&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

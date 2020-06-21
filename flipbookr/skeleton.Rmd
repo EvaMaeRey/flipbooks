@@ -1,5 +1,5 @@
 ---
-title: "The art of flipbooking (building code movies)"
+title: "The art of flipbooking"
 subtitle: "With flipbookr and xaringan"
 author: "Gina Reynolds, December 2019"
 output:
@@ -15,9 +15,9 @@ output:
 
 
 
-```{r setup, include = F}
+```{r, include = F}
 # This is the recommended set up for flipbooks
-# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scracth can be time consuming
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
 library(flipbookr)
 library(tidyverse)
@@ -207,6 +207,30 @@ If the break_type is set to "non_seq", the breakpoints are those indicated by th
 
 ---
 
+# break_type = "rotate", with #ROTATE, #ROTATE, #ROTATE
+
+you can use break_type = "rotate" to cycle through distinct lines of code.  Sometimes, you will need to set the chunk option to eval = F, echo = F instead of include = F.  This will be true when the input code itself cannot be executed. 
+
+
+---
+
+`r chunk_reveal("my_rotate", break_type = "rotate")`
+
+```{r my_rotate, eval = F, echo = F}
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point() +
+  aes(color = speed) +
+  scale_color_viridis_c(option = "magma") + #ROTATE
+  scale_color_viridis_c(option = "cividis") + #ROTATE
+  scale_color_viridis_c(option = "plasma") #ROTATE
+```
+
+
+
+---
+
 ## `break_type = 5` (or "entering the multiverse")
 
 Another modality is to set break_type equal to a positive integer, indicating that you want the same code chunk to be displayed multiple times.  This makes the most sense in a setting where there is some randomization or random sampling and you want to see different realizations. Let's see this used on the user input code chunk "cars_multi", whose first step is to randomly sample rows from the data set cars with replacement.  
@@ -272,6 +296,78 @@ Not sure why you'd want to do this, but you can flip output and code.  It's also
 ---
 
 `r chunk_reveal("cars", break_type = "auto", display_type = c("output", "code"))`
+
+---
+
+## `display_type = c("md", "code"), md = c("hi", "by")`
+
+Include a panel for markdown.  Double backslashes required to escape.
+
+
+
+---
+
+`r chunk_reveal("custom_example", md = c("### hello", "# goodbye", "## $$\\frac{\\sum(x)}{2}$$"), display_type = c("md", "code"))`
+
+
+
+
+```{r custom_example, include=F}
+library(magrittr)
+
+cars %$%
+  cor(x = speed,
+      y = dist)
+```
+
+
+
+
+---
+
+## `display_type = "func"`
+
+to display underlying functions that the code pipeline is using...
+
+---
+
+`r chunk_reveal("rnorm", display_type = c("code", "func", "output"), widths = c(32, 32, 33))`
+
+```{r rnorm, include=F}
+rnorm(50) %>% 
+  sd() %>% 
+  length()
+```
+
+
+
+
+---
+class: middle, inverse, center
+
+# `title = "## My title"`
+
+Give your little flipbook a title if you like...
+
+---
+
+# `widths = c(32, 32, 33)`
+
+depending on how many display panels you have, you can adjust relative widths with a vector
+
+---
+
+`r chunk_reveal("cars3", title = "## A title several widths", widths = c(22, 30, 40), display_type = c("code", "func", "output"))`
+
+
+```{r cars3, include=F}
+cars %>% 
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point() +
+  aes(size = speed)
+```
 
 
 
@@ -446,17 +542,18 @@ lines(inputs_of_x,
 
 ---
 
-# And arithmetic operation
+# And arithmetic operations
 
 ---
 
 `r chunk_reveal("arith")`
 
 ```{r arith, include = FALSE}
-(4 + 5) /
-  6 *
-  7 -
-  3 
+(4 + 5) / # just be careful
+  6 * # because order of operations 
+  7 - # hold
+  3 * # contrasting to pipe logic
+  12 # PEMDAS
 
 1:10 %%
   3
@@ -481,19 +578,6 @@ matrix(1:4, ncol = 4) %*%
 ```
 
 
----
-
-`r chunk_reveal("my_rotate", break_type = "rotate")`
-
-```{r my_rotate, include = F}
-ggplot(data = cars) +
-  aes(x = speed) +
-  aes(y = dist) +
-  geom_point() +
-  scale_x_log10() + #ROTATE
-  scale_x_sqrt() + #ROTATE
-  scale_x_reverse() #ROTATE
-```
 
 
 
@@ -514,76 +598,35 @@ cars %$%
 ```
 
 
----
-class: middle, inverse, center
-
-# Custom Styling
-
----
-
-
-`r chunk_reveal("custom_example", title = "# Pipe to correlation coefficient", width_left = "29%", width_right = "70%", font_size_code = "130%")`
-
-
-```{r custom_example, include=F}
-library(magrittr)
-
-cars %$%
-  cor(x = speed,
-      y = dist)
-```
-
-
-
----
-
-`r chunk_reveal("custom_example", md = c("### hello", "# goodbye", "## $$\\frac{\\sum(1)}{2}$$"), display_type = c("md", "code"))`
-
-
----
-
-
-`r chunk_reveal("custom_example", md = c("### hello", "# goodbye", "## $$\\frac{\\sum(1)}{2}$$"), display_type = c("md", "output"))`
-
-
----
-
-
-`r chunk_reveal(num_breaks = 3, md = c("### hello", "# goodbye", "## $$\\frac{\\sum(1)}{2}$$"), display_type = "md")`
-
-
----
-
-
-```{r cars3, include=F}
-cars %>% 
-  ggplot() +
-  aes(x = speed) +
-  aes(y = dist) +
-  geom_point() +
-  aes(size = speed)
-```
-
-
-`r chunk_reveal("cars3", display_type = c("code", "func", "output"), width_left = "32%", width_middle = "32%", width_right = "32%")`
 
 
 
 ---
 class: middle, inverse, center
 
-# Slow Message
+# `text_reveal`
+
+--
+
+use text_reveal, and define a delimiter.
 
 ---
 
 `r text_reveal("This is my text.", sep = " ")`
 
+---
+
+```{r, echo = F}
+"Sometimes, it's helpful to slow down and look at exactly one decision.| Flipbooks present code step-by-step and side-by-side with output.| They parse code pipelines.| Reconstruct code into partial builds.| And present those builds with their output.| Both code and output are superimposed on the previous state." ->
+  philosophy
+```
+
+
+`r text_reveal(text = philosophy, sep = "\\|")`
 
 ---
 
-'One driver of equality we should invest in is upskilling everyone - not just the select few.'
-
-digital inclusion.
+<!-- 'One driver of equality we should invest in is upskilling everyone - not just the select few.' -->
 
 
 ---
@@ -602,22 +645,59 @@ Another extremely useful resource for xaringan styling is Alison Hill's ["Meet x
 Flipbooks created with Xaringan are multi-file creations.  The figures produced are stored separately from the main html document.  This presents a little bit of a challenge for sharing your work.  You can zip up all the associated files and share that way.  Alternatively, you can share as a website.  I've shared my work on github with github pages.  
 
 - flip, zip, and ship
-- get it on github, with github pages.  A good walk through is the one that I learned with (to get [the ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) online) by Brian Caffo https://www.youtube.com/watch?v=BBCesiebEuQ  Larger flipbooks will take longer to load online - something to keep in mind as you are building. 
+- get it on github, with github pages.  A good walk through is the one that I learned with (to get [the ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) online) is by Brian Caffo https://www.youtube.com/watch?v=BBCesiebEuQ  Larger flipbooks will take longer to load in the browser - something to keep in mind as you are building. 
+- print to pdf using pagedown::chrome_print()
+
+
+---
+
+## Convert to pdf
+
+to create a pdf from you may use the pagedown package as follows to use chrome print to pdf (here, eval is set to FALSE):
+
+```{r, eval = F}
+pagedown::chrome_print(input = "my_flipbook.Rmd")
+
+# or (recommended):
+
+pagedown::chrome_print(input = "my_flipbook.html")
+```
+
+Note:  This works for flipbooks when css is set as it is in the last css code chunk (the media print part) else only the last frame from the flipbooked chunks will display in the pdf.  Thanks to Bryan Shalloway for thinking about conversion to pdf, [the exposition of this last frame problem, and proposing a solution](https://github.com/EvaMaeRey/flipbookr/issues/21) and also to Antoine Bichat! Be sure to preview your work before you present --- translation might not be 100% visual match!
+
+---
+
+## flipbook preview -- as gif
+
+If you want to create a preview of your flipbook, you can pass the pdf to functions from magick (here, eval is set to FALSE):  
+
+```{r, eval = F}
+# then create gif as follows
+magick::image_read_pdf(path = "my_flipbook.pdf", density = 100) %>% # create images
+  magick::image_write_gif(path = "my_flipbook.gif", delay = .4) # images to gif
+```
+
+Bryan Shalloway proposed this workflow.  Thanks Bryan!
+
+Coming soon, build a previews, using [viztoc](https://github.com/EvaMaeRey/viztoc). Development package!  Breaking changes are the norm! 
 
 
 
 
 
 ---
-class: inverse, middle, center
+class: middle, center
 
 The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it with remotes::install_github("EvaMaeRey/flipbookr")
 
 
 
-
-
-
 ```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
 ```

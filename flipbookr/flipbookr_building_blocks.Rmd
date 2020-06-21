@@ -86,7 +86,26 @@ class: middle center inverse
 
 ---
 
+`r chunk_reveal("the_code_parsing", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
 
+```{r the_code_parsing, include=FALSE}
+library(flipbookr)
+
+create_code() %>%
+  code_as_table() %>%
+  code_as_table_process_break_messages() ->
+hide_away
+
+create_code() %>%
+  r_code_base_parse() %>% 
+  r_base_parsed_count_parentheses() ->
+hide_again
+
+
+create_code() %>% 
+  r_code_full_parse() ->
+hide_more
+```
 
 
 ---
@@ -118,32 +137,13 @@ Appropriate highlighting is calculated based on what appears in previous frame a
 
 ---
 
+`r chunk_reveal("the_code_highlight", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
 
-`r chunk_reveal("the_code_parsing", width_left = "32%", width_middle = "32%", width_right = "32%",  display_type = c("code", "func", "output"))`
-
-```{r the_code_parsing, include=FALSE}
-library(flipbookr)
-
-create_code() %>%
-  code_as_table() %>%
-  code_as_table_process_break_messages() ->
-hide_away
-
-create_code() %>%
-  r_code_base_parse() %>% 
-  r_base_parsed_count_parentheses() ->
-hide_again
-
-
-create_code() %>% 
-  r_code_full_parse() ->
-hide_more
-
+```{r the_code_highlight, include=F}
 create_code() %>% 
   code_parse() %>% 
   parsed_calc_show() %>% 
-  shown_lines_calc_highlight() ->
-hiding
+  shown_lines_calc_highlight()
 ```
 
 ---
@@ -235,6 +235,7 @@ define_css() #ROTATE
 chunk_expand() #ROTATE
 chunk_reveal #ROTATE
 ```
+
 
 
 
