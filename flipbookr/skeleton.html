@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>The art of flipbooking</title>
+    <title>Flipbooking</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, December 2019" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# The art of flipbooking
+# Flipbooking
 ## With flipbookr and xaringan
 ### Gina Reynolds, December 2019
 
@@ -27,18 +27,20 @@ class: center, middle, inverse, title-slide
 # Welcome
 
 - Yes, there is now a package called `flipbookr`
+
 --
 
-- Yes, it's still under construction (the title of this book used to be the "fragile perilous art")
+- Yes, it's still under construction 
+
 --
 
-- Yes, you can help make it less fragile and perilous by letting us know if/how it breaks and frustrates you and/or contributing at https://github.com/EvaMaeRey/flipbookr!  
+- Yes, you can help make it less fragile and awesome by letting us know if/how it breaks and frustrates you and/or contributing at https://github.com/EvaMaeRey/flipbookr!  
 
 ---
 
 # Spread the word and giving feedback
 
-Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgement, for example, *The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*  
+Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgment, for example, *The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*  
 
 Also consider sharing your work on social media, and let me know what you've built on Twitter with a mention to @EvaMaeRey
 
@@ -58,21 +60,21 @@ devtools::install_github("EvaMaeRey/flipbookr")
 You can see the template that was used to build this flipbook that you are looking at right now  [here](https://raw.githubusercontent.com/EvaMaeRey/flipbookr/master/inst/rmarkdown/templates/template-name/skeleton/skeleton.Rmd).
 
 
-Or, once you install the package (and restart RStudio?) a template for making the flipbook that you are looking at will also be available from within RStudio, File -&gt; New File -&gt; R Markdown -&gt; From Template -&gt; "A Minimal Flipbook".
+Or, once you install the package (and restart R) a template for making the flipbook that you are looking at will also be available from within RStudio, File -&gt; New File -&gt; R Markdown -&gt; From Template -&gt; "A Minimal Flipbook".
 
 
 ---
 
 # How Flipbooking with Xaringan works
 
-The flipbook you will be building here uses a member of the [rmarkdown](https://rmarkdown.rstudio.com/lesson-1.html) family called [Xaringan (presentation ninja)](https://github.com/yihui/xaringan), which creates a slideshow in html.  Dynamic documents like `rmarkdown` documents allow you to comingle code and prose in a single document.  
+The flipbook you will be building here uses a member of the [rmarkdown](https://rmarkdown.rstudio.com/lesson-1.html) family called [Xaringan (presentation ninja)](https://github.com/yihui/xaringan), which creates a slide show in html.  Dynamic documents like `rmarkdown` documents allow you to co-mingle code and prose in a single document.  
 
 It may be obvious by now, if you are following along with the source template, that slide breaks are indicated with `---` (be careful trailing white space is not allowed)
 
 ---
 
 
-Flipbooks are built by spawning new *partial* code chunks from a single, user-input code chunk.  The partial code chunks build up and are display consecutively in a slide show alongside its output which yields a movie-like experience; this should make each step easier to understand.  
+Flipbooks are built by spawning new *partial* code chunks from a single, user-input code chunk.  The partial code chunks build up and are display consecutively in a slide show alongside its output; this yields a movie-like experience that should make each step easier to understand.  
 
 As you begin with flipbooks, I'd recommend using the code chunk option `include = F` for your "source" code chunks, and with no caching throughout.  As you begin to get more comfortable with flipbooking, you might change these choices.
 
@@ -81,7 +83,7 @@ As you begin with flipbooks, I'd recommend using the code chunk option `include 
 
 ## Set-up
 
-We use the flipbookr package, of course! This does the work of disassembling a single code chunk and creating the "build" of multiple partial-code chunks.  This is at the top of this file in the "setup" code chunk.
+We use the flipbookr package, of course! This does the work of disassembling a single code chunk and creating the "build" of multiple partial-code chunks.  You'll see the library call for flipbookr at the top of this file in the "setup" code chunk.
 
 Also, at the top of this template in that "setup" code chunk, I set *code chunk* options for the code chunks that follow.  These will apply to the spawned code chunks.
 
@@ -104,7 +106,7 @@ Error in file(filename, "r", encoding = encoding) :
 
 # Using `flipbookr::chunk_reveal()`
 
-You will use the `chunk_reveal()` function [inline](https://rmarkdown.rstudio.com/lesson-4.html) to generate the derivitive code chunks, rather than inside of a code chunk, so that the text that is generated is interpreted correctly when rendered.  The inline code will look something like this:
+You will use the `chunk_reveal()` function [*inline*](https://rmarkdown.rstudio.com/lesson-4.html) to generate the derivative code chunks, so that the text that is generated is interpreted correctly when rendered.  The inline code will look something like this:
 
 &lt;!-- The above is for the html output version, just look at the examples below if you are in the source! --&gt;
 ```markdown
@@ -112,7 +114,7 @@ You will use the `chunk_reveal()` function [inline](https://rmarkdown.rstudio.co
 ``` 
 
 
-There are several modalities that you might be interested in using for "flipbookifying" your code and the next section is dedicated to demoing some of them below.
+There are several modes that you might be interested in using for "flipbooking" your code and the next section is dedicated to demoing some of them below.
 
 - **break type** -- *which lines of code should be revealed when*, `break_type` defaults to "auto"
 - **display type** -- *display code and output, or just output, or just code?*, `display_type` defaults to "both"
@@ -120,13 +122,9 @@ There are several modalities that you might be interested in using for "flipbook
 
 
 
-
-
-
-
 ---
 
-At first we'll apply our flipbooking to the below input code - the code chunk is named "cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we loaded that too in the "setup" code chunk at the beginning of the template. 
+At first we'll apply `chunk_reveal()` to the below input code - the code chunk is named "cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we loaded that too in the "setup" code chunk at the beginning of the template. 
 
 
 
@@ -138,7 +136,16 @@ At first we'll apply our flipbooking to the below input code - the code chunk is
 
 # `break_type`
 
-Notice the regular comments and the special #BREAK comments, these will be used for a couple of the different "break type" modalities.
+There are several ways that input code can be revealed:
+
+- auto
+- user
+- non_seq
+- rotate
+- 5 (set to an integer)
+
+
+In the above input code, notice the regular comments and the special *#BREAK* comments, these will be used for a couple of the different `break_type` modes.
 
 
 
@@ -149,7 +156,7 @@ cars %&gt;%
   aes(x = speed) +
   aes(y = dist) + #BREAK
   geom_point(
-    alpha = .3, #BREAK2
+    alpha = .8, #BREAK2
     color = "blue" #BREAK3
     ) + #BREAK
   aes(size = speed) #BREAK
@@ -162,9 +169,9 @@ cars %&gt;%
 
 ---
 
-## break_type = "auto"
+## `break_type = "auto"`
 
-One parameter of flipbooking is the break_type.  The default is "auto", in which appropriate breakpoints are determined automatically --- by finding where parentheses are balanced. 
+The default break_type is "auto", in which appropriate breakpoints are determined automatically --- by finding where parentheses are balanced. 
 
 &lt;!-- display the user input code as a refresher --&gt;
 
@@ -175,7 +182,7 @@ cars %&gt;%
   aes(x = speed) +
   aes(y = dist) + #BREAK
   geom_point(
-    alpha = .3, #BREAK2
+    alpha = .8, #BREAK2
     color = "blue" #BREAK3
     ) + #BREAK
   aes(size = speed) #BREAK
@@ -185,18 +192,17 @@ cars %&gt;%
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 *cars
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```
    speed dist
@@ -254,11 +260,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -266,7 +271,7 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```
    speed dist
@@ -322,11 +327,10 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -335,16 +339,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -354,16 +357,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_4_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -374,16 +376,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -392,22 +393,21 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
 * geom_point(
-*   alpha = .3,
+*   alpha = .8,
 *   color = "blue"
 *   )
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_6_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -416,32 +416,34 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-    alpha = .3,  
+    alpha = .8,  
     color = "blue"  
     ) +  
 * aes(size = speed)
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-auto {
+.panel2-cars-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -453,7 +455,7 @@ cars %&gt;%
 
 ---
 
-## break_type = "user", with #BREAK
+## `break_type = "user"`, with #BREAK
 
 If the break_type is set to "user", the breakpoints are those indicated by the user with the special comment #BREAK
 
@@ -466,7 +468,7 @@ cars %&gt;%
   aes(x = speed) +
   aes(y = dist) + #BREAK
   geom_point(
-    alpha = .3, #BREAK2
+    alpha = .8, #BREAK2
     color = "blue" #BREAK3
     ) + #BREAK
   aes(size = speed) #BREAK
@@ -474,11 +476,10 @@ cars %&gt;%
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-cars-user[
+.panel1-cars-user[
 
 ```r
 *cars %&gt;%
@@ -489,16 +490,15 @@ count: false
 ```
 ]
  
-.right-panel-cars-user[
+.panel2-cars-user[
 &lt;img src="skeleton_files/figure-html/cars_user_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-user[
+.panel1-cars-user[
 
 ```r
 cars %&gt;%  
@@ -507,22 +507,21 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
 * geom_point(
-*   alpha = .3,
+*   alpha = .8,
 *   color = "blue"
 *   )
 ```
 ]
  
-.right-panel-cars-user[
+.panel2-cars-user[
 &lt;img src="skeleton_files/figure-html/cars_user_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-user[
+.panel1-cars-user[
 
 ```r
 cars %&gt;%  
@@ -531,32 +530,34 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-    alpha = .3,  
+    alpha = .8,  
     color = "blue"  
     ) +  
 * aes(size = speed)
 ```
 ]
  
-.right-panel-cars-user[
+.panel2-cars-user[
 &lt;img src="skeleton_files/figure-html/cars_user_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars-user {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-user {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-user {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-user {
+.panel2-cars-user {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-user {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -571,7 +572,7 @@ cars %&gt;%
 
 ---
 
-## break_type = "non_seq", with #BREAK2, #BREAK3
+## `break_type = "non_seq"`, with #BREAK2, #BREAK3
 
 If the break_type is set to "non_seq", the breakpoints are those indicated by the user with the special numeric comment #BREAK2, #BREAK3 etc to indicate at which point in time the code should appear.  
 
@@ -584,7 +585,7 @@ cars %&gt;%
   aes(x = speed) +
   aes(y = dist) + #BREAK
   geom_point(
-    alpha = .3, #BREAK2
+    alpha = .8, #BREAK2
     color = "blue" #BREAK3
     ) + #BREAK
   aes(size = speed) #BREAK
@@ -595,11 +596,10 @@ cars %&gt;%
 ---
 
 
-class: split-40
 count: false
  
 
-.left-panel-cars-non_seq[
+.panel1-cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -613,16 +613,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars-non_seq[
+.panel2-cars-non_seq[
 &lt;img src="skeleton_files/figure-html/cars_non_seq_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-non_seq[
+.panel1-cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -631,22 +630,21 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-*   alpha = .3,
+*   alpha = .8,
     ) +  
   aes(size = speed)  
 ```
 ]
  
-.right-panel-cars-non_seq[
+.panel2-cars-non_seq[
 &lt;img src="skeleton_files/figure-html/cars_non_seq_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-non_seq[
+.panel1-cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -655,32 +653,34 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-    alpha = .3,  
+    alpha = .8,  
 *   color = "blue"
     ) +  
   aes(size = speed)  
 ```
 ]
  
-.right-panel-cars-non_seq[
+.panel2-cars-non_seq[
 &lt;img src="skeleton_files/figure-html/cars_non_seq_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars-non_seq {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-non_seq {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-non_seq {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-non_seq {
+.panel2-cars-non_seq {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-non_seq {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -693,90 +693,102 @@ cars %&gt;%
 
 ---
 
-# break_type = "rotate", with #ROTATE, #ROTATE, #ROTATE
+## `break_type = "rotate"`
 
-you can use break_type = "rotate" to cycle through distinct lines of code.  Sometimes, you will need to set the chunk option to eval = F, echo = F instead of include = F.  This will be true when the input code itself cannot be executed. 
+And break_type = "rotate" is used to to cycle through distinct lines of code. The special comment to indicate which lines should be cycled through is *#ROTATE*. 
+
+--
+
+Sometimes, you will need to set the chunk option to eval = F, echo = F instead of include = F.  This will be true when the input code itself cannot be executed as code to be cycled through is incompatible and would throw an error. 
 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-my_rotate-rotate[
+.panel1-my_rotate-rotate[
 
 ```r
 ggplot(data = cars) +  
   aes(x = speed) +  
   aes(y = dist) +  
-  geom_point() +  
-  aes(color = speed) +  
-  scale_color_viridis_c(option = "magma")   
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+  aes(fill = speed) +  
+  scale_fill_viridis_c(option = "magma")   
 ```
 ]
  
-.right-panel-my_rotate-rotate[
+.panel2-my_rotate-rotate[
 &lt;img src="skeleton_files/figure-html/my_rotate_rotate_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-my_rotate-rotate[
+.panel1-my_rotate-rotate[
 
 ```r
 ggplot(data = cars) +  
   aes(x = speed) +  
   aes(y = dist) +  
-  geom_point() +  
-  aes(color = speed) +  
-* scale_color_viridis_c(option = "cividis")
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+  aes(fill = speed) +  
+* scale_fill_viridis_c(option = "cividis")
 ```
 ]
  
-.right-panel-my_rotate-rotate[
+.panel2-my_rotate-rotate[
 &lt;img src="skeleton_files/figure-html/my_rotate_rotate_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-my_rotate-rotate[
+.panel1-my_rotate-rotate[
 
 ```r
 ggplot(data = cars) +  
   aes(x = speed) +  
   aes(y = dist) +  
-  geom_point() +  
-  aes(color = speed) +  
-* scale_color_viridis_c(option = "plasma")
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+  aes(fill = speed) +  
+* scale_fill_viridis_c(option = "plasma")
 ```
 ]
  
-.right-panel-my_rotate-rotate[
+.panel2-my_rotate-rotate[
 &lt;img src="skeleton_files/figure-html/my_rotate_rotate_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-my_rotate-rotate {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-my_rotate-rotate {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-my_rotate-rotate {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-my_rotate-rotate {
+.panel2-my_rotate-rotate {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_rotate-rotate {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -794,18 +806,18 @@ ggplot(data = cars) +
 
 ## `break_type = 5` (or "entering the multiverse")
 
-Another modality is to set break_type equal to a positive integer, indicating that you want the same code chunk to be displayed multiple times.  This makes the most sense in a setting where there is some randomization or random sampling and you want to see different realizations. Let's see this used on the user input code chunk "cars_multi", whose first step is to randomly sample rows from the data set cars with replacement.  
+Another mode is to set break_type equal to a positive integer, indicating that you want the same code chunk to be displayed multiple times. 
 
+--
 
-
+This makes the most sense in a setting where there is some randomization or random sampling and you want to see different realizations. Let's see this used on the user input code chunk "cars_multi", whose first step is to randomly sample rows from the data set cars with replacement.  
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-cars_multi-3[
+.panel1-cars_multi-3[
 
 ```r
 cars %&gt;%  
@@ -814,8 +826,9 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_count(  
-    alpha = .3,  
-    color = "blue"  
+    alpha = .7,  
+    color = "blue",  
+    size = 4  
     ) +  
   geom_smooth(method = lm, se = FALSE) +  
   coord_cartesian(xlim = range(cars$speed),  
@@ -824,16 +837,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars_multi-3[
+.panel2-cars_multi-3[
 &lt;img src="skeleton_files/figure-html/cars_multi_3_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_multi-3[
+.panel1-cars_multi-3[
 
 ```r
 cars %&gt;%  
@@ -842,8 +854,9 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_count(  
-    alpha = .3,  
-    color = "blue"  
+    alpha = .7,  
+    color = "blue",  
+    size = 4  
     ) +  
   geom_smooth(method = lm, se = FALSE) +  
   coord_cartesian(xlim = range(cars$speed),  
@@ -852,16 +865,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars_multi-3[
+.panel2-cars_multi-3[
 &lt;img src="skeleton_files/figure-html/cars_multi_3_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_multi-3[
+.panel1-cars_multi-3[
 
 ```r
 cars %&gt;%  
@@ -870,8 +882,9 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_count(  
-    alpha = .3,  
-    color = "blue"  
+    alpha = .7,  
+    color = "blue",  
+    size = 4  
     ) +  
   geom_smooth(method = lm, se = FALSE) +  
   coord_cartesian(xlim = range(cars$speed),  
@@ -880,25 +893,27 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-cars_multi-3[
+.panel2-cars_multi-3[
 &lt;img src="skeleton_files/figure-html/cars_multi_3_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars_multi-3 {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars_multi-3 {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars_multi-3 {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars_multi-3 {
+.panel2-cars_multi-3 {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars_multi-3 {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -909,11 +924,34 @@ cars %&gt;%
 
 
 
+
+
+
+
+
 ---
 
 # `display_type`
 
-There are also different display modalities.  Namely you can indicate if you want "both" the code and the output displayed in your flipbookification, or just the "output" (perhaps to be used in a traditional presentation), or just the "code" (which might be used to kind of test student expectations about some code).  You have already seen the default where the parameter display_type is set to "both", but let's have a look at "output" and "code" only.
+There are also different display modes.  
+
+--
+
+The default is `display_type = c("code", "output")` which will give you the classic flipbook --- code and output co-evolution.
+
+---
+
+Display type can be set to a vector of up to three (currently) inputs:
+
+- "code"
+- "output"
+- "func"
+- "output_lag"
+- "code_lag"
+
+--
+
+Also "md" is allowed but the requires you to give an input for another argument `md` with is the markdown text that you would like displayed at each stage in the flipbook.
 
 
 ---
@@ -1064,20 +1102,22 @@ count: false
 &lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
 
 &lt;style&gt;
-.left-panel-cars-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-auto {
+.panel2-cars-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -1156,7 +1196,7 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
 * geom_point(
-*   alpha = .3,
+*   alpha = .8,
 *   color = "blue"
 *   )
 ```
@@ -1172,27 +1212,29 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-    alpha = .3,  
+    alpha = .8,  
     color = "blue"  
     ) +  
 * aes(size = speed)
 ```
 
 &lt;style&gt;
-.left-panel-cars-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-auto {
+.panel2-cars-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -1204,18 +1246,28 @@ cars %&gt;%
 
 ---
 
-## `display_type = c("output", "code")`
+## `display_type = c("code", "output", "output_lag")`
 
-Not sure why you'd want to do this, but you can flip output and code.  It's also not totally stable - jumps moving from tabular output to figure.  Have to figure that one out. It is something to do with fixed height.
+If you want to allow for lateral comparison (so not just temporal displacement) of states of the output, using `output_lag` is the solution.
+
+--
+
+Sometimes we might want to compare the previous output or with the current one *laterally* -- i.e. spatial offset instead of temporal (temporal offset is the essence of flipbooks) but sometimes we might want to have that lateral (spatial) comparison as well. This is most true when differencing via motion detection is not easy.  i.e. when there are large jumps in the position of tabular/text output.
 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-boring-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-boring-auto[
 
 ```
    speed dist
@@ -1272,7 +1324,391 @@ count: false
 ```
 ]
  
-.right-panel-cars-auto[
+.panel3-boring-auto[
+
+```
+[1] "--"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-boring-auto[
+
+```r
+cars %&gt;%  
+* ggplot()
+```
+]
+ 
+.panel2-boring-auto[
+&lt;img src="skeleton_files/figure-html/boring_auto_2_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-boring-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-boring-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+* aes(x = dist)
+```
+]
+ 
+.panel2-boring-auto[
+&lt;img src="skeleton_files/figure-html/boring_auto_3_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-boring-auto[
+&lt;img src="skeleton_files/figure-html/boring_auto_3_output_lag-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-boring-auto {
+  color: black;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-boring-auto {
+  color: black;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-boring-auto {
+  color: black;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+Another example follows, showing too how the color parameter can be set to deemphasize the lagged output. 
+
+
+---
+
+
+count: false
+ 
+
+.panel1-logical-auto[
+
+```r
+*list(1, 2)
+```
+]
+ 
+.panel2-logical-auto[
+
+```
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+```
+]
+ 
+.panel3-logical-auto[
+
+```
+[1] "--"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-logical-auto[
+
+```r
+list(1, 2) %&gt;%  
+* list(1:5, 5,
+*      ., letters[1:4])
+```
+]
+ 
+.panel2-logical-auto[
+
+```
+[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[1] 5
+
+[[3]]
+[[3]][[1]]
+[1] 1
+
+[[3]][[2]]
+[1] 2
+
+
+[[4]]
+[1] "a" "b" "c" "d"
+```
+]
+ 
+.panel3-logical-auto[
+
+```
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-logical-auto[
+
+```r
+list(1, 2) %&gt;%  
+  list(1:5, 5,  
+       ., letters[1:4]) %&gt;%  
+* .[[4]]
+```
+]
+ 
+.panel2-logical-auto[
+
+```
+[1] "a" "b" "c" "d"
+```
+]
+ 
+.panel3-logical-auto[
+
+```
+[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[1] 5
+
+[[3]]
+[[3]][[1]]
+[1] 1
+
+[[3]][[2]]
+[1] 2
+
+
+[[4]]
+[1] "a" "b" "c" "d"
+```
+]
+
+---
+count: false
+ 
+
+.panel1-logical-auto[
+
+```r
+list(1, 2) %&gt;%  
+  list(1:5, 5,  
+       ., letters[1:4]) %&gt;%  
+  .[[4]] %&gt;%  
+* .[3]
+```
+]
+ 
+.panel2-logical-auto[
+
+```
+[1] "c"
+```
+]
+ 
+.panel3-logical-auto[
+
+```
+[1] "a" "b" "c" "d"
+```
+]
+
+&lt;style&gt;
+.panel1-logical-auto {
+  color: black;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-logical-auto {
+  color: black;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-logical-auto {
+  color: grey;
+  width: 32.3333333333333%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+## `display_type = c("output", "code")`
+
+Not sure why you'd want to do this, but you can flip output and code.
+
+
+---
+
+count: false
+ 
+
+.panel1-cars-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+ 
+.panel2-cars-auto[
 
 ```r
 *cars
@@ -1280,11 +1716,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 
 ```
    speed dist
@@ -1339,7 +1774,7 @@ count: false
 ```
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1348,15 +1783,14 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_3_output-1.png" width="432" /&gt;
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1366,15 +1800,14 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_4_output-1.png" width="432" /&gt;
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1385,15 +1818,14 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_5_output-1.png" width="432" /&gt;
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1405,15 +1837,14 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_6_output-1.png" width="432" /&gt;
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1422,22 +1853,21 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
 * geom_point(
-*   alpha = .3,
+*   alpha = .8,
 *   color = "blue"
 *   )
 ```
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars-auto[
+.panel1-cars-auto[
 &lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
 ]
  
-.right-panel-cars-auto[
+.panel2-cars-auto[
 
 ```r
 cars %&gt;%  
@@ -1446,7 +1876,7 @@ cars %&gt;%
   aes(x = speed) +  
   aes(y = dist) +  
   geom_point(  
-    alpha = .3,  
+    alpha = .8,  
     color = "blue"  
     ) +  
 * aes(size = speed)
@@ -1454,20 +1884,22 @@ cars %&gt;%
 ]
 
 &lt;style&gt;
-.left-panel-cars-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars-auto {
+.panel2-cars-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -1481,21 +1913,28 @@ cars %&gt;%
 
 ## `display_type = c("md", "code"), md = c("hi", "by")`
 
-Include a panel for markdown.  Double backslashes required to escape.
+Now to include a panel for markdown "md" should be one of the inputs of the display_type vector.  Then you'll enter markdown text as a vector for the argument md. 
+
+--
+
+The length of the md vector will likely be the same length as the slides in the flipbook.
+
+--
+
+Double backslashes may be required for escape characters.
 
 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-custom_example-auto[
+.panel1-custom_example-auto[
 ### hello
 ]
  
-.right-panel-custom_example-auto[
+.panel2-custom_example-auto[
 
 ```r
 *library(magrittr)
@@ -1503,15 +1942,14 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-custom_example-auto[
+.panel1-custom_example-auto[
 # goodbye
 ]
  
-.right-panel-custom_example-auto[
+.panel2-custom_example-auto[
 
 ```r
 library(magrittr)  
@@ -1521,15 +1959,14 @@ library(magrittr)
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-custom_example-auto[
+.panel1-custom_example-auto[
 ## `$$\frac{\sum(x)}{2}$$`
 ]
  
-.right-panel-custom_example-auto[
+.panel2-custom_example-auto[
 
 ```r
 library(magrittr)  
@@ -1541,20 +1978,22 @@ cars %$%
 ]
 
 &lt;style&gt;
-.left-panel-custom_example-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-custom_example-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-custom_example-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-custom_example-auto {
+.panel2-custom_example-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-custom_example-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -1576,53 +2015,49 @@ cars %$%
 
 ## `display_type = "func"`
 
-to display underlying functions that the code pipeline is using...
+to display the contents of the functions of a pipeline, you can use display_type = c("code", "func").  The function panel will show the contents of composition of the function that is in the highlighted line. 
+
+--
+
+This is work in progress - seems to be currently broken
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-rnorm-auto[
+.panel1-rnorm-auto[
 
 ```r
 *rnorm(50)
 ```
 ]
  
-.middle-panel-rnorm-auto[
+.panel2-rnorm-auto[
 
-```
-function (n, mean = 0, sd = 1) 
-.Call(C_rnorm, n, mean, sd)
-&lt;bytecode: 0x7f9c7e557108&gt;
-&lt;environment: namespace:stats&gt;
-```
 ]
  
-.right-panel-rnorm-auto[
+.panel3-rnorm-auto[
 
 ```
- [1]  0.648116713  0.884244000  0.585123655  0.214940847  0.260582977
- [6] -0.277218778 -1.323624339 -0.003351231  0.606291280  0.527673953
-[11]  0.269551789  1.217976608  0.200647205 -0.123657208 -0.050803661
-[16] -1.615108704 -0.207903842  0.052732383  0.467913186 -1.056109037
-[21] -0.697347999  2.083213626  0.050001119  0.207857303 -0.447916811
-[26] -1.423217002 -0.005006253  0.060340445  1.011655166  0.969748302
-[31]  0.181118861 -0.246419865  0.275384636 -0.683670615  0.738232383
-[36]  0.767946335 -0.947528660  0.119708140  1.042891434  0.468495162
-[41] -1.156521143  3.140953452  0.966693059 -1.125116731  1.409722528
-[46]  0.835218198 -1.861690287  1.479198402 -1.274547091  0.874731241
+ [1]  0.578038172  0.087679155  0.595091449 -0.730222416 -0.009003339
+ [6]  0.325152373  1.775856457  0.077054892  0.923510122 -0.970145626
+[11] -1.556971664 -0.274353333 -3.062675119 -0.246529196 -1.799328308
+[16] -0.485663280 -0.300849412  0.292813662 -1.222845205  0.318629613
+[21] -0.965779611 -0.852951676 -0.169047350 -1.052158605 -0.802402565
+[26]  0.072515030  1.578016806 -0.535211958 -0.091816250 -0.885260950
+[31] -0.138671595  0.224764715 -1.021142785 -0.430932237  2.698790417
+[36]  0.543143001 -0.325044154  2.050711047  0.601964602 -0.050315312
+[41]  1.006538462 -0.827179501  0.124100254  0.084718184 -0.928880742
+[46]  1.751696594 -0.488973051  1.835861259 -0.933201557  0.249784480
 ```
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-rnorm-auto[
+.panel1-rnorm-auto[
 
 ```r
 rnorm(50) %&gt;%  
@@ -1630,30 +2065,22 @@ rnorm(50) %&gt;%
 ```
 ]
  
-.middle-panel-rnorm-auto[
+.panel2-rnorm-auto[
 
-```
-function (x, na.rm = FALSE) 
-sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
-    na.rm = na.rm))
-&lt;bytecode: 0x7f9c75c334e8&gt;
-&lt;environment: namespace:stats&gt;
-```
 ]
  
-.right-panel-rnorm-auto[
+.panel3-rnorm-auto[
 
 ```
-[1] 1.004758
+[1] 1.046606
 ```
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-rnorm-auto[
+.panel1-rnorm-auto[
 
 ```r
 rnorm(50) %&gt;%  
@@ -1662,14 +2089,11 @@ rnorm(50) %&gt;%
 ```
 ]
  
-.middle-panel-rnorm-auto[
+.panel2-rnorm-auto[
 
-```
-function (x)  .Primitive("length")
-```
 ]
  
-.right-panel-rnorm-auto[
+.panel3-rnorm-auto[
 
 ```
 [1] 1
@@ -1677,21 +2101,23 @@ function (x)  .Primitive("length")
 ]
 
 &lt;style&gt;
-.left-panel-rnorm-auto {
-  color: #777;
-  width: 32.3232323232323%;
-  height: 92%;
+.panel1-rnorm-auto {
+  color: black;
+  width: 32%;
   float: left;
-  font-size: 80%
-}
-.right-panel-rnorm-auto {
-  width: 32.3232323232323%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-rnorm-auto {
-  width: 33.3333333333333%;
+.panel2-rnorm-auto {
+  color: black;
+  width: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-rnorm-auto {
+  color: black;
+  width: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1710,32 +2136,27 @@ class: middle, inverse, center
 
 # `title = "## My title"`
 
-Give your little flipbook a title if you like...
+You may give your flipbook slides a consistent title if you like that will show throughout the code evolution. 
 
 ---
 
 # `widths = c(32, 32, 33)`
 
-depending on how many display panels you have, you can adjust relative widths with a vector
+Depending on how many display panels you have, you can also adjust relative widths with a vector.
 
 ---
 
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 *cars
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 
 ```
    speed dist
@@ -1793,11 +2214,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 cars %&gt;%  
@@ -1805,28 +2225,15 @@ cars %&gt;%
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-```
-function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 
-{
-    UseMethod("ggplot")
-}
-&lt;bytecode: 0x7f9c750afa50&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 &lt;img src="skeleton_files/figure-html/cars3_auto_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 cars %&gt;%  
@@ -1835,30 +2242,15 @@ cars %&gt;%
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7f9c74bdd020&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 &lt;img src="skeleton_files/figure-html/cars3_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 cars %&gt;%  
@@ -1868,30 +2260,15 @@ cars %&gt;%
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7f9c74bdd020&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 &lt;img src="skeleton_files/figure-html/cars3_auto_4_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 cars %&gt;%  
@@ -1902,31 +2279,15 @@ cars %&gt;%
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-```
-function (mapping = NULL, data = NULL, stat = "identity", position = "identity", 
-    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list(na.rm = na.rm, ...))
-}
-&lt;bytecode: 0x7f9c73936ff8&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 &lt;img src="skeleton_files/figure-html/cars3_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
-## A title several widths
-.left-panel-cars3-auto[
+## Using a title and custom widths
+.panel1-cars3-auto[
 
 ```r
 cars %&gt;%  
@@ -1938,40 +2299,28 @@ cars %&gt;%
 ```
 ]
  
-.middle-panel-cars3-auto[
-
-```
-function (x, y, ...) 
-{
-    exprs &lt;- enquos(x = x, y = y, ..., .ignore_empty = "all")
-    aes &lt;- new_aes(exprs, env = parent.frame())
-    rename_aes(aes)
-}
-&lt;bytecode: 0x7f9c74bdd020&gt;
-&lt;environment: namespace:ggplot2&gt;
-```
-]
- 
-.right-panel-cars3-auto[
+.panel2-cars3-auto[
 &lt;img src="skeleton_files/figure-html/cars3_auto_6_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars3-auto {
-  color: #777;
-  width: 23.4042553191489%;
-  height: 92%;
+.panel1-cars3-auto {
+  color: black;
+  width: 23.7575757575758%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars3-auto {
-  width: 31.9148936170213%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars3-auto {
-  width: 42.5531914893617%;
+.panel2-cars3-auto {
+  color: black;
+  width: 74.2424242424242%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars3-auto {
+  color: black;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1995,18 +2344,17 @@ If you want to create an object in your flipbooks, it is most "natural" to use [
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 *cars
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 
 ```
    speed dist
@@ -2064,11 +2412,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 cars %&gt;%  
@@ -2076,16 +2423,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 &lt;img src="skeleton_files/figure-html/plot_object_auto_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 cars %&gt;%  
@@ -2094,16 +2440,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 &lt;img src="skeleton_files/figure-html/plot_object_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 cars %&gt;%  
@@ -2113,16 +2458,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 &lt;img src="skeleton_files/figure-html/plot_object_auto_4_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 cars %&gt;%  
@@ -2133,16 +2477,15 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 &lt;img src="skeleton_files/figure-html/plot_object_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-plot_object-auto[
+.panel1-plot_object-auto[
 
 ```r
 cars %&gt;%  
@@ -2154,25 +2497,27 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-plot_object-auto[
+.panel2-plot_object-auto[
 
 ]
 
 &lt;style&gt;
-.left-panel-plot_object-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-plot_object-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-plot_object-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-plot_object-auto {
+.panel2-plot_object-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-plot_object-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -2188,27 +2533,25 @@ cars %&gt;%
 ---
 
 
-class: split-40
 count: false
  
 
-.left-panel-further_building-auto[
+.panel1-further_building-auto[
 
 ```r
 *cars_plot
 ```
 ]
  
-.right-panel-further_building-auto[
+.panel2-further_building-auto[
 &lt;img src="skeleton_files/figure-html/further_building_auto_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-further_building-auto[
+.panel1-further_building-auto[
 
 ```r
 cars_plot +  
@@ -2216,16 +2559,15 @@ cars_plot +
 ```
 ]
  
-.right-panel-further_building-auto[
+.panel2-further_building-auto[
 &lt;img src="skeleton_files/figure-html/further_building_auto_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-further_building-auto[
+.panel1-further_building-auto[
 
 ```r
 cars_plot +  
@@ -2234,34 +2576,33 @@ cars_plot +
 ```
 ]
  
-.right-panel-further_building-auto[
+.panel2-further_building-auto[
 &lt;img src="skeleton_files/figure-html/further_building_auto_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-further_building-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-further_building-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-further_building-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-further_building-auto {
+.panel2-further_building-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-further_building-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 &lt;/style&gt;
-
-
-
 
 
 
@@ -2277,17 +2618,15 @@ cars_plot +
 
 With left assignment in R, you don't get any feedback, so flipbooking prefers this step at the end of a pipeline, so we can enjoy all the nice feedback. So the parameter left_assign is by default set to FALSE.
 
-
-But, setting the left_assign paramter to T and using left assignment, you can still create a meaningful flipbook that gives you feedback.   When left_assign = TRUE, the first object that is created prints at the end of the derivative code chunks. 
+But, setting the left_assign parameter to T and using left assignment, you can still create a meaningful flipbook that gives you feedback.   When left_assign = TRUE, the first object that is created prints at the end of the derivative code chunks. 
 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 *my_plot &lt;- cars   # the data
@@ -2296,7 +2635,7 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 
 ```
    speed dist
@@ -2354,11 +2693,10 @@ my_plot
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 my_plot &lt;- cars %&gt;%  # the data
@@ -2368,7 +2706,7 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 
 ```
    speed dist
@@ -2424,11 +2762,10 @@ my_plot
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 my_plot &lt;- cars %&gt;%  # the data
@@ -2439,16 +2776,15 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 &lt;img src="skeleton_files/figure-html/left_assign_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 my_plot &lt;- cars %&gt;%  # the data
@@ -2460,16 +2796,15 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 &lt;img src="skeleton_files/figure-html/left_assign_auto_4_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 my_plot &lt;- cars %&gt;%  # the data
@@ -2482,16 +2817,15 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 &lt;img src="skeleton_files/figure-html/left_assign_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign-auto[
+.panel1-left_assign-auto[
 
 ```r
 my_plot &lt;- cars %&gt;%  # the data
@@ -2505,25 +2839,27 @@ my_plot
 ```
 ]
  
-.right-panel-left_assign-auto[
+.panel2-left_assign-auto[
 &lt;img src="skeleton_files/figure-html/left_assign_auto_6_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-left_assign-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-left_assign-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-left_assign-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-left_assign-auto {
+.panel2-left_assign-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-left_assign-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -2541,9 +2877,13 @@ my_plot
 
 ---
 
-# Managing source code chunks
+# Manageing source code chunks
 
-So, it is pretty cool that we can create a bunch of derivative code chunks from one input code chunk (a foundational blog post by Emi Tanaka on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)).  But there are some considerations then for this source chunk.  What should its chunk options be?  The easy way is to set all "source" code chunks to include = F, as I do throughout the book.  However, you might consider a combination of `eval` and `echo` instead; you can come back to this idea as you become a more seasoned flipbooker.    
+So, it is pretty cool that we can create a bunch of derivative code chunks from one input code chunk (a foundational blog post by Emi Tanaka on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)). 
+
+--
+
+But there are some considerations then for this source chunk.  What should its chunk options be?  The easy way is to set all "source" code chunks to include = F, as I do throughout the book.  However, you might consider a combination of `eval` and `echo` instead; you can come back to this idea as you become a more seasoned flipbooker.    
 
 
 
@@ -2561,11 +2901,10 @@ But base R techniques and other popular tools can certainly also be employed.
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-left_assign2-auto[
+.panel1-left_assign2-auto[
 
 ```r
 *cars_mod &lt;- cars
@@ -2574,7 +2913,7 @@ cars_mod
 ```
 ]
  
-.right-panel-left_assign2-auto[
+.panel2-left_assign2-auto[
 
 ```
    speed dist
@@ -2632,11 +2971,10 @@ cars_mod
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign2-auto[
+.panel1-left_assign2-auto[
 
 ```r
 cars_mod &lt;- cars  
@@ -2646,7 +2984,7 @@ cars_mod
 ```
 ]
  
-.right-panel-left_assign2-auto[
+.panel2-left_assign2-auto[
 
 ```
    speed dist half_dist
@@ -2704,11 +3042,10 @@ cars_mod
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign2-auto[
+.panel1-left_assign2-auto[
 
 ```r
 cars_mod &lt;- cars  
@@ -2719,7 +3056,7 @@ cars_mod
 ```
 ]
  
-.right-panel-left_assign2-auto[
+.panel2-left_assign2-auto[
 
 ```
    speed distance half_dist
@@ -2777,11 +3114,10 @@ cars_mod
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign2-auto[
+.panel1-left_assign2-auto[
 
 ```r
 cars_mod &lt;- cars  
@@ -2793,7 +3129,7 @@ cars_mod
 ```
 ]
  
-.right-panel-left_assign2-auto[
+.panel2-left_assign2-auto[
 
 ```
    speed distance half_dist
@@ -2847,11 +3183,10 @@ cars_mod
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-left_assign2-auto[
+.panel1-left_assign2-auto[
 
 ```r
 cars_mod &lt;- cars  
@@ -2864,7 +3199,7 @@ cars_mod
 ```
 ]
  
-.right-panel-left_assign2-auto[
+.panel2-left_assign2-auto[
 
 ```
    distance
@@ -2918,20 +3253,22 @@ cars_mod
 ]
 
 &lt;style&gt;
-.left-panel-left_assign2-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-left_assign2-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-left_assign2-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-left_assign2-auto {
+.panel2-left_assign2-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-left_assign2-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -2949,23 +3286,22 @@ cars_mod
 
 ## using the .[] and .[[]] syntax with the migrittr pipe - %&gt;%
 
-Flipbooking can also be applied to logical indexing workflows if the steps are broken up using the %&gt;% followed by .[] and .[[]].  Thus flipbooking can also be used with base R logical indexing and with the popular `data.table` package. 
+Flipbooking can also be applied to logical indexing workflows if the steps are broken up using the %&gt;% followed by .[] and .[[]].  
 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-dot_notation-auto[
+.panel1-dot_notation-auto[
 
 ```r
 *cars
 ```
 ]
  
-.right-panel-dot_notation-auto[
+.panel2-dot_notation-auto[
 
 ```
    speed dist
@@ -3023,11 +3359,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-dot_notation-auto[
+.panel1-dot_notation-auto[
 
 ```r
 cars %&gt;%  
@@ -3035,7 +3370,7 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-dot_notation-auto[
+.panel2-dot_notation-auto[
 
 ```
    speed dist
@@ -3067,11 +3402,10 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-dot_notation-auto[
+.panel1-dot_notation-auto[
 
 ```r
 cars %&gt;%  
@@ -3080,7 +3414,7 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-dot_notation-auto[
+.panel2-dot_notation-auto[
 
 ```
    speed
@@ -3112,11 +3446,10 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-dot_notation-auto[
+.panel1-dot_notation-auto[
 
 ```r
 cars %&gt;%  
@@ -3126,7 +3459,7 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-dot_notation-auto[
+.panel2-dot_notation-auto[
 
 ```
  [1] 16 16 17 17 17 18 18 18 18 19 19 19 20 20 20 20 20 22 23 24 24 24 24 25
@@ -3134,11 +3467,10 @@ cars %&gt;%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-dot_notation-auto[
+.panel1-dot_notation-auto[
 
 ```r
 cars %&gt;%  
@@ -3149,25 +3481,27 @@ cars %&gt;%
 ```
 ]
  
-.right-panel-dot_notation-auto[
+.panel2-dot_notation-auto[
 
 ]
 
 &lt;style&gt;
-.left-panel-dot_notation-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-dot_notation-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-dot_notation-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-dot_notation-auto {
+.panel2-dot_notation-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-dot_notation-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -3184,15 +3518,14 @@ cars %&gt;%
 
 # Base R plotting
 
-It has been a while since I've done much plotting with base R, but I think it is important to have an example or two. 
+Let's see how flipbookr might be used with base R graphics. 
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-base_r_plotting-auto[
+.panel1-base_r_plotting-auto[
 
 ```r
 *plot(cars, xlab = "Speed (mph)",
@@ -3201,16 +3534,15 @@ count: false
 ```
 ]
  
-.right-panel-base_r_plotting-auto[
+.panel2-base_r_plotting-auto[
 &lt;img src="skeleton_files/figure-html/base_r_plotting_auto_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-base_r_plotting-auto[
+.panel1-base_r_plotting-auto[
 
 ```r
 plot(cars, xlab = "Speed (mph)",  
@@ -3222,16 +3554,15 @@ plot(cars, xlab = "Speed (mph)",
 ```
 ]
  
-.right-panel-base_r_plotting-auto[
+.panel2-base_r_plotting-auto[
 &lt;img src="skeleton_files/figure-html/base_r_plotting_auto_2_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-base_r_plotting-auto[
+.panel1-base_r_plotting-auto[
 
 ```r
 plot(cars, xlab = "Speed (mph)",  
@@ -3244,16 +3575,15 @@ lines(lowess(cars$speed, cars$dist,
 ```
 ]
  
-.right-panel-base_r_plotting-auto[
+.panel2-base_r_plotting-auto[
 &lt;img src="skeleton_files/figure-html/base_r_plotting_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-base_r_plotting-auto[
+.panel1-base_r_plotting-auto[
 
 ```r
 plot(cars, xlab = "Speed (mph)",  
@@ -3267,25 +3597,27 @@ title(main = "the `cars` data")
 ```
 ]
  
-.right-panel-base_r_plotting-auto[
+.panel2-base_r_plotting-auto[
 &lt;img src="skeleton_files/figure-html/base_r_plotting_auto_4_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-base_r_plotting-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-base_r_plotting-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-base_r_plotting-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-base_r_plotting-auto {
+.panel2-base_r_plotting-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-base_r_plotting-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -3300,11 +3632,10 @@ title(main = "the `cars` data")
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3314,16 +3645,15 @@ count: false
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_1_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3336,7 +3666,7 @@ plot(cars, xlab = "Speed (mph)",
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_2_output-1.png" width="432" /&gt;
 
 ```
@@ -3351,11 +3681,10 @@ Coefficients:
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3369,16 +3698,15 @@ lm(dist ~ poly(speed, 3),
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3394,7 +3722,7 @@ model
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_4_output-1.png" width="432" /&gt;
 
 ```
@@ -3406,11 +3734,10 @@ model
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3427,16 +3754,15 @@ seq(0, 25, length.out = 25) -&gt;
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3456,7 +3782,7 @@ inputs_of_x
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_6_output-1.png" width="432" /&gt;
 
 ```
@@ -3472,11 +3798,10 @@ inputs_of_x
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3497,16 +3822,15 @@ predict(model,
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_7_output-1.png" width="432" /&gt;
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-cars_anova-auto[
+.panel1-cars_anova-auto[
 
 ```r
 ## An example of polynomial regression
@@ -3531,25 +3855,27 @@ prediction_y
 ```
 ]
  
-.right-panel-cars_anova-auto[
+.panel2-cars_anova-auto[
 &lt;img src="skeleton_files/figure-html/cars_anova_auto_8_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.left-panel-cars_anova-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-cars_anova-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-cars_anova-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-cars_anova-auto {
+.panel2-cars_anova-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars_anova-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -3565,20 +3891,21 @@ prediction_y
 
 # And arithmetic operations
 
+We can do some numeric calculations too.  But this should be done with care.  *The order of operations hold -- PEMDAS -- which is not the logic of the magrittr pipelines (sequential ordering).* 
+
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 *(4 + 5)   # just be careful
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] 9
@@ -3586,11 +3913,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3598,7 +3924,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] 1.5
@@ -3606,11 +3932,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3619,7 +3944,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] 10.5
@@ -3627,11 +3952,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3641,7 +3965,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] 7.5
@@ -3649,11 +3973,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3664,7 +3987,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3672,11 +3995,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3689,7 +4011,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3701,11 +4023,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3719,7 +4040,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3731,11 +4052,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3751,7 +4071,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3767,11 +4087,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3788,7 +4107,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3804,11 +4123,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3827,7 +4145,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3847,11 +4165,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3871,7 +4188,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3891,11 +4208,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3917,7 +4233,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3941,11 +4257,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -3968,7 +4283,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -3992,11 +4307,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4021,7 +4335,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4049,11 +4363,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4079,7 +4392,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4107,11 +4420,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4139,7 +4451,7 @@ count: false
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4175,11 +4487,10 @@ count: false
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4208,7 +4519,7 @@ matrix(1:4, ncol = 1) %*%
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4244,11 +4555,10 @@ matrix(1:4, ncol = 1) %*%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4279,7 +4589,7 @@ matrix(1:4, ncol = 1) %*%
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4320,11 +4630,10 @@ matrix(1:4, ncol = 1) %*%
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-arith-auto[
+.panel1-arith-auto[
 
 ```r
 (4 + 5) /  # just be careful
@@ -4356,7 +4665,7 @@ matrix(1:4, ncol = 4) %*%
 ```
 ]
  
-.right-panel-arith-auto[
+.panel2-arith-auto[
 
 ```
 [1] -25.5
@@ -4397,20 +4706,22 @@ matrix(1:4, ncol = 4) %*%
 ]
 
 &lt;style&gt;
-.left-panel-arith-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-arith-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-arith-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-arith-auto {
+.panel2-arith-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-arith-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -4432,27 +4743,25 @@ A new addition is the %$% pipe from the magrittr library.  And example follows.
 
 ---
 
-class: split-40
 count: false
  
 
-.left-panel-new_pipe-auto[
+.panel1-new_pipe-auto[
 
 ```r
 *library(magrittr)
 ```
 ]
  
-.right-panel-new_pipe-auto[
+.panel2-new_pipe-auto[
 
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-new_pipe-auto[
+.panel1-new_pipe-auto[
 
 ```r
 library(magrittr)  
@@ -4461,7 +4770,7 @@ library(magrittr)
 ```
 ]
  
-.right-panel-new_pipe-auto[
+.panel2-new_pipe-auto[
 
 ```
    speed dist
@@ -4519,11 +4828,10 @@ library(magrittr)
 ]
 
 ---
-class: split-40
 count: false
  
 
-.left-panel-new_pipe-auto[
+.panel1-new_pipe-auto[
 
 ```r
 library(magrittr)  
@@ -4534,7 +4842,7 @@ cars %$%
 ```
 ]
  
-.right-panel-new_pipe-auto[
+.panel2-new_pipe-auto[
 
 ```
 [1] 0.8068949
@@ -4542,20 +4850,22 @@ cars %$%
 ]
 
 &lt;style&gt;
-.left-panel-new_pipe-auto {
-  color: #777;
-  width: 38.6138613861386%;
-  height: 92%;
+.panel1-new_pipe-auto {
+  color: black;
+  width: 38.2121212121212%;
   float: left;
-  font-size: 80%
-}
-.right-panel-new_pipe-auto {
-  width: 59.4059405940594%;
-  float: right;
   padding-left: 1%;
   font-size: 80%
 }
-.middle-panel-new_pipe-auto {
+.panel2-new_pipe-auto {
+  color: black;
+  width: 58.7878787878788%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-new_pipe-auto {
+  color: black;
   width: 0%;
   float: left;
   padding-left: 1%;
@@ -4578,7 +4888,11 @@ class: middle, inverse, center
 
 --
 
-use text_reveal, and define a delimiter.
+Instead of `chunk_reveal()` you may use `text_reveal(text = ?)` to deliver a slow deliberate message. 
+
+--
+
+The input is a character string, and delimiter can be defined using the `sep` argument. 
 
 ---
 
@@ -4611,13 +4925,16 @@ class: inverse, middle, center
 #  They parse code pipelines.
 ---
 class: inverse, middle, center
-#  Reconstruct code into partial builds.
+#  And reconstruct code into partial builds.
 ---
 class: inverse, middle, center
-#  And present those builds with their output.
+#  Then present those builds with their output.
 ---
 class: inverse, middle, center
-#  Both code and output are superimposed on the previous state.
+#  Both code and output are superimposed on the previous state. 
+---
+class: inverse, middle, center
+#  This makes seeing what changed --- both in code and output --- easy.
 
 ---
 
@@ -4690,8 +5007,11 @@ The flipbooked portion of this presentation was created with the new {flipbookr}
 
 
 &lt;style type="text/css"&gt;
+# quickly chance font size of code
 .remark-code{line-height: 1.5; font-size: 80%}
 
+
+# this bit is with a mind to converting to pdf or gif
 @media print {
   .has-continuation {
     display: block;
