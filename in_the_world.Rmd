@@ -1,0 +1,59 @@
+---
+title: "Flipbooks in the world"
+author: "Evangeline Reynolds"
+date: "7/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Me and my students have made a bunch of flipbooks, and we are pretty excited that they are being made out it the world as well!  The {flipbookr} package or its predicesor code base
+
+- [The Tidyverse for Archaeologists, A Guide for Beginners, Japan, Ben Marwick, May 2020](https://benmarwick.github.io/tidyverse-for-archaeology/tidyverse-for-archaeology.html){target=_blank}
+
+- [Dr Rhian Davies (Jumping Rivers): 'Data Viz for better' Presenting at the Royal Statistical Society Merseyside](https://trianglegirl.github.io/presentations/2020-07-01-data-viz-for-better/2020-05-12-florence-and-data-viz.html#1){target=_blank}
+
+- [Data Visualization with R and ggplot2 Jessica Minnier, PhD & Meike Niederhausen, PhD OCTRI Biostatistics, Epidemiology, Research & Design (BERD) Workshop](https://jminnier-berd-r-courses.netlify.app/04-ggplot/04_ggplot_slides.html#1){target=_blank}
+
+- [Tidy Geospatial Networks in R Introducing the sfnetworks package Lucas van der Meer, Lorena Abad, Andrea Gilardi, Robin Lovelace 2020-06-16 for e-Rum2020 statellite event: Hackathon on Spatial Networks](https://sfnetworks.github.io/sfnetworks-webinar/slides#1){target=_blank}
+
+- [The Hirschey Lab](https://github.com/matthewhirschey/tidybiology-meetup/blob/7d0a51fb65e25615ad65dae49a92980a5b382096/2020_02/code/prism_plot_flipbook.Rmd){target=_blank} - The Hirschey Lab studies different aspects of metabolic control, mitochondrial signaling, and cellular processes regulating human health and disease
+
+- [OCTRI Biostatistics, Epidemiology, Research & Design - Jessica Minnier](https://jminnier-berd-r-courses.netlify.com/04-ggplot/04_ggplot_slides.html#1){target=_blank} - Assistant Professor of Biostatistics, OHSU
+
+- [Data Wrangling and Visualisation in R Oxford IT Services - Justin Miller](https://justinmillar.github.io/ox-stats-r-workshop/#1){target=_blank} - Post-doc researcher with the Malaria Atlas Project
+
+- [R Course for INDEC (Instituto Nacional de Estadistica y Census Republica Argentina)](https://github.com/pablotis/Curso_R_INDEC/blob/a6dd8eadff200ceaac13e8f8d548aed8c257f243/Clase%204/Clase_4_Presentacion.Rmd){target=_blank}
+
+- [Derek Ogle, Author of fishR: R for fisheries analysis](https://github.com/EvaMaeRey/flipbookr/issues/17){target=_blank}
+
+
+Additionally, our in-house flipbooks have been linked to from other resources:
+
+1. https://huygens.science.uva.nl/ggPlotteR/
+1. https://ggplot2tutor.com/howitworks
+1. https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
+1. https://medium.com/open-data-delaware/moving-outside-the-box-for-data-visualization-efcda44ce7ec
+1. https://datascience.blog.wzb.eu/2019/03/01/linkdump-105/
+1. https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
+1. https://community.plantae.org/files/posts/5255016927754977602/9be5f23ce0e1a9d173c263e6465b9ef9_DataVisMagda.pdf
+1. http://bryklab.net/compbioftw/
+1. http://stefanorodighiero.net/links.html
+1. https://www.facebook.com/1673798376000921/posts/2035217649858990/
+1. https://tidytuesday.fireside.fm/2
+1. https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
+1. https://rworkshop.uni.lu/lectures/lecture06_plotting.html#46
+1. http://mribeirodantas.xyz/blog/index.php/tag/biology/
+1. https://www.williamrchase.com/slides/ggplot_intro.html#1
+1. https://github.com/zhiiiyang/XaringanTutorial
+1. https://libguides.kaust.edu.sa/ReproducibilityWS/materials
+1. https://threadreaderapp.com/thread/1100663931192963072.html
+1. https://bookdown.org/oscar_baruffa/Book-Twitter-for-R/follow-some-more-folks.html
+1. https://stackoverflow.com/questions/55912039/building-up-a-ggplot-one-line-at-a-time-for-a-presentation
+1. http://www.rpubs.com/dgolicher/ggplots
+1. https://www.quora.com/What-data-visualization-software-can-handle-large-amounts-of-data-in-the-order-of-hundreds-of-millions-I-have-had-trouble-with-Tableau
+
+
+
