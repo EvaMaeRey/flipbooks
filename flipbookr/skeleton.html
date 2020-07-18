@@ -430,21 +430,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -544,21 +544,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars-user {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-user {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-user {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -667,21 +667,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars-non_seq {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-non_seq {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-non_seq {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -775,21 +775,21 @@ ggplot(data = cars) +
 &lt;style&gt;
 .panel1-my_rotate-rotate {
   color: black;
-  width: 38.2121212121212%;
+  width: 49%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-my_rotate-rotate {
   color: black;
-  width: 58.7878787878788%;
+  width: 49%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-my_rotate-rotate {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -900,21 +900,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars_multi-3 {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars_multi-3 {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars_multi-3 {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -924,6 +924,66 @@ cars %&gt;%
 
 
 
+
+
+---
+
+## `break_type = 1`
+
+Of course gives you the side-by-side with no walk through, which is sometimes nice
+
+---
+
+count: false
+ 
+
+.panel1-cars_multi-1[
+
+```r
+cars %&gt;%  
+  sample_frac(size = 1, replace = TRUE) %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_count(  
+    alpha = .7,  
+    color = "blue",  
+    size = 4  
+    ) +  
+  geom_smooth(method = lm, se = FALSE) +  
+  coord_cartesian(xlim = range(cars$speed),  
+                  ylim = range(cars$dist)) +  
+  theme(legend.position = c(.9, .2))  
+```
+]
+ 
+.panel2-cars_multi-1[
+&lt;img src="skeleton_files/figure-html/cars_multi_1_1_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-cars_multi-1 {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cars_multi-1 {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars_multi-1 {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 
@@ -937,7 +997,7 @@ There are also different display modes.
 
 --
 
-The default is `display_type = c("code", "output")` which will give you the classic flipbook --- code and output co-evolution.
+The default is `display_type = c("code", "output")` which will give you the classic flipbook --- code and output co-evolution. (Note this was formerly "both", but that is now deprecated)
 
 ---
 
@@ -1104,21 +1164,21 @@ count: false
 &lt;style&gt;
 .panel1-cars-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 99%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1221,21 +1281,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 99%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1255,19 +1315,20 @@ If you want to allow for lateral comparison (so not just temporal displacement) 
 Sometimes we might want to compare the previous output or with the current one *laterally* -- i.e. spatial offset instead of temporal (temporal offset is the essence of flipbooks) but sometimes we might want to have that lateral (spatial) comparison as well. This is most true when differencing via motion detection is not easy.  i.e. when there are large jumps in the position of tabular/text output.
 
 
+
 ---
 
 count: false
  
 
-.panel1-boring-auto[
+.panel1-short-auto[
 
 ```r
 *cars
 ```
 ]
  
-.panel2-boring-auto[
+.panel2-short-auto[
 
 ```
    speed dist
@@ -1324,7 +1385,7 @@ count: false
 ```
 ]
  
-.panel3-boring-auto[
+.panel3-short-auto[
 
 ```
 [1] "--"
@@ -1335,7 +1396,7 @@ count: false
 count: false
  
 
-.panel1-boring-auto[
+.panel1-short-auto[
 
 ```r
 cars %&gt;%  
@@ -1343,11 +1404,11 @@ cars %&gt;%
 ```
 ]
  
-.panel2-boring-auto[
-&lt;img src="skeleton_files/figure-html/boring_auto_2_output-1.png" width="432" /&gt;
+.panel2-short-auto[
+&lt;img src="skeleton_files/figure-html/short_auto_2_output-1.png" width="432" /&gt;
 ]
  
-.panel3-boring-auto[
+.panel3-short-auto[
 
 ```
    speed dist
@@ -1408,7 +1469,7 @@ cars %&gt;%
 count: false
  
 
-.panel1-boring-auto[
+.panel1-short-auto[
 
 ```r
 cars %&gt;%  
@@ -1417,30 +1478,30 @@ cars %&gt;%
 ```
 ]
  
-.panel2-boring-auto[
-&lt;img src="skeleton_files/figure-html/boring_auto_3_output-1.png" width="432" /&gt;
+.panel2-short-auto[
+&lt;img src="skeleton_files/figure-html/short_auto_3_output-1.png" width="432" /&gt;
 ]
  
-.panel3-boring-auto[
-&lt;img src="skeleton_files/figure-html/boring_auto_3_output_lag-1.png" width="432" /&gt;
+.panel3-short-auto[
+&lt;img src="skeleton_files/figure-html/short_auto_3_output_lag-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.panel1-boring-auto {
+.panel1-short-auto {
   color: black;
   width: 32.3333333333333%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-boring-auto {
+.panel2-short-auto {
   color: black;
   width: 32.3333333333333%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-boring-auto {
+.panel3-short-auto {
   color: black;
   width: 32.3333333333333%;
   float: left;
@@ -1633,6 +1694,178 @@ list(1, 2) %&gt;%
 
 
 
+
+
+---
+
+
+## `display_type = c("code", "output", "output_target")`
+
+Perhaps we want the target to appear on every slide as we build to this target...
+
+---
+
+
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+*ggplot(data = cars)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_1_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_1_output_target-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+ggplot(data = cars) +  
+* aes(x = speed)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_2_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_2_output_target-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_3_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_3_output_target-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point(size = 8,
+*            shape = 21,
+*            alpha = .9,
+*            color = "snow")
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_4_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_4_output_target-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+* aes(fill = speed)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_5_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_5_output_target-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+ggplot(data = cars) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+  aes(fill = speed) +  
+* scale_fill_viridis_c(option = "magma")
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_6_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_6_output_target-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-hello-auto {
+  color: black;
+  width: 38.8%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hello-auto {
+  color: black;
+  width: 38.8%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hello-auto {
+  color: black;
+  width: 19.4%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
 
 
 
@@ -1886,21 +2119,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-cars-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1917,7 +2150,7 @@ Now to include a panel for markdown "md" should be one of the inputs of the disp
 
 --
 
-The length of the md vector will likely be the same length as the slides in the flipbook.
+You'll probably plan on the length of the md vector will likely be the same length as the slides in the flipbook which is calculated from the number of breaks for the code sequence.
 
 --
 
@@ -1980,21 +2213,90 @@ cars %$%
 &lt;style&gt;
 .panel1-custom_example-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-custom_example-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-custom_example-auto {
   color: black;
-  width: 0%;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+---
+
+## `display_type = c("md", "md2")`
+
+Sometimes, perhaps your only inputs will be markdown sequences.
+
+---
+
+count: false
+ 
+
+.panel1-55476-auto[
+### hello
+]
+ 
+.panel2-55476-auto[
+greeting
+]
+
+---
+count: false
+ 
+
+.panel1-55476-auto[
+# goodbye
+]
+ 
+.panel2-55476-auto[
+another
+]
+
+---
+count: false
+ 
+
+.panel1-55476-auto[
+## `$$\frac{\sum(x)}{2}$$`
+]
+ 
+.panel2-55476-auto[
+math mode
+]
+
+&lt;style&gt;
+.panel1-55476-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-55476-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-55476-auto {
+  color: black;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2004,6 +2306,7 @@ cars %$%
 
 
 
+---
 
 
 
@@ -2035,21 +2338,27 @@ count: false
  
 .panel2-rnorm-auto[
 
+```
+function (n, mean = 0, sd = 1) 
+.Call(C_rnorm, n, mean, sd)
+&lt;bytecode: 0x7fbb35a17498&gt;
+&lt;environment: namespace:stats&gt;
+```
 ]
  
 .panel3-rnorm-auto[
 
 ```
- [1]  0.578038172  0.087679155  0.595091449 -0.730222416 -0.009003339
- [6]  0.325152373  1.775856457  0.077054892  0.923510122 -0.970145626
-[11] -1.556971664 -0.274353333 -3.062675119 -0.246529196 -1.799328308
-[16] -0.485663280 -0.300849412  0.292813662 -1.222845205  0.318629613
-[21] -0.965779611 -0.852951676 -0.169047350 -1.052158605 -0.802402565
-[26]  0.072515030  1.578016806 -0.535211958 -0.091816250 -0.885260950
-[31] -0.138671595  0.224764715 -1.021142785 -0.430932237  2.698790417
-[36]  0.543143001 -0.325044154  2.050711047  0.601964602 -0.050315312
-[41]  1.006538462 -0.827179501  0.124100254  0.084718184 -0.928880742
-[46]  1.751696594 -0.488973051  1.835861259 -0.933201557  0.249784480
+ [1]  1.305924408 -1.240605503  0.574870579  1.657795519  0.157304426
+ [6]  0.354985694  0.253476673 -0.739702151  0.239614639 -0.375903149
+[11]  0.408588921 -0.108247429  0.064205428 -0.264685236  0.240919162
+[16] -0.174829063  0.343893170 -1.110648072 -0.366828785  0.263579201
+[21]  0.451539752 -0.107403651  0.612832903  1.285456292  0.003980898
+[26]  0.066013027 -1.583579965  0.164799014  1.022857242 -0.569510504
+[31]  0.160275439 -0.101193808  1.880325787 -0.025062130 -1.701007231
+[36]  0.534951366  1.330471740  0.580105856  0.583621376  1.982006883
+[41] -1.031249288  0.869898884  1.248684235  0.925795635 -0.380000563
+[46] -0.191312901 -2.046721878  1.478861996 -0.014738993 -0.813940252
 ```
 ]
 
@@ -2067,12 +2376,19 @@ rnorm(50) %&gt;%
  
 .panel2-rnorm-auto[
 
+```
+function (x, na.rm = FALSE) 
+sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
+    na.rm = na.rm))
+&lt;bytecode: 0x7fbb2c983578&gt;
+&lt;environment: namespace:stats&gt;
+```
 ]
  
 .panel3-rnorm-auto[
 
 ```
-[1] 1.046606
+[1] 0.9778986
 ```
 ]
 
@@ -2091,6 +2407,9 @@ rnorm(50) %&gt;%
  
 .panel2-rnorm-auto[
 
+```
+function (x)  .Primitive("length")
+```
 ]
  
 .panel3-rnorm-auto[
@@ -2504,21 +2823,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-plot_object-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-plot_object-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-plot_object-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2583,21 +2902,21 @@ cars_plot +
 &lt;style&gt;
 .panel1-further_building-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-further_building-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-further_building-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -2846,21 +3165,21 @@ my_plot
 &lt;style&gt;
 .panel1-left_assign-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-left_assign-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-left_assign-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -3255,21 +3574,21 @@ cars_mod
 &lt;style&gt;
 .panel1-left_assign2-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-left_assign2-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-left_assign2-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -3488,21 +3807,21 @@ cars %&gt;%
 &lt;style&gt;
 .panel1-dot_notation-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-dot_notation-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-dot_notation-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -3604,21 +3923,21 @@ title(main = "the `cars` data")
 &lt;style&gt;
 .panel1-base_r_plotting-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-base_r_plotting-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-base_r_plotting-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -3862,21 +4181,21 @@ prediction_y
 &lt;style&gt;
 .panel1-cars_anova-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-cars_anova-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-cars_anova-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -4708,21 +5027,21 @@ matrix(1:4, ncol = 4) %*%
 &lt;style&gt;
 .panel1-arith-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-arith-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-arith-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -4852,21 +5171,21 @@ cars %$%
 &lt;style&gt;
 .panel1-new_pipe-auto {
   color: black;
-  width: 38.2121212121212%;
+  width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel2-new_pipe-auto {
   color: black;
-  width: 58.7878787878788%;
+  width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
 .panel3-new_pipe-auto {
   color: black;
-  width: 0%;
+  width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -5007,11 +5326,9 @@ The flipbooked portion of this presentation was created with the new {flipbookr}
 
 
 &lt;style type="text/css"&gt;
-# quickly chance font size of code
 .remark-code{line-height: 1.5; font-size: 80%}
 
 
-# this bit is with a mind to converting to pdf or gif
 @media print {
   .has-continuation {
     display: block;
