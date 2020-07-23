@@ -124,7 +124,7 @@ There are several modes that you might be interested in using for "flipbooking" 
 
 ---
 
-At first we'll apply `chunk_reveal()` to the below input code - the code chunk is named "cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we loaded that too in the "setup" code chunk at the beginning of the template. 
+At first we'll apply `chunk_reveal()` to the below input code - the code chunk is named "my_cars".  For now I set echo = TRUE for this code chunk, so you can see the code content but sometimes you might like to set echo to FALSE. This code uses tidyverse tools, so we loaded that too in the "setup" code chunk at the beginning of the template. 
 
 
 
@@ -162,7 +162,7 @@ cars %&gt;%
   aes(size = speed) #BREAK
 ```
 
-&lt;!-- Also notice how we've created a new code chunk with the code from the previous chunk by calling knitr::knit_code$get("cars"). --&gt;
+&lt;!-- Also notice how we've created a new code chunk with the code from the previous chunk by calling knitr::knit_code$get("my_cars"). --&gt;
 &lt;!-- This slide is also about giving you some intuition about how flipbooking works in the background. --&gt;
 &lt;!-- (more on this [here](https://emitanaka.rbind.io/post/knitr-knitr-code/)) --&gt;
 
@@ -195,14 +195,14 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 *cars
 ```
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```
    speed dist
@@ -263,7 +263,7 @@ count: false
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -271,7 +271,7 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```
    speed dist
@@ -330,7 +330,7 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -339,15 +339,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_3_output-1.png" width="432" /&gt;
+.panel2-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -357,15 +357,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_4_output-1.png" width="432" /&gt;
+.panel2-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -376,15 +376,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_5_output-1.png" width="432" /&gt;
+.panel2-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -399,15 +399,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_6_output-1.png" width="432" /&gt;
+.panel2-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -423,26 +423,26 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
+.panel2-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.panel1-cars-auto {
+.panel1-my_cars-auto {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-auto {
+.panel2-my_cars-auto {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-auto {
+.panel3-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
@@ -479,7 +479,7 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-user[
+.panel1-my_cars-user[
 
 ```r
 *cars %&gt;%
@@ -490,15 +490,15 @@ count: false
 ```
 ]
  
-.panel2-cars-user[
-&lt;img src="skeleton_files/figure-html/cars_user_1_output-1.png" width="432" /&gt;
+.panel2-my_cars-user[
+&lt;img src="skeleton_files/figure-html/my_cars_user_1_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-user[
+.panel1-my_cars-user[
 
 ```r
 cars %&gt;%  
@@ -513,15 +513,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-user[
-&lt;img src="skeleton_files/figure-html/cars_user_2_output-1.png" width="432" /&gt;
+.panel2-my_cars-user[
+&lt;img src="skeleton_files/figure-html/my_cars_user_2_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-user[
+.panel1-my_cars-user[
 
 ```r
 cars %&gt;%  
@@ -537,26 +537,26 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-user[
-&lt;img src="skeleton_files/figure-html/cars_user_3_output-1.png" width="432" /&gt;
+.panel2-my_cars-user[
+&lt;img src="skeleton_files/figure-html/my_cars_user_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.panel1-cars-user {
+.panel1-my_cars-user {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-user {
+.panel2-my_cars-user {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-user {
+.panel3-my_cars-user {
   color: black;
   width: NA%;
   float: left;
@@ -599,7 +599,7 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-non_seq[
+.panel1-my_cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -613,15 +613,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-non_seq[
-&lt;img src="skeleton_files/figure-html/cars_non_seq_1_output-1.png" width="432" /&gt;
+.panel2-my_cars-non_seq[
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_1_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-non_seq[
+.panel1-my_cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -636,15 +636,15 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-non_seq[
-&lt;img src="skeleton_files/figure-html/cars_non_seq_2_output-1.png" width="432" /&gt;
+.panel2-my_cars-non_seq[
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_2_output-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-cars-non_seq[
+.panel1-my_cars-non_seq[
 
 ```r
 cars %&gt;%  
@@ -660,26 +660,26 @@ cars %&gt;%
 ```
 ]
  
-.panel2-cars-non_seq[
-&lt;img src="skeleton_files/figure-html/cars_non_seq_3_output-1.png" width="432" /&gt;
+.panel2-my_cars-non_seq[
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_3_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.panel1-cars-non_seq {
+.panel1-my_cars-non_seq {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-non_seq {
+.panel2-my_cars-non_seq {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-non_seq {
+.panel3-my_cars-non_seq {
   color: black;
   width: NA%;
   float: left;
@@ -1018,7 +1018,7 @@ Also "md" is allowed but the requires you to give an input for another argument 
 
 ## `display_type = "output"`
 
-Let's look at where only the *output* is displayed for the "cars" code chunk.
+Let's look at where only the *output* is displayed for the "my_cars" code chunk.
 
 
 ---
@@ -1139,44 +1139,44 @@ count: false
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/cars_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/cars_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/cars_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/cars_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
 
 &lt;style&gt;
-.panel1-cars-auto {
+.panel1-my_cars-auto {
   color: black;
   width: 99%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-auto {
+.panel2-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-auto {
+.panel3-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
@@ -1191,7 +1191,7 @@ count: false
 
 ## `display_type = "code"`
 
-And now where only the *code* is displayed for the "cars" code chunk.
+And now where only the *code* is displayed for the "my_cars" code chunk.
 
 
 ---
@@ -1279,21 +1279,21 @@ cars %&gt;%
 ```
 
 &lt;style&gt;
-.panel1-cars-auto {
+.panel1-my_cars-auto {
   color: black;
   width: 99%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-auto {
+.panel2-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-auto {
+.panel3-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
@@ -1709,26 +1709,26 @@ Perhaps we want the target to appear on every slide as we build to this target..
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 *ggplot(data = cars)
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_1_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_1_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_1_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_1_output_target-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 ggplot(data = cars) +  
@@ -1736,19 +1736,19 @@ ggplot(data = cars) +
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_2_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_2_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_2_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_2_output_target-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 ggplot(data = cars) +  
@@ -1757,19 +1757,19 @@ ggplot(data = cars) +
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_3_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_3_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_3_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_3_output_target-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 ggplot(data = cars) +  
@@ -1782,19 +1782,19 @@ ggplot(data = cars) +
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_4_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_4_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_4_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_4_output_target-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 ggplot(data = cars) +  
@@ -1808,19 +1808,19 @@ ggplot(data = cars) +
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_5_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_5_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_5_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_5_output_target-1.png" width="432" /&gt;
 ]
 
 ---
 count: false
  
 
-.panel1-hello-auto[
+.panel1-goodbye-auto[
 
 ```r
 ggplot(data = cars) +  
@@ -1835,30 +1835,30 @@ ggplot(data = cars) +
 ```
 ]
  
-.panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_6_output-1.png" width="432" /&gt;
+.panel2-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_6_output-1.png" width="432" /&gt;
 ]
  
-.panel3-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_6_output_target-1.png" width="432" /&gt;
+.panel3-goodbye-auto[
+&lt;img src="skeleton_files/figure-html/goodbye_auto_6_output_target-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
-.panel1-hello-auto {
+.panel1-goodbye-auto {
   color: black;
   width: 38.8%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-hello-auto {
+.panel2-goodbye-auto {
   color: black;
   width: 38.8%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-hello-auto {
+.panel3-goodbye-auto {
   color: black;
   width: 19.4%;
   float: left;
@@ -1871,20 +1871,25 @@ ggplot(data = cars) +
 
 
 
-
 ---
 
-## `display_type = c("output", "code")`
+## `display_type = c("code", "output", "output_start")`
 
-Not sure why you'd want to do this, but you can flip output and code.
-
+Or maybe we want the input to appear on every slide ...
 
 ---
 
 count: false
  
 
-.panel1-cars-auto[
+.panel1-hello-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-hello-auto[
 
 ```
    speed dist
@@ -1941,7 +1946,624 @@ count: false
 ```
 ]
  
-.panel2-cars-auto[
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+* ggplot(data = .)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_2_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+  ggplot(data = .) +  
+* aes(x = speed)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_3_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+  ggplot(data = .) +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_4_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+  ggplot(data = .) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point(size = 8,
+*            shape = 21,
+*            alpha = .9,
+*            color = "snow")
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_5_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+  ggplot(data = .) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+* aes(fill = speed)
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_6_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hello-auto[
+
+```r
+cars %&gt;%  
+  ggplot(data = .) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 8,  
+             shape = 21,  
+             alpha = .9,  
+             color = "snow") +  
+  aes(fill = speed) +  
+* scale_fill_viridis_c(option = "magma")
+```
+]
+ 
+.panel2-hello-auto[
+&lt;img src="skeleton_files/figure-html/hello_auto_7_output-1.png" width="432" /&gt;
+]
+ 
+.panel3-hello-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+&lt;style&gt;
+.panel1-hello-auto {
+  color: black;
+  width: 38.8%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hello-auto {
+  color: black;
+  width: 38.8%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hello-auto {
+  color: black;
+  width: 19.4%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+## `display_type = c("output", "code")`
+
+Not sure why you'd want to do this, but you can flip output and code.
+
+
+---
+
+count: false
+ 
+
+.panel1-my_cars-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+ 
+.panel2-my_cars-auto[
 
 ```r
 *cars
@@ -1952,7 +2574,7 @@ count: false
 count: false
  
 
-.panel1-cars-auto[
+.panel1-my_cars-auto[
 
 ```
    speed dist
@@ -2007,7 +2629,7 @@ count: false
 ```
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2019,11 +2641,11 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_3_output-1.png" width="432" /&gt;
+.panel1-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2036,11 +2658,11 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_4_output-1.png" width="432" /&gt;
+.panel1-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2054,11 +2676,11 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_5_output-1.png" width="432" /&gt;
+.panel1-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2073,11 +2695,11 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_6_output-1.png" width="432" /&gt;
+.panel1-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2096,11 +2718,11 @@ cars %&gt;%
 count: false
  
 
-.panel1-cars-auto[
-&lt;img src="skeleton_files/figure-html/cars_auto_7_output-1.png" width="432" /&gt;
+.panel1-my_cars-auto[
+&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
 ]
  
-.panel2-cars-auto[
+.panel2-my_cars-auto[
 
 ```r
 cars %&gt;%  
@@ -2117,21 +2739,21 @@ cars %&gt;%
 ]
 
 &lt;style&gt;
-.panel1-cars-auto {
+.panel1-my_cars-auto {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-cars-auto {
+.panel2-my_cars-auto {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-cars-auto {
+.panel3-my_cars-auto {
   color: black;
   width: NA%;
   float: left;
@@ -2247,11 +2869,11 @@ Sometimes, perhaps your only inputs will be markdown sequences.
 count: false
  
 
-.panel1-55476-auto[
+.panel1-95157-auto[
 ### hello
 ]
  
-.panel2-55476-auto[
+.panel2-95157-auto[
 greeting
 ]
 
@@ -2259,11 +2881,11 @@ greeting
 count: false
  
 
-.panel1-55476-auto[
+.panel1-95157-auto[
 # goodbye
 ]
  
-.panel2-55476-auto[
+.panel2-95157-auto[
 another
 ]
 
@@ -2271,30 +2893,30 @@ another
 count: false
  
 
-.panel1-55476-auto[
+.panel1-95157-auto[
 ## `$$\frac{\sum(x)}{2}$$`
 ]
  
-.panel2-55476-auto[
+.panel2-95157-auto[
 math mode
 ]
 
 &lt;style&gt;
-.panel1-55476-auto {
+.panel1-95157-auto {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-55476-auto {
+.panel2-95157-auto {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-55476-auto {
+.panel3-95157-auto {
   color: black;
   width: NA%;
   float: left;
@@ -2341,7 +2963,7 @@ count: false
 ```
 function (n, mean = 0, sd = 1) 
 .Call(C_rnorm, n, mean, sd)
-&lt;bytecode: 0x7fbb35a17498&gt;
+&lt;bytecode: 0x7ff1a5a430b0&gt;
 &lt;environment: namespace:stats&gt;
 ```
 ]
@@ -2349,16 +2971,15 @@ function (n, mean = 0, sd = 1)
 .panel3-rnorm-auto[
 
 ```
- [1]  1.305924408 -1.240605503  0.574870579  1.657795519  0.157304426
- [6]  0.354985694  0.253476673 -0.739702151  0.239614639 -0.375903149
-[11]  0.408588921 -0.108247429  0.064205428 -0.264685236  0.240919162
-[16] -0.174829063  0.343893170 -1.110648072 -0.366828785  0.263579201
-[21]  0.451539752 -0.107403651  0.612832903  1.285456292  0.003980898
-[26]  0.066013027 -1.583579965  0.164799014  1.022857242 -0.569510504
-[31]  0.160275439 -0.101193808  1.880325787 -0.025062130 -1.701007231
-[36]  0.534951366  1.330471740  0.580105856  0.583621376  1.982006883
-[41] -1.031249288  0.869898884  1.248684235  0.925795635 -0.380000563
-[46] -0.191312901 -2.046721878  1.478861996 -0.014738993 -0.813940252
+ [1]  0.37122572  0.54628327  1.34405228  0.96535452  0.75976280 -0.04622073
+ [7]  0.39058344 -0.60209974  0.95403735 -1.68957371 -0.84167870  0.39035097
+[13]  0.51061181  0.03826057  2.24101643 -1.37553395 -0.02361193  0.99186661
+[19] -1.28018967 -1.27432038 -0.38678433  0.57702116 -0.51397089 -0.15916267
+[25]  0.18067103 -1.78951466  0.29159972  1.29928756 -0.27269488  0.06875663
+[31]  0.62594473  0.63025478 -1.02254132 -0.28795244 -0.44867481 -1.22577458
+[37] -0.43097362  0.35134920 -0.43580189  0.14596703  1.51711508 -0.82159153
+[43]  0.27519359  0.10669183 -0.73840787  2.59310236 -1.42420185  1.10214515
+[49] -0.22983318  0.27699621
 ```
 ]
 
@@ -2380,7 +3001,7 @@ rnorm(50) %&gt;%
 function (x, na.rm = FALSE) 
 sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
     na.rm = na.rm))
-&lt;bytecode: 0x7fbb2c983578&gt;
+&lt;bytecode: 0x7ff19e981998&gt;
 &lt;environment: namespace:stats&gt;
 ```
 ]
@@ -2388,7 +3009,7 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 .panel3-rnorm-auto[
 
 ```
-[1] 0.9778986
+[1] 0.9073671
 ```
 ]
 
@@ -5324,10 +5945,21 @@ class: middle, center
 The flipbooked portion of this presentation was created with the new {flipbookr} package.  Get it with remotes::install_github("EvaMaeRey/flipbookr")
 
 
+---
+
+
+
+
+
+
+# The End!
+
+
+&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-1.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-2.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-3.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-4.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-5.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-6.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-7.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-8.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-9.png" width="20%" /&gt;&lt;img src="skeleton_files/figure-html/unnamed-chunk-9-10.png" width="20%" /&gt;
+
 
 &lt;style type="text/css"&gt;
 .remark-code{line-height: 1.5; font-size: 80%}
-
 
 @media print {
   .has-continuation {
