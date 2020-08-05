@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A Federalist Papers Whodunnit Epilogue</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, 2019" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+class: left, top, inverse
+background-image: url(slow_sky.gif)
+background-size: cover
+
+## .Large[The 'sleepy time tea' of flipbooks]
+### Epilogue to 'A *Federalist Papers* Whodunnit'
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+#### Gina Reynolds&lt;br&gt;Photo Credit: Clark Young
+
+
+
+
+
+
+
+---
+
+
+
+
+---
+class: inverse, middle, center
+# I believe I've got material for writing one of the world's most boring data story.
+---
+class: inverse, middle, center
+# One theme is *stop words* --- I'll explain them --- but arguably they are the boringest of words.
+---
+class: inverse, middle, center
+# And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!
+---
+class: inverse, middle, center
+# I'm doing an analytic post mortem here.
+---
+class: inverse, middle, center
+# The non-boring thing to do is to fix the mistakes found in post mortems and move on.
+---
+class: inverse, middle, center
+# I have done this, [updating the original federalist papers work]().
+---
+class: inverse, middle, center
+# But also, I dig into the question: how consequential is correcting the mistake?
+---
+class: inverse, middle, center
+# In this case, the correction is pretty inconsequential, which makes this data story so very dull!
+---
+class: inverse, middle, center
+# The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.
+---
+class: inverse, middle, center
+# I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.
+---
+class: inverse, middle, center
+# You can flicker between outcomes for different decisions, and be stunned by lack of change too!
+---
+class: inverse, middle, center
+# But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.
+---
+class: inverse, middle, center
+# Buckle up for a boring read.
+---
+class: inverse, middle, center
+# 
+
+
+---
+class: center, middle
+
+# Chapter 0: Setting the stage
+
+---
+
+
+
+
+---
+class: inverse, middle, center
+# For ambiance, first set the stage with a hypnotic gif. We'll slow down the play back time with {magick} to make things less exciting.
+---
+class: inverse, middle, center
+# And beyond the title slide we'll use a version with washed out color so there is a bit more contrast.
+
+---
+
+
+count: false
+ 
+
+.panel1-prepare_gif-auto[
+
+```r
+# prepping gif
+*gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"
+```
+]
+ 
+.panel2-prepare_gif-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_gif-auto[
+
+```r
+# prepping gif
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
+*magick::image_read(path = gif_url)
+```
+]
+ 
+.panel2-prepare_gif-auto[
+![](federalist_epilogue_files/figure-html/prepare_gif_auto_02_output-1.gif)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_gif-auto[
+
+```r
+# prepping gif
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
+magick::image_read(path = gif_url) %&gt;%  
+* magick::image_colorize(
+*   opacity = 40,
+*   color = "white"
+*   )
+```
+]
+ 
+.panel2-prepare_gif-auto[
+![](federalist_epilogue_files/figure-html/prepare_gif_auto_03_output-1.gif)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_gif-auto[
+
+```r
+# prepping gif
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
+magick::image_read(path = gif_url) %&gt;%  
+  magick::image_colorize(  
+    opacity = 40,  
+    color = "white"  
+    ) %&gt;%  
+* magick::image_write_gif(
+*   delay = .3,
+*   path = "washed_out_sky.gif"
+*   )
+```
+]
+ 
+.panel2-prepare_gif-auto[
+
+```
+
+Frame 1 (5%)
+Frame 2 (10%)
+Frame 3 (15%)
+Frame 4 (21%)
+Frame 5 (26%)
+Frame 6 (31%)
+Frame 7 (36%)
+Frame 8 (42%)
+Frame 9 (47%)
+Frame 10 (52%)
+Frame 11 (57%)
+Frame 12 (63%)
+Frame 13 (68%)
+Frame 14 (73%)
+Frame 15 (78%)
+Frame 16 (84%)
+Frame 17 (89%)
+Frame 18 (94%)
+Frame 19 (100%)
+Finalizing encoding... done!
+```
+
+```
+[1] "/Users/evangelinereynolds/Google Drive/flipbook_enterprise/flipbooks/federalist/washed_out_sky.gif"
+```
+]
+
+&lt;style&gt;
+.panel1-prepare_gif-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-prepare_gif-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-prepare_gif-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## We're using {xaringanthemer} to set all the background images. 
+
+
+
+
+```r
+xaringanthemer::style_mono_accent(code_inline_background_color = "darkgrey",
+  # hex color should be provided, or theme_xaringan doesn't work
+  title_slide_background_image = "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif",
+  background_image = "washed_out_sky.gif",
+  code_font_size = '14px',
+  text_slide_number_color = '#b3b3b3', #grey70
+  footnote_font_size = '0.5em',
+  footnote_position_bottom = "30px"
+)
+```
+
+
+---
+class: center, middle
+
+# Chapter 1: The mistake
+
+---
+
+
+
+
+
+
+
+
+---
+class: inverse, middle, center
+# So in my work federalist papers network vis work, I wanted to only use stop words from the papers.
+---
+class: inverse, middle, center
+# Stop words are low content words, that usually occur pretty frequently in texts. They serve grammatical purposes. But are often are removed in text analysis seeking to do topic modeling. Stop words just look like noise in this context.
+---
+class: inverse, middle, center
+# But the classic question for the federalist papers is not about the paper's themes, it is about who wrote the *disputed texts*.
+---
+class: inverse, middle, center
+# There are 15 texts that both Hamilton and Madison claimed to have written.
+---
+class: inverse, middle, center
+# For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling! You'd definitely not want to remove stop words.
+---
+class: inverse, middle, center
+# In fact, you might only want to keep stop words.
+---
+class: inverse, middle, center
+# This was my intent when I used a right join.
+---
+class: inverse, middle, center
+# But this is a mistake.
+---
+class: inverse, middle, center
+#  While stop words are frequently occuring and common examples will definitely be present in every text (my favorite examples *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.
+---
+class: inverse, middle, center
+# So really an inner join is better to look only at the stop words that occur in the texts.
+---
+class: inverse, middle, center
+# Don't assume that text will have all stop words. David Robinson pointed this out. Thanks David!
+---
+class: inverse, middle, center
+# Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers.
+
+
+
+
+---
+
+## first getting and prepping the federalist data
+
+
+```r
+library(tidyverse) # data manipulation and viz functions
+library(corpus) # has the federalist papers corpus
+corpus::federalist %&gt;% 
+  mutate(author = replace_na(author, 
+                             "Disputed")) %&gt;% 
+  mutate(name = paste(author, 
+                      str_remove(name, "eralist"), 
+                      sep = "-")) -&gt; 
+federalist
+
+federalist %&gt;% 
+  glimpse()
+```
+
+```
+Rows: 85
+Columns: 6
+$ name   &lt;chr&gt; "Hamilton-Fed No. 1", "Jay-Fed No. 2", "Jay-Fed No. 3", "Jay-F…
+$ title  &lt;chr&gt; "General Introduction", "Concerning Dangers from Foreign Force…
+$ venue  &lt;chr&gt; "For the Independent Journal", "For the Independent Journal", …
+$ date   &lt;date&gt; NA, NA, NA, NA, NA, NA, NA, 1787-11-20, NA, 1787-11-23, NA, 1…
+$ author &lt;chr&gt; "Hamilton", "Jay", "Jay", "Jay", "Jay", "Hamilton", "Hamilton"…
+$ text   &lt;chr&gt; "To the People of the State of New York:\n\nAFTER an unequivoc…
+```
+
+
+---
+
+## There are 15 disputed texts
+
+
+```r
+federalist %&gt;% 
+  group_by(author) %&gt;% 
+  tally() -&gt;
+the_tally
+
+the_tally 
+```
+
+```
+# A tibble: 4 x 2
+  author       n
+  &lt;chr&gt;    &lt;int&gt;
+1 Disputed    15
+2 Hamilton    51
+3 Jay          5
+4 Madison     14
+```
+
+---
+
+count: false
+ 
+### The *inner* join shows us stop words that appear in the federalist papers while, the *anti* join shows us stop words **not** in the federalist papers. Lots with apostrophes for example.
+.panel1-doc_term_stop-rotate[
+
+```r
+federalist %&gt;%  
+  select(name, text, title) %&gt;%  
+  tidytext::unnest_tokens(output = word,  
+                          input = text) -&gt;  
+federalist_words  
+
+tidytext::stop_words %&gt;%  
+* inner_join(federalist_words) %&gt;%
+  distinct(word)  
+```
+]
+ 
+.panel2-doc_term_stop-rotate[
+
+```
+# A tibble: 515 x 1
+   word       
+   &lt;chr&gt;      
+ 1 a          
+ 2 able       
+ 3 about      
+ 4 above      
+ 5 according  
+ 6 accordingly
+ 7 actually   
+ 8 after      
+ 9 afterwards 
+10 again      
+# … with 505 more rows
+```
+]
+
+---
+count: false
+ 
+### The *inner* join shows us stop words that appear in the federalist papers while, the *anti* join shows us stop words **not** in the federalist papers. Lots with apostrophes for example.
+.panel1-doc_term_stop-rotate[
+
+```r
+federalist %&gt;%  
+  select(name, text, title) %&gt;%  
+  tidytext::unnest_tokens(output = word,  
+                          input = text) -&gt;  
+federalist_words  
+
+tidytext::stop_words %&gt;%  
+* anti_join(federalist_words) %&gt;%
+  distinct(word)  
+```
+]
+ 
+.panel2-doc_term_stop-rotate[
+
+```
+# A tibble: 213 x 1
+   word   
+   &lt;chr&gt;  
+ 1 a's    
+ 2 across 
+ 3 ain't  
+ 4 anybody
+ 5 anyhow 
+ 6 anyone 
+ 7 anyway 
+ 8 anyways
+ 9 aren't 
+10 asking 
+# … with 203 more rows
+```
+]
+
+&lt;style&gt;
+.panel1-doc_term_stop-rotate {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-doc_term_stop-rotate {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-doc_term_stop-rotate {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+### Now this is the *correct* preparation, which includes only the stop words in the federalist papers.
+
+
+```r
+federalist %&gt;%
+  select(name, text, title) %&gt;% 
+  tidytext::unnest_tokens(output = word, input = text) %&gt;% 
+  # stop word are good for stylometry - keep them only
+* inner_join(tidytext::stop_words) %&gt;%
+  group_by(name, word) %&gt;% 
+  count() %&gt;% 
+  arrange(-n) %&gt;% 
+  ungroup() %&gt;% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %&gt;% 
+  filter(!is.na(item1)) %&gt;% 
+  filter(!is.na(item2)) -&gt;
+*document_correlation_inner
+```
+
+---
+
+### And this is the *incorrect* preparation, which includes preserves all the stop words even if they are not in the federalist papers.  
+
+
+```r
+federalist %&gt;%
+  select(name, text, title) %&gt;% 
+  tidytext::unnest_tokens(output = word, input = text) %&gt;% 
+  # stop word are good for stylometry - keep them only
+* right_join(tidytext::stop_words) %&gt;%
+  group_by(name, word) %&gt;% 
+  count() %&gt;% 
+  arrange(-n) %&gt;% 
+  ungroup() %&gt;% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %&gt;% 
+  filter(!is.na(item1)) %&gt;% 
+  filter(!is.na(item2)) -&gt;
+*document_correlation_right
+```
+
+---
+
+count: false
+ 
+### Let's look at the resulting differences in correlation for word counts for the documents. Correlations are about the same for the inner v. right join -- the difference is in the third decimal place, inspecting the most correlated and least correlated docs
+.panel1-compare_table-rotate[
+
+```r
+*document_correlation_inner
+```
+]
+ 
+.panel2-compare_table-rotate[
+
+```
+# A tibble: 7,140 x 3
+   item1               item2               correlation
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.992
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.992
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.990
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.990
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990
+# … with 7,130 more rows
+```
+]
+
+---
+count: false
+ 
+### Let's look at the resulting differences in correlation for word counts for the documents. Correlations are about the same for the inner v. right join -- the difference is in the third decimal place, inspecting the most correlated and least correlated docs
+.panel1-compare_table-rotate[
+
+```r
+*document_correlation_right
+```
+]
+ 
+.panel2-compare_table-rotate[
+
+```
+# A tibble: 7,140 x 3
+   item1               item2               correlation
+   &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Madison-Fed No. 41  Madison-Fed No. 43        0.993
+ 2 Madison-Fed No. 43  Madison-Fed No. 41        0.993
+ 3 Disputed-Fed No. 63 Madison-Fed No. 41        0.991
+ 4 Madison-Fed No. 41  Disputed-Fed No. 63       0.991
+ 5 Disputed-Fed No. 63 Madison-Fed No. 43        0.990
+ 6 Madison-Fed No. 43  Disputed-Fed No. 63       0.990
+ 7 Hamilton-Fed No. 76 Hamilton-Fed No. 65       0.990
+ 8 Hamilton-Fed No. 65 Hamilton-Fed No. 76       0.990
+ 9 Madison-Fed No. 48  Disputed-Fed No. 63       0.990
+10 Disputed-Fed No. 63 Madison-Fed No. 48        0.990
+# … with 7,130 more rows
+```
+]
+
+&lt;style&gt;
+.panel1-compare_table-rotate {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-compare_table-rotate {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-compare_table-rotate {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-compare_table_tail-rotate[
+
+```r
+*document_correlation_inner %&gt;% tail()
+```
+]
+ 
+.panel2-compare_table_tail-rotate[
+
+```
+# A tibble: 6 x 3
+  item1               item2               correlation
+  &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+1 Jay-Fed No. 5       Disputed-Fed No. 54       0.797
+2 Disputed-Fed No. 54 Jay-Fed No. 5             0.797
+3 Jay-Fed No. 5       Madison-Fed No. 45        0.796
+4 Madison-Fed No. 45  Jay-Fed No. 5             0.796
+5 Jay-Fed No. 5       Madison-Fed No. 47        0.783
+6 Madison-Fed No. 47  Jay-Fed No. 5             0.783
+```
+]
+
+---
+count: false
+ 
+
+.panel1-compare_table_tail-rotate[
+
+```r
+*document_correlation_right %&gt;% tail()
+```
+]
+ 
+.panel2-compare_table_tail-rotate[
+
+```
+# A tibble: 6 x 3
+  item1               item2               correlation
+  &lt;chr&gt;               &lt;chr&gt;                     &lt;dbl&gt;
+1 Jay-Fed No. 5       Disputed-Fed No. 18       0.800
+2 Disputed-Fed No. 18 Jay-Fed No. 5             0.800
+3 Jay-Fed No. 5       Madison-Fed No. 45        0.797
+4 Madison-Fed No. 45  Jay-Fed No. 5             0.797
+5 Jay-Fed No. 5       Madison-Fed No. 47        0.785
+6 Madison-Fed No. 47  Jay-Fed No. 5             0.785
+```
+]
+
+&lt;style&gt;
+.panel1-compare_table_tail-rotate {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-compare_table_tail-rotate {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-compare_table_tail-rotate {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: middle, center
+
+# Chapter 2: visual super imposition of inner v. right join correlation heat maps!
+
+
+
+
+---
+
+
+
+count: false
+ 
+### Visually inspecting these two heat maps, you're hard pressed to see a difference.
+.panel1-heat_map_inner-1[
+
+```r
+*document_correlation_inner %&gt;%
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+  theme(aspect.ratio = 1) +  
+  geom_tile() +  
+  aes(fill = correlation) +  
+  scale_fill_viridis_c(direction = -1,  
+                       limits = c(.75,1)) +  
+  theme_void() +  
+  coord_equal()  
+```
+]
+ 
+.panel2-heat_map_inner-1[
+&lt;img src="federalist_epilogue_files/figure-html/heat_map_inner_1_01_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-heat_map_inner-1 {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-heat_map_inner-1 {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-heat_map_inner-1 {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+### Visually inspecting these two heat maps, you're hard pressed to see a difference.
+.panel1-heat_map_rignt-1[
+
+```r
+*document_correlation_right %&gt;%
+  ggplot() +  
+  aes(x = item1) +  
+  theme(axis.text.x =  
+          element_text(angle = 90)) +  
+  theme(text = element_text(size = 4)) +  
+  aes(y = item2) +  
+  theme(aspect.ratio = 1) +  
+  geom_tile() +  
+  aes(fill = correlation) +  
+  scale_fill_viridis_c(direction = -1,  
+                       limits = c(.75,1)) +  
+  theme_void() +  
+  coord_equal()  
+```
+]
+ 
+.panel2-heat_map_rignt-1[
+&lt;img src="federalist_epilogue_files/figure-html/heat_map_rignt_1_01_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-heat_map_rignt-1 {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-heat_map_rignt-1 {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-heat_map_rignt-1 {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: middle, center
+
+# In this case, the mistake of inner v. right join was not very consequential.  
+
+---
+class: middle, center
+
+# Of course, in other contexts this misstep could have profound consequences!
+
+
+---
+
+#  Epilogue to the Epilogue? 
+
+### I think that I'd like to do a better job trying to communicate what is happening when those between document correlations are being calculated.  This feels a bit glossed over, but it'd be nice to try to show an example of the correlation at least for one document.  This might also provide total clarity as to why these stray stop words don't seem to influence the outcome much at all. 
+
+---
+
+
+
+---
+class: inverse, middle, center
+# Okay. Lights out!
+---
+class: inverse, middle, center
+# Eyes shut!
+---
+class: inverse, middle, center
+# Good night! I hope you dream of stop words and inconsequential decisions!
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

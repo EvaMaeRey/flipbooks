@@ -1,0 +1,346 @@
+---
+title: "A *Federalist Papers* Whodunnit Epilogue"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, 2019"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [xaringan-themer.css]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+
+
+
+
+
+
+class: left, top, inverse
+background-image: url(slow_sky.gif)
+background-size: cover
+
+## .Large[The 'sleepy time tea' of flipbooks]
+### Epilogue to 'A *Federalist Papers* Whodunnit'
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+#### Gina Reynolds<br>Photo Credit: Clark Young
+
+
+```{r setup, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3, dev.args = list(bg = "transparent"))
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+
+
+
+```{r, include = F}
+"I believe I've got material for writing one of the world's most boring data story.  One theme is *stop words* --- I'll explain them --- but arguably they are the boringest of words.  And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!  I'm doing an analytic post mortem here.  The non-boring thing to do is to fix the mistakes found in post mortems and move on.  I have done this, [updating the original federalist papers work]().  But also, I dig into the question: how consequential is correcting the mistake?  In this case, the correction is pretty inconsequential, which makes this data story so very dull!  The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.  I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.  You can flicker between outcomes for different decisions, and be stunned by lack of change too!  But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.  Buckle up for a boring read.  " -> intro
+```
+
+
+`r text_reveal(text = intro,  sep = "  ")`
+
+
+---
+class: center, middle
+
+# Chapter 0: Setting the stage with a hypnotic gif
+
+
+```{r, include = F}
+"For ambiance, first set the stage with a hypnotic gif. We'll slow down the play back time with {magick} to make things less exciting.  And beyond the title slide we'll use a version with washed out color so there is a bit more contrast." -> hypnotic
+```
+
+
+`r text_reveal(text = hypnotic,  sep = "  ")`
+
+---
+
+
+`r chunk_reveal("prepare_gif")`
+
+
+```{r prepare_gif, include = F}
+# prepping gif
+gif_url <- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"
+magick::image_read(path = gif_url) %>% 
+  magick::image_colorize(
+    opacity = 40, 
+    color = "white"
+    ) %>% 
+  magick::image_write_gif(
+    delay = .3, 
+    path = "washed_out_sky.gif"
+    )
+```
+
+
+```{r, include=FALSE}
+# Slow down gif and save.
+magick::image_read("https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif") %>% 
+  magick::image_write_gif(delay = .2, path = "slow_sky.gif")
+```
+
+
+
+---
+
+## We're using {xaringanthemer} to set all the background images. 
+
+
+
+```{r xaringan-themer}
+xaringanthemer::style_mono_accent(code_inline_background_color = "darkgrey",
+  # hex color should be provided, or theme_xaringan doesn't work
+  title_slide_background_image = "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif",
+  background_image = "washed_out_sky.gif",
+  code_font_size = '14px',
+  text_slide_number_color = '#b3b3b3', #grey70
+  footnote_font_size = '0.5em',
+  footnote_position_bottom = "30px"
+)
+```
+
+
+---
+class: center, middle
+
+# Chapter 1: The mistake
+
+---
+
+
+
+
+
+```{r, include = F}
+"So in my work federalist papers network vis work, I wanted to only use stop words from the papers.  Stop words are low content words, that usually occur pretty frequently in texts. They serve grammatical purposes. But are often are removed in text analysis seeking to do topic modeling. Stop words just look like noise in this context.  But the classic question for the federalist papers is not about the paper's themes, it is about who wrote the *disputed texts*.  There are 15 texts that both Hamilton and Madison claimed to have written.  For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling! You'd definitely not want to remove stop words.  In fact, you might only want to keep stop words.  This was my intent when I used a right join.  But this is a mistake.   While stop words are frequently occuring and common examples will definitely be present in every text (my favorite examples *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.  So really an inner join is better to look only at the stop words that occur in the texts.  Don't assume that text will have all stop words. David Robinson pointed this out. Thanks David!  Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers." -> chapter1
+```
+
+
+`r text_reveal(text = chapter1,  sep = "  ")`
+
+
+
+
+---
+
+## first getting and prepping the federalist data
+
+```{r start, include = T}
+library(tidyverse) # data manipulation and viz functions
+library(corpus) # has the federalist papers corpus
+corpus::federalist %>% 
+  mutate(author = replace_na(author, 
+                             "Disputed")) %>% 
+  mutate(name = paste(author, 
+                      str_remove(name, "eralist"), 
+                      sep = "-")) -> 
+federalist
+
+federalist %>% 
+  glimpse()
+```
+
+
+---
+
+## There are 15 disputed texts
+
+```{r}
+federalist %>% 
+  group_by(author) %>% 
+  tally() ->
+the_tally
+
+the_tally 
+```
+
+---
+
+`r chunk_reveal("doc_term_stop", break_type = "rotate", title = "### The *inner* join shows us stop words that appear in the federalist papers while, the *anti* join shows us stop words **not** in the federalist papers. Lots with apostrophes for example.")`
+
+```{r doc_term_stop, include = F}
+federalist %>%
+  select(name, text, title) %>% 
+  tidytext::unnest_tokens(output = word, 
+                          input = text) ->
+federalist_words
+
+tidytext::stop_words %>% 
+  inner_join(federalist_words) %>% #ROTATE
+  anti_join(federalist_words) %>% #ROTATE
+  distinct(word)
+```
+
+---
+
+### Now this is the *correct* preparation, which includes only the stop words in the federalist papers.
+
+```{r doc_term_prep1, include = T}
+federalist %>%
+  select(name, text, title) %>% 
+  tidytext::unnest_tokens(output = word, input = text) %>% 
+  # stop word are good for stylometry - keep them only
+  inner_join(tidytext::stop_words) %>% #<<
+  group_by(name, word) %>% 
+  count() %>% 
+  arrange(-n) %>% 
+  ungroup() %>% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %>% 
+  filter(!is.na(item1)) %>% 
+  filter(!is.na(item2)) ->
+document_correlation_inner #<<
+```
+
+---
+
+### And this is the *incorrect* preparation, which includes preserves all the stop words even if they are not in the federalist papers.  
+
+```{r doc_term_prep2, include = T}
+federalist %>%
+  select(name, text, title) %>% 
+  tidytext::unnest_tokens(output = word, input = text) %>% 
+  # stop word are good for stylometry - keep them only
+  right_join(tidytext::stop_words) %>% #<<
+  group_by(name, word) %>% 
+  count() %>% 
+  arrange(-n) %>% 
+  ungroup() %>% # document term frequency 
+  widyr::pairwise_cor(item = name,
+                      feature = word, 
+                      value = n, 
+                      sort = TRUE) %>% 
+  filter(!is.na(item1)) %>% 
+  filter(!is.na(item2)) ->
+document_correlation_right #<<
+```
+
+---
+
+`r chunk_reveal("compare_table", break_type = "rotate", title = "### Let's look at the resulting differences in correlation for word counts for the documents. Correlations are about the same for the inner v. right join -- the difference is in the third decimal place, inspecting the most correlated and least correlated docs" )`
+
+```{r compare_table, include = F}
+document_correlation_inner #ROTATE
+document_correlation_right #ROTATE
+```
+
+
+---
+
+`r chunk_reveal("compare_table_tail", break_type = "rotate", title = "### Looking at the least correlated cases")`
+
+```{r compare_table_tail, include = F}
+document_correlation_inner %>% tail() #ROTATE
+document_correlation_right %>% tail() #ROTATE
+```
+
+---
+class: middle, center
+
+# Chapter 2: visual super imposition of inner v. right join correlation heat maps!
+
+
+
+
+---
+
+
+
+`r chunk_reveal("heat_map_inner", break_type = 1, title = "### Visually inspecting these two heat maps, you're hard pressed to see a difference.")`
+
+
+```{r heat_map_inner, include = F}
+document_correlation_inner %>% #<<
+  ggplot() +
+  aes(x = item1) +
+  theme(axis.text.x = 
+          element_text(angle = 90)) +
+  theme(text = element_text(size = 4)) +
+  aes(y = item2) +
+  theme(aspect.ratio = 1) +
+  geom_tile() +
+  aes(fill = correlation) +
+  scale_fill_viridis_c(direction = -1, 
+                       limits = c(.75,1)) +
+  theme_void() +
+  coord_equal()
+```
+
+---
+
+`r chunk_reveal("heat_map_rignt", break_type = 1, title = "### Visually inspecting these two heat maps, you're hard pressed to see a difference.")`
+
+
+```{r heat_map_rignt, include = F}
+document_correlation_right %>% #<<
+  ggplot() +
+  aes(x = item1) +
+  theme(axis.text.x = 
+          element_text(angle = 90)) +
+  theme(text = element_text(size = 4)) +
+  aes(y = item2) +
+  theme(aspect.ratio = 1) +
+  geom_tile() +
+  aes(fill = correlation) +
+  scale_fill_viridis_c(direction = -1, 
+                       limits = c(.75,1)) +
+  theme_void() +
+  coord_equal()
+```
+
+
+---
+class: middle, center
+
+# So in this case, the mistake of inner v. right join seems not to be very consequential.  
+
+---
+class: middle, center
+
+# Of course, in other contexts this misstep could have profound consequences!  Careful! Achtung! Cuidado! 
+
+
+---
+
+#  Epilogue to the Epilogue? 
+
+### I think that I'd like to do a better job trying to communicate what is happening when those between document correlations are being calculated.  This feels a bit glossed over, but it'd be nice to try to show an example of the correlation at least for one document.  This might also provide total clarity as to why these stray stop words don't seem to influence the outcome much at all. 
+
+---
+
+```{r, include = F}
+"Okay. Lights out!  Eyes shut!  Good night! May you dream of stop words and inconsequential decisions!" -> farewell
+```
+
+`r text_reveal(farewell, sep = "  ")`
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+```
