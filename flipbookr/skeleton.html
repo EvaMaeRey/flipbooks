@@ -100,6 +100,11 @@ Error in file(filename, "r", encoding = encoding) :
   cannot open the connection
 ```
 
+```
+Error in file(filename, "r", encoding = encoding) : 
+  cannot open the connection
+```
+
 
 
 ---
@@ -266,7 +271,7 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * filter(speed &gt; 4)
 ```
 ]
@@ -333,14 +338,14 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
 * ggplot()
 ```
 ]
  
 .panel2-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -350,15 +355,15 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
 * aes(x = speed)
 ```
 ]
  
 .panel2-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_04_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -368,16 +373,16 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
  
 .panel2-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_05_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -387,11 +392,11 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(
 *   alpha = .8,
 *   color = "blue"
@@ -400,7 +405,7 @@ cars %&gt;%
 ]
  
 .panel2-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_06_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -410,21 +415,21 @@ count: false
 .panel1-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    alpha = .8,  
-    color = "blue"  
-    ) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    alpha = .8,
+    color = "blue"
+    ) +
 * aes(size = speed)
 ```
 ]
  
 .panel2-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_07_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -491,7 +496,7 @@ count: false
 ]
  
 .panel2-my_cars-user[
-&lt;img src="skeleton_files/figure-html/my_cars_user_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_user_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -501,11 +506,11 @@ count: false
 .panel1-my_cars-user[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(
 *   alpha = .8,
 *   color = "blue"
@@ -514,7 +519,7 @@ cars %&gt;%
 ]
  
 .panel2-my_cars-user[
-&lt;img src="skeleton_files/figure-html/my_cars_user_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_user_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -524,21 +529,21 @@ count: false
 .panel1-my_cars-user[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    alpha = .8,  
-    color = "blue"  
-    ) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    alpha = .8,
+    color = "blue"
+    ) +
 * aes(size = speed)
 ```
 ]
  
 .panel2-my_cars-user[
-&lt;img src="skeleton_files/figure-html/my_cars_user_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_user_03_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -602,19 +607,19 @@ count: false
 .panel1-my_cars-non_seq[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    ) +  
-  aes(size = speed)  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    ) +
+  aes(size = speed)
 ```
 ]
  
 .panel2-my_cars-non_seq[
-&lt;img src="skeleton_files/figure-html/my_cars_non_seq_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -624,20 +629,20 @@ count: false
 .panel1-my_cars-non_seq[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
 *   alpha = .8,
-    ) +  
-  aes(size = speed)  
+    ) +
+  aes(size = speed)
 ```
 ]
  
 .panel2-my_cars-non_seq[
-&lt;img src="skeleton_files/figure-html/my_cars_non_seq_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -647,21 +652,21 @@ count: false
 .panel1-my_cars-non_seq[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    alpha = .8,  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    alpha = .8,
 *   color = "blue"
-    ) +  
-  aes(size = speed)  
+    ) +
+  aes(size = speed)
 ```
 ]
  
 .panel2-my_cars-non_seq[
-&lt;img src="skeleton_files/figure-html/my_cars_non_seq_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_non_seq_03_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -710,20 +715,20 @@ count: false
 .panel1-my_rotate-rotate[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
-  aes(fill = speed) +  
-  scale_fill_viridis_c(option = "magma")   
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+* scale_fill_viridis_c(option = "magma")
 ```
 ]
  
 .panel2-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -733,20 +738,20 @@ count: false
 .panel1-my_rotate-rotate[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
-  aes(fill = speed) +  
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
 * scale_fill_viridis_c(option = "cividis")
 ```
 ]
  
 .panel2-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -756,20 +761,20 @@ count: false
 .panel1-my_rotate-rotate[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
-  aes(fill = speed) +  
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
 * scale_fill_viridis_c(option = "plasma")
 ```
 ]
  
 .panel2-my_rotate-rotate[
-&lt;img src="skeleton_files/figure-html/my_rotate_rotate_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_rotate_rotate_03_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -800,6 +805,362 @@ ggplot(data = cars) +
 
 
 
+---
+
+You might want to combine the reveal experience and rotate as one idea.  This can be done with the omit function.  
+
+
+---
+
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+*ggplot(data = cars)
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_01_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+* theme_minimal(base_size = 13)
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_02_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+* aes(x = speed)
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_03_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+* aes(y = dist)
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_04_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+* geom_point(size = 8,
+*            shape = 21,
+*            alpha = .9,
+*            color = "snow")
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_05_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+* aes(fill = speed)
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_06_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+* scale_fill_viridis_c(option = "viridis")
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_07_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+  scale_fill_viridis_c(option = "viridis") +
+* labs(title = "Cars")
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_08_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+  scale_fill_viridis_c(option = "viridis") +
+  labs(title = "Cars") +
+* labs(speed = "Speed\n(mph)")
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_09_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-auto[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+  scale_fill_viridis_c(option = "viridis") +
+  labs(title = "Cars") +
+  labs(speed = "Speed\n(mph)") +
+* theme(legend.position = "none")
+```
+]
+ 
+.panel2-omit-auto[
+&lt;img src="skeleton_files/figure-html/omit_auto_10_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-omit-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-omit-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-omit-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+---
+
+count: false
+ 
+
+.panel1-omit-rotate[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+* scale_fill_viridis_c(option = "magma") +
+  labs(title = "Cars") +
+  labs(speed = "Speed\n(mph)") +
+  theme(legend.position = "none")
+```
+]
+ 
+.panel2-omit-rotate[
+&lt;img src="skeleton_files/figure-html/omit_rotate_01_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-rotate[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+* scale_fill_viridis_c(option = "cividis") +
+  labs(title = "Cars") +
+  labs(speed = "Speed\n(mph)") +
+  theme(legend.position = "none")
+```
+]
+ 
+.panel2-omit-rotate[
+&lt;img src="skeleton_files/figure-html/omit_rotate_02_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-omit-rotate[
+
+```r
+ggplot(data = cars) +
+  theme_minimal(base_size = 13) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
+* scale_fill_viridis_c(option = "plasma") +
+  labs(title = "Cars") +
+  labs(speed = "Speed\n(mph)") +
+  theme(legend.position = "none")
+```
+]
+ 
+.panel2-omit-rotate[
+&lt;img src="skeleton_files/figure-html/omit_rotate_03_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-omit-rotate {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-omit-rotate {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-omit-rotate {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
 
 
 ---
@@ -820,25 +1181,25 @@ count: false
 .panel1-cars_multi-3[
 
 ```r
-cars %&gt;%  
-  sample_frac(size = 1, replace = TRUE) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_count(  
-    alpha = .7,  
-    color = "blue",  
-    size = 4  
-    ) +  
-  geom_smooth(method = lm, se = FALSE) +  
-  coord_cartesian(xlim = range(cars$speed),  
-                  ylim = range(cars$dist)) +  
-  theme(legend.position = c(.9, .2))  
+cars %&gt;%
+  sample_frac(size = 1, replace = TRUE) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_count(
+    alpha = .7,
+    color = "blue",
+    size = 4
+    ) +
+  geom_smooth(method = lm, se = FALSE) +
+  coord_cartesian(xlim = range(cars$speed),
+                  ylim = range(cars$dist)) +
+  theme(legend.position = c(.9, .2))
 ```
 ]
  
 .panel2-cars_multi-3[
-&lt;img src="skeleton_files/figure-html/cars_multi_3_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_multi_3_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -848,25 +1209,25 @@ count: false
 .panel1-cars_multi-3[
 
 ```r
-cars %&gt;%  
-  sample_frac(size = 1, replace = TRUE) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_count(  
-    alpha = .7,  
-    color = "blue",  
-    size = 4  
-    ) +  
-  geom_smooth(method = lm, se = FALSE) +  
-  coord_cartesian(xlim = range(cars$speed),  
-                  ylim = range(cars$dist)) +  
-  theme(legend.position = c(.9, .2))  
+cars %&gt;%
+  sample_frac(size = 1, replace = TRUE) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_count(
+    alpha = .7,
+    color = "blue",
+    size = 4
+    ) +
+  geom_smooth(method = lm, se = FALSE) +
+  coord_cartesian(xlim = range(cars$speed),
+                  ylim = range(cars$dist)) +
+  theme(legend.position = c(.9, .2))
 ```
 ]
  
 .panel2-cars_multi-3[
-&lt;img src="skeleton_files/figure-html/cars_multi_3_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_multi_3_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -876,25 +1237,25 @@ count: false
 .panel1-cars_multi-3[
 
 ```r
-cars %&gt;%  
-  sample_frac(size = 1, replace = TRUE) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_count(  
-    alpha = .7,  
-    color = "blue",  
-    size = 4  
-    ) +  
-  geom_smooth(method = lm, se = FALSE) +  
-  coord_cartesian(xlim = range(cars$speed),  
-                  ylim = range(cars$dist)) +  
-  theme(legend.position = c(.9, .2))  
+cars %&gt;%
+  sample_frac(size = 1, replace = TRUE) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_count(
+    alpha = .7,
+    color = "blue",
+    size = 4
+    ) +
+  geom_smooth(method = lm, se = FALSE) +
+  coord_cartesian(xlim = range(cars$speed),
+                  ylim = range(cars$dist)) +
+  theme(legend.position = c(.9, .2))
 ```
 ]
  
 .panel2-cars_multi-3[
-&lt;img src="skeleton_files/figure-html/cars_multi_3_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_multi_3_03_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -940,25 +1301,25 @@ count: false
 .panel1-cars_multi-1[
 
 ```r
-cars %&gt;%  
-  sample_frac(size = 1, replace = TRUE) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_count(  
-    alpha = .7,  
-    color = "blue",  
-    size = 4  
-    ) +  
-  geom_smooth(method = lm, se = FALSE) +  
-  coord_cartesian(xlim = range(cars$speed),  
-                  ylim = range(cars$dist)) +  
-  theme(legend.position = c(.9, .2))  
+cars %&gt;%
+  sample_frac(size = 1, replace = TRUE) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_count(
+    alpha = .7,
+    color = "blue",
+    size = 4
+    ) +
+  geom_smooth(method = lm, se = FALSE) +
+  coord_cartesian(xlim = range(cars$speed),
+                  ylim = range(cars$dist)) +
+  theme(legend.position = c(.9, .2))
 ```
 ]
  
 .panel2-cars_multi-1[
-&lt;img src="skeleton_files/figure-html/cars_multi_1_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_multi_1_01_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -1139,27 +1500,27 @@ count: false
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_03_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_04_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_05_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_06_output-1.png" width="432" /&gt;
 
 ---
 count: false
 
-&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_07_output-1.png" width="432" /&gt;
 
 &lt;style&gt;
 .panel1-my_cars-auto {
@@ -1208,7 +1569,7 @@ count: false
 
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * filter(speed &gt; 4)
 ```
 
@@ -1217,8 +1578,8 @@ count: false
 
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
 * ggplot()
 ```
 
@@ -1227,9 +1588,9 @@ count: false
 
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
 * aes(x = speed)
 ```
 
@@ -1238,10 +1599,10 @@ count: false
 
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 
@@ -1250,11 +1611,11 @@ count: false
 
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(
 *   alpha = .8,
 *   color = "blue"
@@ -1266,15 +1627,15 @@ count: false
 
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    alpha = .8,  
-    color = "blue"  
-    ) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    alpha = .8,
+    color = "blue"
+    ) +
 * aes(size = speed)
 ```
 
@@ -1399,13 +1760,13 @@ count: false
 .panel1-short-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * ggplot()
 ```
 ]
  
 .panel2-short-auto[
-&lt;img src="skeleton_files/figure-html/short_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/short_auto_02_output-1.png" width="432" /&gt;
 ]
  
 .panel3-short-auto[
@@ -1472,18 +1833,18 @@ count: false
 .panel1-short-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  ggplot() +
 * aes(x = dist)
 ```
 ]
  
 .panel2-short-auto[
-&lt;img src="skeleton_files/figure-html/short_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/short_auto_03_output-1.png" width="432" /&gt;
 ]
  
 .panel3-short-auto[
-&lt;img src="skeleton_files/figure-html/short_auto_3_output_lag-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/short_auto_03_output_lag-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -1557,7 +1918,7 @@ count: false
 .panel1-logical-auto[
 
 ```r
-list(1, 2) %&gt;%  
+list(1, 2) %&gt;%
 * list(1:5, 5,
 *      ., letters[1:4])
 ```
@@ -1603,9 +1964,9 @@ count: false
 .panel1-logical-auto[
 
 ```r
-list(1, 2) %&gt;%  
-  list(1:5, 5,  
-       ., letters[1:4]) %&gt;%  
+list(1, 2) %&gt;%
+  list(1:5, 5,
+       ., letters[1:4]) %&gt;%
 * .[[4]]
 ```
 ]
@@ -1646,10 +2007,10 @@ count: false
 .panel1-logical-auto[
 
 ```r
-list(1, 2) %&gt;%  
-  list(1:5, 5,  
-       ., letters[1:4]) %&gt;%  
-  .[[4]] %&gt;%  
+list(1, 2) %&gt;%
+  list(1:5, 5,
+       ., letters[1:4]) %&gt;%
+  .[[4]] %&gt;%
 * .[3]
 ```
 ]
@@ -1717,11 +2078,11 @@ count: false
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_01_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_1_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_01_output_target-1.png" width="432" /&gt;
 ]
 
 ---
@@ -1731,17 +2092,17 @@ count: false
 .panel1-goodbye-auto[
 
 ```r
-ggplot(data = cars) +  
+ggplot(data = cars) +
 * aes(x = speed)
 ```
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_02_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_2_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_02_output_target-1.png" width="432" /&gt;
 ]
 
 ---
@@ -1751,18 +2112,18 @@ count: false
 .panel1-goodbye-auto[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
+ggplot(data = cars) +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_03_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_3_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_03_output_target-1.png" width="432" /&gt;
 ]
 
 ---
@@ -1772,9 +2133,9 @@ count: false
 .panel1-goodbye-auto[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(size = 8,
 *            shape = 21,
 *            alpha = .9,
@@ -1783,11 +2144,11 @@ ggplot(data = cars) +
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_04_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_4_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_04_output_target-1.png" width="432" /&gt;
 ]
 
 ---
@@ -1797,23 +2158,23 @@ count: false
 .panel1-goodbye-auto[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
 * aes(fill = speed)
 ```
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_05_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_5_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_05_output_target-1.png" width="432" /&gt;
 ]
 
 ---
@@ -1823,24 +2184,24 @@ count: false
 .panel1-goodbye-auto[
 
 ```r
-ggplot(data = cars) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
-  aes(fill = speed) +  
+ggplot(data = cars) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
 * scale_fill_viridis_c(option = "magma")
 ```
 ]
  
 .panel2-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_06_output-1.png" width="432" /&gt;
 ]
  
 .panel3-goodbye-auto[
-&lt;img src="skeleton_files/figure-html/goodbye_auto_6_output_target-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/goodbye_auto_06_output_target-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -2010,13 +2371,13 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * ggplot(data = .)
 ```
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_02_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2083,14 +2444,14 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
-  ggplot(data = .) +  
+cars %&gt;%
+  ggplot(data = .) +
 * aes(x = speed)
 ```
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_03_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2157,15 +2518,15 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
-  ggplot(data = .) +  
-  aes(x = speed) +  
+cars %&gt;%
+  ggplot(data = .) +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_04_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2232,10 +2593,10 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
-  ggplot(data = .) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  ggplot(data = .) +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(size = 8,
 *            shape = 21,
 *            alpha = .9,
@@ -2244,7 +2605,7 @@ cars %&gt;%
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_05_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2311,20 +2672,20 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
-  ggplot(data = .) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
+cars %&gt;%
+  ggplot(data = .) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
 * aes(fill = speed)
 ```
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_06_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2391,21 +2752,21 @@ count: false
 .panel1-hello-auto[
 
 ```r
-cars %&gt;%  
-  ggplot(data = .) +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(size = 8,  
-             shape = 21,  
-             alpha = .9,  
-             color = "snow") +  
-  aes(fill = speed) +  
+cars %&gt;%
+  ggplot(data = .) +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(size = 8,
+             shape = 21,
+             alpha = .9,
+             color = "snow") +
+  aes(fill = speed) +
 * scale_fill_viridis_c(option = "magma")
 ```
 ]
  
 .panel2-hello-auto[
-&lt;img src="skeleton_files/figure-html/hello_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/hello_auto_07_output-1.png" width="432" /&gt;
 ]
  
 .panel3-hello-auto[
@@ -2632,7 +2993,7 @@ count: false
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * filter(speed &gt; 4)
 ```
 ]
@@ -2642,14 +3003,14 @@ count: false
  
 
 .panel1-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_03_output-1.png" width="432" /&gt;
 ]
  
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
 * ggplot()
 ```
 ]
@@ -2659,15 +3020,15 @@ count: false
  
 
 .panel1-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_04_output-1.png" width="432" /&gt;
 ]
  
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
 * aes(x = speed)
 ```
 ]
@@ -2677,16 +3038,16 @@ count: false
  
 
 .panel1-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_05_output-1.png" width="432" /&gt;
 ]
  
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
@@ -2696,17 +3057,17 @@ count: false
  
 
 .panel1-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_06_output-1.png" width="432" /&gt;
 ]
  
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point(
 *   alpha = .8,
 *   color = "blue"
@@ -2719,21 +3080,21 @@ count: false
  
 
 .panel1-my_cars-auto[
-&lt;img src="skeleton_files/figure-html/my_cars_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/my_cars_auto_07_output-1.png" width="432" /&gt;
 ]
  
 .panel2-my_cars-auto[
 
 ```r
-cars %&gt;%  
-  filter(speed &gt; 4) %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point(  
-    alpha = .8,  
-    color = "blue"  
-    ) +  
+cars %&gt;%
+  filter(speed &gt; 4) %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+    alpha = .8,
+    color = "blue"
+    ) +
 * aes(size = speed)
 ```
 ]
@@ -2807,7 +3168,7 @@ count: false
 .panel2-custom_example-auto[
 
 ```r
-library(magrittr)  
+library(magrittr)
 
 *cars
 ```
@@ -2824,9 +3185,9 @@ count: false
 .panel2-custom_example-auto[
 
 ```r
-library(magrittr)  
+library(magrittr)
 
-cars %$%  
+cars %$%
 * cor(x = speed,
 *     y = dist)
 ```
@@ -2869,11 +3230,11 @@ Sometimes, perhaps your only inputs will be markdown sequences.
 count: false
  
 
-.panel1-95157-auto[
+.panel1-19900-auto[
 ### hello
 ]
  
-.panel2-95157-auto[
+.panel2-19900-auto[
 greeting
 ]
 
@@ -2881,11 +3242,11 @@ greeting
 count: false
  
 
-.panel1-95157-auto[
+.panel1-19900-auto[
 # goodbye
 ]
  
-.panel2-95157-auto[
+.panel2-19900-auto[
 another
 ]
 
@@ -2893,30 +3254,30 @@ another
 count: false
  
 
-.panel1-95157-auto[
+.panel1-19900-auto[
 ## `$$\frac{\sum(x)}{2}$$`
 ]
  
-.panel2-95157-auto[
+.panel2-19900-auto[
 math mode
 ]
 
 &lt;style&gt;
-.panel1-95157-auto {
+.panel1-19900-auto {
   color: black;
   width: 38.6060606060606%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-95157-auto {
+.panel2-19900-auto {
   color: black;
   width: 59.3939393939394%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-95157-auto {
+.panel3-19900-auto {
   color: black;
   width: NA%;
   float: left;
@@ -2963,7 +3324,7 @@ count: false
 ```
 function (n, mean = 0, sd = 1) 
 .Call(C_rnorm, n, mean, sd)
-&lt;bytecode: 0x7ff1a5a430b0&gt;
+&lt;bytecode: 0x7fc990f84c00&gt;
 &lt;environment: namespace:stats&gt;
 ```
 ]
@@ -2971,15 +3332,15 @@ function (n, mean = 0, sd = 1)
 .panel3-rnorm-auto[
 
 ```
- [1]  0.37122572  0.54628327  1.34405228  0.96535452  0.75976280 -0.04622073
- [7]  0.39058344 -0.60209974  0.95403735 -1.68957371 -0.84167870  0.39035097
-[13]  0.51061181  0.03826057  2.24101643 -1.37553395 -0.02361193  0.99186661
-[19] -1.28018967 -1.27432038 -0.38678433  0.57702116 -0.51397089 -0.15916267
-[25]  0.18067103 -1.78951466  0.29159972  1.29928756 -0.27269488  0.06875663
-[31]  0.62594473  0.63025478 -1.02254132 -0.28795244 -0.44867481 -1.22577458
-[37] -0.43097362  0.35134920 -0.43580189  0.14596703  1.51711508 -0.82159153
-[43]  0.27519359  0.10669183 -0.73840787  2.59310236 -1.42420185  1.10214515
-[49] -0.22983318  0.27699621
+ [1] -0.74941173  0.40474678 -0.60637892  0.39587507  0.44770170  0.38020027
+ [7] -0.74019496  1.95491316 -0.08183958  0.56129282  0.46972750  1.56562440
+[13]  0.99074123  1.21726897  0.44021605 -0.32548567  0.72102660 -0.05190467
+[19] -1.06848176  2.81436885 -0.41688685  0.11889744  0.12718310  1.11600044
+[25]  0.50466049 -0.20242151  0.59030545 -0.04378365 -0.15829309  1.16186387
+[31] -1.30222524 -0.48758736  0.39295936  1.20400274  1.26601323  2.81469820
+[37] -0.93885128 -0.13835554  1.18091265 -0.37420928  0.43407275 -1.88669863
+[43] -0.92796525  0.64812581 -0.22173266  0.35086042 -1.34200196  0.90665616
+[49]  1.97617586 -0.33076006
 ```
 ]
 
@@ -2990,7 +3351,7 @@ count: false
 .panel1-rnorm-auto[
 
 ```r
-rnorm(50) %&gt;%  
+rnorm(50) %&gt;%
 * sd()
 ```
 ]
@@ -3001,7 +3362,7 @@ rnorm(50) %&gt;%
 function (x, na.rm = FALSE) 
 sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
     na.rm = na.rm))
-&lt;bytecode: 0x7ff19e981998&gt;
+&lt;bytecode: 0x7fc9873c7520&gt;
 &lt;environment: namespace:stats&gt;
 ```
 ]
@@ -3009,7 +3370,7 @@ sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x),
 .panel3-rnorm-auto[
 
 ```
-[1] 0.9073671
+[1] 1.027467
 ```
 ]
 
@@ -3020,8 +3381,8 @@ count: false
 .panel1-rnorm-auto[
 
 ```r
-rnorm(50) %&gt;%  
-  sd() %&gt;%  
+rnorm(50) %&gt;%
+  sd() %&gt;%
 * length()
 ```
 ]
@@ -3160,13 +3521,13 @@ count: false
 .panel1-cars3-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * ggplot()
 ```
 ]
  
 .panel2-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars3_auto_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3176,14 +3537,14 @@ count: false
 .panel1-cars3-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  ggplot() +
 * aes(x = speed)
 ```
 ]
  
 .panel2-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars3_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3193,15 +3554,15 @@ count: false
 .panel1-cars3-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
  
 .panel2-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars3_auto_04_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3211,16 +3572,16 @@ count: false
 .panel1-cars3-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point()
 ```
 ]
  
 .panel2-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars3_auto_05_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3230,17 +3591,17 @@ count: false
 .panel1-cars3-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() +  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point() +
 * aes(size = speed)
 ```
 ]
  
 .panel2-cars3-auto[
-&lt;img src="skeleton_files/figure-html/cars3_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars3_auto_06_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -3358,13 +3719,13 @@ count: false
 .panel1-plot_object-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * ggplot()
 ```
 ]
  
 .panel2-plot_object-auto[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/plot_object_auto_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3374,14 +3735,14 @@ count: false
 .panel1-plot_object-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
+cars %&gt;%
+  ggplot() +
 * aes(x = speed)
 ```
 ]
  
 .panel2-plot_object-auto[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/plot_object_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3391,15 +3752,15 @@ count: false
 .panel1-plot_object-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
 * aes(y = dist)
 ```
 ]
  
 .panel2-plot_object-auto[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/plot_object_auto_04_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3409,16 +3770,16 @@ count: false
 .panel1-plot_object-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point()
 ```
 ]
  
 .panel2-plot_object-auto[
-&lt;img src="skeleton_files/figure-html/plot_object_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/plot_object_auto_05_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3428,11 +3789,11 @@ count: false
 .panel1-plot_object-auto[
 
 ```r
-cars %&gt;%  
-  ggplot() +  
-  aes(x = speed) +  
-  aes(y = dist) +  
-  geom_point() -&gt;  
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point() -&gt;
 *cars_plot
 ```
 ]
@@ -3484,7 +3845,7 @@ count: false
 ]
  
 .panel2-further_building-auto[
-&lt;img src="skeleton_files/figure-html/further_building_auto_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/further_building_auto_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3494,13 +3855,13 @@ count: false
 .panel1-further_building-auto[
 
 ```r
-cars_plot +  
+cars_plot +
 * labs(x = "Speed (mph)")
 ```
 ]
  
 .panel2-further_building-auto[
-&lt;img src="skeleton_files/figure-html/further_building_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/further_building_auto_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3510,14 +3871,14 @@ count: false
 .panel1-further_building-auto[
 
 ```r
-cars_plot +  
-  labs(x = "Speed (mph)") +  
+cars_plot +
+  labs(x = "Speed (mph)") +
 * labs(y = "Stopping distance (ft)")
 ```
 ]
  
 .panel2-further_building-auto[
-&lt;img src="skeleton_files/figure-html/further_building_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/further_building_auto_03_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -3570,7 +3931,7 @@ count: false
 
 ```r
 *my_plot &lt;- cars   # the data
- 
+
 my_plot
 ```
 ]
@@ -3641,7 +4002,7 @@ count: false
 ```r
 my_plot &lt;- cars %&gt;%  # the data
 * filter(speed &gt; 4)   # subset
- 
+
 my_plot
 ```
 ]
@@ -3711,13 +4072,13 @@ count: false
 my_plot &lt;- cars %&gt;%  # the data
   filter(speed &gt; 4) %&gt;%  # subset
 * ggplot()   # pipe to ggplot
- 
+
 my_plot
 ```
 ]
  
 .panel2-left_assign-auto[
-&lt;img src="skeleton_files/figure-html/left_assign_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/left_assign_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3731,13 +4092,13 @@ my_plot &lt;- cars %&gt;%  # the data
   filter(speed &gt; 4) %&gt;%  # subset
   ggplot() +  # pipe to ggplot
 * aes(x = speed)
- 
+
 my_plot
 ```
 ]
  
 .panel2-left_assign-auto[
-&lt;img src="skeleton_files/figure-html/left_assign_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/left_assign_auto_04_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3750,15 +4111,15 @@ count: false
 my_plot &lt;- cars %&gt;%  # the data
   filter(speed &gt; 4) %&gt;%  # subset
   ggplot() +  # pipe to ggplot
-  aes(x = speed) +  
+  aes(x = speed) +
 * aes(y = dist)
- 
+
 my_plot
 ```
 ]
  
 .panel2-left_assign-auto[
-&lt;img src="skeleton_files/figure-html/left_assign_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/left_assign_auto_05_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -3771,16 +4132,16 @@ count: false
 my_plot &lt;- cars %&gt;%  # the data
   filter(speed &gt; 4) %&gt;%  # subset
   ggplot() +  # pipe to ggplot
-  aes(x = speed) +  
-  aes(y = dist) +  
+  aes(x = speed) +
+  aes(y = dist) +
 * geom_point()
- 
+
 my_plot
 ```
 ]
  
 .panel2-left_assign-auto[
-&lt;img src="skeleton_files/figure-html/left_assign_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/left_assign_auto_06_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -3848,7 +4209,7 @@ count: false
 
 ```r
 *cars_mod &lt;- cars
- 
+
 cars_mod
 ```
 ]
@@ -3917,9 +4278,9 @@ count: false
 .panel1-left_assign2-auto[
 
 ```r
-cars_mod &lt;- cars  
+cars_mod &lt;- cars
 *cars_mod$half_dist &lt;- cars$dist / 2
- 
+
 cars_mod
 ```
 ]
@@ -3988,10 +4349,10 @@ count: false
 .panel1-left_assign2-auto[
 
 ```r
-cars_mod &lt;- cars  
-cars_mod$half_dist &lt;- cars$dist / 2  
+cars_mod &lt;- cars
+cars_mod$half_dist &lt;- cars$dist / 2
 *names(cars_mod)[2] &lt;- "distance"
- 
+
 cars_mod
 ```
 ]
@@ -4060,11 +4421,11 @@ count: false
 .panel1-left_assign2-auto[
 
 ```r
-cars_mod &lt;- cars  
-cars_mod$half_dist &lt;- cars$dist / 2  
-names(cars_mod)[2] &lt;- "distance"  
+cars_mod &lt;- cars
+cars_mod$half_dist &lt;- cars$dist / 2
+names(cars_mod)[2] &lt;- "distance"
 *cars_mod &lt;- cars_mod[cars_mod$distance &gt; 10,]
- 
+
 cars_mod
 ```
 ]
@@ -4129,12 +4490,12 @@ count: false
 .panel1-left_assign2-auto[
 
 ```r
-cars_mod &lt;- cars  
-cars_mod$half_dist &lt;- cars$dist / 2  
-names(cars_mod)[2] &lt;- "distance"  
-cars_mod &lt;- cars_mod[cars_mod$distance &gt; 10,]  
+cars_mod &lt;- cars
+cars_mod$half_dist &lt;- cars$dist / 2
+names(cars_mod)[2] &lt;- "distance"
+cars_mod &lt;- cars_mod[cars_mod$distance &gt; 10,]
 *cars_mod &lt;- cars_mod["distance"]
- 
+
 cars_mod
 ```
 ]
@@ -4305,7 +4666,7 @@ count: false
 .panel1-dot_notation-auto[
 
 ```r
-cars %&gt;%  
+cars %&gt;%
 * .[cars$speed &gt; median(cars$speed),]
 ```
 ]
@@ -4348,8 +4709,8 @@ count: false
 .panel1-dot_notation-auto[
 
 ```r
-cars %&gt;%  
-  .[cars$speed &gt; median(cars$speed),] %&gt;%  
+cars %&gt;%
+  .[cars$speed &gt; median(cars$speed),] %&gt;%
 * .["speed"]
 ```
 ]
@@ -4392,9 +4753,9 @@ count: false
 .panel1-dot_notation-auto[
 
 ```r
-cars %&gt;%  
-  .[cars$speed &gt; median(cars$speed),] %&gt;%  
-  .["speed"] %&gt;%  
+cars %&gt;%
+  .[cars$speed &gt; median(cars$speed),] %&gt;%
+  .["speed"] %&gt;%
 * .[,1]
 ```
 ]
@@ -4413,10 +4774,10 @@ count: false
 .panel1-dot_notation-auto[
 
 ```r
-cars %&gt;%  
-  .[cars$speed &gt; median(cars$speed),] %&gt;%  
-  .["speed"] %&gt;%  
-  .[,1] -&gt;  
+cars %&gt;%
+  .[cars$speed &gt; median(cars$speed),] %&gt;%
+  .["speed"] %&gt;%
+  .[,1] -&gt;
 *top_speeds
 ```
 ]
@@ -4475,7 +4836,7 @@ count: false
 ]
  
 .panel2-base_r_plotting-auto[
-&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4485,9 +4846,9 @@ count: false
 .panel1-base_r_plotting-auto[
 
 ```r
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-     las = 1)  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+     las = 1)
 *lines(lowess(cars$speed, cars$dist,
 *            f = 2/3, iter = 3),
 *     col = "red")
@@ -4495,7 +4856,7 @@ plot(cars, xlab = "Speed (mph)",
 ]
  
 .panel2-base_r_plotting-auto[
-&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_02_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4505,18 +4866,18 @@ count: false
 .panel1-base_r_plotting-auto[
 
 ```r
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-     las = 1)  
-lines(lowess(cars$speed, cars$dist,  
-             f = 2/3, iter = 3),  
-      col = "red")  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+     las = 1)
+lines(lowess(cars$speed, cars$dist,
+             f = 2/3, iter = 3),
+      col = "red")
 *title(main = "the `cars` data")
 ```
 ]
  
 .panel2-base_r_plotting-auto[
-&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4526,19 +4887,19 @@ count: false
 .panel1-base_r_plotting-auto[
 
 ```r
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-     las = 1)  
-lines(lowess(cars$speed, cars$dist,  
-             f = 2/3, iter = 3),  
-      col = "red")  
-title(main = "the `cars` data")  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+     las = 1)
+lines(lowess(cars$speed, cars$dist,
+             f = 2/3, iter = 3),
+      col = "red")
+title(main = "the `cars` data")
 *title(sub = "Data is from Ezekiel's (1930) 'Methods of Correlation Analysis'.")
 ```
 ]
  
 .panel2-base_r_plotting-auto[
-&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/base_r_plotting_auto_04_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -4586,7 +4947,7 @@ count: false
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_1_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_01_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4597,9 +4958,9 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
 *lm(dist ~ poly(speed, 3),
 *  data = cars)
@@ -4607,7 +4968,7 @@ plot(cars, xlab = "Speed (mph)",
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_2_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_02_output-1.png" width="432" /&gt;
 
 ```
 
@@ -4628,18 +4989,18 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
 *model
 ```
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_3_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_03_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4650,20 +5011,20 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
-model  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
+model
 
 *seq(0, 25, length.out = 25)
 ```
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_4_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_04_output-1.png" width="432" /&gt;
 
 ```
  [1]  0.000000  1.041667  2.083333  3.125000  4.166667  5.208333  6.250000
@@ -4681,21 +5042,21 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
-model  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
+model
 
-seq(0, 25, length.out = 25) -&gt;  
+seq(0, 25, length.out = 25) -&gt;
 *inputs_of_x
 ```
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_5_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_05_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4706,16 +5067,16 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
-model  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
+model
 
-seq(0, 25, length.out = 25) -&gt;  
-inputs_of_x  
+seq(0, 25, length.out = 25) -&gt;
+inputs_of_x
 
 *predict(model,
 *       data.frame(speed = inputs_of_x))
@@ -4723,7 +5084,7 @@ inputs_of_x
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_6_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_06_output-1.png" width="432" /&gt;
 
 ```
          1          2          3          4          5          6          7 
@@ -4745,25 +5106,25 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
-model  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
+model
 
-seq(0, 25, length.out = 25) -&gt;  
-inputs_of_x  
+seq(0, 25, length.out = 25) -&gt;
+inputs_of_x
 
-predict(model,  
-        data.frame(speed = inputs_of_x)) -&gt;  
+predict(model,
+        data.frame(speed = inputs_of_x)) -&gt;
 *prediction_y
 ```
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_7_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_07_output-1.png" width="432" /&gt;
 ]
 
 ---
@@ -4774,20 +5135,20 @@ count: false
 
 ```r
 ## An example of polynomial regression
-plot(cars, xlab = "Speed (mph)",  
-     ylab = "Stopping distance (ft)",  
-    las = 1, xlim = c(0, 25))  
+plot(cars, xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+    las = 1, xlim = c(0, 25))
 
-lm(dist ~ poly(speed, 3),  
-   data = cars) -&gt;  
-model  
+lm(dist ~ poly(speed, 3),
+   data = cars) -&gt;
+model
 
-seq(0, 25, length.out = 25) -&gt;  
-inputs_of_x  
+seq(0, 25, length.out = 25) -&gt;
+inputs_of_x
 
-predict(model,  
-        data.frame(speed = inputs_of_x)) -&gt;  
-prediction_y  
+predict(model,
+        data.frame(speed = inputs_of_x)) -&gt;
+prediction_y
 
 *lines(inputs_of_x,
 *     prediction_y,
@@ -4796,7 +5157,7 @@ prediction_y
 ]
  
 .panel2-cars_anova-auto[
-&lt;img src="skeleton_files/figure-html/cars_anova_auto_8_output-1.png" width="432" /&gt;
+&lt;img src="skeleton_files/figure-html/cars_anova_auto_08_output-1.png" width="432" /&gt;
 ]
 
 &lt;style&gt;
@@ -4975,7 +5336,7 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
+1:10 %%
 * 3
 ```
 ]
@@ -5004,8 +5365,8 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
 *1:10
 ```
@@ -5039,10 +5400,10 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
+1:10 %/%
 * 3
 ```
 ]
@@ -5075,11 +5436,11 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
 *33
 ```
@@ -5117,13 +5478,13 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
+33 %%
 * 15
 ```
 ]
@@ -5160,14 +5521,14 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
 *4 
 ```
@@ -5209,16 +5570,16 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
+4 %/%
 * 2
 ```
 ]
@@ -5259,17 +5620,17 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
 *4 
 ```
@@ -5315,19 +5676,19 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
-4 ^  
+4 ^
 * 5
 ```
 ]
@@ -5372,20 +5733,20 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
-4 ^  
-  5  
+4 ^
+  5
 
 *matrix(1:4, ncol = 1)
 ```
@@ -5439,22 +5800,22 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
-4 ^  
-  5  
+4 ^
+  5
 
-matrix(1:4, ncol = 1) %*%  
+matrix(1:4, ncol = 1) %*%
 * matrix(1:4, nrow = 1)
 ```
 ]
@@ -5507,23 +5868,23 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
-4 ^  
-  5  
+4 ^
+  5
 
-matrix(1:4, ncol = 1) %*%  
-  matrix(1:4, nrow = 1)  
+matrix(1:4, ncol = 1) %*%
+  matrix(1:4, nrow = 1)
 
 *matrix(1:4, ncol = 4)
 ```
@@ -5582,25 +5943,25 @@ count: false
   3 *  # contrasting to pipe logic
   12  # PEMDAS
 
-1:10 %%  
-  3  
+1:10 %%
+  3
 
-1:10 %/%  
-  3  
+1:10 %/%
+  3
 
-33 %%  
-  15  
+33 %%
+  15
 
-4 %/%  
-  2  
+4 %/%
+  2
 
-4 ^  
-  5  
+4 ^
+  5
 
-matrix(1:4, ncol = 1) %*%  
-  matrix(1:4, nrow = 1)  
+matrix(1:4, ncol = 1) %*%
+  matrix(1:4, nrow = 1)
 
-matrix(1:4, ncol = 4) %*%  
+matrix(1:4, ncol = 4) %*%
 * matrix(1:4, nrow = 4)
 ```
 ]
@@ -5704,7 +6065,7 @@ count: false
 .panel1-new_pipe-auto[
 
 ```r
-library(magrittr)  
+library(magrittr)
 
 *cars
 ```
@@ -5774,9 +6135,9 @@ count: false
 .panel1-new_pipe-auto[
 
 ```r
-library(magrittr)  
+library(magrittr)
 
-cars %$%  
+cars %$%
 * cor(x = speed,
 *     y = dist)
 ```
@@ -5947,7 +6308,106 @@ The flipbooked portion of this presentation was created with the new {flipbookr}
 
 ---
 
+count: false
+ 
 
+.panel1-for_loop-inject_vector[
+
+```r
+*for (i in 1:1){
+     
+    print(i)
+     
+}
+```
+]
+ 
+.panel2-for_loop-inject_vector[
+
+```
+[1] 1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-for_loop-inject_vector[
+
+```r
+*for (i in 1:2){
+     
+    print(i)
+     
+}
+```
+]
+ 
+.panel2-for_loop-inject_vector[
+
+```
+[1] 1
+[1] 2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-for_loop-inject_vector[
+
+```r
+*for (i in 1:3){
+     
+    print(i)
+     
+}
+```
+]
+ 
+.panel2-for_loop-inject_vector[
+
+```
+[1] 1
+[1] 2
+[1] 3
+```
+]
+
+&lt;style&gt;
+.panel1-for_loop-inject_vector {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-for_loop-inject_vector {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-for_loop-inject_vector {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
 
 
 

@@ -11,4 +11,8 @@ download.file(url = url, "skeleton.Rmd")
 # seems not to quiet work from code below... So just knitting from Rstudio for now.
 # rmarkdown::render("skeleton.Rmd")
 # knitr::knit("skeleton.Rmd")
+
+py_url <- "https://github.com/EvaMaeRey/flipbookr/blob/master/inst/rmarkdown/templates/python-flipbook/skeleton/skeleton.Rmd"
+
+download.file(url = py_url, "py_skeleton.Rmd")
 ```
