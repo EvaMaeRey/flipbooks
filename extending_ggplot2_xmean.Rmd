@@ -1,0 +1,288 @@
+---
+title: "'Extending your ability to extend...'"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 8, message = FALSE,
+                      warning = FALSE, comment = "", 
+                      cache = F, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+
+
+```
+
+---
+
+
+
+## d. xvlines
+
+---
+
+`r chunk_reveal("xvlines")`
+
+```{r xvlines, include=F}
+create_xvlines <- function(x){
+  
+  tibble(
+    x = x,
+    xend = x,
+    y = -Inf,
+    yend = Inf
+  )
+
+}
+
+create_xvlines(x = 2) %>% 
+  ggplot() +
+  aes(x = x, y = 1) +
+  geom_point() +
+  geom_rug() +
+  aes(xend = xend, yend = yend) +
+  geom_segment(aes(y = y))
+```
+
+---
+
+
+```{r}
+StatXvlines <- ggproto("StatXvlines", Stat, 
+  setup_params = function(data, params) {
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    cols_to_keep <- setdiff(names(data), c("x"))
+    xvlines <- lapply(seq_len(nrow(data)), function(i) {
+      xvlines_segment <- create_xvlines(data$x[i])
+      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xvlines)
+  },
+  required_aes = c("x")
+)
+```
+
+---
+
+`r chunk_reveal("xvlines_unpack")`
+
+```{r xvlines_unpack, include=F}
+tibble(x = 1:2) %>% 
+  mutate(group = row_number()) ->
+data
+
+   cols_to_keep <- setdiff(names(data), c("x"))
+   
+    xvlines <- lapply(seq_len(nrow(data)), function(i) {
+      xvlines_segment <- create_xvlines(data$x[i])
+      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xvlines)
+    
+do.call(rbind, xvlines) %>% 
+  ggplot() +
+  aes(x = x, xend = xend, y = y, yend = yend) +
+  geom_point(data = . %>% mutate(y = 1:2)) +
+  geom_segment()
+```
+
+
+
+---
+
+
+```{r}
+geom_xvlines <- function(mapping = NULL, data = NULL, stat = "xvlines", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomSegment, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_xvlines")`
+
+```{r use_xvlines, include=F}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10)
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_xvlines(n = 6) +
+  geom_xvlines(n = 13) +
+  geom_xvlines(r = 2)
+```
+
+
+
+---
+
+## e. x mean line
+
+```{r}
+StatXmean <- ggproto("StatXmean", Stat, 
+  setup_params = function(data, params) {
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    data <- data %>% 
+      summarize(x = mean(x, na.rm = T)) %>% 
+      ungroup() %>% 
+      mutate(group = row_number())
+    
+    cols_to_keep <- setdiff(names(data), c("x"))
+    xmean <- lapply(seq_len(nrow(data)), function(i) {
+      xmean_segment <- create_xvlines(data$x[i])
+      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xmean)
+  },
+  required_aes = c("x")
+)
+```
+
+---
+
+`r chunk_reveal("xmean_unpack")`
+
+```{r xmean_unpack, include=F}
+tibble(x = 1:2) %>% 
+  mutate(group = row_number()) ->
+data0
+
+    data0 %>% 
+      summarize(x = mean(x, na.rm = T)) %>% 
+      mutate(group = row_number()) ->
+      data
+
+   cols_to_keep <- setdiff(names(data), c("x"))
+   
+    xmean <- lapply(seq_len(nrow(data)), function(i) {
+      xmean_segment <- create_xvlines(data$x[i])
+      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xmean)
+    
+do.call(rbind, xmean) %>% 
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point(data = data0, aes(y = 2)) +
+  geom_segment(aes(xend = xend, yend = yend),
+               linetype = "dashed")
+```
+
+
+
+---
+
+
+```{r}
+geom_xmean <- function(mapping = NULL, data = NULL, stat = "xmean", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomSegment, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_xmean")`
+
+```{r use_xmean, include=F}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10)
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_xmean() +
+  geom_xmean(color = "blue", linetype = "dashed",
+             size = 2) +
+  geom_xmean(color = "magenta", 
+             linetype = "dotted", size = 3)
+```
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 65%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

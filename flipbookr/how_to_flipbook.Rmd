@@ -1,0 +1,177 @@
+---
+title: "A getting started with {flipbookr}"
+author: "Gina Reynolds, August 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3)
+```
+
+
+class: inverse, center, middle
+
+
+
+# This set of slides is aimed at helping you get started with {flipbookr}.  It will show you the text that you'll use in your source .Rmd document and will show you the flipbook result.
+
+
+---
+class: inverse
+
+
+# In this guide:
+
+--
+
+##- slides with a *dark background* communicate about *'how-to'*, i.e. what will be in your .Rmd file
+
+--
+
+##- and slides with a *light background* demo the *flipbook experience* that you'll create.
+
+---
+class: inverse, middle, center
+
+
+# Set up
+
+--
+
+#### (The template will give you this too once you have installed flipbookr.  File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook  But let's have a look.)
+
+---
+class: inverse
+
+### YAML metadata will look like this 
+
+
+
+````markdown
+---
+title: "How to Flipbook"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+````
+
+
+---
+class: inverse
+
+## setup
+
+#### Your set up code chunk loads {flipbookr} and sets some knitr defaults
+
+````markdown
+```{r setup, include = FALSE}`r ''`
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F, dev = "svg")
+```
+````
+
+---
+class: inverse
+
+## A source code chunk
+
+#### We'll refer to this code chunk later.  We don't want to see this chunk itself, so, you can set `include = FALSE`
+
+````markdown
+```{r cars, include = FALSE}`r ''`
+library(tidyverse)
+
+cars %>% 
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(shape = 21,
+             size = 7, #BREAK2
+             color = "white", #BREAK3
+             alpha = .8 #BREAK4
+             ) +
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+````
+
+---
+class: inverse
+
+
+
+
+### In your .Rmd:
+
+```markdown
+``r 'r chunk_reveal(chunk_name = "cars", title = "## Our first flipbook!")'``
+``` 
+
+
+
+
+
+---
+
+
+`r chunk_reveal("cars", title = "## Our first flipbook!")`
+
+```{r cars, include=FALSE}
+library(tidyverse)
+
+cars %>% 
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) + #BREAK
+  geom_point(shape = 21,
+             size = 7, #BREAK2
+             color = "white", #BREAK3
+             alpha = .8 #BREAK4
+             ) + #BREAK
+  aes(fill = speed) + #BREAK
+  scale_fill_viridis_c() + #BREAK
+  theme_minimal() #BREAK
+```
+
+
+
+---
+class: inverse
+
+## Refer to same chunk, 'cars', get different break behavior
+
+### In your .Rmd:
+
+```markdown
+``r 'r chunk_reveal("cars", break_type = "non_seq", title = "## user defined reveal (before we saw auto)")'``
+``` 
+
+---
+
+`r chunk_reveal("cars", break_type = "non_seq", title = "## user defined reveal (before we saw auto)")`
+
+

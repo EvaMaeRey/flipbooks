@@ -1,0 +1,5018 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>‘Extending your ability to extend…’</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, December 2019" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ‘Extending your ability to extend…’
+## With flipbookr and xaringan
+### Gina Reynolds, December 2019
+
+---
+
+
+
+
+
+
+---
+
+# 0. Modify existing geoms/stats
+
+
+---
+
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+*ggplot(mpg, aes(displ, 1 / hwy))
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_01_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+* geom_point()
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_02_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+* geom_smooth()
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+*g0
+```
+]
+ 
+.panel2-existing-auto[
+
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+*geom_lm &lt;- function(formula = y ~ x,
+*                   colour = alpha("steelblue", 0.5),
+*                   size = 2, ...)  {
+* geom_smooth(formula = formula,
+*             se = FALSE, method = "lm",
+*             colour = colour,
+*   size = size, ...)
+*} 
+```
+]
+ 
+.panel2-existing-auto[
+
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+*ggplot(mpg, aes(displ, 1 / hwy))
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_06_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+* geom_point()
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+* geom_lm()
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+*g1
+```
+]
+ 
+.panel2-existing-auto[
+
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+*ggplot(mpg, aes(displ, 1 / hwy))
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_10_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+* geom_point()
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_11_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+* geom_lm(formula = y ~ poly(x, 2),
+*         size = 1, colour = "red")
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_12_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm(formula = y ~ poly(x, 2),
+          size = 1, colour = "red") -&gt;
+*g2
+```
+]
+ 
+.panel2-existing-auto[
+
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm(formula = y ~ poly(x, 2),
+          size = 1, colour = "red") -&gt;
+g2
+
+*library(patchwork)
+```
+]
+ 
+.panel2-existing-auto[
+
+]
+
+---
+count: false
+ 
+### Modifying an existing geom
+.panel1-existing-auto[
+
+```r
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_smooth() -&gt;
+g0
+
+geom_lm &lt;- function(formula = y ~ x,
+                    colour = alpha("steelblue", 0.5),
+                    size = 2, ...)  {
+  geom_smooth(formula = formula,
+              se = FALSE, method = "lm",
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm() -&gt;
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) +
+  geom_point() +
+  geom_lm(formula = y ~ poly(x, 2),
+          size = 1, colour = "red") -&gt;
+g2
+
+library(patchwork)
+
+*g0 + g1 + g2
+```
+]
+ 
+.panel2-existing-auto[
+&lt;img src="extending_ggplot2_files/figure-html/existing_auto_15_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-existing-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-existing-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-existing-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+*ggplot(mpg, aes(class, cty))
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_01_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+* stat_summary(fun = "mean", geom = "bar", fill = "grey70")
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_02_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+* stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4)
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+* geom_point(alpha = .4)
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+*g0
+```
+]
+ 
+.panel2-combining_layers-auto[
+
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+*geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+* list(
+*   stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+*   stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+*   geom_point(alpha = alpha)
+* )
+*} 
+```
+]
+ 
+.panel2-combining_layers-auto[
+
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+*ggplot(mpg, aes(class, cty))
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+* geom_mean()
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+*g1
+```
+]
+ 
+.panel2-combining_layers-auto[
+
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+g1
+
+*ggplot(mpg, aes(class, cty))
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_10_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+g1
+
+ggplot(mpg, aes(class, cty)) +
+* geom_mean(fill = "blue", alpha = .2)
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_11_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+g1
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean(fill = "blue", alpha = .2) -&gt;
+*g2
+```
+]
+ 
+.panel2-combining_layers-auto[
+
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+g1
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean(fill = "blue", alpha = .2) -&gt;
+g2
+
+*library(patchwork)
+```
+]
+ 
+.panel2-combining_layers-auto[
+
+]
+
+---
+count: false
+ 
+### Combining existing geoms/stats into a single call
+.panel1-combining_layers-auto[
+
+```r
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) -&gt;
+g0
+
+geom_mean &lt;- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean() -&gt;
+g1
+
+ggplot(mpg, aes(class, cty)) +
+  geom_mean(fill = "blue", alpha = .2) -&gt;
+g2
+
+library(patchwork)
+*g0 + g1 + g2
+```
+]
+ 
+.panel2-combining_layers-auto[
+&lt;img src="extending_ggplot2_files/figure-html/combining_layers_auto_14_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-combining_layers-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-combining_layers-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-combining_layers-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+# 1. Building new geoms
+
+## a. springs
+
+
+
+
+---
+
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+*tibble(
+* x = sin(seq(0, 2*pi, length.out = 100)),
+* y = cos(seq(0, 2*pi, length.out = 100)),
+* index = 1:100,
+* type = "circle"
+*) 
+```
+]
+ 
+.panel2-spring-auto[
+
+```
+# A tibble: 100 x 4
+        x     y index type  
+    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; 
+ 1 0      1         1 circle
+ 2 0.0634 0.998     2 circle
+ 3 0.127  0.992     3 circle
+ 4 0.189  0.982     4 circle
+ 5 0.251  0.968     5 circle
+ 6 0.312  0.950     6 circle
+ 7 0.372  0.928     7 circle
+ 8 0.430  0.903     8 circle
+ 9 0.486  0.874     9 circle
+10 0.541  0.841    10 circle
+# … with 90 more rows
+```
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+* circle
+```
+]
+ 
+.panel2-spring-auto[
+
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+*spring &lt;- circle
+```
+]
+ 
+.panel2-spring-auto[
+
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+*spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+```
+]
+ 
+.panel2-spring-auto[
+
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+*spring$type &lt;- "spring"
+```
+]
+ 
+.panel2-spring-auto[
+
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+*rbind(circle, spring)
+```
+]
+ 
+.panel2-spring-auto[
+
+```
+# A tibble: 200 x 4
+        x     y index type  
+    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; 
+ 1 0      1         1 circle
+ 2 0.0634 0.998     2 circle
+ 3 0.127  0.992     3 circle
+ 4 0.189  0.982     4 circle
+ 5 0.251  0.968     5 circle
+ 6 0.312  0.950     6 circle
+ 7 0.372  0.928     7 circle
+ 8 0.430  0.903     8 circle
+ 9 0.486  0.874     9 circle
+10 0.541  0.841    10 circle
+# … with 190 more rows
+```
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+rbind(circle, spring) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/spring_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+rbind(circle, spring) %&gt;%
+  ggplot() +
+* facet_wrap(~ type, scales = "free_x")
+```
+]
+ 
+.panel2-spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/spring_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+rbind(circle, spring) %&gt;%
+  ggplot() +
+  facet_wrap(~ type, scales = "free_x") +
+* aes(x = x, y = y, group = type, alpha = index)
+```
+]
+ 
+.panel2-spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/spring_auto_09_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+rbind(circle, spring) %&gt;%
+  ggplot() +
+  facet_wrap(~ type, scales = "free_x") +
+  aes(x = x, y = y, group = type, alpha = index) +
+* geom_point(show.legend = FALSE)
+```
+]
+ 
+.panel2-spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/spring_auto_10_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Thinking about springs
+.panel1-spring-auto[
+
+```r
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) -&gt;
+  circle
+
+spring &lt;- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -&gt; spring$x
+spring$type &lt;- "spring"
+
+rbind(circle, spring) %&gt;%
+  ggplot() +
+  facet_wrap(~ type, scales = "free_x") +
+  aes(x = x, y = y, group = type, alpha = index) +
+  geom_point(show.legend = FALSE) +
+* geom_path(show.legend = FALSE)
+```
+]
+ 
+.panel2-spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/spring_auto_11_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-spring-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-spring-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-spring-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+*create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+* if (tension &lt;= 0) {
+*   rlang::abort("`tension` must be larger than 0")
+* }
+# Calculate direct length of segment
+* length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+* n_revolutions &lt;- length / (diameter * tension)
+* n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+* radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+* x &lt;- seq(x, xend, length.out = n_points)
+* y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+* data.frame(
+*   x = cos(radians) * diameter/2 + x,
+*   y = sin(radians) * diameter/2 + y
+* )
+*} 
+```
+]
+ 
+.panel2-create_spring-auto[
+
+]
+
+---
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+# Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+*create_spring(
+* x = 4, y = 2,
+* xend = 10, yend = 6,
+* diameter = 2,
+* tension = 0.75, n = 20
+*) 
+```
+]
+ 
+.panel2-create_spring-auto[
+
+```
+           x        y
+1   5.000000 2.000000
+2   5.013407 2.351144
+3   4.933447 2.671902
+4   4.774109 2.934870
+5   4.557173 3.118320
+6   4.310078 3.208330
+7   4.063220 3.200154
+8   3.846975 3.098686
+9   3.688711 2.917979
+10  3.610105 2.679868
+11  3.625012 2.411822
+12  3.738104 2.144253
+13  3.944414 1.907522
+14  4.229821 1.728964
+15  4.572440 1.630203
+16  4.944767 1.625026
+17  5.316379 1.718034
+18  5.656928 1.904184
+19  5.939112 2.169292
+20  6.141360 2.491417
+21  6.249953 2.843022
+22  6.260364 3.193676
+23  6.177707 3.513041
+24  6.016235 3.773849
+25  5.797939 3.954585
+26  5.550389 4.041593
+27  5.304029 4.030422
+28  5.089183 3.926260
+29  4.933085 3.743424
+30  4.857196 3.503959
+31  4.875106 3.235467
+32  4.991191 2.968402
+33  5.200192 2.733078
+34  5.487723 2.556690
+35  5.831689 2.460650
+36  6.204455 2.458477
+37  6.575555 2.554477
+38  6.914691 2.743315
+39  7.194700 3.010540
+40  7.394225 3.334006
+41  7.499812 3.686043
+42  7.507232 4.036178
+43  7.421891 4.354123
+44  7.258306 4.612751
+45  7.038676 4.790760
+46  6.790702 4.874762
+47  6.544868 4.860601
+48  6.331448 4.753759
+49  6.177535 4.568816
+50  6.104377 4.328023
+51  6.125293 4.059114
+52  6.244368 3.792582
+53  6.456045 3.558690
+54  6.745678 3.384493
+55  7.090965 3.291186
+56  7.464141 3.292022
+57  7.834701 3.391009
+58  8.172398 3.582520
+59  8.450211 3.851842
+60  8.646999 4.176622
+61  8.749578 4.529062
+62  8.754011 4.878649
+63  8.666000 5.195149
+64  8.500324 5.451577
+65  8.279386 5.626845
+66  8.031017 5.707838
+67  7.785738 5.690692
+68  7.573770 5.581183
+69  7.422063 5.394154
+70  7.351647 5.152060
+71  7.375575 4.882762
+72  7.497633 4.616794
+73  7.711973 4.384360
+74  8.003686 4.212373
+75  8.350268 4.121812
+76  8.723825 4.125660
+77  9.093815 4.227629
+78  9.430047 4.421800
+79  9.705644 4.693197
+80  9.899684 5.019265
+81  9.999249 5.372079
+82 10.000702 5.721089
+83  9.910036 6.036117
+84  9.742290 6.290324
+85  9.520071 6.462841
+86  9.271334 6.540819
+87  9.026640 6.520694
+88  8.816150 6.408533
+89  8.666668 6.219439
+90  8.599008 5.976071
+91  8.625950 5.706414
+92  8.750986 5.441037
+93  8.967974 5.210087
+94  9.261747 5.040331
+95  9.609597 4.952529
+96  9.983506 4.959392
+97 10.352897 5.064338
+```
+]
+
+---
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+# Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2,
+  xend = 10, yend = 6,
+  diameter = 2,
+  tension = 0.75, n = 20
+) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-create_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/create_spring_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+# Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2,
+  xend = 10, yend = 6,
+  diameter = 2,
+  tension = 0.75, n = 20
+) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-create_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/create_spring_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+# Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2,
+  xend = 10, yend = 6,
+  diameter = 2,
+  tension = 0.75, n = 20
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-create_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/create_spring_auto_05_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Writing and using a general spring function
+.panel1-create_spring-auto[
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+# Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+
+# Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+
+# Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+
+# Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2,
+  xend = 10, yend = 6,
+  diameter = 2,
+  tension = 0.75, n = 20
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* geom_path()
+```
+]
+ 
+.panel2-create_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/create_spring_auto_06_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-create_spring-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-create_spring-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-create_spring-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+
+```r
+StatSpring &lt;- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$diameter)) {
+      params$diameter &lt;- 1
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension &lt;- 0.75
+    } else if (params$tension &lt;= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    cols_to_keep &lt;- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+      spring_path &lt;- create_spring(data$x[i], data$y[i], data$xend[i], 
+                                   data$yend[i], diameter, tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+)
+```
+
+
+
+
+---
+
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+*tibble(x = 1:2,
+*      y = 4:3,
+*      xend = 5:6,
+*      yend = 8:7)
+```
+]
+ 
+.panel2-unpack-auto[
+
+```
+# A tibble: 2 x 4
+      x     y  xend  yend
+  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+1     1     4     5     8
+2     2     3     6     7
+```
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+* mutate(group = 1:n())
+```
+]
+ 
+.panel2-unpack-auto[
+
+```
+# A tibble: 2 x 5
+      x     y  xend  yend group
+  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+1     1     4     5     8     1
+2     2     3     6     7     2
+```
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+*data
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+*diameter = 1
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+*tension = 0.75
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+*n = 2
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+*setdiff(names(data), c("x", "y", "xend", "yend"))
+```
+]
+ 
+.panel2-unpack-auto[
+
+```
+[1] "group"
+```
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+* cols_to_keep
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+*   springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+*     spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+*                                   data$xend[i], yend =
+*                                  data$yend[i], diameter = diameter,
+*                                   tension = tension,
+*                                  n = n)
+*     cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+*   })
+```
+]
+ 
+.panel2-unpack-auto[
+
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+*do.call(rbind, springs)
+```
+]
+ 
+.panel2-unpack-auto[
+
+```
+           x        y group
+1  1.5000000 4.000000     1
+2  0.7667458 4.257772     1
+3  2.0330169 4.551120     1
+4  1.3007120 4.773327     1
+5  2.5654012 5.102218     1
+6  1.8353102 5.288915     1
+7  3.0971541 5.653271     1
+8  2.3705389 5.804560     1
+9  3.6282777 6.204256     1
+10 2.9063957 6.320283     1
+11 4.1587747 6.755152     1
+12 3.4428773 6.836107     1
+13 4.6886488 7.305936     1
+14 3.9799798 7.352055     1
+15 5.2179043 7.856585     1
+16 4.5176984 7.868147     1
+17 2.5000000 3.000000     2
+18 1.7667458 3.257772     2
+19 3.0330169 3.551120     2
+20 2.3007120 3.773327     2
+21 3.5654012 4.102218     2
+22 2.8353102 4.288915     2
+23 4.0971541 4.653271     2
+24 3.3705389 4.804560     2
+25 4.6282777 5.204256     2
+26 3.9063957 5.320283     2
+27 5.1587747 5.755152     2
+28 4.4428773 5.836107     2
+29 5.6886488 6.305936     2
+30 4.9799798 6.352055     2
+31 6.2179043 6.856585     2
+32 5.5176984 6.868147     2
+```
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+do.call(rbind, springs) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/unpack_auto_11_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+do.call(rbind, springs) %&gt;%
+  ggplot() +
+* aes(x = x, y = y, color = group)
+```
+]
+ 
+.panel2-unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/unpack_auto_12_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+do.call(rbind, springs) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, color = group) +
+* geom_point(data = data, color = "black")
+```
+]
+ 
+.panel2-unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/unpack_auto_13_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+do.call(rbind, springs) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, color = group) +
+  geom_point(data = data, color = "black") +
+* geom_point(data = data, aes(x = xend, y = yend), color = "red")
+```
+]
+ 
+.panel2-unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/unpack_auto_14_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+### Let's unpack that data manipulation that happens with a 2-row data set.
+.panel1-unpack-auto[
+
+```r
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %&gt;%
+  mutate(group = 1:n())-&gt;
+data
+
+diameter = 1
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) -&gt;
+
+  cols_to_keep
+
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+
+      spring_path &lt;- create_spring(x = data$x[i], y = data$y[i], xend =
+                                    data$xend[i], yend =
+                                   data$yend[i], diameter = diameter,
+                                    tension = tension,
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+
+    })
+
+do.call(rbind, springs) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, color = group) +
+  geom_point(data = data, color = "black") +
+  geom_point(data = data, aes(x = xend, y = yend), color = "red") +
+* geom_point()
+```
+]
+ 
+.panel2-unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/unpack_auto_15_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-unpack-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-unpack-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-unpack-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+```r
+geom_spring &lt;- function(mapping = NULL, data = NULL, stat = "spring", 
+                        position = "identity", ..., diameter = 1, tension = 0.75, 
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      diameter = diameter, 
+      tension = tension, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+---
+
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+*set.seed(123)
+```
+]
+ 
+.panel2-use_spring-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+*tibble(
+* x = runif(5, max = 10),
+* y = runif(5, max = 10),
+* xend = runif(5, max = 10),
+* yend = runif(5, max = 10),
+* class = 1:5
+*) 
+```
+]
+ 
+.panel2-use_spring-auto[
+
+```
+# A tibble: 5 x 5
+      x     y  xend  yend class
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1  2.88 0.456  9.57 9.00      1
+2  7.88 5.28   4.53 2.46      2
+3  4.09 8.92   6.78 0.421     3
+4  8.83 5.51   5.73 3.28      4
+5  9.40 4.57   1.03 9.55      5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_05_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* geom_point(aes(x = xend, y = yend), color = "red")
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_06_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+* facet_wrap(~class)
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+* aes(xend = xend, yend = yend)
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+  aes(xend = xend, yend = yend) +
+* geom_spring()
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_09_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_spring-auto[
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+  aes(xend = xend, yend = yend) +
+  geom_spring() +
+* geom_spring(tension = .9, diameter = 2,
+*             color = "magenta", alpha = .7)
+```
+]
+ 
+.panel2-use_spring-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_spring_auto_10_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-use_spring-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use_spring-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use_spring-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+
+
+
+## b. circle
+
+---
+
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+*create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+* angels &lt;- seq(
+
+*   from = 0,
+*   to = 2*pi,
+*   length.out = n + 1
+
+* )
+
+* data.frame(
+*   x = cos(angels) * r + x0,
+*   y = sin(angels) * r + y0
+* )
+
+*} 
+```
+]
+ 
+.panel2-circle-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+  angels &lt;- seq(
+
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+
+  )
+
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+*create_circle(x0 = 1, y0 = 2, r = 2)
+```
+]
+ 
+.panel2-circle-auto[
+
+```
+              x           y
+1    3.00000000 2.000000000
+2    2.99605346 2.125581039
+3    2.98422940 2.250666467
+4    2.96457450 2.374762629
+5    2.93716632 2.497379774
+6    2.90211303 2.618033989
+7    2.85955297 2.736249105
+8    2.80965410 2.851558583
+9    2.75261336 2.963507348
+10   2.68865585 3.071653590
+11   2.61803399 3.175570505
+12   2.54102649 3.274847979
+13   2.45793725 3.369094212
+14   2.36909421 3.457937255
+15   2.27484798 3.541026486
+16   2.17557050 3.618033989
+17   2.07165359 3.688655851
+18   1.96350735 3.752613360
+19   1.85155858 3.809654105
+20   1.73624911 3.859552972
+21   1.61803399 3.902113033
+22   1.49737977 3.937166322
+23   1.37476263 3.964574501
+24   1.25066647 3.984229403
+25   1.12558104 3.996053457
+26   1.00000000 4.000000000
+27   0.87441896 3.996053457
+28   0.74933353 3.984229403
+29   0.62523737 3.964574501
+30   0.50262023 3.937166322
+31   0.38196601 3.902113033
+32   0.26375089 3.859552972
+33   0.14844142 3.809654105
+34   0.03649265 3.752613360
+35  -0.07165359 3.688655851
+36  -0.17557050 3.618033989
+37  -0.27484798 3.541026486
+38  -0.36909421 3.457937255
+39  -0.45793725 3.369094212
+40  -0.54102649 3.274847979
+41  -0.61803399 3.175570505
+42  -0.68865585 3.071653590
+43  -0.75261336 2.963507348
+44  -0.80965410 2.851558583
+45  -0.85955297 2.736249105
+46  -0.90211303 2.618033989
+47  -0.93716632 2.497379774
+48  -0.96457450 2.374762629
+49  -0.98422940 2.250666467
+50  -0.99605346 2.125581039
+51  -1.00000000 2.000000000
+52  -0.99605346 1.874418961
+53  -0.98422940 1.749333533
+54  -0.96457450 1.625237371
+55  -0.93716632 1.502620226
+56  -0.90211303 1.381966011
+57  -0.85955297 1.263750895
+58  -0.80965410 1.148441417
+59  -0.75261336 1.036492652
+60  -0.68865585 0.928346410
+61  -0.61803399 0.824429495
+62  -0.54102649 0.725152021
+63  -0.45793725 0.630905788
+64  -0.36909421 0.542062745
+65  -0.27484798 0.458973514
+66  -0.17557050 0.381966011
+67  -0.07165359 0.311344149
+68   0.03649265 0.247386640
+69   0.14844142 0.190345895
+70   0.26375089 0.140447028
+71   0.38196601 0.097886967
+72   0.50262023 0.062833678
+73   0.62523737 0.035425499
+74   0.74933353 0.015770597
+75   0.87441896 0.003946543
+76   1.00000000 0.000000000
+77   1.12558104 0.003946543
+78   1.25066647 0.015770597
+79   1.37476263 0.035425499
+80   1.49737977 0.062833678
+81   1.61803399 0.097886967
+82   1.73624911 0.140447028
+83   1.85155858 0.190345895
+84   1.96350735 0.247386640
+85   2.07165359 0.311344149
+86   2.17557050 0.381966011
+87   2.27484798 0.458973514
+88   2.36909421 0.542062745
+89   2.45793725 0.630905788
+90   2.54102649 0.725152021
+91   2.61803399 0.824429495
+92   2.68865585 0.928346410
+93   2.75261336 1.036492652
+94   2.80965410 1.148441417
+95   2.85955297 1.263750895
+96   2.90211303 1.381966011
+97   2.93716632 1.502620226
+98   2.96457450 1.625237371
+99   2.98422940 1.749333533
+100  2.99605346 1.874418961
+101  3.00000000 2.000000000
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+  angels &lt;- seq(
+
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+
+  )
+
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+create_circle(x0 = 1, y0 = 2, r = 2) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+  angels &lt;- seq(
+
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+
+  )
+
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+create_circle(x0 = 1, y0 = 2, r = 2) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+  angels &lt;- seq(
+
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+
+  )
+
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+create_circle(x0 = 1, y0 = 2, r = 2) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_auto_05_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle-auto[
+
+```r
+create_circle &lt;- function(x0, y0, r = 1, n = 100){
+
+  angels &lt;- seq(
+
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+
+  )
+
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+create_circle(x0 = 1, y0 = 2, r = 2) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* geom_point(data = data_frame(x = 1, y = 2))
+```
+]
+ 
+.panel2-circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_auto_06_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-circle-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-circle-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-circle-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+
+
+
+```r
+StatCircle &lt;- ggproto("StatCircle", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$r)) {
+      params$r &lt;- 1
+    } else if (params$r == 0) {
+      rlang::abort("Circles cannot be defined with a radius of 0")
+    }
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Circles must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], r, n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, circles)
+  },
+  required_aes = c("x0", "y0")
+)
+```
+
+---
+
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+*tibble(x0 = 1:2,
+*      y0 = c(1,8),
+*      r = 1:2)
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+```
+# A tibble: 2 x 3
+     x0    y0     r
+  &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+1     1     1     1
+2     2     8     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+* mutate(group = row_number())
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+```
+# A tibble: 2 x 4
+     x0    y0     r group
+  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     1     1     1
+2     2     8     2     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+*data
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+*r = .25
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+*n = 10
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+*  cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+*   circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+*     circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+*     cbind(circles_path, unclass(data[i, cols_to_keep]))
+*   })
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+*do.call(rbind, circles)
+```
+]
+ 
+.panel2-circle_unpack-auto[
+
+```
+          x          y r group
+1  2.000000 1.00000000 1     1
+2  1.809017 1.58778525 1     1
+3  1.309017 1.95105652 1     1
+4  0.690983 1.95105652 1     1
+5  0.190983 1.58778525 1     1
+6  0.000000 1.00000000 1     1
+7  0.190983 0.41221475 1     1
+8  0.690983 0.04894348 1     1
+9  1.309017 0.04894348 1     1
+10 1.809017 0.41221475 1     1
+11 2.000000 1.00000000 1     1
+12 4.000000 8.00000000 2     2
+13 3.618034 9.17557050 2     2
+14 2.618034 9.90211303 2     2
+15 1.381966 9.90211303 2     2
+16 0.381966 9.17557050 2     2
+17 0.000000 8.00000000 2     2
+18 0.381966 6.82442950 2     2
+19 1.381966 6.09788697 2     2
+20 2.618034 6.09788697 2     2
+21 3.618034 6.82442950 2     2
+22 4.000000 8.00000000 2     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-circle_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_unpack_auto_09_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+* aes(x = x, y = y, col = group)
+```
+]
+ 
+.panel2-circle_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_unpack_auto_10_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+* geom_point()
+```
+]
+ 
+.panel2-circle_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_unpack_auto_11_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data
+
+r = .25
+n = 10
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+  geom_point() +
+* geom_point(data = data, aes(x = x0, y = y0))
+```
+]
+ 
+.panel2-circle_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle_unpack_auto_12_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-circle_unpack-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-circle_unpack-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-circle_unpack-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+
+```r
+geom_circle &lt;- function(mapping = NULL, data = NULL, stat = "circle", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      r = r, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+*set.seed(1244)
+```
+]
+ 
+.panel2-use_circle-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+*tibble(
+* x = runif(5, max = 10),
+* y = runif(5, max = 10),
+* r = runif(5, max = 10),
+* class = 1:5
+*) 
+```
+]
+ 
+.panel2-use_circle-auto[
+
+```
+# A tibble: 5 x 4
+      x     y     r class
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 2.56   7.65 3.81      1
+2 0.779  5.64 3.58      2
+3 1.25   1.51 0.121     3
+4 5.05   7.52 5.42      4
+5 4.06   2.79 3.32      5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_05_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* aes(x0 = x, y0 = y)
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_06_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(x0 = x, y0 = y) +
+* geom_circle(n = 6)
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(x0 = x, y0 = y) +
+  geom_circle(n = 6) +
+* geom_circle(n = 13)
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(x0 = x, y0 = y) +
+  geom_circle(n = 6) +
+  geom_circle(n = 13) +
+* geom_circle(r = 2)
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_09_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(x0 = x, y0 = y) +
+  geom_circle(n = 6) +
+  geom_circle(n = 13) +
+  geom_circle(r = 2) +
+* geom_circle()
+```
+]
+ 
+.panel2-use_circle-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle_auto_10_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-use_circle-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use_circle-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use_circle-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+## c. circlemean (a collective geom)
+
+---
+
+
+
+
+
+### Now me... I will try to do geom_mean_circle.  This is collective geom.  Take the mean of x0 and y0 and r, then draw a circle around the mean, and r reflective of that.  
+
+---
+
+### collective geoms
+
+Thus far we've looked at creating individual geoms -- a mark/geom is associated with each row in the data.  But what about a geom that summarizes.  i.e. creates a mark/geom which reflects all of the rows of data or groups within the data. This is the case of x-mean (my target) and several of the other geoms that I want to create. 
+
+I think I'll try to get it done in the wrong way first - having a vertical line for each and every row at the mean.  And then come back to this. 
+
+---
+
+
+
+
+
+```r
+StatCirclemean &lt;- ggproto("StatCirclemean", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$r)) {
+      params$r &lt;- 1
+    } else if (params$r == 0) {
+      rlang::abort("Circles cannot be defined with a radius of 0")
+    }
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Circles must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+   data %&gt;% 
+     summarise(x0 = mean(x0),
+               y0 = mean(y0),
+               r = mean(r)) %&gt;% 
+     mutate(group = 1) -&gt;
+    data
+
+    cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+    
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], r, n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, circles)
+  },
+  required_aes = c("x0", "y0")
+)
+```
+
+---
+
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+*tibble(x0 = 1:2,
+*      y0 = c(1,8),
+*      r = 1:2)
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+# A tibble: 2 x 3
+     x0    y0     r
+  &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+1     1     1     1
+2     2     8     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+* mutate(group = row_number())
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+# A tibble: 2 x 4
+     x0    y0     r group
+  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     1     1     1
+2     2     8     2     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+*data0
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+*data &lt;- data0
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+*r = .25
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+*n = 50
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+*  cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+*  data
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+# A tibble: 2 x 4
+     x0    y0     r group
+  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1     1     1     1     1
+2     2     8     2     2
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+*    summarise(x0 = mean(x0),
+*                     y0 = mean(y0),
+*                     r = mean(r))
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+# A tibble: 1 x 3
+     x0    y0     r
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   1.5   4.5   1.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+*    mutate(group = 1)
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+# A tibble: 1 x 4
+     x0    y0     r group
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   1.5   4.5   1.5     1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+*   data
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+*   circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+*     circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+*     cbind(circles_path, unclass(data[i, cols_to_keep]))
+*   })
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+*do.call(rbind, circles)
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+
+```
+            x        y   r group
+1  3.00000000 4.500000 1.5     1
+2  2.98817205 4.688000 1.5     1
+3  2.95287474 4.873035 1.5     1
+4  2.89466473 5.052187 1.5     1
+5  2.81446002 5.222631 1.5     1
+6  2.71352549 5.381678 1.5     1
+7  2.59345294 5.526821 1.5     1
+8  2.45613598 5.655770 1.5     1
+9  2.30374019 5.766492 1.5     1
+10 2.13866894 5.857241 1.5     1
+11 1.96352549 5.926585 1.5     1
+12 1.78107197 5.973431 1.5     1
+13 1.59418578 5.997040 1.5     1
+14 1.40581422 5.997040 1.5     1
+15 1.21892803 5.973431 1.5     1
+16 1.03647451 5.926585 1.5     1
+17 0.86133106 5.857241 1.5     1
+18 0.69625981 5.766492 1.5     1
+19 0.54386402 5.655770 1.5     1
+20 0.40654706 5.526821 1.5     1
+21 0.28647451 5.381678 1.5     1
+22 0.18553998 5.222631 1.5     1
+23 0.10533527 5.052187 1.5     1
+24 0.04712526 4.873035 1.5     1
+25 0.01182795 4.688000 1.5     1
+26 0.00000000 4.500000 1.5     1
+27 0.01182795 4.312000 1.5     1
+28 0.04712526 4.126965 1.5     1
+29 0.10533527 3.947813 1.5     1
+30 0.18553998 3.777369 1.5     1
+31 0.28647451 3.618322 1.5     1
+32 0.40654706 3.473179 1.5     1
+33 0.54386402 3.344230 1.5     1
+34 0.69625981 3.233508 1.5     1
+35 0.86133106 3.142759 1.5     1
+36 1.03647451 3.073415 1.5     1
+37 1.21892803 3.026569 1.5     1
+38 1.40581422 3.002960 1.5     1
+39 1.59418578 3.002960 1.5     1
+40 1.78107197 3.026569 1.5     1
+41 1.96352549 3.073415 1.5     1
+42 2.13866894 3.142759 1.5     1
+43 2.30374019 3.233508 1.5     1
+44 2.45613598 3.344230 1.5     1
+45 2.59345294 3.473179 1.5     1
+46 2.71352549 3.618322 1.5     1
+47 2.81446002 3.777369 1.5     1
+48 2.89466473 3.947813 1.5     1
+49 2.95287474 4.126965 1.5     1
+50 2.98817205 4.312000 1.5     1
+51 3.00000000 4.500000 1.5     1
+```
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle1_unpack_auto_14_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+* aes(x = x, y = y, col = group)
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle1_unpack_auto_15_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+* geom_point()
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle1_unpack_auto_16_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+  geom_point() +
+* geom_point(data = data0,
+*            aes(x = x0, y = y0),
+*            alpha = .3)
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle1_unpack_auto_17_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-circle1_unpack-auto[
+
+```r
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %&gt;%
+  mutate(group = row_number()) -&gt;
+data0
+
+data &lt;- data0
+
+r = .25
+n = 50
+
+   cols_to_keep &lt;- setdiff(names(data), c("x0", "y0"))
+
+   data %&gt;%
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %&gt;%
+     mutate(group = 1) -&gt;
+    data
+
+    circles &lt;- lapply(seq_len(nrow(data)), function(i) {
+      circles_path &lt;- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+
+do.call(rbind, circles) %&gt;%
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+  geom_point() +
+  geom_point(data = data0,
+             aes(x = x0, y = y0),
+             alpha = .3) +
+* geom_point(data = data0,
+*            aes(x = x0, y = y0))
+```
+]
+ 
+.panel2-circle1_unpack-auto[
+&lt;img src="extending_ggplot2_files/figure-html/circle1_unpack_auto_18_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-circle1_unpack-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-circle1_unpack-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-circle1_unpack-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+
+
+```r
+geom_circlemean &lt;- function(mapping = NULL, data = NULL, stat = "circlemean", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      r = r, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+*set.seed(1244)
+```
+]
+ 
+.panel2-use_circle1-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+*tibble(
+* x = runif(5, max = 10),
+* y = runif(5, max = 10),
+* r = runif(5, max = 10),
+* class = 1:5
+*) 
+```
+]
+ 
+.panel2-use_circle1-auto[
+
+```
+# A tibble: 5 x 4
+      x     y     r class
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 2.56   7.65 3.81      1
+2 0.779  5.64 3.58      2
+3 1.25   1.51 0.121     3
+4 5.05   7.52 5.42      4
+5 4.06   2.79 3.32      5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_03_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+* aes(x = x, y = y)
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_04_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+* geom_point()
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_05_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+* geom_point(data = . %&gt;% summarize(x = mean(x),
+*                                 y = mean(y)),
+*            color = "red")
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_06_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %&gt;% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+* aes(x0 = x, y0 = y)
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_07_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %&gt;% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+  aes(x0 = x, y0 = y) +
+* geom_circlemean(r = 1 , n = 6)
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_08_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %&gt;% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+  aes(x0 = x, y0 = y) +
+  geom_circlemean(r = 1 , n = 6) +
+* geom_circlemean(r = .75 , n = 13)
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_09_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %&gt;% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+  aes(x0 = x, y0 = y) +
+  geom_circlemean(r = 1 , n = 6) +
+  geom_circlemean(r = .75 , n = 13) +
+* geom_circlemean(r = .5 )
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_10_output-1.png" width="576" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-use_circle1-auto[
+
+```r
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %&gt;% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+  aes(x0 = x, y0 = y) +
+  geom_circlemean(r = 1 , n = 6) +
+  geom_circlemean(r = .75 , n = 13) +
+  geom_circlemean(r = .5 ) +
+* geom_circle(r = .8, color = "red")
+```
+]
+ 
+.panel2-use_circle1-auto[
+&lt;img src="extending_ggplot2_files/figure-html/use_circle1_auto_11_output-1.png" width="576" /&gt;
+]
+
+&lt;style&gt;
+.panel1-use_circle1-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-use_circle1-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-use_circle1-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+
+
+---
+
+
+
+count: false
+ 
+### Roger Peng's stuff
+.panel1-hi-1[
+
+```r
+library(grid)
+GeomMyPoint &lt;- ggproto("GeomMyPoint", Geom,
+                       required_aes = c("x", "y"),
+                       default_aes = aes(shape = 1),
+                       draw_key = draw_key_point,
+                       draw_panel = function(data, panel_scales, coord) {
+## Transform the data first
+                         coords &lt;- coord$transform(data, panel_scales)
+
+## Let's print out the structure of the 'coords' object
+                         str(coords)
+
+## Construct a grid grob
+                         pointsGrob(
+                           x = coords$x,
+                           y = coords$y,
+                           pch = coords$shape
+                         )
+                       })
+
+geom_mypoint &lt;- function(mapping = NULL, data = NULL, stat = "identity",
+                         position = "identity", na.rm = FALSE,
+                         show.legend = NA, inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    geom = GeomMyPoint, mapping = mapping,
+    data = data, stat = stat, position = position,
+    show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+
+}
+
+library(tidyverse)
+tibble(x = 1:3, y = x*-2) %&gt;%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_mypoint()
+```
+]
+ 
+.panel2-hi-1[
+&lt;img src="extending_ggplot2_files/figure-html/hi_1_01_output-1.png" width="576" /&gt;
+
+```
+'data.frame':	3 obs. of  5 variables:
+ $ x    : num  0.0455 0.5 0.9545
+ $ y    : num  0.9545 0.5 0.0455
+ $ PANEL: Factor w/ 1 level "1": 1 1 1
+ $ group: int  -1 -1 -1
+ $ shape: num  1 1 1
+```
+]
+
+&lt;style&gt;
+.panel1-hi-1 {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hi-1 {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hi-1 {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 65%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

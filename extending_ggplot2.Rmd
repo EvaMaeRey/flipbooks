@@ -1,0 +1,952 @@
+---
+title: "'Extending your ability to extend...'"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 8, message = FALSE,
+                      warning = FALSE, comment = "", 
+                      cache = F, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+---
+
+# 0. Modify existing geoms/stats
+
+
+---
+
+`r chunk_reveal("existing", title = "### Modifying an existing geom")`
+
+```{r existing, include = F}
+ggplot(mpg, aes(displ, 1 / hwy)) + 
+  geom_point() + 
+  geom_smooth() ->
+g0
+
+geom_lm <- function(formula = y ~ x, 
+                    colour = alpha("steelblue", 0.5), 
+                    size = 2, ...)  {
+  geom_smooth(formula = formula, 
+              se = FALSE, method = "lm", 
+              colour = colour,
+    size = size, ...)
+}
+
+ggplot(mpg, aes(displ, 1 / hwy)) + 
+  geom_point() + 
+  geom_lm() ->
+g1
+
+ggplot(mpg, aes(displ, 1 / hwy)) + 
+  geom_point() + 
+  geom_lm(formula = y ~ poly(x, 2), 
+          size = 1, colour = "red") ->
+g2
+
+library(patchwork)
+
+g0 + g1 + g2
+```
+
+---
+
+`r chunk_reveal("combining_layers", title = "### Combining existing geoms/stats into a single call")`
+
+```{r combining_layers, include=F}
+ggplot(mpg, aes(class, cty)) +
+  stat_summary(fun = "mean", geom = "bar", fill = "grey70") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4) +
+  geom_point(alpha = .4) ->
+g0
+
+geom_mean <- function(alpha = .4, fill = "magenta") {
+  list(
+    stat_summary(fun = "mean", geom = "bar", fill = fill, alpha = alpha),
+    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4),
+    geom_point(alpha = alpha)
+  )
+}
+
+ggplot(mpg, aes(class, cty)) + 
+  geom_mean() ->
+g1
+
+ggplot(mpg, aes(class, cty)) + 
+  geom_mean(fill = "blue", alpha = .2) ->
+g2
+
+library(patchwork)
+g0 + g1 + g2
+```
+
+
+---
+
+
+# 1. Building new geoms
+
+## a. springs
+
+
+
+
+---
+
+`r chunk_reveal("spring", title = "### Thinking about springs")`
+
+```{r spring, include = F}
+tibble(
+  x = sin(seq(0, 2*pi, length.out = 100)),
+  y = cos(seq(0, 2*pi, length.out = 100)),
+  index = 1:100,
+  type = "circle"
+) ->
+  circle
+
+spring <- circle
+
+spring$x + seq(0, 1.5, length.out = 100) -> spring$x
+spring$type <- "spring"
+
+rbind(circle, spring) %>% 
+  ggplot() + 
+  facet_wrap(~ type, scales = "free_x") +
+  aes(x = x, y = y, group = type, alpha = index) +
+  geom_point(show.legend = FALSE) +
+  geom_path(show.legend = FALSE)
+```
+
+
+
+---
+
+`r chunk_reveal("create_spring", title = "### Writing and using a general spring function")`
+
+```{r create_spring, include=F}
+create_spring <- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension <= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+  # Calculate direct length of segment
+  length <- sqrt((x - xend)^2 + (y - yend)^2)
+  
+  # Figure out how many revolutions and points we need
+  n_revolutions <- length / (diameter * tension)
+  n_points <- n * n_revolutions
+  
+  # Calculate sequence of radians and x and y offset
+  radians <- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x <- seq(x, xend, length.out = n_points)
+  y <- seq(y, yend, length.out = n_points)
+  
+  # Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2, 
+  xend = 10, yend = 6,
+  diameter = 2, 
+  tension = 0.75, n = 20
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_path()
+```
+
+---
+
+
+```{r}
+StatSpring <- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$diameter)) {
+      params$diameter <- 1
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension <- 0.75
+    } else if (params$tension <= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    cols_to_keep <- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      spring_path <- create_spring(data$x[i], data$y[i], data$xend[i], 
+                                   data$yend[i], diameter, tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+)
+
+
+```
+
+
+
+
+---
+
+`r chunk_reveal("unpack", title = "### Let's unpack that data manipulation that happens with a 2-row data set.")`
+
+```{r unpack, include=F}
+tibble(x = 1:2,
+       y = 4:3,
+       xend = 5:6,
+       yend = 8:7) %>% 
+  mutate(group = row_number())->
+data
+
+diameter = 1 
+tension = 0.75
+n = 2
+
+setdiff(names(data), c("x", "y", "xend", "yend")) ->
+
+  cols_to_keep
+
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      
+      spring_path <- create_spring(x = data$x[i], y = data$y[i], xend = 
+                                    data$xend[i], yend = 
+                                   data$yend[i], diameter = diameter, 
+                                    tension = tension, 
+                                   n = n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+      
+    })
+
+do.call(rbind, springs) %>% 
+  ggplot() +
+  aes(x = x, y = y, color = group) +
+  geom_point(data = data, color = "black") +
+  geom_point(data = data, aes(x = xend, y = yend), color = "red") +
+  geom_point()
+```
+
+
+---
+
+```{r}
+geom_spring <- function(mapping = NULL, data = NULL, stat = "spring", 
+                        position = "identity", ..., diameter = 1, tension = 0.75, 
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      diameter = diameter, 
+      tension = tension, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+---
+
+`r chunk_reveal("use_spring")`
+
+```{r use_spring, include=F}
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+  aes(xend = xend, yend = yend) +
+  geom_spring() +
+  geom_spring(tension = .9, diameter = 2, 
+              color = "magenta", alpha = .7)
+```
+
+
+---
+
+
+
+
+
+## b. circle
+
+---
+
+`r chunk_reveal("circle")`
+
+```{r circle, include=F}
+create_circle <- function(x0, y0, r = 1, n = 100){
+  
+  angels <- seq(
+    
+    from = 0,
+    to = 2*pi,
+    length.out = n + 1
+    
+  )
+  
+  data.frame(
+    x = cos(angels) * r + x0,
+    y = sin(angels) * r + y0
+  )
+
+}
+
+create_circle(x0 = 1, y0 = 2, r = 2) %>% 
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = data_frame(x = 1, y = 2))
+```
+
+---
+
+
+
+
+```{r}
+StatCircle <- ggproto("StatCircle", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$r)) {
+      params$r <- 1
+    } else if (params$r == 0) {
+      rlang::abort("Circles cannot be defined with a radius of 0")
+    }
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Circles must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+    circles <- lapply(seq_len(nrow(data)), function(i) {
+      circles_path <- create_circle(data$x0[i], data$y0[i], r, n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, circles)
+  },
+  required_aes = c("x0", "y0")
+)
+```
+
+---
+
+`r chunk_reveal("circle_unpack")`
+
+```{r circle_unpack, include=F}
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %>% 
+  mutate(group = row_number()) ->
+data
+
+r = .25
+n = 10
+
+   cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+   
+    circles <- lapply(seq_len(nrow(data)), function(i) {
+      circles_path <- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+    
+do.call(rbind, circles) %>% 
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+  geom_point() +
+  geom_point(data = data, aes(x = x0, y = y0))
+```
+
+
+
+---
+
+
+```{r}
+geom_circle <- function(mapping = NULL, data = NULL, stat = "circle", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      r = r, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_circle")`
+
+```{r use_circle, include=F}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  aes(x0 = x, y0 = y) +
+  geom_circle(n = 6) +
+  geom_circle(n = 13) +
+  geom_circle(r = 2) +
+  geom_circle()
+```
+
+---
+
+
+## c. circlemean (a collective geom)
+
+---
+
+
+### Now me... I will try to do geom_mean_circle.  This is collective geom.  Take the mean of x0 and y0 and r, then draw a circle around the mean, and r reflective of that.  
+
+---
+
+### collective geoms
+
+Thus far we've looked at creating individual geoms -- a mark/geom is associated with each row in the data.  But what about a geom that summarizes.  i.e. creates a mark/geom which reflects all of the rows of data or groups within the data. This is the case of x-mean (my target) and several of the other geoms that I want to create. 
+
+I think I'll try to get it done in the wrong way first - having a vertical line for each and every row at the mean.  And then come back to this. 
+
+---
+
+```{r}
+StatCirclemean <- ggproto("StatCirclemean", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$r)) {
+      params$r <- 1
+    } else if (params$r == 0) {
+      rlang::abort("Circles cannot be defined with a radius of 0")
+    }
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Circles must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+   data %>% 
+     summarise(x0 = mean(x0),
+               y0 = mean(y0)) %>% 
+     mutate(group = row_number()) ->
+    data
+
+    cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+    
+    circles <- lapply(seq_len(nrow(data)), function(i) {
+      circles_path <- create_circle(data$x0[i], data$y0[i], r, n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, circles)
+  },
+  required_aes = c("x0", "y0")
+)
+```
+
+---
+
+`r chunk_reveal("circle1_unpack")`
+
+```{r circle1_unpack, include=F}
+tibble(x0 = 1:2,
+       y0 = c(1,8),
+       r = 1:2) %>% 
+  mutate(group = row_number()) ->
+data0
+
+data <- data0
+
+r = .25
+n = 50
+
+   cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+   
+   data %>% 
+     summarise(x0 = mean(x0),
+                      y0 = mean(y0),
+                      r = mean(r)) %>% 
+     ungroup() %>% 
+     mutate(group = row_number()) ->
+    data
+   
+    circles <- lapply(seq_len(nrow(data)), function(i) {
+      circles_path <- create_circle(data$x0[i], data$y0[i], data$r[i], n)
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+    })
+    
+do.call(rbind, circles) %>% 
+  ggplot() +
+  aes(x = x, y = y, col = group) +
+  geom_point() +
+  geom_point(data = data0, 
+             aes(x = x0, y = y0), 
+             alpha = .3) +
+  geom_point(data = data0, 
+             aes(x = x0, y = y0))
+```
+
+
+
+---
+
+
+```{r}
+geom_circlemean <- function(mapping = NULL, data = NULL, stat = "circlemean", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      r = r, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_circle1")`
+
+```{r use_circle1, include=F}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  r = runif(5, max = 10),
+  class = 1:5
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(data = . %>% summarize(x = mean(x),
+                                  y = mean(y)),
+             color = "red") +
+  aes(x0 = x, y0 = y) +
+  geom_circlemean(r = 1 , n = 6) +
+  geom_circlemean(r = .75 , n = 13) +
+  geom_circlemean(r = .5 ) +
+  geom_circle(r = .8, color = "red")
+```
+
+---
+
+
+## d. xvlines
+
+---
+
+`r chunk_reveal("xvlines")`
+
+```{r xvlines, include=F}
+create_xvlines <- function(x){
+  
+  tibble(
+    x = x,
+    xend = x,
+    y = -Inf,
+    yend = Inf
+  )
+
+}
+
+create_xvlines(x = 2) %>% 
+  ggplot() +
+  aes(x = x, y = 1) +
+  geom_point() +
+  geom_rug() +
+  aes(xend = xend, yend = yend) +
+  geom_segment(aes(y = y))
+```
+
+---
+
+
+```{r}
+StatXvlines <- ggproto("StatXvlines", Stat, 
+  setup_params = function(data, params) {
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    cols_to_keep <- setdiff(names(data), c("x"))
+    xvlines <- lapply(seq_len(nrow(data)), function(i) {
+      xvlines_segment <- create_xvlines(data$x[i])
+      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xvlines)
+  },
+  required_aes = c("x")
+)
+```
+
+---
+
+`r chunk_reveal("xvlines_unpack")`
+
+```{r xvlines_unpack, include=F}
+tibble(x = 1:2) %>% 
+  mutate(group = row_number()) ->
+data
+
+   cols_to_keep <- setdiff(names(data), c("x"))
+   
+    xvlines <- lapply(seq_len(nrow(data)), function(i) {
+      xvlines_segment <- create_xvlines(data$x[i])
+      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xvlines)
+    
+do.call(rbind, xvlines) %>% 
+  ggplot() +
+  aes(x = x, xend = xend, y = y, yend = yend) +
+  geom_point(data = . %>% mutate(y = 1:2)) +
+  geom_segment()
+```
+
+
+
+---
+
+
+```{r}
+geom_xvlines <- function(mapping = NULL, data = NULL, stat = "xvlines", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomSegment, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_xvlines")`
+
+```{r use_xvlines, include=T}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10)
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_xvlines(n = 6) +
+  geom_xvlines(n = 13) +
+  geom_xvlines(r = 2)
+```
+
+
+
+---
+
+## e. x mean line
+
+```{r}
+StatXmean <- ggproto("StatXmean", Stat, 
+  setup_params = function(data, params) {
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    data <- data %>% 
+      summarize(x = mean(x, na.rm = T)) %>% 
+      ungroup() %>% 
+      mutate(group = row_number())
+    
+    cols_to_keep <- setdiff(names(data), c("x"))
+    xmean <- lapply(seq_len(nrow(data)), function(i) {
+      xmean_segment <- create_xvlines(data$x[i])
+      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xmean)
+  },
+  required_aes = c("x")
+)
+```
+
+---
+
+`r chunk_reveal("xmean_unpack")`
+
+```{r xmean_unpack, include=F}
+tibble(x = 1:2) %>% 
+  mutate(group = row_number()) ->
+data0
+
+    data0 %>% 
+      summarize(x = mean(x, na.rm = T)) %>% 
+      mutate(group = row_number()) ->
+      data
+
+   cols_to_keep <- setdiff(names(data), c("x"))
+   
+    xmean <- lapply(seq_len(nrow(data)), function(i) {
+      xmean_segment <- create_xvlines(data$x[i])
+      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, xmean)
+    
+do.call(rbind, xmean) %>% 
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_point(data = data0, aes(y = 2)) +
+  geom_segment(aes(xend = xend, yend = yend),
+               linetype = "dashed")
+```
+
+
+
+---
+
+
+```{r}
+geom_xmean <- function(mapping = NULL, data = NULL, stat = "xmean", 
+                        position = "identity", ..., r = 1,  
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomSegment, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+
+---
+
+`r chunk_reveal("use_xmean")`
+
+```{r use_xmean, include=T}
+set.seed(1244)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10)
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_xmean() +
+  geom_xmean(color = "blue", linetype = "dashed",
+             size = 2) +
+  geom_xmean(color = "magenta", 
+             linetype = "dotted", size = 3)
+```
+
+
+
+---
+
+
+
+
+---
+
+
+
+`r chunk_reveal("hi", break_type = 1, title = "### Roger Peng's stuff")`
+
+```{r hi, include=F}
+library(grid)
+GeomMyPoint <- ggproto("GeomMyPoint", Geom,
+                       required_aes = c("x", "y"),
+                       default_aes = aes(shape = 1),
+                       draw_key = draw_key_point,
+                       draw_panel = function(data, panel_scales, coord) {
+                         ## Transform the data first
+                         coords <- coord$transform(data, panel_scales)
+
+                         ## Let's print out the structure of the 'coords' object
+                         str(coords)
+
+                         ## Construct a grid grob
+                         pointsGrob(
+                           x = coords$x,
+                           y = coords$y,
+                           pch = coords$shape
+                         )
+                       })
+
+geom_mypoint <- function(mapping = NULL, data = NULL, stat = "identity",
+                         position = "identity", na.rm = FALSE,
+                         show.legend = NA, inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    geom = GeomMyPoint, mapping = mapping,
+    data = data, stat = stat, position = position,
+    show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+
+}
+
+library(tidyverse)
+tibble(x = 1:3, y = x*-2) %>%
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_mypoint()
+```
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 65%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

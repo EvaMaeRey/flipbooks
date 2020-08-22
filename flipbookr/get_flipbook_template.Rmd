@@ -12,7 +12,7 @@ download.file(url = url, "skeleton.Rmd")
 # rmarkdown::render("skeleton.Rmd")
 # knitr::knit("skeleton.Rmd")
 
-py_url <- "https://github.com/EvaMaeRey/flipbookr/blob/master/inst/rmarkdown/templates/python-flipbook/skeleton/skeleton.Rmd"
+py_url <- "https://raw.githubusercontent.com/EvaMaeRey/flipbookr/master/inst/rmarkdown/templates/python-flipbook/skeleton/skeleton.Rmd"
 
 download.file(url = py_url, "py_skeleton.Rmd")
 ```
