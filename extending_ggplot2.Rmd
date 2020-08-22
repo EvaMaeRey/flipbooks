@@ -1,7 +1,5 @@
 ---
-title: "'Extending your ability to extend...'"
-subtitle: "With flipbookr and xaringan"
-author: "Gina Reynolds, December 2019"
+title: "'extending ggplot2'"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -27,8 +25,14 @@ library(tidyverse)
 
 ---
 
+
+
+
+---
+
 # 0. Modify existing geoms/stats
 
+examples base on those in https://ggplot2-book.org/programming.html
 
 ---
 
@@ -104,8 +108,7 @@ g0 + g1 + g2
 
 ## a. springs
 
-
-
+This example is https://ggplot2-book.org/spring1.html
 
 ---
 
@@ -325,6 +328,12 @@ tibble(
 
 ## b. circle
 
+This one based on the idea from T. Pedersen's talk
+https://rstudio.com/resources/rstudioconf-2020/extending-your-ability-to-extend-ggplot2/
+
+He seems to get it done in a more succinct way, so something to come back to. 
+
+
 ---
 
 `r chunk_reveal("circle")`
@@ -518,17 +527,16 @@ StatCirclemean <- ggproto("StatCirclemean", Stat,
     data
   },
   compute_panel = function(data, scales, r = 1, n = 50) {
-    
    data %>% 
      summarise(x0 = mean(x0),
-               y0 = mean(y0)) %>% 
-     mutate(group = row_number()) ->
+               y0 = mean(y0),
+               r = mean(r)) %>% 
+     mutate(group = 1) ->
     data
-
     cols_to_keep <- setdiff(names(data), c("x0", "y0"))
-    
     circles <- lapply(seq_len(nrow(data)), function(i) {
       circles_path <- create_circle(data$x0[i], data$y0[i], r, n)
+      
       cbind(circles_path, unclass(data[i, cols_to_keep]))
       
     })
@@ -540,43 +548,36 @@ StatCirclemean <- ggproto("StatCirclemean", Stat,
 
 ---
 
-`r chunk_reveal("circle1_unpack")`
+`r chunk_reveal("circle1_unpack", title = "unpacking some data manipulation")`
 
 ```{r circle1_unpack, include=F}
 tibble(x0 = 1:2,
        y0 = c(1,8),
-       r = 1:2) %>% 
+       r = 1:2) %>%
   mutate(group = row_number()) ->
 data0
-
 data <- data0
-
 r = .25
 n = 50
-
    cols_to_keep <- setdiff(names(data), c("x0", "y0"))
-   
-   data %>% 
+   data %>%
      summarise(x0 = mean(x0),
                       y0 = mean(y0),
-                      r = mean(r)) %>% 
-     ungroup() %>% 
-     mutate(group = row_number()) ->
+                      r = mean(r)) %>%
+     mutate(group = 1) ->
     data
-   
     circles <- lapply(seq_len(nrow(data)), function(i) {
       circles_path <- create_circle(data$x0[i], data$y0[i], data$r[i], n)
       cbind(circles_path, unclass(data[i, cols_to_keep]))
     })
-    
-do.call(rbind, circles) %>% 
+do.call(rbind, circles) %>%
   ggplot() +
   aes(x = x, y = y, col = group) +
   geom_point() +
-  geom_point(data = data0, 
-             aes(x = x0, y = y0), 
+  geom_point(data = data0,
+             aes(x = x0, y = y0),
              alpha = .3) +
-  geom_point(data = data0, 
+  geom_point(data = data0,
              aes(x = x0, y = y0))
 ```
 
@@ -623,8 +624,8 @@ tibble(
   y = runif(5, max = 10),
   r = runif(5, max = 10),
   class = 1:5
-) %>% 
-  ggplot() + 
+) %>%
+  ggplot() +
   aes(x = x, y = y) +
   geom_point() +
   geom_point(data = . %>% summarize(x = mean(x),
@@ -638,306 +639,6 @@ tibble(
 ```
 
 ---
-
-
-## d. xvlines
-
----
-
-`r chunk_reveal("xvlines")`
-
-```{r xvlines, include=F}
-create_xvlines <- function(x){
-  
-  tibble(
-    x = x,
-    xend = x,
-    y = -Inf,
-    yend = Inf
-  )
-
-}
-
-create_xvlines(x = 2) %>% 
-  ggplot() +
-  aes(x = x, y = 1) +
-  geom_point() +
-  geom_rug() +
-  aes(xend = xend, yend = yend) +
-  geom_segment(aes(y = y))
-```
-
----
-
-
-```{r}
-StatXvlines <- ggproto("StatXvlines", Stat, 
-  setup_params = function(data, params) {
-    params
-  },
-  setup_data = function(data, params) {
-    if (anyDuplicated(data$group)) {
-      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
-    }
-    data
-  },
-  compute_panel = function(data, scales, r = 1, n = 50) {
-    
-    cols_to_keep <- setdiff(names(data), c("x"))
-    xvlines <- lapply(seq_len(nrow(data)), function(i) {
-      xvlines_segment <- create_xvlines(data$x[i])
-      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
-      
-    })
-    do.call(rbind, xvlines)
-  },
-  required_aes = c("x")
-)
-```
-
----
-
-`r chunk_reveal("xvlines_unpack")`
-
-```{r xvlines_unpack, include=F}
-tibble(x = 1:2) %>% 
-  mutate(group = row_number()) ->
-data
-
-   cols_to_keep <- setdiff(names(data), c("x"))
-   
-    xvlines <- lapply(seq_len(nrow(data)), function(i) {
-      xvlines_segment <- create_xvlines(data$x[i])
-      cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
-      
-    })
-    do.call(rbind, xvlines)
-    
-do.call(rbind, xvlines) %>% 
-  ggplot() +
-  aes(x = x, xend = xend, y = y, yend = yend) +
-  geom_point(data = . %>% mutate(y = 1:2)) +
-  geom_segment()
-```
-
-
-
----
-
-
-```{r}
-geom_xvlines <- function(mapping = NULL, data = NULL, stat = "xvlines", 
-                        position = "identity", ..., r = 1,  
-                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
-                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
-  layer(
-    data = data, 
-    mapping = mapping, 
-    stat = stat, 
-    geom = GeomSegment, 
-    position = position, 
-    show.legend = show.legend, 
-    inherit.aes = inherit.aes, 
-    params = list(
-      arrow = arrow, 
-      lineend = lineend, 
-      linejoin = linejoin, 
-      na.rm = na.rm, 
-      ...
-    )
-  )
-}
-```
-
-
----
-
-`r chunk_reveal("use_xvlines")`
-
-```{r use_xvlines, include=T}
-set.seed(1244)
-tibble(
-  x = runif(5, max = 10),
-  y = runif(5, max = 10)
-) %>% 
-  ggplot() + 
-  aes(x = x, y = y) +
-  geom_point() +
-  geom_xvlines(n = 6) +
-  geom_xvlines(n = 13) +
-  geom_xvlines(r = 2)
-```
-
-
-
----
-
-## e. x mean line
-
-```{r}
-StatXmean <- ggproto("StatXmean", Stat, 
-  setup_params = function(data, params) {
-    params
-  },
-  setup_data = function(data, params) {
-    if (anyDuplicated(data$group)) {
-      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
-    }
-    data
-  },
-  compute_panel = function(data, scales, r = 1, n = 50) {
-    
-    data <- data %>% 
-      summarize(x = mean(x, na.rm = T)) %>% 
-      ungroup() %>% 
-      mutate(group = row_number())
-    
-    cols_to_keep <- setdiff(names(data), c("x"))
-    xmean <- lapply(seq_len(nrow(data)), function(i) {
-      xmean_segment <- create_xvlines(data$x[i])
-      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
-      
-    })
-    do.call(rbind, xmean)
-  },
-  required_aes = c("x")
-)
-```
-
----
-
-`r chunk_reveal("xmean_unpack")`
-
-```{r xmean_unpack, include=F}
-tibble(x = 1:2) %>% 
-  mutate(group = row_number()) ->
-data0
-
-    data0 %>% 
-      summarize(x = mean(x, na.rm = T)) %>% 
-      mutate(group = row_number()) ->
-      data
-
-   cols_to_keep <- setdiff(names(data), c("x"))
-   
-    xmean <- lapply(seq_len(nrow(data)), function(i) {
-      xmean_segment <- create_xvlines(data$x[i])
-      cbind(xmean_segment, unclass(data[i, cols_to_keep]))
-      
-    })
-    do.call(rbind, xmean)
-    
-do.call(rbind, xmean) %>% 
-  ggplot() +
-  aes(x = x, y = y) +
-  geom_point(data = data0, aes(y = 2)) +
-  geom_segment(aes(xend = xend, yend = yend),
-               linetype = "dashed")
-```
-
-
-
----
-
-
-```{r}
-geom_xmean <- function(mapping = NULL, data = NULL, stat = "xmean", 
-                        position = "identity", ..., r = 1,  
-                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
-                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
-  layer(
-    data = data, 
-    mapping = mapping, 
-    stat = stat, 
-    geom = GeomSegment, 
-    position = position, 
-    show.legend = show.legend, 
-    inherit.aes = inherit.aes, 
-    params = list(
-      arrow = arrow, 
-      lineend = lineend, 
-      linejoin = linejoin, 
-      na.rm = na.rm, 
-      ...
-    )
-  )
-}
-```
-
-
----
-
-`r chunk_reveal("use_xmean")`
-
-```{r use_xmean, include=T}
-set.seed(1244)
-tibble(
-  x = runif(5, max = 10),
-  y = runif(5, max = 10)
-) %>% 
-  ggplot() + 
-  aes(x = x, y = y) +
-  geom_point() +
-  geom_xmean() +
-  geom_xmean(color = "blue", linetype = "dashed",
-             size = 2) +
-  geom_xmean(color = "magenta", 
-             linetype = "dotted", size = 3)
-```
-
-
-
----
-
-
-
-
----
-
-
-
-`r chunk_reveal("hi", break_type = 1, title = "### Roger Peng's stuff")`
-
-```{r hi, include=F}
-library(grid)
-GeomMyPoint <- ggproto("GeomMyPoint", Geom,
-                       required_aes = c("x", "y"),
-                       default_aes = aes(shape = 1),
-                       draw_key = draw_key_point,
-                       draw_panel = function(data, panel_scales, coord) {
-                         ## Transform the data first
-                         coords <- coord$transform(data, panel_scales)
-
-                         ## Let's print out the structure of the 'coords' object
-                         str(coords)
-
-                         ## Construct a grid grob
-                         pointsGrob(
-                           x = coords$x,
-                           y = coords$y,
-                           pch = coords$shape
-                         )
-                       })
-
-geom_mypoint <- function(mapping = NULL, data = NULL, stat = "identity",
-                         position = "identity", na.rm = FALSE,
-                         show.legend = NA, inherit.aes = TRUE, ...) {
-  ggplot2::layer(
-    geom = GeomMyPoint, mapping = mapping,
-    data = data, stat = stat, position = position,
-    show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
-  )
-
-}
-
-library(tidyverse)
-tibble(x = 1:3, y = x*-2) %>%
-  ggplot() +
-  aes(x = x, y = y) +
-  geom_mypoint()
-```
-
 
 
 
