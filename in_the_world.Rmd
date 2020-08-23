@@ -1,5 +1,5 @@
 ---
-title: "Flipbooks in the world"
+title: "Flipbooks in the World"
 author: "Evangeline Reynolds"
 date: "7/13/2020"
 output: html_document
@@ -11,23 +11,47 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Me and my students have made a bunch of flipbooks, and we are pretty excited that they are being made out it the world as well!  The {flipbookr} package or its predicesor code base
 
-- [The Tidyverse for Archaeologists, A Guide for Beginners, Japan, Ben Marwick, May 2020](https://benmarwick.github.io/tidyverse-for-archaeology/tidyverse-for-archaeology.html){target=_blank}
+1. [The Tidyverse for Archaeologists, A Guide for Beginners, Japan, Ben Marwick, May 2020](https://benmarwick.github.io/tidyverse-for-archaeology/tidyverse-for-archaeology.html){target=_blank}
 
-- [Dr Rhian Davies (Jumping Rivers): 'Data Viz for better' Presenting at the Royal Statistical Society Merseyside](https://trianglegirl.github.io/presentations/2020-07-01-data-viz-for-better/2020-05-12-florence-and-data-viz.html#1){target=_blank}
+1. [Dr Rhian Davies (Jumping Rivers): 'Data Viz for better' Presenting at the Royal Statistical Society Merseyside](https://trianglegirl.github.io/presentations/2020-07-01-data-viz-for-better/2020-05-12-florence-and-data-viz.html#1){target=_blank}
 
-- [Data Visualization with R and ggplot2 Jessica Minnier, PhD & Meike Niederhausen, PhD OCTRI Biostatistics, Epidemiology, Research & Design (BERD) Workshop](https://jminnier-berd-r-courses.netlify.app/04-ggplot/04_ggplot_slides.html#1){target=_blank}
+1. [Data Visualization with R and ggplot2 Jessica Minnier, PhD & Meike Niederhausen, PhD OCTRI Biostatistics, Epidemiology, Research & Design (BERD) Workshop](https://jminnier-berd-r-courses.netlify.app/04-ggplot/04_ggplot_slides.html#1){target=_blank}
 
-- [Tidy Geospatial Networks in R Introducing the sfnetworks package Lucas van der Meer, Lorena Abad, Andrea Gilardi, Robin Lovelace 2020-06-16 for e-Rum2020 statellite event: Hackathon on Spatial Networks](https://sfnetworks.github.io/sfnetworks-webinar/slides#1){target=_blank}
+1. [Tidy Geospatial Networks in R Introducing the sfnetworks package Lucas van der Meer, Lorena Abad, Andrea Gilardi, Robin Lovelace 2020-06-16 for e-Rum2020 statellite event: Hackathon on Spatial Networks](https://sfnetworks.github.io/sfnetworks-webinar/slides#1){target=_blank}
 
-- [The Hirschey Lab](https://github.com/matthewhirschey/tidybiology-meetup/blob/7d0a51fb65e25615ad65dae49a92980a5b382096/2020_02/code/prism_plot_flipbook.Rmd){target=_blank} - The Hirschey Lab studies different aspects of metabolic control, mitochondrial signaling, and cellular processes regulating human health and disease
+1. [The Hirschey Lab](https://github.com/matthewhirschey/tidybiology-meetup/blob/7d0a51fb65e25615ad65dae49a92980a5b382096/2020_02/code/prism_plot_flipbook.Rmd){target=_blank} - The Hirschey Lab studies different aspects of metabolic control, mitochondrial signaling, and cellular processes regulating human health and disease
 
-- [OCTRI Biostatistics, Epidemiology, Research & Design - Jessica Minnier](https://jminnier-berd-r-courses.netlify.com/04-ggplot/04_ggplot_slides.html#1){target=_blank} - Assistant Professor of Biostatistics, OHSU
+1. [OCTRI Biostatistics, Epidemiology, Research & Design - Jessica Minnier](https://jminnier-berd-r-courses.netlify.com/04-ggplot/04_ggplot_slides.html#1){target=_blank} - Assistant Professor of Biostatistics, OHSU
 
-- [Data Wrangling and Visualisation in R Oxford IT Services - Justin Miller](https://justinmillar.github.io/ox-stats-r-workshop/#1){target=_blank} - Post-doc researcher with the Malaria Atlas Project
+1. [Data Wrangling and Visualisation in R Oxford IT Services - Justin Miller](https://justinmillar.github.io/ox-stats-r-workshop/#1){target=_blank} - Post-doc researcher with the Malaria Atlas Project
 
-- [R Course for INDEC (Instituto Nacional de Estadistica y Census Republica Argentina)](https://github.com/pablotis/Curso_R_INDEC/blob/a6dd8eadff200ceaac13e8f8d548aed8c257f243/Clase%204/Clase_4_Presentacion.Rmd){target=_blank}
+1. [R Course for INDEC (Instituto Nacional de Estadistica y Census Republica Argentina)](https://github.com/pablotis/Curso_R_INDEC/blob/a6dd8eadff200ceaac13e8f8d548aed8c257f243/Clase%204/Clase_4_Presentacion.Rmd){target=_blank}
 
-- [Derek Ogle, Author of fishR: R for fisheries analysis](https://github.com/EvaMaeRey/flipbookr/issues/17){target=_blank}
+1. [Derek Ogle, Author of fishR: R for fisheries analysis](https://github.com/EvaMaeRey/flipbookr/issues/17){target=_blank}
+
+1. [Visualising Leaders: Archigos (A Database of National Leaders) meets ggplot](https://rww.science/xaringan/ds-archigos/#43) - Robert W. Walker
+Associate Professor of Quantitative Methods, Atkinson Graduate School of Management, Willamette University
+
+1. [R-Ladies AKL](https://cmjt.github.io/slides/rladies#27) - Charlotte M. Jones-Todd, University of Auckland
+
+1. [Intro to R & Plotting Data](https://github.com/mikemahoney218/mm218.dev/blob/3087a58410f0ef67d9210f81ecd02f0cfab17de6/static/ids/01/01-intro-plotting.Rmd) - Mike Mahoney analyst at Wayfair, Inc.
+
+1. [Covid racing bar chart](https://vivianchiou.github.io/shiny_web/slide_flipbookr.html#36) - Taner Yee, Taiwan (?)
+
+1. [Pie Chart](https://github.com/rfaridi/factcheckbd/blob/27f385984cd83b626f3d5110e971c6f1149aeba6/static/slides/demo_ggplot2_pie1.rmd) - Rushad Faridi, University of Dhaka, Dhaka, Bangladesh
+
+1. [A bridge between politics, society, and statistics](https://github.com/zmeers/numbat_talk/blob/abbd450e5caf90112acb54b9fd9feb534cd35d85/presentation.Rmd) - Zoe Meers, United States Studies Centre, University of Sydney
+
+1. [Incorporating flipbooks in learnR tutorials](https://cbdrh.shinyapps.io/demo-tutorial/) - Mark Hanly
+
+1. [Recreating Nightingale's Coxcombs](https://github.com/edwardgunning/FlorenceNightingale/blob/405226e726f9b388b5a013df5ab2c91d8b331e04/YRS%20Presentation/FlipBookPresentation.Rmd) - Edward Gunning, University of Limerick, CRT in foundations of Data Science
+
+1. University of Chicago MACS 30500 Course: Computing for the Social Sciences, Benjamin Soltoff, University of Chicago, 
+
+    - [Text analysis: classification and topic modeling](https://cfss.uchicago.edu/slides/text-analysis-classification-and-topic-modeling/#1) 
+    - [Getting data from the web: API access](https://cfss.uchicago.edu/slides/getting-data-from-the-web-api-access/#50)
+
+
 
 
 Additionally, our in-house flipbooks have been linked to from other resources:

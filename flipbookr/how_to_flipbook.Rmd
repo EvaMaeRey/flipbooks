@@ -1,5 +1,6 @@
 ---
-title: "A getting started with {flipbookr}"
+title: "Easy Flipbook Recipes"
+subtitle: "with {flipbookr} and {xaringan}"
 author: "Gina Reynolds, August 2020"
 output:
   xaringan::moon_reader:
@@ -15,6 +16,7 @@ output:
 
 ```{r setup, include = FALSE}
 library(flipbookr)
+library(tidyverse)
 
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3)
 ```
@@ -22,9 +24,17 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment =
 
 class: inverse, center, middle
 
+# This set of slides is aimed at helping you get started making flipbooks with {flipbookr}.  
 
+---
+class: inverse, center, middle
 
-# This set of slides is aimed at helping you get started with {flipbookr}.  It will show you the text that you'll use in your source .Rmd document and will show you the flipbook result.
+# It will show you what's needed in your source .Rmd document...
+
+---
+class: inverse, center, middle
+
+# ...and what to expect for the flipbooked result.
 
 
 ---
@@ -42,27 +52,95 @@ class: inverse
 ##- and slides with a *light background* demo the *flipbook experience* that you'll create.
 
 ---
-class: inverse, middle, center
+class: inverse
 
 
-# Set up
+# I assume that you are familiar with:
 
---
-
-#### (The template will give you this too once you have installed flipbookr.  File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook  But let's have a look.)
+##- [the R programming language]()
+##- [knitr and rmarkdown](https://bookdown.org/yihui/rmarkdown/) which let you comingle prose and code, and compile to documents with prose, code, output and more!
 
 ---
 class: inverse
 
-### YAML metadata will look like this 
+## If the {xaringan} package is new to you, things might feel a little more foreign.
+
+--
+
+## {xaringan} translates an .Rmd file to an .html slide show.  
+
+--
+
+## For background on {xaringan} you might first check out [an introduction](https://bookdown.org/yihui/rmarkdown/xaringan.html) and later come back to a [styling guide](https://arm.rbind.io/slides/xaringan.html#1)
+
+
+
+
+
+---
+class: inverse, middle, center
+
+# Okay. 
+
+---
+class: inverse, middle, center
+
+# Ready to cook up some flipbooks?
+
+
+---
+class: inverse, middle, center
+
+# Let's get started!
+
+---
+class: inverse
+
+## Step 0: Installing {flipbookr} and {xaringan}
+
+--
+
+- ### In your R console:
+
+```r
+install.packages("xaringan")
+install.packages("remotes") # allows you to install development packages from github
+remotes::install_github("EvaMaeRey/flipbookr")
+```
+
+--
+
+- ### Note: you probably don't need to update dependency packages when installing {flipbookr}, i.e. select option three, 'don't update' if prompted.
+
+--
+
+- ### Restart R.  
+
+--
+
+- ### Congrats! The foundation is laid for flipbooking! 
+
+
+
+---
+class: inverse, middle, center
+
+
+# Step 1. Set up
+
+
+---
+class: inverse
+
+## 1a. At the top of your .Rmd file use a YAML like this:
 
 
 
 ````markdown
 ---
-title: "How to Flipbook"
+title: "My First Flipbook"
 subtitle: "With flipbookr and xaringan"
-author: "Gina Reynolds, December 2019"
+author: "Your name here"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -75,17 +153,20 @@ output:
 ---
 ````
 
+--
+
+### This declares your document output to be an html {xaringan} slide show.
 
 ---
 class: inverse
 
-## setup
+## 1b. setup code chunk
 
-#### Your set up code chunk loads {flipbookr} and sets some knitr defaults
 
 ````markdown
 ```{r setup, include = FALSE}`r ''`
 library(flipbookr)
+library(tidyverse)
 
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
@@ -93,85 +174,291 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
 ```
 ````
 
+--
+
+### Your setup code chunk loads {flipbookr}, other packages (like the tidyverse here) and sets some knitr defaults.
+
+
+
 ---
 class: inverse
 
-## A source code chunk
-
-#### We'll refer to this code chunk later.  We don't want to see this chunk itself, so, you can set `include = FALSE`
+## 1c. css code chunk
 
 ````markdown
-```{r cars, include = FALSE}`r ''`
-library(tidyverse)
+```{css, eval = TRUE, echo = FALSE}`r ''`
+.remark-code{line-height: 1.5; font-size: 80%}
 
-cars %>% 
-  ggplot() +
-  aes(x = speed) +
-  aes(y = dist) +
-  geom_point(shape = 21,
-             size = 7, #BREAK2
-             color = "white", #BREAK3
-             alpha = .8 #BREAK4
-             ) +
-  aes(fill = speed) +
-  scale_fill_viridis_c() +
-  theme_minimal()
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
 ```
 ````
 
+--
+
+### css stands for cascading style sheets (you'll see that in the YAML too), and this code chunk helps define the look of the html document you'll ultimately produce. 
+
+--
+
+### In this chunk, you can quickly adjust the font size for the code that you'll be revealing.  Now it is set to 80%.
+
+---
+class: inverse, middle, center
+
+# Step 2: building a code pipeline in a source code chunk
+
 ---
 class: inverse
 
+### A *source* code chunk, named my_cars with a pipeline of code will serve as the material to be flipbooked. 
 
-
-
-### In your .Rmd:
-
-```markdown
-``r 'r chunk_reveal(chunk_name = "cars", title = "## Our first flipbook!")'``
-``` 
-
-
-
-
-
----
-
-
-`r chunk_reveal("cars", title = "## Our first flipbook!")`
-
-```{r cars, include=FALSE}
-library(tidyverse)
-
+````markdown
+```{r my_cars, include = FALSE}`r ''`
 cars %>% 
   ggplot() +
   aes(x = speed) +
   aes(y = dist) + #BREAK
-  geom_point(shape = 21,
+  geom_point(
+             shape = 21,
              size = 7, #BREAK2
              color = "white", #BREAK3
              alpha = .8 #BREAK4
              ) + #BREAK
-  aes(fill = speed) + #BREAK
-  scale_fill_viridis_c() + #BREAK
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
   theme_minimal() #BREAK
 ```
+````
+
+--
+
+#### We'll refer to this code chunk later.  We don't want to see this chunk itself, so you should set `include = FALSE`
+
+
+---
+class: inverse, middle, center
+
+# Step 3: Ask for flipbooked version of source code
+
+---
+class: inverse
+
+
+### In your .Rmd use the {flipbookr} function `chunk_reveal` *inline* as follows, referring to the source code chunk that you have prepared by name. 
+
+```markdown
+---
+
+``r 'r chunk_reveal(chunk_name = "my_cars", title = "### First flipbook!")'``
+``` 
+
+
+--
+
+### Make sure to indicate you want a slide break before the inline code. The slide break is indicated with three dashes, '---' at the beginning of a line with no trailing spaces as shown above.
+
+--
+
+### Let's see the result...
+
+
+---
+
+```{r my_cars, include=FALSE}
+cars %>% 
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) + #BREAK
+  geom_point(
+             shape = 21,
+             size = 7, #BREAK2
+             color = "white", #BREAK3
+             alpha = .8 #BREAK4
+             ) + #BREAK
+  aes(fill = speed) + 
+  scale_fill_viridis_c() + 
+  theme_minimal() #BREAK
+```
+
+`r chunk_reveal("my_cars", title = "### First flipbook!")`
+
+
+
+
+---
+class: inverse, center, middle
+
+# Step 4: Modify the recipe
+
+---
+class: inverse
+
+## We've looked at the *classic* flipbook recipe -- what `chunk_reveal` gives us when we use most the *defaults*.
+
+--
+
+## The classic flipbook is a side-by-side *code-output* reveal, where break points are determined *automatically*, where parentheses are balanced at the ends of lines.  
+
 
 
 
 ---
 class: inverse
 
-## Refer to same chunk, 'cars', get different break behavior
+## Let's change the recipe.  
+
+--
+
+### Refering to the same chunk, 'cars', we get different build behavior by setting the `break_type` argument to `"user"`.  
+
+```markdown
+---
+
+``r 'r chunk_reveal("my_cars", break_type = "user", title = "### Another code movie!")'``
+``` 
+
+--
+
+### When break_type = "user", flipbookr's chunk_reveal looks for the special comment *#BREAK* back in the source code chunk, and pauses sequentially at the *user defined* breaks.
+
+--
+
+### Let's see the result... (you might 'knit' your .Rmd now)
+
+---
+
+`r chunk_reveal("my_cars", break_type = "user", title = "### Another code movie!")`
+
+
+---
+class: inverse
+
+### Let's change the recipe again.  Referring to same chunk, 'cars', get different build behavior by setting the `break_type` argument to `"non_seq"`.  
 
 ### In your .Rmd:
 
 ```markdown
-``r 'r chunk_reveal("cars", break_type = "non_seq", title = "## user defined reveal (before we saw auto)")'``
+``r 'r chunk_reveal("my_cars", break_type = "non_seq")'``
 ``` 
+
+--
+
+### Here the comments #BREAK2, #BREAK3 etc. in the 'my_cars' code chunk inform flipbookr of which lines of code should be displayed on which frames of the flipbook. 
+
+
+--
+
+### Let's see the result ...
 
 ---
 
-`r chunk_reveal("cars", break_type = "non_seq", title = "## user defined reveal (before we saw auto)")`
+`r chunk_reveal("my_cars", break_type = "non_seq")`
 
+---
+class: inverse
+
+## The final recipe we'll look at is changing the `display_type` from its default, which is `c("code", "output")`.
+
+---
+class: inverse
+
+
+### Let's build a new source code chunk, then *only show one panal* -- the output.  The set up looks like this. 
+
+````markdown
+```{r my_mtcars, include = F}`r ''`
+mtcars %>% 
+  ggplot() +
+  aes(x = factor(cyl)) +
+  aes(y = mpg) +
+  geom_boxplot() +
+  geom_jitter(alpha = .5,
+              width = .25)
+```
+````
+
+
+```{r my_mtcars, include = F}
+mtcars %>% 
+  ggplot() +
+  aes(x = factor(cyl)) +
+  aes(y = mpg) +
+  theme_gray(base_size = 20) +
+  geom_boxplot() +
+  geom_jitter(alpha = .5,
+              width = .25)
+```
+
+--
+
+#### Then request flipbooking with chunk_reveal and using the display type argument to get *only the output panal*. 
+
+```markdown
+---
+
+``r 'r chunk_reveal("my_mtcars", display_type = "output")'``
+```
+
+
+--
+
+### Let's look at the flipbook ...
+
+---
+
+`r chunk_reveal("my_mtcars", display_type = "output")`
+
+
+
+
+---
+class: inverse, 
+
+# Congratulations! 
+
+--
+
+### Now your are cooking with {flipbookr} and {xaringan} having gone through these steps:
+
+###- Step 0: Installing {flipbookr} and {xaringan}
+###- Step 1: .Rmd set up (a. YAML, b. setup code chunk, c. css code chunk)
+###- Step 2: Write a source code to be flipbooked
+###- Step 3: use {flipbookr}'s chunk_reveal to build flipbook (upon knit)
+
+
+---
+class: inverse, 
+
+# *And* you have learned *four recipes*!
+
+--
+
+###1. *The classic* (defaults)
+--
+
+###2. *Let me tell you how I want it* **break_type = "user", with #BREAK comments in source chunk**
+
+--
+
+###3. *Now really mix it up* **break_type = "non_seq", with #BREAK2, #BREAK3 comments in source chunk**
+
+--
+
+###2. *Hold the code* **display_type = "output"**
+
+
+
+---
+class: inverse
+
+# Spread the word and giving feedback
+
+### Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgment, for example, *The 'flipbooked' portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*  
+
+### And if you're willing, consider sharing your work on social media w/ #flipbookr tag.
+
+### Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr 
 
