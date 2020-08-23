@@ -1,6 +1,6 @@
 ---
 title: "A Very Minimal Flipbook"
-author: "Gina Reynolds, Feb 9, 2020"
+author: "Gina Reynolds, August, 2020"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -13,15 +13,13 @@ output:
 ---
 
 
-
-
 ```{r setup, include=F}
 knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
                       comment = "", cache = F)
 library(flipbookr)
 ```
 
-```{css, eval = TRUE, echo = FALSE}`
+```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 80%}
 
 @media print {
@@ -31,6 +29,7 @@ library(flipbookr)
 }
 ```
 
+# Let's look at some tidyverse pipelines
 
 ```{r}
 library(tidyverse)
@@ -62,9 +61,5 @@ fast_cars %>%
 
 
 
-
-```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 90%}
-```
 
 
