@@ -335,9 +335,10 @@ class: inverse
 
 ### Let's change the recipe again.  Setting the `break_type` argument to `"non_seq"` allows you to define a non sequential order of display in the flipbook. 
 
-### In your .Rmd:
 
 ```markdown
+---
+
 ``r 'r chunk_reveal("my_cars", break_type = "non_seq")'``
 ``` 
 
@@ -363,7 +364,7 @@ class: inverse
 class: inverse
 
 
-### Let's build a *new* source code chunk, "my_mtcars", then *only show one panel* --- the output.  
+### Let's build a *new* source code chunk, "my_mtcars".
 
 ````markdown
 ```{r my_mtcars, include = F}`r ''`
@@ -391,7 +392,7 @@ mtcars %>%
 
 --
 
-#### Then we use `chunk_reveal()` on this the "my_mtcars" code chunk.  Using the display_type = "output" will give us *only the output panel*. 
+#### Then we use `chunk_reveal()` on this the "my_mtcars" code chunk and set display_type = "output" to give us *only the output panel*. 
 
 ```markdown
 ---
@@ -448,15 +449,52 @@ class: inverse,
 
 
 
+
+
 ---
 class: inverse
 
-# Spread the word and giving feedback
+# Afterward: Source for a tiny flipbook and output
 
-### Please help us spread the word about flipbooks.  Consider a quick acknowledgment like: *The 'flipbooked' portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*
+## You might find it useful to at an .Rmd for a full (but tiny) slide show with flipbooks and the resultant html.
+
+##- [.Rmd](https://raw.githubusercontent.com/EvaMaeRey/flipbooks/master/tiny_flipbook.Rmd)
+
+##- [.html](https://evamaerey.github.io/flipbooks/tiny_flipbook.html)
 
 
-### Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr 
+
+---
+class: inverse
+
+## Epilogue: Share your work and learn more recipes
+
+
+### Once you master flipbooking you'll probably want to share your work
+
+--
+
+### But the .html slides that {xaringan} produces aren't contained in a single file, so doing so can be a little tricky! 
+
+--
+
+### Instead a folder of associated files will be created, and this needs to travel with your work.  
+
+---
+class: inverse
+
+## Epilogue: Share your work and learn more recipes
+
+### For more about ways to share your slide shows and for more flipbook recipes consult the template that travels with the {flipbookr} package.  
+
+--
+
+### In RStudio access this .Rmd template via: File -> New File -> RMarkdown -> From Template -> A Minimal Flipbook
+
+--
+
+## You may check out the template rendered to html [here](https://evamaerey.github.io/flipbooks/flipbookr/skeleton.html).
+
 
 ---
 class: inverse
@@ -472,39 +510,11 @@ class: inverse
 ---
 class: inverse
 
-# Source for a tiny flipbook and output
+# Spread the word and giving feedback
 
-## You might find it useful to also look at an .Rmd and the resultant slide show.
-
-##- [.Rmd](EvaMaeRey/flipbookr/flipbooks/tiny_flipbook.Rmd)
-
-##- [.html](https://evamaerey.github.io/flipbooks/tiny_flipbook.html)
-
----
-class: inverse, center, middle
+### Please help us spread the word about flipbooks.  Consider a quick acknowledgment like: *The 'flipbooked' portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*
 
 
-# Epilogue: Share your work
-
----
-class: inverse, center, middle
-
-
-## Once you master flipbooking you'll probably want to share your work
-
---
-
-## But the .html slides that {xaringan} produces aren't contained in a single file, so doing so can be perilous! 
-
---
-
-## Instead a folder of associated files will be created, and this needs to travel with your work.  
-
---
-
-## For more on this topic and also more flipbook recipes consult template that travels with flipbookr.  The rendered output is [here](https://evamaerey.github.io/flipbooks/flipbookr/skeleton#220).
-
-
-
+### Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr 
 
 
