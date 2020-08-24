@@ -19,7 +19,7 @@ knitr::include_graphics(c("figures/column_aesthetics.png"))
 
 <hr>
 
-[The geom pile on](https://evamaerey.github.io/ggplot2_grammar_guide/geoms.html){target="_blank"} is a suppliment to the ggplot grammar guide and shows you a lot of "geoms" that you can use to communicate about your data.  Piling up the geoms allows you to see how plot types relate to one another. 
+[The geom pile on](https://evamaerey.github.io/ggplot2_grammar_guide/geoms.html){target="_blank"} is a supplement to the ggplot grammar guide and shows you a lot of "geoms" that you can use to communicate about your data.  Piling up the geoms allows you to see how plot types relate to one another. 
 
 
 ```{r, out.width="85%", fig.align='center', echo = F}

@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 
 class: inverse, center, middle
 
-# This set of slides is aimed at helping you get started making flipbooks with {flipbookr}.  
+# These slides are aimed at helping you get started making flipbooks with {flipbookr} and {xaringan}.  
 
 ---
 class: inverse, center, middle
@@ -50,7 +50,7 @@ class: inverse
 
 --
 
-##- and slides with a *light background* demo the *flipbook experience* that you'll create.
+##- and slides with a *light background* demo the *flipbook experience* that you'll create upon 'knitting'. 
 
 ---
 class: inverse
@@ -58,8 +58,8 @@ class: inverse
 
 # I assume that you are familiar with:
 
-##- [the R programming language]()
-##- [knitr and rmarkdown](https://bookdown.org/yihui/rmarkdown/) which let you comingle prose and code, and compile to documents with prose, code, output and more!
+##- [the R programming language](https://www.r-project.org/)
+##- [knitr and Rmarkdown](https://bookdown.org/yihui/rmarkdown/) which let you comingle prose and code, and compile to documents with prose, code, output and more!
 
 ---
 class: inverse
@@ -68,7 +68,7 @@ class: inverse
 
 --
 
-## {xaringan} translates an .Rmd file to an .html slide show.  
+## {xaringan} translates an Rmarkdown (.Rmd) file to an .html slide show.  
 
 --
 
@@ -97,7 +97,7 @@ class: inverse, middle, center
 ---
 class: inverse
 
-## Step 0: Installing {flipbookr} and {xaringan}
+## Step 0: Installing {xaringan} and {flipbookr} 
 
 --
 
@@ -111,7 +111,7 @@ remotes::install_github("EvaMaeRey/flipbookr")
 
 --
 
-- ### Note: you probably don't need to update dependency packages when installing {flipbookr}, i.e. select option three, 'don't update' if prompted.
+- ### Note: you probably don't need to update dependency packages when installing {flipbookr}, i.e. select option #3, 'don't update' if prompted.
 
 --
 
@@ -133,8 +133,7 @@ class: inverse, middle, center
 ---
 class: inverse
 
-## 1a. At the top of your .Rmd file use a YAML like this:
-
+## 1a. In an .Rmd file, start with a YAML like this:
 
 
 ````markdown
@@ -156,7 +155,7 @@ output:
 
 --
 
-### This declares your document output to be an html {xaringan} slide show.
+### This declares your output document to be an html {xaringan} slide show.
 
 ---
 class: inverse
@@ -177,7 +176,7 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
 
 --
 
-### Your setup code chunk loads {flipbookr}, other packages (like the tidyverse here) and sets some knitr defaults.
+### Your setup code chunk loads {flipbookr}, and maybe other packages (like the {tidyverse} in this example) and sets some knitr defaults.
 
 
 
@@ -209,12 +208,12 @@ class: inverse
 ---
 class: inverse, middle, center
 
-# Step 2: building a code pipeline in a source code chunk
+# Step 2: building a code pipeline in a 'source' code chunk
 
 ---
 class: inverse
 
-### A *source* code chunk, named my_cars with a pipeline of code will serve as the material to be flipbooked. 
+### A *source* code chunk, named 'my_cars' will serve as the material to be flipbooked. 
 
 ````markdown
 ```{r my_cars, include = FALSE}
@@ -248,7 +247,7 @@ class: inverse, middle, center
 class: inverse
 
 
-### In your .Rmd use the {flipbookr} function `chunk_reveal` *inline* as follows, referring to the source code chunk that you have prepared by name. 
+### In your .Rmd use the {flipbookr} function `chunk_reveal()` *inline* as follows.  Refer to the source code chunk that you have prepared by name. 
 
 ```markdown
 ---
@@ -259,11 +258,11 @@ class: inverse
 
 --
 
-### Make sure to indicate you want a slide break before the inline code. The slide break is indicated with three dashes, '---' at the beginning of a line with no trailing spaces as shown above.
+### Also, indicate you want a slide break before the inline code  as shown above. The slide break is indicated with three dashes, '---' at the beginning of a line with no trailing spaces.
 
 --
 
-### Let's see the result...
+### Let's see the result... (you might 'knit' your .Rmd now)
 
 
 ---
@@ -530,23 +529,21 @@ class: inverse, center, middle
 ---
 class: inverse
 
-## We've looked at the *classic* flipbook recipe -- what `chunk_reveal` gives us when we use most the *defaults*.
+## We've looked at the *classic* flipbook recipe -- what `chunk_reveal()` gives us when basically use *defaults*.
 
 --
 
-## The classic flipbook is a side-by-side *code-output* reveal, where break points are determined *automatically*, where parentheses are balanced at the ends of lines.  
-
-
+## The classic flipbook is a side-by-side *code-output* reveal, where break points are determined *automatically*.  `chunk_reveal()` pauses where parentheses are balanced at ends of lines.  
 
 
 ---
 class: inverse
 
-## Let's change the recipe.  
+## Let's change the recipe. 
 
 --
 
-### Refering to the same chunk, 'cars', we get different build behavior by setting the `break_type` argument to `"user"`.  
+### We get different build behavior by setting the `break_type` argument to `"user"`.  We can refering to the same chunk, 'my_cars'.  
 
 ```markdown
 ---
@@ -556,7 +553,7 @@ class: inverse
 
 --
 
-### When break_type = "user", flipbookr's chunk_reveal looks for the special comment *#BREAK* back in the source code chunk, and pauses sequentially at the *user defined* breaks.
+### When break_type = "user", flipbookr's `chunk_reveal()` looks for the special comment *#BREAK* in the source code chunk, and displays code sequentially at the *user defined* breaks.
 
 --
 
@@ -665,7 +662,7 @@ cars %&gt;%
 ---
 class: inverse
 
-### Let's change the recipe again.  Referring to same chunk, 'cars', get different build behavior by setting the `break_type` argument to `"non_seq"`.  
+### Let's change the recipe again.  Setting the `break_type` argument to `"non_seq"` allows you to define a non sequential order of display in the flipbook. 
 
 ### In your .Rmd:
 
@@ -675,7 +672,7 @@ class: inverse
 
 --
 
-### Here the comments #BREAK2, #BREAK3 etc. in the 'my_cars' code chunk inform flipbookr of which lines of code should be displayed on which frames of the flipbook. 
+### Here the comments #BREAK2, #BREAK3 etc. in the 'my_cars' code chunk inform flipbookr of which lines of code should be displayed in which frames of the flipbook. Lines without such a comment are always displayed.
 
 
 --
@@ -823,7 +820,7 @@ class: inverse
 class: inverse
 
 
-### Let's build a new source code chunk, then *only show one panal* -- the output.  The set up looks like this. 
+### Let's build a *new* source code chunk, "my_mtcars", then *only show one panel* --- the output.  
 
 ````markdown
 ```{r my_mtcars, include = F}
@@ -842,7 +839,7 @@ mtcars %&gt;%
 
 --
 
-#### Then request flipbooking with chunk_reveal and using the display type argument to get *only the output panal*. 
+#### Then we use `chunk_reveal()` on this the "my_mtcars" code chunk.  Using the display_type = "output" will give us *only the output panel*. 
 
 ```markdown
 ---
@@ -965,33 +962,33 @@ class: inverse,
 
 --
 
-### Now your are cooking with {flipbookr} and {xaringan} having gone through these steps:
+### Now your are cooking with {flipbookr} and {xaringan}. We went through these steps:
 
-###- Step 0: Installing {flipbookr} and {xaringan}
-###- Step 1: .Rmd set up (a. YAML, b. setup code chunk, c. css code chunk)
+###- Step 0: Install {flipbookr} and {xaringan}
+###- Step 1: Set up .Rmd (a. YAML, b. setup code chunk, c. css code chunk)
 ###- Step 2: Write a source code to be flipbooked
-###- Step 3: use {flipbookr}'s chunk_reveal to build flipbook (upon knit)
+###- Step 3: Use {flipbookr}'s chunk_reveal to build flipbook (upon knit)
 
 
 ---
 class: inverse, 
 
-# *And* you have learned *four recipes*!
+## *And* you have learned *four flipbook recipes*!
 
 --
 
-###1. *The classic* (defaults)
+###1. *The classic* (defaults code-output reveal at auto break points)
 --
 
-###2. *Let me tell you how I want it* **break_type = "user", with #BREAK comments in source chunk**
-
---
-
-###3. *Now really mix it up* **break_type = "non_seq", with #BREAK2, #BREAK3 comments in source chunk**
+###2. *The picky eater* **break_type = "user", with #BREAK comments in source code chunk** user defines break points
 
 --
 
-###2. *Hold the code* **display_type = "output"**
+###3. *Tossed salad* **break_type = "non_seq", with #BREAK2, #BREAK3 comments in source chunk** user sets order of break points, which may be non sequential
+
+--
+
+###2. *Hold the code* **display_type = "output"** display only an output panel
 
 
 
@@ -1000,11 +997,56 @@ class: inverse
 
 # Spread the word and giving feedback
 
-### Please help us spread the word about flipbooks.  Let your audience know *how* you created your flipbook with a quick acknowledgment, for example, *The 'flipbooked' portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*  
+### Please help us spread the word about flipbooks.  Consider a quick acknowledgment like: *The 'flipbooked' portion of this presentation was created with the new {flipbookr} package.  Get it at remotes::install_github("EvaMaeRey/flipbookr")*
 
-### And if you're willing, consider sharing your work on social media w/ #flipbookr tag.
 
-### Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr
+### Feedback? Contributions? Leave an issue at:  https://github.com/EvaMaeRey/flipbookr 
+
+---
+class: inverse
+
+# Acknowledgments
+
+### Emi Tanaka and Garrick Aden-Buie were critical in getting this project off the ground and have provided much help, support and feedback in the development.
+
+### Tidyverse tools, and especially ggplot2, have been an inspiration for flipbooks. 
+
+### The knitr/Rmarkdown ecosystem are {xaringan} are of course a key infrastructures this project relies on.
+
+---
+class: inverse
+
+# Source for a tiny flipbook and output
+
+## You might find it useful to also look at an .Rmd and the resultant slide show.
+
+##- [.Rmd](EvaMaeRey/flipbookr/flipbooks/tiny_flipbook.Rmd)
+
+##- [.html](https://evamaerey.github.io/flipbooks/tiny_flipbook.html)
+
+---
+class: inverse, center, middle
+
+
+# Epilogue: Share your work
+
+---
+class: inverse, center, middle
+
+
+## Once you master flipbooking you'll probably want to share your work
+
+--
+
+## But the .html slides that {xaringan} produces aren't contained in a single file, so doing so can be perilous! 
+
+--
+
+## Instead a folder of associated files will be created, and this needs to travel with your work.  
+
+--
+
+## For more on this topic and also more flipbook recipes consult template that travels with flipbookr.  The rendered output is [here](https://evamaerey.github.io/flipbooks/flipbookr/skeleton#220).
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
