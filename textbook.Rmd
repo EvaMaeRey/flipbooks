@@ -25,13 +25,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- 3. *Teaching in a quarter system doesn't give you time to mess about.  It's helpful to have step-by-step examples at the ready.* -->
 
-So, you're right. This isn't really a textbook.  It's a collection of flipbooks on data manipulation, visualization, and analysis.  There is hardly any discussion.  Nevertheless, the dynamic examples in flipbooks might be useful and quick reference.  It is for folks that already may know the "what" of what they are trying to get done, but may need a bit of a refresher on the "how".  
+So, you're right. This isn't really a textbook.  It's a collection of flipbooks on data manipulation, visualization, and analysis.  There is hardly any discussion.  Nevertheless, the dynamic examples in flipbooks might be useful and quick reference.  It is for folks that already may know the "what" of what they are trying to get done, but may need a bit of a refresher on the "how".  So an oversell as far as "textbook", but 'R Flipbook Reference' didn't sounds quite as good.
 
-> "I think I have figured it out through the flipbooks you have posted." --- A student
+
+> "I think I have figured it out through the flipbooks you have posted." --- A cool, former student
 
 <!-- The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling --- but also digestible examples --- student may be better positioned to solve analytic problems independently.  -->
 
-So an oversell as far as "textbook", but 'R Flipbook Reference' didn't sounds as good.
 
 
 
