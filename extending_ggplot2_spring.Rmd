@@ -1,0 +1,414 @@
+---
+title: "'extending ggplot2'"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default]
+    nature:
+      ratio: 12:12
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 8, message = FALSE,
+                      warning = FALSE, comment = "", 
+                      cache = F, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+
+
+```{r}
+StatSpring <- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+NULL   
+NULL   
+NULL 
+    if (is.null(params$diameter)) {
+      params$diameter <- 1
+NULL   
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension <- 0.75
+NULL  
+    } else if (params$tension <= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    NULL
+    cols_to_keep <- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      spring_path <- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   diameter, 
+                                   tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+  
+)
+
+
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+StatSprin2 <- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (is.null(  data$diameter)) {
+        data$diameter <- 1
+    }
+    if (any(  data$diameter == 0)) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(  data$tension)) {
+        data$tension <- 0.75
+    }
+    if (any(  data$tension <= 0)) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+NULL
+NULL 
+NULL
+          }
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, 
+                           n = 50) {
+    NULL
+    cols_to_keep <- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      spring_path <- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   data$diameter[i],
+                                   data$tension[i], n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend"),
+  optional_aes = c("diameter", "tension")
+)
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+GeomSpring <- ggproto("GeomSpring", Geom,
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (is.null(data$group)) {
+      data$group <- seq_len(nrow(data))
+    }
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    data
+  },
+     draw_panel = function(data, panel_params, coord, n = 50, arrow = NULL,
+                        lineend = "butt", linejoin = "round", linemitre = 10,
+                        na.rm = FALSE) {
+    cols_to_keep <- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      spring_path <- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   data$diameter[i],
+                                   data$tension[i], n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    springs <- do.call(rbind, springs)
+    GeomPath$draw_panel(
+      data = springs, panel_params = panel_params, 
+      coord = coord, arrow = arrow, lineend = lineend, 
+      linejoin = linejoin, linemitre = linemitre, 
+      na.rm = na.rm
+    )
+  },
+  required_aes = c("x", "y", "xend", "yend"),
+  default_aes = aes(colour = "black", size = 0.5, 
+    linetype = 1L, alpha = NA, diameter = 1, tension = 0.75
+  )
+)
+```
+
+
+
+
+
+---
+
+```{r}
+geom_spring <- function(mapping = NULL, data = NULL, stat = "spring", 
+                        position = "identity", ..., diameter = 1, tension = 0.75, 
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      diameter = diameter, 
+      tension = tension, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+---
+
+
+```{r use_spring, include=T}
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+  aes(xend = xend, yend = yend) +
+  geom_spring() +
+  geom_spring(tension = .9, diameter = 2, 
+              color = "magenta", alpha = .7)
+```
+
+
+---
+
+
+---
+
+```{r}
+StatSpring <- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$diameter)) {
+      params$diameter <- 1
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension <- 0.75
+    } else if (params$tension <= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    if (is.null(params$n)) {
+      params$n <- 50
+    } else if (params$n <= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    cols_to_keep <- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs <- lapply(seq_len(nrow(data)), function(i) {
+      spring_path <- create_spring(data$x[i], data$y[i], data$xend[i], 
+                                   data$yend[i], diameter, tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+)
+```
+
+
+
+
+
+---
+
+
+```{r create_spring, include=T}
+create_spring <- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension <= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+  # Calculate direct length of segment
+  length <- sqrt((x - xend)^2 + (y - yend)^2)
+  
+  # Figure out how many revolutions and points we need
+  n_revolutions <- length / (diameter * tension)
+  n_points <- n * n_revolutions
+  
+  # Calculate sequence of radians and x and y offset
+  radians <- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x <- seq(x, xend, length.out = n_points)
+  y <- seq(y, yend, length.out = n_points)
+  
+  # Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2, 
+  xend = 10, yend = 6,
+  diameter = 2, 
+  tension = 0.75, n = 20
+) %>% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_path()
+```
+
+---
+
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 30%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

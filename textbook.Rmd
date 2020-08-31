@@ -1,6 +1,6 @@
 ---
-title: "The R Flipbook Textbook"
-subtitle: "A introduction to data manipulation, visualization, and statistical analysis with dynamic examples"
+title: "R Flipbook Textbook"
+subtitle: "Dynamic examples of data manipulation, visualization, and statistical analysis"
 author: "[Gina Reynolds](https://evangelinereynolds.netlify.com/)"
 date: "March 2020"
 output: 
@@ -25,17 +25,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- 3. *Teaching in a quarter system doesn't give you time to mess about.  It's helpful to have step-by-step examples at the ready.* -->
 
-The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling --- but also digestible examples --- student may be better positioned to solve analytic problems independently.
+So, you're right. This isn't really a textbook.  It's a collection of flipbooks on data manipulation, visualization, and analysis.  There is hardly any discussion.  Nevertheless, the dynamic examples in flipbooks might be useful and quick reference.  It is for folks that already may know the "what" of what they are trying to get done, but may need a bit of a refresher on the "how".  
 
-> "I think I have figured it out through the flipbooks you have posted."
+> "I think I have figured it out through the flipbooks you have posted." --- A student
 
-At the moment calling this work a "textbook" is a bit of an overstatement. The source material for the book project was a motley crew of flipbooks that I developed *ad-hoc* for teaching. Organizing these one-off projects to logically hang together is currently a work in progress.  
+<!-- The new code display tools, [flipbooks](https://evamaerey.github.io/flipbooks/about){target="_blank"}, deliver bite-sized pieces because they show code step-by-step and side-by-side with output.  Moving incrementally through material is more comprehensible and less overwhelming.  With compelling --- but also digestible examples --- student may be better positioned to solve analytic problems independently.  -->
 
-Also, the material doesn't have a lot of context or discussion --- *flipbooks* were originally only focused on communicating *how to get things done in R*. So this textbook will benefit from more context and discussion alongside the coding pipelines now dominating book. Hopefully still useful. 
+So an oversell as far as "textbook", but 'R Flipbook Reference' didn't sounds as good.
+
+
+
+<!-- At the moment calling this work a "textbook" is a bit of an overstatement. The source material for the book project was a motley crew of flipbooks that I developed *ad-hoc* for teaching. Organizing these one-off projects to logically hang together is currently a work in progress.   -->
+
+<!-- Also, the material doesn't have a lot of context or discussion --- *flipbooks* were originally only focused on communicating *how to get things done in R*. So this textbook will benefit from more context and discussion alongside the coding pipelines now dominating book. Hopefully still useful.  -->
 
 <!-- Please feel free to be in touch with suggestions on *The R Flipbook Textbook's* organization or content.  -->
 
-*Are you an educator, but content is not appropriate for your course?  Learn more about building your own flipbooks with {flipbookr} [here](https://evamaerey.github.io/flipbooks/about){target="_blank"}*.
+*Are you an educator, but content is not appropriate for your course?  Learn more about building your own flipbooks with {flipbookr} [here](https://evamaerey.github.io/flipbooks/flipbook_recipes#1){target="_blank"}*.
 
 
 <!-- # Case Studies -->
@@ -51,9 +57,9 @@ Also, the material doesn't have a lot of context or discussion --- *flipbooks* w
 
 # [Data manipulation and management](https://evamaerey.github.io/data_manipulation/about){target="_blank"}
 
-> Wrangle. “From Middle English wranglen, from Low German wrangeln (“to wrangle”), frequentative form of Low German wrangen (“to struggle, make an uproar”) and German rangeln (“to wrestle”).
+> Wrangle. "From Middle English wranglen, from Low German wrangeln ("to wrangle"), frequentative form of Low German wrangen ("to struggle, make an uproar") and German rangeln ("to wrestle").
 
-*A data project often actually starts with some perhaps not-so-good stuff, understanding your data, data manipulation and management.  Sometimes this is called "data wrangling" because of the possible struggles that arise in getting your data ready for the fun part --- data visualization and analysis.*
+*A data project often actually starts with a part than might present some frustration: data cleaning, manipulation, and management.  Sometimes this is called "data wrangling" because of the possible struggles that arise in getting your data ready for data visualization and analysis.  But wrangling can be satisfying.  You might find yourself liking it!*
 
 
 
@@ -94,18 +100,12 @@ Also, the material doesn't have a lot of context or discussion --- *flipbooks* w
 
 
 
-# [Visualization](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
+# [Visualization with the Grammar of Graphics and ggplot2](https://evamaerey.github.io/ggplot2_grammar_guide/about){target="_blank"}
 
 > The greatest value of a picture is when it forces us to notice what we never expected to see. --- John Tukey
 
 
-Data visualization is a powerful tool for analysis.  Let's dive in. 
-
-
-
-### The "Grammar of Graphics" framework
-
-*The "grammar of graphics" has helped data visualizers to understanding and use the deep connections between chart types. ggplot2 is a popular implementation of the grammar of graphics.  "A {ggplot2} grammar guide" is designed to orient you to organization (grammar if you will) of this particular implementation. * 
+Data visualization is a powerful tool for analysis.  The "grammar of graphics" has helped data visualizers to understanding and use the deep connections between chart types. and ggplot2 is a popular implementation of the grammar of graphics
 
 <!-- - [What's a pie chart?](https://evamaerey.github.io/pie_chart/pie_chart.html){target="_blank"} -->
 

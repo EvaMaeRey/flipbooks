@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>‘extending ggplot2’</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+```r
+StatSpring &lt;- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+NULL   
+NULL   
+NULL 
+    if (is.null(params$diameter)) {
+      params$diameter &lt;- 1
+NULL   
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension &lt;- 0.75
+NULL  
+    } else if (params$tension &lt;= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    NULL
+    cols_to_keep &lt;- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+      spring_path &lt;- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   diameter, 
+                                   tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+  
+)
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```r
+StatSprin2 &lt;- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (is.null(  data$diameter)) {
+        data$diameter &lt;- 1
+    }
+    if (any(  data$diameter == 0)) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(  data$tension)) {
+        data$tension &lt;- 0.75
+    }
+    if (any(  data$tension &lt;= 0)) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+NULL
+NULL 
+NULL
+          }
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, 
+                           n = 50) {
+    NULL
+    cols_to_keep &lt;- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+      spring_path &lt;- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   data$diameter[i],
+                                   data$tension[i], n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend"),
+  optional_aes = c("diameter", "tension")
+)
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```r
+GeomSpring &lt;- ggproto("GeomSpring", Geom,
+  setup_params = function(data, params) {
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (is.null(data$group)) {
+      data$group &lt;- seq_len(nrow(data))
+    }
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    NULL
+    data
+  },
+     draw_panel = function(data, panel_params, coord, n = 50, arrow = NULL,
+                        lineend = "butt", linejoin = "round", linemitre = 10,
+                        na.rm = FALSE) {
+    cols_to_keep &lt;- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+      spring_path &lt;- create_spring(data$x[i], data$y[i], 
+                                   data$xend[i], data$yend[i], 
+                                   data$diameter[i],
+                                   data$tension[i], n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    springs &lt;- do.call(rbind, springs)
+    GeomPath$draw_panel(
+      data = springs, panel_params = panel_params, 
+      coord = coord, arrow = arrow, lineend = lineend, 
+      linejoin = linejoin, linemitre = linemitre, 
+      na.rm = na.rm
+    )
+  },
+  required_aes = c("x", "y", "xend", "yend"),
+  default_aes = aes(colour = "black", size = 0.5, 
+    linetype = 1L, alpha = NA, diameter = 1, tension = 0.75
+  )
+)
+```
+
+
+
+
+
+---
+
+
+```r
+geom_spring &lt;- function(mapping = NULL, data = NULL, stat = "spring", 
+                        position = "identity", ..., diameter = 1, tension = 0.75, 
+                        n = 50, arrow = NULL, lineend = "butt", linejoin = "round", 
+                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  layer(
+    data = data, 
+    mapping = mapping, 
+    stat = stat, 
+    geom = GeomPath, 
+    position = position, 
+    show.legend = show.legend, 
+    inherit.aes = inherit.aes, 
+    params = list(
+      diameter = diameter, 
+      tension = tension, 
+      n = n, 
+      arrow = arrow, 
+      lineend = lineend, 
+      linejoin = linejoin, 
+      na.rm = na.rm, 
+      ...
+    )
+  )
+}
+```
+
+---
+
+
+
+```r
+set.seed(123)
+tibble(
+  x = runif(5, max = 10),
+  y = runif(5, max = 10),
+  xend = runif(5, max = 10),
+  yend = runif(5, max = 10),
+  class = 1:5
+) %&gt;% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_point(aes(x = xend, y = yend), color = "red") +
+  facet_wrap(~class) +
+  aes(xend = xend, yend = yend) +
+  geom_spring() +
+  geom_spring(tension = .9, diameter = 2, 
+              color = "magenta", alpha = .7)
+```
+
+&lt;img src="extending_ggplot2_spring_files/figure-html/use_spring-1.png" width="576" /&gt;
+
+
+---
+
+
+---
+
+
+```r
+StatSpring &lt;- ggproto("StatSpring", Stat, 
+  setup_params = function(data, params) {
+    if (is.null(params$diameter)) {
+      params$diameter &lt;- 1
+    } else if (params$diameter == 0) {
+      rlang::abort("Springs cannot be defined with a diameter of 0")
+    }
+    if (is.null(params$tension)) {
+      params$tension &lt;- 0.75
+    } else if (params$tension &lt;= 0) {
+      rlang::abort("Springs must be defined with a tension greater than 0")
+    }
+    if (is.null(params$n)) {
+      params$n &lt;- 50
+    } else if (params$n &lt;= 0) {
+      rlang::abort("Springs must be defined with `n` greater than 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group &lt;- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, diameter = 1, tension = 0.75, 
+                           n = 50) {
+    cols_to_keep &lt;- setdiff(names(data), c("x", "y", "xend", "yend"))
+    springs &lt;- lapply(seq_len(nrow(data)), function(i) {
+      spring_path &lt;- create_spring(data$x[i], data$y[i], data$xend[i], 
+                                   data$yend[i], diameter, tension, n)
+      cbind(spring_path, unclass(data[i, cols_to_keep]))
+    })
+    do.call(rbind, springs)
+  },
+  required_aes = c("x", "y", "xend", "yend")
+)
+```
+
+
+
+
+
+---
+
+
+
+```r
+create_spring &lt;- function(x, y, xend, yend, diameter, tension, n) {
+  if (tension &lt;= 0) {
+    rlang::abort("`tension` must be larger than 0")
+  }
+  # Calculate direct length of segment
+  length &lt;- sqrt((x - xend)^2 + (y - yend)^2)
+  
+  # Figure out how many revolutions and points we need
+  n_revolutions &lt;- length / (diameter * tension)
+  n_points &lt;- n * n_revolutions
+  
+  # Calculate sequence of radians and x and y offset
+  radians &lt;- seq(0, n_revolutions * 2 * pi, length.out = n_points)
+  x &lt;- seq(x, xend, length.out = n_points)
+  y &lt;- seq(y, yend, length.out = n_points)
+  
+  # Create the new data
+  data.frame(
+    x = cos(radians) * diameter/2 + x,
+    y = sin(radians) * diameter/2 + y
+  )
+}
+
+create_spring(
+  x = 4, y = 2, 
+  xend = 10, yend = 6,
+  diameter = 2, 
+  tension = 0.75, n = 20
+) %&gt;% 
+  ggplot() + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_path()
+```
+
+&lt;img src="extending_ggplot2_spring_files/figure-html/create_spring-1.png" width="576" /&gt;
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 30%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "12:12",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

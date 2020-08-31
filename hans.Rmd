@@ -1,0 +1,93 @@
+---
+title: "Hans"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, dev = "svg", fig.ext = "svg")
+library(flipbookr)
+library(tidyverse)
+library(gapminder)
+```
+
+---
+
+https://www.youtube.com/watch?v=jbkSRLYSojo
+
+---
+
+
+```{r}
+talk <- c("So, here we go",
+"First an axis for health: life exectancy ...",
+"And down here an axis for wealth: income per person ...") %>% 
+  paste("### ", .)
+
+```
+
+
+
+---
+
+`r chunk_reveal("build")`
+
+
+```{r build, include = F}
+library(gapminder)
+gapminder %>% 
+  filter(year == 2057) %>%
+  ggplot() + #BREAK
+  aes(y = lifeExp) + #BREAK
+  aes(x = gdpPercap) +
+  scale_x_log10() + #BREAK
+  geom_blank() +
+  annotate(geom = "text", 
+           x = 300, y = 45, 
+           label = "Poor and\nSick",
+           size = 10,
+           hjust = 0, vjust = 0,
+           lineheight = .8) +
+  annotate(geom = "text", 
+           x = 3000, y = 80, 
+           label = "Wealthy and\nHealthy",
+           size = 10,
+           hjust = 1, vjust = 1,
+           lineheight = .8) 
+  ggedit::remove_geom(last_plot(), "GeomText") + geom_blank()
+  ggedit::remove_geom(last_plot(), "GeomText")  + geom_blank()
+  aes(color = continent) + 
+  geom_point(data = . %>% filter(continent == "Africa")) + #BREAK
+  geom_point(data = . %>% filter(continent == "Americas")) + #BREAK
+  geom_point(data = . %>% filter(continent == "Asia")) +  #BREAK
+  geom_point(data = . %>% filter(continent == "Europe")) + #BREAK
+  aes(size = pop) 
+```
+
+
+`r chunk_reveal("build", display_type = c("md", "code", "output"), md = talk, break_type = "user")`
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

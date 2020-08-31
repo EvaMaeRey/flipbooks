@@ -27,6 +27,16 @@ library(tidyverse)
 
 
 
+```{r}
+library(DBI)
+db = dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+```
+
+```{sql, connection=db}
+SELECT * FROM trials
+```
+
+
 
 ---
 
