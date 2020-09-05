@@ -17,6 +17,7 @@ output:
 ```{r setup, include = FALSE}
 library(flipbookr)
 library(tidyverse)
+xaringanExtra::use_webcam()
 
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3)
 ```
@@ -169,7 +170,7 @@ library(tidyverse)
 
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
-                      cache = F, dev = "svg")
+                      cache = F)
 ```
 ````
 
