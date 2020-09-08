@@ -216,12 +216,20 @@ class: inverse
 ### A *source* code chunk, named 'my_cars' will serve as the material to be flipbooked. 
 
 ````markdown
-```{r task1, include = FALSE}`r ''`
-gapminder %>% 
-  filter(year == 2007) %>% 
-  select(country, lifeExp, year) %>% 
-  filter(lifeExp >= 80) %>% 
-  arrange(-lifeExp)
+```{r my_cars, include = FALSE}`r ''`
+cars %>% 
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) + #BREAK
+  geom_point(
+             shape = 21,
+             size = 7, #BREAK2
+             color = "magenta", #BREAK3
+             alpha = .8 #BREAK4
+             ) + #BREAK
+  aes(fill = speed) + 
+  scale_fill_viridis_c() + 
+  theme_minimal() #BREAK
 ```
 ````
 

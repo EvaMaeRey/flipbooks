@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>A Federalist Papers Whodunnit Epilogue</title>
+    <title>A Data Science Bedtime Story</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, 2019" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -42,14 +42,14 @@ background-size: cover
 
 
 
----
+
 
 
 
 
 ---
 class: inverse, middle, center
-# I believe I've got material for writing one of the world's most boring data story.
+# I've got material for writing a *really* boring data story.
 ---
 class: inverse, middle, center
 # One theme is *stop words* --- I'll explain them --- but arguably they are the boringest of words.
@@ -64,7 +64,7 @@ class: inverse, middle, center
 # The non-boring thing to do is to fix the mistakes found in post mortems and move on.
 ---
 class: inverse, middle, center
-# I have done this, [updating the original federalist papers work]().
+# I have done this, [updating the original federalist papers work](https://evamaerey.github.io/flipbooks/federalist/federalist#1).
 ---
 class: inverse, middle, center
 # But also, I dig into the question: how consequential is correcting the mistake?
@@ -94,9 +94,8 @@ class: inverse, middle, center
 ---
 class: center, middle
 
-# Chapter 0: Setting the stage
+# Chapter 0: Setting the stage with a hypnotic gif
 
----
 
 
 
@@ -134,7 +133,7 @@ count: false
 
 ```r
 # prepping gif
-gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"
 *magick::image_read(path = gif_url)
 ```
 ]
@@ -151,8 +150,8 @@ count: false
 
 ```r
 # prepping gif
-gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
-magick::image_read(path = gif_url) %&gt;%  
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"
+magick::image_read(path = gif_url) %&gt;%
 * magick::image_colorize(
 *   opacity = 40,
 *   color = "white"
@@ -172,12 +171,12 @@ count: false
 
 ```r
 # prepping gif
-gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"  
-magick::image_read(path = gif_url) %&gt;%  
-  magick::image_colorize(  
-    opacity = 40,  
-    color = "white"  
-    ) %&gt;%  
+gif_url &lt;- "https://media.giphy.com/media/6uVwL25uYHW92/giphy.gif"
+magick::image_read(path = gif_url) %&gt;%
+  magick::image_colorize(
+    opacity = 40,
+    color = "white"
+    ) %&gt;%
 * magick::image_write_gif(
 *   delay = .3,
 *   path = "washed_out_sky.gif"
@@ -220,6 +219,7 @@ Finalizing encoding... done!
 .panel1-prepare_gif-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -227,6 +227,7 @@ Finalizing encoding... done!
 .panel2-prepare_gif-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -234,6 +235,7 @@ Finalizing encoding... done!
 .panel3-prepare_gif-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -388,15 +390,15 @@ count: false
 .panel1-doc_term_stop-rotate[
 
 ```r
-federalist %&gt;%  
-  select(name, text, title) %&gt;%  
-  tidytext::unnest_tokens(output = word,  
-                          input = text) -&gt;  
-federalist_words  
+federalist %&gt;%
+  select(name, text, title) %&gt;%
+  tidytext::unnest_tokens(output = word,
+                          input = text) -&gt;
+federalist_words
 
-tidytext::stop_words %&gt;%  
+tidytext::stop_words %&gt;%
 * inner_join(federalist_words) %&gt;%
-  distinct(word)  
+  distinct(word)
 ```
 ]
  
@@ -427,15 +429,15 @@ count: false
 .panel1-doc_term_stop-rotate[
 
 ```r
-federalist %&gt;%  
-  select(name, text, title) %&gt;%  
-  tidytext::unnest_tokens(output = word,  
-                          input = text) -&gt;  
-federalist_words  
+federalist %&gt;%
+  select(name, text, title) %&gt;%
+  tidytext::unnest_tokens(output = word,
+                          input = text) -&gt;
+federalist_words
 
-tidytext::stop_words %&gt;%  
+tidytext::stop_words %&gt;%
 * anti_join(federalist_words) %&gt;%
-  distinct(word)  
+  distinct(word)
 ```
 ]
  
@@ -463,6 +465,7 @@ tidytext::stop_words %&gt;%
 .panel1-doc_term_stop-rotate {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -470,6 +473,7 @@ tidytext::stop_words %&gt;%
 .panel2-doc_term_stop-rotate {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -477,6 +481,7 @@ tidytext::stop_words %&gt;%
 .panel3-doc_term_stop-rotate {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -602,6 +607,7 @@ count: false
 .panel1-compare_table-rotate {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -609,6 +615,7 @@ count: false
 .panel2-compare_table-rotate {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -616,6 +623,7 @@ count: false
 .panel3-compare_table-rotate {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -631,7 +639,7 @@ count: false
 
 count: false
  
-
+### Looking at the least correlated cases
 .panel1-compare_table_tail-rotate[
 
 ```r
@@ -657,7 +665,7 @@ count: false
 ---
 count: false
  
-
+### Looking at the least correlated cases
 .panel1-compare_table_tail-rotate[
 
 ```r
@@ -684,6 +692,7 @@ count: false
 .panel1-compare_table_tail-rotate {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -691,6 +700,7 @@ count: false
 .panel2-compare_table_tail-rotate {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -698,6 +708,7 @@ count: false
 .panel3-compare_table_tail-rotate {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -727,19 +738,19 @@ count: false
 
 ```r
 *document_correlation_inner %&gt;%
-  ggplot() +  
-  aes(x = item1) +  
-  theme(axis.text.x =  
-          element_text(angle = 90)) +  
-  theme(text = element_text(size = 4)) +  
-  aes(y = item2) +  
-  theme(aspect.ratio = 1) +  
-  geom_tile() +  
-  aes(fill = correlation) +  
-  scale_fill_viridis_c(direction = -1,  
-                       limits = c(.75,1)) +  
-  theme_void() +  
-  coord_equal()  
+  ggplot() +
+  aes(x = item1) +
+  theme(axis.text.x =
+          element_text(angle = 90)) +
+  theme(text = element_text(size = 4)) +
+  aes(y = item2) +
+  theme(aspect.ratio = 1) +
+  geom_tile() +
+  aes(fill = correlation) +
+  scale_fill_viridis_c(direction = -1,
+                       limits = c(.75,1)) +
+  theme_void() +
+  coord_equal()
 ```
 ]
  
@@ -751,6 +762,7 @@ count: false
 .panel1-heat_map_inner-1 {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -758,6 +770,7 @@ count: false
 .panel2-heat_map_inner-1 {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -765,6 +778,7 @@ count: false
 .panel3-heat_map_inner-1 {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -785,19 +799,19 @@ count: false
 
 ```r
 *document_correlation_right %&gt;%
-  ggplot() +  
-  aes(x = item1) +  
-  theme(axis.text.x =  
-          element_text(angle = 90)) +  
-  theme(text = element_text(size = 4)) +  
-  aes(y = item2) +  
-  theme(aspect.ratio = 1) +  
-  geom_tile() +  
-  aes(fill = correlation) +  
-  scale_fill_viridis_c(direction = -1,  
-                       limits = c(.75,1)) +  
-  theme_void() +  
-  coord_equal()  
+  ggplot() +
+  aes(x = item1) +
+  theme(axis.text.x =
+          element_text(angle = 90)) +
+  theme(text = element_text(size = 4)) +
+  aes(y = item2) +
+  theme(aspect.ratio = 1) +
+  geom_tile() +
+  aes(fill = correlation) +
+  scale_fill_viridis_c(direction = -1,
+                       limits = c(.75,1)) +
+  theme_void() +
+  coord_equal()
 ```
 ]
  
@@ -809,6 +823,7 @@ count: false
 .panel1-heat_map_rignt-1 {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -816,6 +831,7 @@ count: false
 .panel2-heat_map_rignt-1 {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -823,6 +839,7 @@ count: false
 .panel3-heat_map_rignt-1 {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -838,12 +855,12 @@ count: false
 ---
 class: middle, center
 
-# In this case, the mistake of inner v. right join was not very consequential.  
+# So in this case, the mistake of inner v. right join seems not to be very consequential.  
 
 ---
 class: middle, center
 
-# Of course, in other contexts this misstep could have profound consequences!
+# Of course, in other contexts this misstep could have profound consequences!  Careful! Achtung! Cuidado! 
 
 
 ---
@@ -864,7 +881,7 @@ class: inverse, middle, center
 # Eyes shut!
 ---
 class: inverse, middle, center
-# Good night! I hope you dream of stop words and inconsequential decisions!
+# Good night! May you dream of stop words and inconsequential decisions!
 
 
 &lt;style type="text/css"&gt;

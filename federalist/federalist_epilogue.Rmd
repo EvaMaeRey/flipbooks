@@ -1,5 +1,5 @@
 ---
-title: "A *Federalist Papers* Whodunnit Epilogue"
+title: "A Data Science Bedtime Story"
 subtitle: "With flipbookr and xaringan"
 author: "Gina Reynolds, 2019"
 output:
@@ -56,7 +56,7 @@ library(tidyverse)
 
 
 ```{r, include = F}
-"I believe I've got material for writing one of the world's most boring data story.  One theme is *stop words* --- I'll explain them --- but arguably they are the boringest of words.  And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!  I'm doing an analytic post mortem here.  The non-boring thing to do is to fix the mistakes found in post mortems and move on.  I have done this, [updating the original federalist papers work]().  But also, I dig into the question: how consequential is correcting the mistake?  In this case, the correction is pretty inconsequential, which makes this data story so very dull!  The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.  I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.  You can flicker between outcomes for different decisions, and be stunned by lack of change too!  But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.  Buckle up for a boring read.  " -> intro
+"I've got material for writing a *really* boring data story.  One theme is 'stop words' --- I'll explain them --- but arguably they are the boringest of words.  And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!  I'm doing an analytic post mortem here.  The non-boring thing to do is to fix the mistakes found in post mortems and move on.  I have done this, [updating the original federalist papers work](https://evamaerey.github.io/flipbooks/federalist/federalist#1).  But also, I dig into the question: how consequential is correcting the mistake?  In this case, the correction is pretty inconsequential, which makes this data story so very dull!  The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.  I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.  You can flicker between outcomes for different decisions, and be stunned by lack of change too!  But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.  Buckle up for a boring read.  " -> intro
 ```
 
 
