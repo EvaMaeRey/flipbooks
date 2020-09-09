@@ -69,6 +69,75 @@ library(patchwork)
 g0 + g1 + g2
 ```
 
+
+---
+
+
+```{r}
+tibble(num_people = c(49, 16),
+       type = c("student", "professor")) %>% 
+  mutate(quadrant = row_number()) %>% 
+  ggplot() +
+  aes(xmax = num_people^.5, ymax = num_people^.5,
+      xmin = 0, ymin = 0) +
+  geom_rect(color = "black") +
+  coord_fixed() +
+  geom_text(aes(x = num_people^.5/2,
+            y = num_people^.5/2,
+            label = type))
+
+geom_sq_area <- function(area, ...)  {
+  geom_rect(aes(xmax = area^.5, ymax = area^.5, 
+                xmin = 0, ymin = 0),
+               ...)
+}
+
+geom_sq_area_txt <- function(area, 
+                    colour = alpha("steelblue", 0.5), 
+                    size = 2, ...)  {
+  geom_rect(aes(xmax = area^.5, ymax = area^.5, 
+                xmin = 0, ymin = 0),
+              colour = colour,
+    size = size, ...)
+}
+
+
+tibble(num_people = c(49, 16),
+       type = c("student", "professor")) %>% 
+  mutate(quadrant = row_number()) %>% 
+  ggplot() +
+  geom_sq_area(area = 45,
+               color = "black",
+               fill = "darkolivegreen") +
+  coord_equal()
+
+
+tibble(num_people = c(8*8, 16),
+       type = c("students", "professors")) %>% 
+  ggplot() +
+  aes(x = 1, y = num_people^.5, width = num_people^.5,
+      fill = type) +
+  geom_col(alpha = .9) +
+  # coord_equal() +
+  facet_wrap(~type) +
+  facet_grid(~type, scales = "free_x", space = "free_x") +
+  geom_text(aes(y = num_people^.5/2, 
+                label = paste0(type, "\n", num_people))) +
+  scale_x_continuous(expand = c(0,0)) +
+  theme_void() +
+  theme(legend.position = "none") +
+  theme(strip.text = element_blank()) +
+  theme(panel.spacing.x = unit(0, "npc"))
+  
+
+  
+  
+
+```
+
+
+
+
 ---
 
 `r chunk_reveal("combining_layers", title = "### Combining existing geoms/stats into a single call")`
@@ -361,6 +430,17 @@ create_circle(x0 = 1, y0 = 2, r = 2) %>%
   aes(x = x, y = y) +
   geom_point() +
   geom_point(data = data_frame(x = 1, y = 2))
+
+create_area_square <- function(area){
+
+  data.frame(
+    
+    x = c(0, area^.5, area^.5, 0),
+    x = c(0, 0, area^.5, area^.5)
+  )
+  
+}
+
 ```
 
 ---
@@ -405,6 +485,41 @@ StatCircle <- ggproto("StatCircle", Stat,
 
 ---
 
+
+
+```{r}
+StatCircle <- ggproto("StatCircle", Stat, 
+  setup_params = function(area) {
+    if (is.null(params$area)) {
+      params$area <- 1
+    } else if (params$r == 0) {
+      rlang::abort("Square cannot be defined with an area of 0")
+    }
+    params
+  },
+  setup_data = function(data, params) {
+    if (anyDuplicated(data$group)) {
+      data$group <- paste(data$group, seq_len(nrow(data)), sep = "-")
+    }
+    data
+  },
+  compute_panel = function(data, scales, r = 1, n = 50) {
+    
+    cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+    squares <- lapply(seq_len(nrow(data)), function(i) {
+      squares_path <- create_area_square(data$area[i])
+      cbind(circles_path, unclass(data[i, cols_to_keep]))
+      
+    })
+    do.call(rbind, circles)
+  },
+  required_aes = c("area")
+)
+```
+
+
+---
+
 `r chunk_reveal("circle_unpack")`
 
 ```{r circle_unpack, include=F}
@@ -417,7 +532,7 @@ data
 r = .25
 n = 10
 
-   cols_to_keep <- setdiff(names(data), c("x0", "y0"))
+   cols_to_keep <- setdiff(names(data), c("area"))
    
     circles <- lapply(seq_len(nrow(data)), function(i) {
       circles_path <- create_circle(data$x0[i], data$y0[i], data$r[i], n)
@@ -429,6 +544,10 @@ do.call(rbind, circles) %>%
   aes(x = x, y = y, col = group) +
   geom_point() +
   geom_point(data = data, aes(x = x0, y = y0))
+```
+
+```{r}
+
 ```
 
 
