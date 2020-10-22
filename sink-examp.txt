@@ -1,0 +1,20 @@
+# A tibble: 2 x 2
+  num_people type      
+       <dbl> <chr>     
+1         64 students  
+2         16 professors
+character(0)
+[1] "mtcars"
+[1] "gapminder" "mtcars"   
+[1] "gapminder" "mtcars"    "mytibble" 
+ [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+[11] "carb"
+[1] 5
+[1] 5
+[1] 1
+ [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+[11] "carb"
+character(0)
+[1] "rcid"          "session"       "importantvote" "date"         
+[5] "unres"         "amend"         "para"          "short"        
+[9] "descr"        

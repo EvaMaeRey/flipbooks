@@ -22,7 +22,6 @@ class: center, middle, inverse, title-slide
 
 
 
-
 &lt;style type="text/css"&gt;
 .remark-code{line-height: 1.5; font-size: 80%}
 @media print {
@@ -31,6 +30,7 @@ class: center, middle, inverse, title-slide
   }
 }
 &lt;/style&gt;
+
 
 
 
@@ -274,6 +274,238 @@ cars %&gt;%
   font-size: 80%
 }
 .panel3-my_cars-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+count: false
+ 
+### Another code movie!
+.panel1-my_cars-user[
+
+```r
+*cars %&gt;%
+* ggplot() +
+* aes(x = speed) +
+* aes(y = dist)
+```
+]
+ 
+.panel2-my_cars-user[
+![](test_files/figure-html/my_cars_user_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### Another code movie!
+.panel1-my_cars-user[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+* geom_point(
+*            shape = 21,
+*            size = 7,
+*            color = "magenta",
+*            alpha = .8
+*            )
+```
+]
+ 
+.panel2-my_cars-user[
+![](test_files/figure-html/my_cars_user_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+### Another code movie!
+.panel1-my_cars-user[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+             shape = 21,
+             size = 7,
+             color = "magenta",
+             alpha = .8
+             ) +
+* aes(fill = speed) +
+* scale_fill_viridis_c() +
+* theme_minimal()
+```
+]
+ 
+.panel2-my_cars-user[
+![](test_files/figure-html/my_cars_user_03_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-my_cars-user {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars-user {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars-user {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+---
+count: false
+ 
+
+.panel1-my_cars-non_seq[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+             shape = 21,
+             ) +
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+]
+ 
+.panel2-my_cars-non_seq[
+![](test_files/figure-html/my_cars_non_seq_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-non_seq[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+             shape = 21,
+*            size = 7,
+             ) +
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+]
+ 
+.panel2-my_cars-non_seq[
+![](test_files/figure-html/my_cars_non_seq_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-non_seq[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+             shape = 21,
+             size = 7,
+*            color = "magenta",
+             ) +
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+]
+ 
+.panel2-my_cars-non_seq[
+![](test_files/figure-html/my_cars_non_seq_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-my_cars-non_seq[
+
+```r
+cars %&gt;%
+  ggplot() +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(
+             shape = 21,
+             size = 7,
+             color = "magenta",
+*            alpha = .8
+             ) +
+  aes(fill = speed) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+]
+ 
+.panel2-my_cars-non_seq[
+![](test_files/figure-html/my_cars_non_seq_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-my_cars-non_seq {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_cars-non_seq {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_cars-non_seq {
   color: black;
   width: NA%;
   hight: 33%;

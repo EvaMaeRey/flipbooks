@@ -4,9 +4,7 @@
     <title>Hans</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, December 2019" />
-    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
-    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -15,6 +13,13 @@ class: center, middle, inverse, title-slide
 # Hans
 ## With flipbookr and xaringan
 ### Gina Reynolds, December 2019
+
+---
+
+
+
+
+
 
 ---
 
@@ -42,206 +47,243 @@ talk &lt;- c("So, here we go",
 
 ---
 
-
-
-
-
 count: false
- 
 
-.panel1-build-user[
-###  So, here we go
-]
- 
-.panel2-build-user[
 
-```r
-*gapminder %&gt;%
-* filter(year == 2007) %&gt;%
-* ggplot()
-```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_01_output-1.svg)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-build-user[
-###  First an axis for health: life exectancy ...
-]
- 
-.panel2-build-user[
 
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-* aes(y = lifeExp)
-```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_02_output-1.svg)&lt;!-- --&gt;
-]
 
 ---
 count: false
- 
 
-.panel1-build-user[
-###  And down here an axis for wealth: income per person ...
-]
- 
-.panel2-build-user[
 
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-  aes(y = lifeExp) +
-* aes(x = gdpPercap) +
-* scale_x_log10()
 ```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_03_output-1.svg)&lt;!-- --&gt;
-]
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
 
 ---
 count: false
- 
 
-.panel1-build-user[
-NA
-]
- 
-.panel2-build-user[
 
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-* aes(color = continent) +
-* geom_point(data = . %&gt;% filter(continent == "Africa"))
 ```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_04_output-1.svg)&lt;!-- --&gt;
-]
+# A tibble: 142 x 6
+   country     continent  year lifeExp       pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       2007    43.8  31889923      975.
+ 2 Albania     Europe     2007    76.4   3600523     5937.
+ 3 Algeria     Africa     2007    72.3  33333216     6223.
+ 4 Angola      Africa     2007    42.7  12420476     4797.
+ 5 Argentina   Americas   2007    75.3  40301927    12779.
+ 6 Australia   Oceania    2007    81.2  20434176    34435.
+ 7 Austria     Europe     2007    79.8   8199783    36126.
+ 8 Bahrain     Asia       2007    75.6    708573    29796.
+ 9 Bangladesh  Asia       2007    64.1 150448339     1391.
+10 Belgium     Europe     2007    79.4  10392226    33693.
+# … with 132 more rows
+```
 
 ---
 count: false
- 
 
-.panel1-build-user[
-NA
-]
- 
-.panel2-build-user[
 
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  aes(color = continent) +
-  geom_point(data = . %&gt;% filter(continent == "Africa")) +
-* geom_point(data = . %&gt;% filter(continent == "Americas"))
 ```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_05_output-1.svg)&lt;!-- --&gt;
-]
+# A tibble: 142 x 6
+   country       continent  year lifeExp        pop gdpPercap
+   &lt;fct&gt;         &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;     &lt;dbl&gt;
+ 1 China         Asia       2007    73.0 1318683096     4959.
+ 2 India         Asia       2007    64.7 1110396331     2452.
+ 3 United States Americas   2007    78.2  301139947    42952.
+ 4 Indonesia     Asia       2007    70.6  223547000     3541.
+ 5 Brazil        Americas   2007    72.4  190010647     9066.
+ 6 Pakistan      Asia       2007    65.5  169270617     2606.
+ 7 Bangladesh    Asia       2007    64.1  150448339     1391.
+ 8 Nigeria       Africa     2007    46.9  135031164     2014.
+ 9 Japan         Asia       2007    82.6  127467972    31656.
+10 Mexico        Americas   2007    76.2  108700891    11978.
+# … with 132 more rows
+```
 
 ---
 count: false
- 
 
-.panel1-build-user[
-NA
-]
- 
-.panel2-build-user[
-
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  aes(color = continent) +
-  geom_point(data = . %&gt;% filter(continent == "Africa")) +
-  geom_point(data = . %&gt;% filter(continent == "Americas")) +
-* geom_point(data = . %&gt;% filter(continent == "Asia"))
-```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_06_output-1.svg)&lt;!-- --&gt;
-]
+![](hans_files/figure-html/build_auto_06_output-1.svg)&lt;!-- --&gt;
 
 ---
 count: false
- 
 
-.panel1-build-user[
-NA
-]
- 
-.panel2-build-user[
+![](hans_files/figure-html/build_auto_07_output-1.svg)&lt;!-- --&gt;
 
-```r
-gapminder %&gt;%
-  filter(year == 2007) %&gt;%
-  ggplot() +
-  aes(y = lifeExp) +
-  aes(x = gdpPercap) +
-  scale_x_log10() +
-  aes(color = continent) +
-  geom_point(data = . %&gt;% filter(continent == "Africa")) +
-  geom_point(data = . %&gt;% filter(continent == "Americas")) +
-  geom_point(data = . %&gt;% filter(continent == "Asia")) +
-* geom_point(data = . %&gt;% filter(continent == "Europe"))
-```
-]
- 
-.panel3-build-user[
-![](hans_files/figure-html/build_user_07_output-1.svg)&lt;!-- --&gt;
-]
+---
+count: false
+
+![](hans_files/figure-html/build_auto_08_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_09_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_10_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_11_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_12_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_13_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_14_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_15_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_16_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_17_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_18_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_19_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_20_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_21_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_22_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_23_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_24_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_25_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_26_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_27_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_28_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_29_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_30_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_31_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_32_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_33_output-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+
+![](hans_files/figure-html/build_auto_34_output-1.svg)&lt;!-- --&gt;
 
 &lt;style&gt;
-.panel1-build-user {
+.panel1-build-auto {
   color: black;
-  width: 28.7040816326531%;
+  width: 99%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel2-build-user {
+.panel2-build-auto {
   color: black;
-  width: 38.6020408163265%;
+  width: NA%;
   hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
 }
-.panel3-build-user {
+.panel3-build-auto {
   color: black;
-  width: 29.6938775510204%;
+  width: NA%;
   hight: 33%;
   float: left;
   padding-left: 1%;
@@ -250,6 +292,12 @@ gapminder %&gt;%
 &lt;/style&gt;
 
 
+
+
+
+
+
+r chunk_reveal("build", display_type = c("md", "code", "output"), md = talk, break_type = "user")`
 
 
 

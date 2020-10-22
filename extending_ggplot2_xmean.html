@@ -267,6 +267,7 @@ create_xvlines(x = 2) %&gt;%
 .panel1-xvlines-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -274,6 +275,7 @@ create_xvlines(x = 2) %&gt;%
 .panel2-xvlines-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -281,6 +283,7 @@ create_xvlines(x = 2) %&gt;%
 .panel3-xvlines-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -651,6 +654,7 @@ do.call(rbind, xvlines) %&gt;%
 .panel1-xvlines_unpack-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -658,6 +662,7 @@ do.call(rbind, xvlines) %&gt;%
 .panel2-xvlines_unpack-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -665,6 +670,7 @@ do.call(rbind, xvlines) %&gt;%
 .panel3-xvlines_unpack-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -890,6 +896,7 @@ tibble(
 .panel1-use_xvlines-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -897,6 +904,7 @@ tibble(
 .panel2-use_xvlines-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -904,6 +912,7 @@ tibble(
 .panel3-use_xvlines-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -913,21 +922,6 @@ tibble(
 
 
 
-```r
-set.seed(1244)
-tibble(
-  x = runif(5, max = 10),
-  y = runif(5, max = 10)
-) %&gt;% 
-  ggplot() + 
-  aes(x = x, y = y) +
-  geom_point() +
-  geom_xvlines(n = 6) +
-  geom_xvlines(n = 13) +
-  geom_xvlines(r = 2)
-```
-
-&lt;img src="extending_ggplot2_xmean_files/figure-html/use_xvlines-1.png" width="576" /&gt;
 
 
 
@@ -1432,6 +1426,7 @@ do.call(rbind, xmean) %&gt;%
 .panel1-xmean_unpack-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1439,6 +1434,7 @@ do.call(rbind, xmean) %&gt;%
 .panel2-xmean_unpack-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1446,6 +1442,7 @@ do.call(rbind, xmean) %&gt;%
 .panel3-xmean_unpack-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1674,6 +1671,7 @@ tibble(
 .panel1-use_xmean-auto {
   color: black;
   width: 38.6060606060606%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1681,6 +1679,7 @@ tibble(
 .panel2-use_xmean-auto {
   color: black;
   width: 59.3939393939394%;
+  hight: 32%;
   float: left;
   padding-left: 1%;
   font-size: 80%
@@ -1688,6 +1687,7 @@ tibble(
 .panel3-use_xmean-auto {
   color: black;
   width: NA%;
+  hight: 33%;
   float: left;
   padding-left: 1%;
   font-size: 80%

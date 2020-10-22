@@ -22,7 +22,6 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
                       cache = F)
 ```
 
-
 ```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 80%}
 @media print {
@@ -31,6 +30,7 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
   }
 }
 ```
+
 
 
 ```{r my_cars, include = FALSE}
@@ -51,4 +51,45 @@ cars %>%
 
 ---
 `r chunk_reveal(chunk_name = "my_cars", title = "### First flipbook!")`
+
+
+
+---
+`r chunk_reveal("my_cars", break_type = "user", title = "### Another code movie!")`
+
+
+---
+`r chunk_reveal("my_cars", break_type = "non_seq")`
+
+
+
+---
+
+```{r}
+tibble(num_people = c(8*8, 16),
+       type = c("students", "professors")) %>% 
+ggplot() +
+ aes(x = 1, y = num_people^.5, width = num_people^.5,
+ fill = type) +
+ geom_col(alpha = .9) +
+ # coord_equal() +
+ facet_wrap(~type) +
+ facet_grid(~type, scales = "free_x", space = "free_x") +
+ geom_text(aes(y = num_people^.5/2, 
+ label = paste0(type, "\n", num_people))) +
+ scale_x_continuous(expand = c(0,0)) +
+ theme_void() +
+ theme(legend.position = "none") +
+ theme(strip.text = element_blank()) +
+ theme(panel.spacing.x = unit(0, "npc"))
+
+sink("sink-examp.txt")
+i <- 1:10
+outer(i, i, "*")
+sink()
+
+
+
+```
+
 

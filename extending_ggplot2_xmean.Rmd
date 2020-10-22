@@ -102,9 +102,19 @@ data
       cbind(xvlines_segment, unclass(data[i, cols_to_keep]))
       
     })
-    do.call(rbind, xvlines)
     
-do.call(rbind, xvlines) %>% 
+do.call(rbind, xvlines) ->
+prepped_data
+    
+
+# alternative that feels more familiar
+data %>% 
+  mutate(data = purrr::map(x, create_xvlines)) %>% 
+  select(-x) %>% 
+  unnest()
+    
+    
+prepped_data %>% 
   ggplot() +
   aes(x = x, xend = xend, y = y, yend = yend) +
   geom_point(data = . %>% mutate(y = 1:2)) +
