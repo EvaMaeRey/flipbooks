@@ -52,8 +52,9 @@ You might want to set the code chunk options to echo = F, unless you are demoing
 
 ```{r}
 embed_flipbook(chunk_name = "my_code", 
-                       use_share_again = T,
-                       font_size = 120)
+               use_share_again = T,
+               use_embed_xaringan = T,
+               font_size = 150)
 ```
 
 ---

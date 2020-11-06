@@ -48,6 +48,9 @@ Associate Professor of Quantitative Methods, Atkinson Graduate School of Managem
 
 1. [Data Visualization](https://github.com/tmieno2/Data-Science-with-R/tree/5af01a17e2da32229c30002192e433509f8ca8b2) Data Science for Social Scientists and Agricultural and Environmental Scientists - University of Nebraska Lincoln
 
+1. [dataviz-flipbook](https://jelmerp.github.io/dataviz-flipbook/#1) Jelmer W. Poelstra,
+Evolutionary Biologist, postdoc at Duke University
+
 1. University of Chicago MACS 30500 Course: Computing for the Social Sciences, Benjamin Soltoff, University of Chicago, 
 
     - [Text analysis: classification and topic modeling](https://cfss.uchicago.edu/slides/text-analysis-classification-and-topic-modeling/#1) 

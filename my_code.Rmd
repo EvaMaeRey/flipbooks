@@ -43,7 +43,7 @@ the_code_seq
 
 
 ```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 120%}
+.remark-code{line-height: 1.5; font-size: 150%}
 
 @media print {
   .has-continuation {

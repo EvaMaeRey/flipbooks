@@ -4,6 +4,11 @@
     <title>A Data Science Bedtime Story</title>
     <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, 2019" />
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon-1.4.1/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain-0.2.1/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain-0.2.1/shareagain.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -20,7 +25,7 @@ class: left, top, inverse
 background-image: url(slow_sky.gif)
 background-size: cover
 
-## .Large[The 'sleepy time tea' of flipbooks]
+## .Large[A Data Science Bedtime Story]
 ### Epilogue to 'A *Federalist Papers* Whodunnit'
 
 &lt;br&gt;
@@ -47,45 +52,46 @@ background-size: cover
 
 
 
+
 ---
 class: inverse, middle, center
-# I've got material for writing a *really* boring data story.
+# This is a boring data story.
 ---
 class: inverse, middle, center
-# One theme is *stop words* --- I'll explain them --- but arguably they are the boringest of words.
+#  One theme is 'stop words'.
 ---
 class: inverse, middle, center
-# And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!
+#  Stop words are boring.
 ---
 class: inverse, middle, center
-# I'm doing an analytic post mortem here.
+#  Words like 'a', 'the', 'and', 'is', 'also'.
 ---
 class: inverse, middle, center
-# The non-boring thing to do is to fix the mistakes found in post mortems and move on.
+#  And these stop words are from the Federalist Papers.
 ---
 class: inverse, middle, center
-# I have done this, [updating the original federalist papers work](https://evamaerey.github.io/flipbooks/federalist/federalist#1).
+# 
 ---
 class: inverse, middle, center
-# But also, I dig into the question: how consequential is correcting the mistake?
+# They are historic.
 ---
 class: inverse, middle, center
-# In this case, the correction is pretty inconsequential, which makes this data story so very dull!
+#  Sometimes historic things are boring.
 ---
 class: inverse, middle, center
-# The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.
+#  This data story is a analytic post mortem.
 ---
 class: inverse, middle, center
-# I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.
+#  You could just discover mistakes, [fix them](https://evamaerey.github.io/flipbooks/federalist/federalist#1), and move on.
 ---
 class: inverse, middle, center
-# You can flicker between outcomes for different decisions, and be stunned by lack of change too!
+#  But here is a not very interesting question: how consequential was the mistake?
 ---
 class: inverse, middle, center
-# But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.
+# 
 ---
 class: inverse, middle, center
-# Buckle up for a boring read.
+# Buckle up.
 ---
 class: inverse, middle, center
 # 
@@ -102,10 +108,13 @@ class: center, middle
 
 ---
 class: inverse, middle, center
-# For ambiance, first set the stage with a hypnotic gif. We'll slow down the play back time with {magick} to make things less exciting.
+# For ambiance, first set the stage with a hypnotic gif.
 ---
 class: inverse, middle, center
-# And beyond the title slide we'll use a version with washed out color so there is a bit more contrast.
+#  We'll slow down the play back time with {magick} to make things less exciting.
+---
+class: inverse, middle, center
+#  And beyond the title slide we'll use a version with washed out color so there is a bit more contrast.
 
 ---
 
@@ -288,40 +297,67 @@ class: center, middle
 
 ---
 class: inverse, middle, center
-# So in my work federalist papers network vis work, I wanted to only use stop words from the papers.
+# So in a Federalist Papers network vis, I wanted to only use stop words from the Papers.
 ---
 class: inverse, middle, center
-# Stop words are low content words, that usually occur pretty frequently in texts. They serve grammatical purposes. But are often are removed in text analysis seeking to do topic modeling. Stop words just look like noise in this context.
+# Stop words are low content words, that usually occur pretty frequently in texts.
 ---
 class: inverse, middle, center
-# But the classic question for the federalist papers is not about the paper's themes, it is about who wrote the *disputed texts*.
+# *I'm tired already.*
+---
+class: inverse, middle, center
+# They serve grammatical purposes.
+---
+class: inverse, middle, center
+# But are often are removed in text analysis seeking to do topic modeling.
+---
+class: inverse, middle, center
+# Stop words just look like noise in this context.
+---
+class: inverse, middle, center
+# *Blah blah blah.*
+---
+class: inverse, middle, center
+# But the classic question for the Federalist Papers is not about the Paper's themes, it is about who wrote the *disputed texts*.
 ---
 class: inverse, middle, center
 # There are 15 texts that both Hamilton and Madison claimed to have written.
 ---
 class: inverse, middle, center
-# For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling! You'd definitely not want to remove stop words.
+# For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling!
+---
+class: inverse, middle, center
+# *When will it end?*
+---
+class: inverse, middle, center
+# You'd definitely not want to remove stop words.
 ---
 class: inverse, middle, center
 # In fact, you might only want to keep stop words.
 ---
 class: inverse, middle, center
-# This was my intent when I used a right join.
+# *Still awake?*
+---
+class: inverse, middle, center
+#  This was my intent when I used a right join.
 ---
 class: inverse, middle, center
 # But this is a mistake.
 ---
 class: inverse, middle, center
-#  While stop words are frequently occuring and common examples will definitely be present in every text (my favorite examples *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.
+#  While stop words are frequently occuring and common examples will definitely be present in every text (favorite examples are *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.
+---
+class: inverse, middle, center
+# *This is tiresome.*
 ---
 class: inverse, middle, center
 # So really an inner join is better to look only at the stop words that occur in the texts.
 ---
 class: inverse, middle, center
-# Don't assume that text will have all stop words. David Robinson pointed this out. Thanks David!
+# Don't assume that text will have all stop words.
 ---
 class: inverse, middle, center
-# Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers.
+#  Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers.
 
 
 
@@ -860,7 +896,7 @@ class: middle, center
 ---
 class: middle, center
 
-# Of course, in other contexts this misstep could have profound consequences!  Careful! Achtung! Cuidado! 
+# Of course, in other contexts this misstep could have profound consequences!  
 
 
 ---
@@ -875,13 +911,16 @@ class: middle, center
 
 ---
 class: inverse, middle, center
-# Okay. Lights out!
+# Okay.
 ---
 class: inverse, middle, center
-# Eyes shut!
+#  Lights out!
 ---
 class: inverse, middle, center
-# Good night! May you dream of stop words and inconsequential decisions!
+#  Bed time!
+---
+class: inverse, middle, center
+#  Dreams of stop words and inconsequential decisions!
 
 
 &lt;style type="text/css"&gt;

@@ -25,7 +25,7 @@ class: left, top, inverse
 background-image: url(slow_sky.gif)
 background-size: cover
 
-## .Large[The 'sleepy time tea' of flipbooks]
+## .Large[A Data Science Bedtime Story]
 ### Epilogue to 'A *Federalist Papers* Whodunnit'
 
 <br>
@@ -51,12 +51,18 @@ library(tidyverse)
 ```
 
 
+```{r, echo = F}
+xaringanExtra::use_share_again()
+```
 
 
 
 
 ```{r, include = F}
-"I've got material for writing a *really* boring data story.  One theme is 'stop words' --- I'll explain them --- but arguably they are the boringest of words.  And we'll be talking about the stop words in the federalist paper -- some old (boring?) documents!  I'm doing an analytic post mortem here.  The non-boring thing to do is to fix the mistakes found in post mortems and move on.  I have done this, [updating the original federalist papers work](https://evamaerey.github.io/flipbooks/federalist/federalist#1).  But also, I dig into the question: how consequential is correcting the mistake?  In this case, the correction is pretty inconsequential, which makes this data story so very dull!  The only thing that is kind of interesting is using a flipbooking (temporal offset of data and visuals) to compare outcomes of these decisions.  I feel like this kind of comparison --- showing just how very similar two things are --- is new uncharted territory for flipbooks.  You can flicker between outcomes for different decisions, and be stunned by lack of change too!  But I'll grant that if you are looking for some data story bedtime reading, this might be just the trick to put you to sleep.  Buckle up for a boring read.  " -> intro
+"This is a boring data story.   One theme is 'stop words'.   Stop words are boring.   Words like 'a', 'the', 'and', 'is', 'also'.   And these stop words are from the Federalist Papers.   They are historic.   Sometimes historic things are boring.   This data story is a analytic post mortem.   You could just discover mistakes, [fix them](https://evamaerey.github.io/flipbooks/federalist/federalist#1), and move on.   But here is a not very interesting question: how consequential was the mistake?   Buckle up.  " -> intro
+
+
+
 ```
 
 
@@ -70,7 +76,7 @@ class: center, middle
 
 
 ```{r, include = F}
-"For ambiance, first set the stage with a hypnotic gif. We'll slow down the play back time with {magick} to make things less exciting.  And beyond the title slide we'll use a version with washed out color so there is a bit more contrast." -> hypnotic
+"For ambiance, first set the stage with a hypnotic gif.   We'll slow down the play back time with {magick} to make things less exciting.   And beyond the title slide we'll use a version with washed out color so there is a bit more contrast." -> hypnotic
 ```
 
 
@@ -136,7 +142,7 @@ class: center, middle
 
 
 ```{r, include = F}
-"So in my work federalist papers network vis work, I wanted to only use stop words from the papers.  Stop words are low content words, that usually occur pretty frequently in texts. They serve grammatical purposes. But are often are removed in text analysis seeking to do topic modeling. Stop words just look like noise in this context.  But the classic question for the federalist papers is not about the paper's themes, it is about who wrote the *disputed texts*.  There are 15 texts that both Hamilton and Madison claimed to have written.  For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling! You'd definitely not want to remove stop words.  In fact, you might only want to keep stop words.  This was my intent when I used a right join.  But this is a mistake.   While stop words are frequently occuring and common examples will definitely be present in every text (my favorite examples *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.  So really an inner join is better to look only at the stop words that occur in the texts.  Don't assume that text will have all stop words. David Robinson pointed this out. Thanks David!  Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers." -> chapter1
+"So in a Federalist Papers network vis, I wanted to only use stop words from the Papers.  Stop words are low content words, that usually occur pretty frequently in texts.  *I'm tired already.*  They serve grammatical purposes.  But are often are removed in text analysis seeking to do topic modeling.  Stop words just look like noise in this context.  *Blah blah blah.*  But the classic question for the Federalist Papers is not about the Paper's themes, it is about who wrote the *disputed texts*.  There are 15 texts that both Hamilton and Madison claimed to have written.  For this, those idiosyncratic turns of phrase and stop word frequency can be rather telling!   You'd definitely not want to remove stop words.  In fact, you might only want to keep stop words.  *Still awake?*   This was my intent when I used a right join.  But this is a mistake.   While stop words are frequently occuring and common examples will definitely be present in every text (favorite examples are *the*, *and*, *of* certainly always are), sometimes stop words *don't* occur in texts.  *When will it end?*  So really an inner join is better to look only at the stop words that occur in the texts.  Don't assume that text will have all stop words.   Now, we'll see the preparation of the federalist data, and then compare the inner join vs anti join of federalist paper words on stop words, demonstrating that indeed there are stop words beyond those used in the fed papers." -> chapter1
 ```
 
 
@@ -323,7 +329,7 @@ class: middle, center
 ---
 class: middle, center
 
-# Of course, in other contexts this misstep could have profound consequences!  Careful! Achtung! Cuidado! 
+# Of course, in other contexts this misstep could have profound consequences!  
 
 
 ---
@@ -335,7 +341,7 @@ class: middle, center
 ---
 
 ```{r, include = F}
-"Okay. Lights out!  Eyes shut!  Good night! May you dream of stop words and inconsequential decisions!" -> farewell
+"Okay.   Lights out!   Bed time!   Dreams of stop words and inconsequential decisions!" -> farewell
 ```
 
 `r text_reveal(farewell, sep = "  ")`

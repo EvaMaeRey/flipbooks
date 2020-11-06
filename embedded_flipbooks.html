@@ -401,10 +401,13 @@ g</code></pre>
 <h1>A2. Let’s get a walk-through using embed_flipbook():</h1>
 <p>You might want to set the code chunk options to echo = F, unless you are demoing embed_flibook().</p>
 <pre class="r"><code>embed_flipbook(chunk_name = &quot;my_code&quot;, 
-                       use_share_again = T,
-                       font_size = 120)</code></pre>
-<iframe src="my_code.html" width="576" height="360">
-</iframe>
+               use_share_again = T,
+               use_embed_xaringan = T,
+               font_size = 150)</code></pre>
+<div class="shareagain" style="min-width:300px;margin:1em auto;">
+<iframe src="my_code.html" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
 <hr />
 </div>
 <div id="b1.-here-is-some-more-code-im-named-the-code-chunk-fine_tuning" class="section level1">
